@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Fixy.Domain\Fixy.Domain.csproj" />
+    <ProjectReference Include="..\Fixy.Infrastructure\Fixy.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Bases\" />
+    <Folder Include="Features\" />
+    <Folder Include="Mapping\" />
+    <Folder Include="Abstracts\" />
+    <Folder Include="Behaviors\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Services\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Wrappers\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,40 @@
+# Ignore build results
+bin/
+obj/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio working folder
+.vs/
+
+# Rider
+.idea/
+
+# ASP.NET & EF Core generated files
+*.dbmdl
+*.jfm
+Migrations/
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Publish folder
+publish/
+
+# Local secrets
+secrets.json
+appsettings.Development.json
+appsettings.Local.json
+
+# Other
+*.vsidx
+*.cache
