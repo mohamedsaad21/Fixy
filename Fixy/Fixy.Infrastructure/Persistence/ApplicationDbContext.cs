@@ -1,5 +1,13 @@
-﻿namespace Fixy.Infrastructure.Persistence;
+﻿using Fixy.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-public class ApplicationDbContext
+namespace Fixy.Infrastructure.Persistence;
+
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+        
+    }
 }
