@@ -16,10 +16,14 @@ public static class ServiceRegisteration
     public static IServiceCollection AddServiceRegisteration(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
+        
         var jwtSettings = new JWTSettings();
         configuration.GetSection(nameof(jwtSettings)).Bind(jwtSettings);
-        services.AddSingleton<JWTSettings>();
+        services.AddSingleton(jwtSettings);
+
+        var emailSettings = new EmailSettings();
+        configuration.GetSection(nameof(emailSettings)).Bind(emailSettings);
+        services.AddSingleton(emailSettings);
 
         services.AddAuthentication(options =>
         {
@@ -37,7 +41,8 @@ public static class ServiceRegisteration
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+                ClockSkew = TimeSpan.Zero,
             };
         });
 

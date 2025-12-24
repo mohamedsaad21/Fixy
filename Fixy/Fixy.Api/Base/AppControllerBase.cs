@@ -6,31 +6,41 @@ using System.Net;
 namespace Fixy.Api.Base;
 
 [ApiController]
-public class AppControllerBase : ControllerBase
+public abstract class AppControllerBase : ControllerBase
 {
-    private IMediator _mediatorInstance;
-    protected IMediator Mediator => _mediatorInstance ??= HttpContext.RequestServices.GetService<IMediator>();
+    private IMediator? _mediator;
 
-    public ObjectResult NewResult<T>(Response<T> response)
+    protected IMediator Mediator =>
+        _mediator ??= HttpContext.RequestServices.GetRequiredService<IMediator>();
+
+    protected IActionResult ToActionResult(Result result)
     {
-        switch (response.StatusCode)
-        {
-            case HttpStatusCode.OK:
-                return new OkObjectResult(response);
-            case HttpStatusCode.Created:
-                return new CreatedResult(string.Empty, response);
-            case HttpStatusCode.Unauthorized:
-                return new UnauthorizedObjectResult(response);
-            case HttpStatusCode.BadRequest:
-                return new BadRequestObjectResult(response);
-            case HttpStatusCode.NotFound:
-                return new NotFoundObjectResult(response);
-            case HttpStatusCode.Accepted:
-                return new AcceptedResult(string.Empty, response);
-            case HttpStatusCode.UnprocessableEntity:
-                return new UnprocessableEntityObjectResult(response);
-            default:
-                return new BadRequestObjectResult(response);
-        }
+        if (result.IsSuccess)
+            return Ok();
+
+        var statusCode = MapToStatusCode(result.Error!.Type);
+
+        return StatusCode((int)statusCode, result);
     }
+
+    protected IActionResult ToActionResult<T>(Result<T> result)
+    {
+        if (result.IsSuccess)
+            return Ok(result.Value);
+
+        var statusCode = MapToStatusCode(result.Error!.Type);
+
+        return StatusCode((int)statusCode, result);
+    }
+
+    private static HttpStatusCode MapToStatusCode(ErrorType type) =>
+        type switch
+        {
+            ErrorType.BadRequest => HttpStatusCode.BadRequest,
+            ErrorType.Validation => HttpStatusCode.BadRequest,
+            ErrorType.NotFound => HttpStatusCode.NotFound,
+            ErrorType.Unauthorized => HttpStatusCode.Unauthorized,
+            ErrorType.Failure => HttpStatusCode.InternalServerError,
+            _ => HttpStatusCode.InternalServerError
+        };
 }
