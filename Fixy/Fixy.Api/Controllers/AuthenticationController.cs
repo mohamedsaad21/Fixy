@@ -15,7 +15,7 @@ public class AuthenticationController : AppControllerBase
     }
 
     [HttpPost(Router.AuthenticationRouting.SignIn)]
-    public async Task<IActionResult> SignInAsync([FromQuery] SignInCommand command)
+    public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
@@ -26,9 +26,45 @@ public class AuthenticationController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetCustomersQuery()));
     }
 
-    [HttpGet(Router.AuthenticationRouting.ConfirmEmail)]
-    public async Task<IActionResult> ConfirmEmailAsync([FromQuery] ConfirmEmailQuery query)
+    [HttpPost(Router.AuthenticationRouting.SendConfirmEmail)]
+    public async Task<IActionResult> SendConfirmEmailAsync([FromQuery] SendConfirmEmailCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [HttpPost(Router.AuthenticationRouting.ConfirmEmail)]
+    public async Task<IActionResult> ConfirmEmailAsync([FromQuery] ConfirmEmailCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [HttpPost(Router.AuthenticationRouting.RefreshToken)]
+    public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [HttpPost(Router.AuthenticationRouting.RevokeToken)]
+    public async Task<IActionResult> RevokeTokenAsync([FromBody] RevokeTokenCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [HttpPost(Router.AuthenticationRouting.SendResetPassword)]
+    public async Task<IActionResult> SendResetPasswordAsync([FromForm] SendResetPasswordCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [HttpGet(Router.AuthenticationRouting.ConfirmResetPassword)]
+    public async Task<IActionResult> ConfirmResetPasswordAsync([FromQuery] ConfirmResetPasswordQuery query)
     {
         return ToActionResult(await Mediator.Send(query));
+    }
+
+    [HttpPost(Router.AuthenticationRouting.ResetPassword)]
+    public async Task<IActionResult> ResetPasswordAsync([FromForm] ResetPasswordCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
     }
 }

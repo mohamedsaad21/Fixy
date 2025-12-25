@@ -22,8 +22,6 @@ public static class ModuleApplicationDependencies
         // Add Services
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<IEmailService, EmailService>();
-
-
         return services;
     }
 }

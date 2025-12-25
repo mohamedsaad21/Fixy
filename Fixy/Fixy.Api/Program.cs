@@ -7,6 +7,8 @@ using Fixy.Infrastructure.Seeder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Serilog;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -56,6 +58,10 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedUICultures = supportedCultures;
 });
 
+// Serilog
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+builder.Services.AddSerilog();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,6 +76,11 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = "swagger";
     });
 }
+
+// Localization Middleware
+var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(options.Value);
+
 
 app.UseHttpsRedirection();
 

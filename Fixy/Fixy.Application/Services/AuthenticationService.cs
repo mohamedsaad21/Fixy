@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Fixy.Application.Services;
@@ -53,4 +54,17 @@ public class AuthenticationService : IAuthenticationService
         return jwtSecurityToken;
     }
 
+    public async Task<RefreshToken> GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var generator = new RNGCryptoServiceProvider();
+        generator.GetBytes(randomNumber);
+
+        return new RefreshToken
+        {
+            Token = Convert.ToBase64String(randomNumber),
+            CreatedOn = DateTime.UtcNow,
+            ExpiresOn = DateTime.UtcNow.AddDays(30)
+        };
+    }
 }

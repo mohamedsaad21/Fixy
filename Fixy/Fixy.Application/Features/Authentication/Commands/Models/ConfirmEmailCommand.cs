@@ -1,9 +1,9 @@
 ﻿using Fixy.Application.Bases;
 using MediatR;
 
-namespace Fixy.Application.Features.Authentication.Queries.Models;
+namespace Fixy.Application.Features.Authentication.Commands.Models;
 
-public class ConfirmEmailQuery : IRequest<Result>
+public class ConfirmEmailCommand : IRequest<Result>
 {
     public string Email { get; set; }
     public string Code { get; set; }
