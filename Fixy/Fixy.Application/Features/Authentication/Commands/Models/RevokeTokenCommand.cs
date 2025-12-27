@@ -3,7 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Authentication.Commands.Models;
 
-public class RevokeTokenCommand : IRequest<Result>
-{
-    public string Token { get; set; }
-}
+public record RevokeTokenCommand(string Token) : IRequest<Result>;

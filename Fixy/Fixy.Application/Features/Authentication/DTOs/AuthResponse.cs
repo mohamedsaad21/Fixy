@@ -1,4 +1,4 @@
-﻿namespace Fixy.Domain.Responses;
+﻿namespace Fixy.Application.Features.Authentication.DTOs;
 
 public class AuthResponse
 {

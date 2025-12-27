@@ -3,7 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Authentication.Commands.Models;
 
-public class SendConfirmEmailCommand : IRequest<Result>
-{
-    public string Email { get; set; }
-}
+public record SendConfirmEmailCommand(string Email) : IRequest<Result>;

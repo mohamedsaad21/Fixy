@@ -1,4 +1,4 @@
-﻿namespace Fixy.Domain.Helpers;
+﻿namespace Fixy.Infrastructure.Configurations;
 
 public class JWTSettings
 {

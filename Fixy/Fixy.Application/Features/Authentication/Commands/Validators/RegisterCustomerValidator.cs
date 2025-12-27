@@ -17,20 +17,13 @@ public class RegisterCustomerValidator : AbstractValidator<RegisterCustomerComma
 
     public void ApplyValidationRules()
     {
-        RuleFor(x => x.FullName).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.FullName).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
 
-        RuleFor(x => x.UserName).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.Email).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
 
-        RuleFor(x => x.Email).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.Password).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
 
-        RuleFor(x => x.Password).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
-
-        RuleFor(x => x.ConfirmPassword).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
+        RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
             .Equal(x => x.Password).WithMessage(_stringLocalizer[SharedResourcesKeys.PasswordNotMatchConfirmPassword]);
     }
 }

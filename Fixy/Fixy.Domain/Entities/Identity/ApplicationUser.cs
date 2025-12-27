@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Fixy.Domain.Entities.Identity;
 
-public class ApplicationUser : IdentityUser
+public class ApplicationUser : IdentityUser<Guid>
 {
     public ApplicationUser()
     {

@@ -1,4 +1,4 @@
-﻿namespace Fixy.Domain.AppMetaData;
+﻿namespace Fixy.Api.Contracts.Routing;
 
 public static class Router
 {
@@ -10,6 +10,7 @@ public static class Router
     {
         public const string prefix = Rule + "/Authentication";
         public const string RegisterCustomer = prefix + "/Register-Customer";
+        public const string RegisterTechnician = prefix + "/Register-Technician";
         public const string SignIn = prefix + "/SignIn";
         public const string CustomersList = prefix + "/Customers-List";
         public const string SendConfirmEmail = prefix + "/Send-Confirm-Email";

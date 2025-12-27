@@ -2,16 +2,18 @@
 using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
 using Fixy.Application.Features.Authentication.Commands.Models;
+using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Application.Resources;
+using Fixy.Domain.Constants;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Helpers;
-using Fixy.Domain.Responses;
+using Fixy.Infrastructure.Persistence.Abstracts;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Mail;
 
 namespace Fixy.Application.Features.Authentication.Commands.Handlers;
 
@@ -22,43 +24,42 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
                                                                                       IRequestHandler<ConfirmEmailCommand, Result>,
                                                                                       IRequestHandler<SendConfirmEmailCommand, Result>,
                                                                                       IRequestHandler<SendResetPasswordCommand, Result>,
-                                                                                      IRequestHandler<ResetPasswordCommand, Result>
+                                                                                      IRequestHandler<ResetPasswordCommand, Result>,
+                                                                                      IRequestHandler<RegisterTechnicianCommand, Result<Guid>>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly IAuthenticationService _authenticationService;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailService _emailService;
     private readonly IMapper _mapper;
+    private readonly ITechnicianRepository _technicianRepository;
+    private readonly IFileService _fileService;
     public AuthenticationCommandsHandler(IStringLocalizer<SharedResources> stringLocalizer, 
-        IAuthenticationService authenticationService, IMapper mapper, UserManager<ApplicationUser> userManager, IEmailService emailService)
+        IAuthenticationService authenticationService, IMapper mapper, UserManager<ApplicationUser> userManager,
+        IEmailService emailService, ITechnicianRepository technicianRepository, IFileService fileService)
     {
         _stringLocalizer = stringLocalizer;
         _authenticationService = authenticationService;
         _mapper = mapper;
         _userManager = userManager;
         _emailService = emailService;
+        _technicianRepository = technicianRepository;
+        _fileService = fileService;
     }
 
     public async Task<Result> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
     {
-        if (await _userManager.FindByNameAsync(request.UserName) != null)
-            return Errors.UserNameAlreadyExists;
-
         if (await _userManager.FindByEmailAsync(request.Email) != null)
             return Errors.EmailAlreadyExists;
 
         var customer = _mapper.Map<Customer>(request);
+        customer.UserName = new MailAddress(request.Email).User;
 
         var result = await _userManager.CreateAsync(customer, request.Password);
 
         if (!result.Succeeded)
         {
-            var errors = string.Empty;
-            foreach (var error in result.Errors)
-            {
-                errors += $"{error.Description},";
-            }
-            return Errors.IdentityFailure(errors);
+            return Errors.IdentityCreateUserFailed;
         }
 
         await _userManager.AddToRoleAsync(customer, Roles.Customer);
@@ -224,5 +225,80 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         await _userManager.AddPasswordAsync(user, request.Password);
 
         return Result.Success();
+    }
+
+    public async Task<Result<Guid>> Handle(RegisterTechnicianCommand request, CancellationToken cancellationToken)
+    {
+        if (await _userManager.FindByEmailAsync(request.Email) != null)
+            return Errors.EmailAlreadyExists;
+
+        if (await _technicianRepository.NationalIdExistsAsync(request.NationalId))
+            return Errors.NationalIdAlreadyExists;
+
+        var user = new ApplicationUser
+        {
+            Id = Guid.NewGuid(),
+            FullName = request.FullName,
+            UserName = request.Email,
+            Email = request.Email
+        };
+
+        var createResult = await _userManager.CreateAsync(user, request.Password);
+        if (!createResult.Succeeded)
+            return Errors.IdentityCreateUserFailed;
+
+        var roleResult = await _userManager.AddToRoleAsync(user, Roles.Technician);
+        if (!roleResult.Succeeded)
+            return Errors.IdentityAddRoleFailed;
+
+        var technician = _mapper.Map<Technician>(request);
+        technician.Id = user.Id;
+
+        string? profilePicturePublicId = null;
+        string? nationalIdCardImagePublicId = null;
+
+        try
+        {
+            var ProfileResult = await _fileService.UploadAsync($"Technicians/{technician.Id}/Profiles", request.ProfilePicture);
+
+            if (!ProfileResult.IsSuccess)
+                throw new Exception("Profile Upload Failed");
+
+            technician.ProfilePictureUrl = ProfileResult.Url;
+            technician.ProfilePicturePublicId = ProfileResult.PublicId;
+            profilePicturePublicId = ProfileResult.PublicId;
+
+            var nationalIdResult = await _fileService.UploadAsync($"Technicians/{technician.Id}/NationalIds", request.NationalIdCardImage);
+
+            if (!nationalIdResult.IsSuccess)
+                throw new Exception("NationalId Upload Failed");
+
+            technician.NationalIdCardImageUrl = nationalIdResult.Url;
+            technician.NationalIdCardImagePublicId = nationalIdResult.PublicId;
+            nationalIdCardImagePublicId = nationalIdResult.PublicId;
+
+            await _technicianRepository.AddAsync(technician);
+            // Generate confirm email code
+            var random = new Random();
+            var code = random.Next(1, 1000000).ToString("D6");
+            user.Code = code;
+            await _userManager.UpdateAsync(user);
+            // send code to customer to verify email
+            var message = $"This code to confirm your account: {code}";
+            await _emailService.SendEmailAsync(user.Email, message, "Confirm Account");
+            return technician.Id;
+        }
+        catch (Exception)
+        {
+            if (!string.IsNullOrWhiteSpace(profilePicturePublicId))
+                await _fileService.DeleteAsync(profilePicturePublicId);
+
+            if (!string.IsNullOrWhiteSpace(nationalIdCardImagePublicId))
+                await _fileService.DeleteAsync(nationalIdCardImagePublicId);
+
+            await _userManager.DeleteAsync(user);
+
+            return Errors.FileUploadFailed;
+        }
     }
 }

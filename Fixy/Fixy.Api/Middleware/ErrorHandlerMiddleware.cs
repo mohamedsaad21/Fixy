@@ -1,12 +1,11 @@
 ﻿using Fixy.Application.Bases;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 
-namespace Fixy.Application.Middleware;
+namespace Fixy.Api.Middleware;
 
 public sealed class ErrorHandlerMiddleware
 {

@@ -1,10 +1,7 @@
 ﻿using Fixy.Application.Bases;
-using Fixy.Domain.Responses;
+using Fixy.Application.Features.Authentication.DTOs;
 using MediatR;
 
 namespace Fixy.Application.Features.Authentication.Commands.Models;
 
-public class RefreshTokenCommand : IRequest<Result<AuthResponse>>
-{
-    public string Token { get; set; }
-}
+public record RefreshTokenCommand(string Token) : IRequest<Result<AuthResponse>>;

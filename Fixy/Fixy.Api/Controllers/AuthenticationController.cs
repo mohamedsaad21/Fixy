@@ -1,13 +1,19 @@
 ﻿using Fixy.Api.Base;
+using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Authentication.Commands.Models;
 using Fixy.Application.Features.Authentication.Queries.Models;
-using Fixy.Domain.AppMetaData;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fixy.Api.Controllers;
 
 public class AuthenticationController : AppControllerBase
 {
+    [HttpPost(Router.AuthenticationRouting.RegisterTechnician)]
+    public async Task<IActionResult> RegisterTechnicianAsync([FromForm] RegisterTechnicianCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
     [HttpPost(Router.AuthenticationRouting.RegisterCustomer)]
     public async Task<IActionResult> RegisterCustomerAsync([FromBody] RegisterCustomerCommand command)
     {
@@ -27,13 +33,13 @@ public class AuthenticationController : AppControllerBase
     }
 
     [HttpPost(Router.AuthenticationRouting.SendConfirmEmail)]
-    public async Task<IActionResult> SendConfirmEmailAsync([FromQuery] SendConfirmEmailCommand command)
+    public async Task<IActionResult> SendConfirmEmailAsync([FromForm] SendConfirmEmailCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
     [HttpPost(Router.AuthenticationRouting.ConfirmEmail)]
-    public async Task<IActionResult> ConfirmEmailAsync([FromQuery] ConfirmEmailCommand command)
+    public async Task<IActionResult> ConfirmEmailAsync([FromForm] ConfirmEmailCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }

@@ -1,5 +1,6 @@
-﻿using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Helpers;
+﻿using CloudinaryDotNet;
+using Fixy.Domain.Entities.Identity;
+using Fixy.Infrastructure.Configurations;
 using Fixy.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +16,7 @@ public static class ServiceRegisteration
 {
     public static IServiceCollection AddServiceRegisteration(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
         
         var jwtSettings = new JWTSettings();
         configuration.GetSection(nameof(jwtSettings)).Bind(jwtSettings);
@@ -24,6 +25,14 @@ public static class ServiceRegisteration
         var emailSettings = new EmailSettings();
         configuration.GetSection(nameof(emailSettings)).Bind(emailSettings);
         services.AddSingleton(emailSettings);
+
+        var cloudinarySettings = new CloudinarySettings();
+        configuration.GetSection(nameof(cloudinarySettings)).Bind(cloudinarySettings);
+        services.AddSingleton(cloudinarySettings);
+
+        var cloudinary = new Cloudinary(cloudinarySettings.Url);
+        cloudinary.Api.Secure = true;
+        services.AddSingleton(cloudinary);
 
         services.AddAuthentication(options =>
         {
