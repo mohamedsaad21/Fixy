@@ -1,6 +1,6 @@
-﻿using Fixy.Domain.Entities;
+﻿using Fixy.Domain.Constants;
+using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Helpers;
 using Microsoft.AspNetCore.Identity;
 
 namespace Fixy.Infrastructure.Seeder;
@@ -13,7 +13,8 @@ public static class UserSeeder
         {
             FullName = "Mohamed Saad",
             UserName = "admin",
-            Email = "admin@fixy.com"
+            Email = "admin@fixy.com",
+            EmailConfirmed = true
         };
         var password = "Ad@123";
 

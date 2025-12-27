@@ -3,6 +3,6 @@ using MediatR;
 
 namespace Fixy.Application.Features.Authentication.Commands.Models;
 
-public sealed record RegisterCustomerCommand(
-    string FullName, string UserName, string Email, string Password, string ConfirmPassword
+public record RegisterCustomerCommand(
+    string FullName, string Email, string Password, string ConfirmPassword
     ) : IRequest<Result>;

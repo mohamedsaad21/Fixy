@@ -1,10 +1,11 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Helpers;
+using Fixy.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Fixy.Application.Services;
@@ -35,7 +36,7 @@ public class AuthenticationService : IAuthenticationService
             new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim("uid", user.Id),
+            new Claim("uid", user.Id.ToString()),
         }.Union(userClaims)
         .Union(roleClaims);
 
@@ -53,4 +54,17 @@ public class AuthenticationService : IAuthenticationService
         return jwtSecurityToken;
     }
 
+    public async Task<RefreshToken> GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        using var generator = new RNGCryptoServiceProvider();
+        generator.GetBytes(randomNumber);
+
+        return new RefreshToken
+        {
+            Token = Convert.ToBase64String(randomNumber),
+            CreatedOn = DateTime.UtcNow,
+            ExpiresOn = DateTime.UtcNow.AddDays(30)
+        };
+    }
 }

@@ -1,4 +1,4 @@
-﻿namespace Fixy.Domain.Helpers;
+﻿namespace Fixy.Domain.Constants;
 
 public class Roles
 {

@@ -7,5 +7,6 @@ public partial class AuthenticationProfile : Profile
     public AuthenticationProfile()
     {
         RegisterCustomerCommandToCustomerMapping();
+        RegisterTechnicianCommandToTechnicianMapping();
     }
 }

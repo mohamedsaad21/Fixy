@@ -1,11 +1,7 @@
 ﻿using Fixy.Application.Bases;
-using Fixy.Domain.Responses;
+using Fixy.Application.Features.Authentication.DTOs;
 using MediatR;
 
 namespace Fixy.Application.Features.Authentication.Commands.Models;
 
-public class SignInCommand : IRequest<Result<AuthResponse>>
-{
-    public string Email { get; set; }
-    public string Password { get; set; }
-}
+public record SignInCommand(string Email, string Password) : IRequest<Result<AuthResponse>>;

@@ -6,7 +6,6 @@ using Fixy.Application.Features.Authentication.Queries.Results;
 using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Helpers;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +14,7 @@ using Microsoft.Extensions.Localization;
 namespace Fixy.Application.Features.Authentication.Queries.Handlers;
 
 public class AuthenticationQueriesHandler : IRequestHandler<GetCustomersQuery, Result<List<GetCustomersResponse>>>,
-                                                                                IRequestHandler<ConfirmEmailQuery, Result>
+                                                                                IRequestHandler<ConfirmResetPasswordQuery, Result>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly IAuthenticationService _authenticationService;
@@ -39,7 +38,7 @@ public class AuthenticationQueriesHandler : IRequestHandler<GetCustomersQuery, R
         return result;
     }
 
-    public async Task<Result> Handle(ConfirmEmailQuery request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ConfirmResetPasswordQuery request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
 
@@ -49,8 +48,6 @@ public class AuthenticationQueriesHandler : IRequestHandler<GetCustomersQuery, R
         if (user.Code != request.Code)
             return Errors.InvalidCode;
 
-        user.EmailConfirmed = true;
-        await _userManager.UpdateAsync(user);
         return Result.Success();
     }
 }

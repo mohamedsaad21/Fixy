@@ -6,4 +6,5 @@ namespace Fixy.Application.Abstracts;
 public interface IAuthenticationService
 {
     Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user);
+    Task<RefreshToken> GenerateRefreshToken();
 }

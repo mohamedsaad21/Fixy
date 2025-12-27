@@ -1,8 +1,8 @@
 ﻿using Fixy.Application.Abstracts;
-using Fixy.Domain.Helpers;
 using MailKit.Security;
 using MimeKit;
 using MailKit.Net.Smtp;
+using Fixy.Infrastructure.Configurations;
 
 namespace Fixy.Application.Services;
 

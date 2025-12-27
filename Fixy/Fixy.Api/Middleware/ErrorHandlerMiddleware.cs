@@ -1,11 +1,11 @@
 ﻿using Fixy.Application.Bases;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 
-namespace Fixy.Application.Middleware;
+namespace Fixy.Api.Middleware;
 
 public sealed class ErrorHandlerMiddleware
 {
@@ -24,6 +24,7 @@ public sealed class ErrorHandlerMiddleware
         }
         catch (Exception exception)
         {
+            Log.Error(exception, exception.Message, context.Request, "");
             await HandleExceptionAsync(context, exception);
         }
     }
@@ -47,6 +48,13 @@ public sealed class ErrorHandlerMiddleware
                     "ValidationError",
                     ErrorType.Validation,
                     exception.Message),
+
+            FluentValidation.ValidationException fvEx =>
+                new Error(
+                    "ValidationError",
+                    ErrorType.Validation,
+                    exception.Message
+                ),
 
             KeyNotFoundException =>
                 new Error(

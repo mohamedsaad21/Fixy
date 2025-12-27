@@ -4,4 +4,5 @@ namespace Fixy.Domain.Entities;
 
 public class Customer : ApplicationUser
 {
+
 }
