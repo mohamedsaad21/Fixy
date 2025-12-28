@@ -239,7 +239,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         {
             Id = Guid.NewGuid(),
             FullName = request.FullName,
-            UserName = request.Email,
+            UserName = new MailAddress(request.Email).User,
             Email = request.Email
         };
 

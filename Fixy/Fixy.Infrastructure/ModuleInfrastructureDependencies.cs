@@ -1,4 +1,5 @@
 ﻿using Fixy.Infrastructure.InfrastructureBases;
+using Fixy.Infrastructure.Persistence;
 using Fixy.Infrastructure.Persistence.Abstracts;
 using Fixy.Infrastructure.Persistence.Repositories;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,9 @@ public static class ModuleInfrastructureDependencies
     {
         services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
         services.AddScoped<ITechnicianRepository, TechnicianRepository>();
+        services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
+        services.AddScoped<IServiceCategoryRepository, ServiceCategoryRepository>();
+        services.AddScoped<IServiceCategoryReadRepository, ServiceCategoryReadRepository>();
         return services;
     }
 }

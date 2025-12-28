@@ -1,11 +1,9 @@
-﻿using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Enums;
+﻿using Fixy.Domain.Enums;
 
 namespace Fixy.Domain.Entities;
 
-public class Technician
+public class Technician : DatedEntity
 {
-    public Guid Id { get; set; }
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingVerification;
@@ -18,5 +16,4 @@ public class Technician
     public int? ResponseTime { get; set; }
     public double? CancellationRate { get; set; }
     public double? AverageRating { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

@@ -36,4 +36,9 @@ public class SharedResourcesKeys
     public const string RoleAlreadyExists = "RoleAlreadyExists";
     public const string FailedToEditRole = "FailedToEditRole";
     public const string FailedToUpdateUserRoles = "FailedToUpdateUserRoles";
+
+
+    public const string CategoryAlreadyExists = "CategoryAlreadyExists";
+
+
 }

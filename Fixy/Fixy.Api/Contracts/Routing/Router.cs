@@ -6,6 +6,8 @@ public static class Router
     public const string version = "v1";
     public const string Rule = root + "/" + version;
 
+    public const string SingleRoute = "/{Id}";
+
     public static class AuthenticationRouting
     {
         public const string prefix = Rule + "/Authentication";
@@ -20,5 +22,15 @@ public static class Router
         public const string SendResetPassword = prefix + "/Send-Reset-Password";
         public const string ConfirmResetPassword = prefix + "/Confirm-Reset-Password";
         public const string ResetPassword = prefix + "/Reset-Password";
+    }
+
+    public static class CategoryRouting
+    {
+        public const string prefix = Rule + "/Category";
+        public const string List = prefix + "/List";
+        public const string GetById = prefix + "/GetById" + SingleRoute;
+        public const string Create = prefix + "/Create";
+        public const string Edit = prefix + "/Edit";
+        public const string Delete = prefix + "/Delete" + SingleRoute;
     }
 }
