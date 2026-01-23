@@ -9,7 +9,6 @@ public class TechniciansConfigurations : IEntityTypeConfiguration<Technician>
 {
     public void Configure(EntityTypeBuilder<Technician> builder)
     {
-        builder.HasKey(x => x.Id);
         builder.Property(x => x.NationalId).IsRequired().HasMaxLength(14);
         builder.Property(x => x.YearsOfExperience).IsRequired();
 

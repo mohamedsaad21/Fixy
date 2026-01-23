@@ -1,8 +1,9 @@
-﻿using Fixy.Domain.Enums;
+﻿using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Enums;
 
 namespace Fixy.Domain.Entities;
 
-public class Technician : DatedEntity
+public class Technician : ApplicationUser
 {
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }

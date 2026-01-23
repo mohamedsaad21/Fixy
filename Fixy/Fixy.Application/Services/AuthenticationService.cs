@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Abstracts;
+using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity;
@@ -13,11 +14,13 @@ namespace Fixy.Application.Services;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IEmailService _emailService;
     private readonly JWTSettings _jWTSettings;
 
-    public AuthenticationService(UserManager<ApplicationUser> userManager, JWTSettings jWTSettings)
+    public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings)
     {
         _userManager = userManager;
+        _emailService = emailService;
         _jWTSettings = jWTSettings;
     }
 
@@ -66,5 +69,17 @@ public class AuthenticationService : IAuthenticationService
             CreatedOn = DateTime.UtcNow,
             ExpiresOn = DateTime.UtcNow.AddDays(30)
         };
+    }
+
+    public async Task SendCodeAsync(ApplicationUser user, string actionText, string reason)
+    {
+        // Generate  code
+        var random = new Random();
+        var code = random.Next(1, 1000000).ToString("D6");
+        user.Code = code;
+        await _userManager.UpdateAsync(user);
+        // send code to user
+        var message = $"This code to {actionText}: {code}";
+        await _emailService.SendEmailAsync(user.Email, message, reason);
     }
 }

@@ -58,19 +58,10 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         var result = await _userManager.CreateAsync(customer, request.Password);
 
         if (!result.Succeeded)
-        {
             return Errors.IdentityCreateUserFailed;
-        }
 
         await _userManager.AddToRoleAsync(customer, Roles.Customer);
-        // Generate confirm email code
-        var random = new Random();
-        var code = random.Next(1, 1000000).ToString("D6");
-        customer.Code = code;
-        await _userManager.UpdateAsync(customer);
-        // send code to customer to verify email
-        var message = $"This code to confirm your account: {code}";
-        await _emailService.SendEmailAsync(customer.Email, message, "Confirm Account");
+        await _authenticationService.SendCodeAsync(customer, "confirm your account", "Confirm Account");
         return Result.Success();
     }
 
@@ -171,6 +162,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
             return Errors.InvalidCode;
 
         user.EmailConfirmed = true;
+        user.Code = null;
         await _userManager.UpdateAsync(user);
         return Result.Success();
     }
@@ -185,14 +177,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         if (user.EmailConfirmed)
             return Errors.EmailAlreadyConfirmed;
 
-        // Generate confirm email code
-        var random = new Random();
-        var code = random.Next(1, 1000000).ToString("D6");
-        user.Code = code;
-        await _userManager.UpdateAsync(user);
-        // send code to customer to verify email
-        var message = $"This code to confirm your account: {code}";
-        await _emailService.SendEmailAsync(user.Email, message, "Confirm Account");
+        await _authenticationService.SendCodeAsync(user, "confirm your account", "Confirm Account");
         return Result.Success();
     }
 
@@ -203,14 +188,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         if (user == null)
             return Errors.UserNotFound;
 
-        // Generate reset password code
-        var random = new Random();
-        var code = random.Next(1, 1000000).ToString("D6");
-        user.Code = code;
-        await _userManager.UpdateAsync(user);
-        // send code to customer to reset password
-        var message = $"This code to reset your password: {code}";
-        await _emailService.SendEmailAsync(user.Email, message, "Reset Password");
+        await _authenticationService.SendCodeAsync(user, "reset your password", "Reset Password");
         return Result.Success();
     }
 
@@ -235,24 +213,16 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         if (await _technicianRepository.NationalIdExistsAsync(request.NationalId))
             return Errors.NationalIdAlreadyExists;
 
-        var user = new ApplicationUser
-        {
-            Id = Guid.NewGuid(),
-            FullName = request.FullName,
-            UserName = new MailAddress(request.Email).User,
-            Email = request.Email
-        };
+        var technician = _mapper.Map<Technician>(request);
+        technician.UserName = new MailAddress(request.Email).User;
 
-        var createResult = await _userManager.CreateAsync(user, request.Password);
+        var createResult = await _userManager.CreateAsync(technician, request.Password);
         if (!createResult.Succeeded)
             return Errors.IdentityCreateUserFailed;
 
-        var roleResult = await _userManager.AddToRoleAsync(user, Roles.Technician);
+        var roleResult = await _userManager.AddToRoleAsync(technician, Roles.Technician);
         if (!roleResult.Succeeded)
             return Errors.IdentityAddRoleFailed;
-
-        var technician = _mapper.Map<Technician>(request);
-        technician.Id = user.Id;
 
         string? profilePicturePublicId = null;
         string? nationalIdCardImagePublicId = null;
@@ -277,15 +247,8 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
             technician.NationalIdCardImagePublicId = nationalIdResult.PublicId;
             nationalIdCardImagePublicId = nationalIdResult.PublicId;
 
-            await _technicianRepository.AddAsync(technician);
-            // Generate confirm email code
-            var random = new Random();
-            var code = random.Next(1, 1000000).ToString("D6");
-            user.Code = code;
-            await _userManager.UpdateAsync(user);
-            // send code to customer to verify email
-            var message = $"This code to confirm your account: {code}";
-            await _emailService.SendEmailAsync(user.Email, message, "Confirm Account");
+            await _userManager.UpdateAsync(technician);
+            await _authenticationService.SendCodeAsync(technician, "confirm your account", "Confirm Account");
             return technician.Id;
         }
         catch (Exception)
@@ -296,7 +259,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
             if (!string.IsNullOrWhiteSpace(nationalIdCardImagePublicId))
                 await _fileService.DeleteAsync(nationalIdCardImagePublicId);
 
-            await _userManager.DeleteAsync(user);
+            await _userManager.DeleteAsync(technician);
 
             return Errors.FileUploadFailed;
         }
