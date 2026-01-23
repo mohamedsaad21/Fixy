@@ -1,9 +1,7 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
-using Fixy.Application.Features.ServiceCategory.Commands.Models;
-using Fixy.Application.Features.ServiceCategory.Queries.Models;
-using Fixy.Domain.Constants;
-using Microsoft.AspNetCore.Authorization;
+using Fixy.Application.Features.ServiceCategories.Commands.Models;
+using Fixy.Application.Features.ServiceCategories.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fixy.Api.Controllers;
