@@ -9,9 +9,9 @@ public class TechniciansConfigurations : IEntityTypeConfiguration<Technician>
 {
     public void Configure(EntityTypeBuilder<Technician> builder)
     {
-        builder.Property(x => x.NationalId).IsRequired().HasMaxLength(14);
-        builder.Property(x => x.YearsOfExperience).IsRequired();
+        builder.Property(x => x.NationalId).HasMaxLength(14);
 
         builder.HasOne<ApplicationUser>().WithOne().HasForeignKey<Technician>(x => x.Id);
+        builder.HasOne(x => x.ServiceCategory).WithMany(x => x.Technicians).HasForeignKey(x => x.ServiceCategoryId);
     }
 }

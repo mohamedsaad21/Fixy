@@ -33,4 +33,13 @@ public static class Router
         public const string Edit = prefix + "/Edit";
         public const string Delete = prefix + "/Delete" + SingleRoute;
     }
+    public static class ServiceRequestRouting
+    {
+        public const string prefix = Rule + "/Request";
+        public const string List = prefix + "/List";
+        public const string GetById = prefix + "/GetById" + SingleRoute;
+        public const string Create = prefix + "/Create";
+        public const string Edit = prefix + "/Edit";
+        public const string Delete = prefix + "/Delete" + SingleRoute;
+    }
 }

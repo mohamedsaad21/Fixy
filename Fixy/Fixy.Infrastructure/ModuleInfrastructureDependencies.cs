@@ -12,10 +12,11 @@ public static class ModuleInfrastructureDependencies
     {
         services.AddScoped(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
         services.AddScoped<ITechnicianRepository, TechnicianRepository>();
-        services.AddScoped<IDbConnectionFactory, SqlConnectionFactory>();
+        services.AddSingleton<IDbConnectionFactory, SqlConnectionFactory>();
         services.AddScoped<IServiceCategoryRepository, ServiceCategoryRepository>();
         services.AddScoped<IServiceCategoryReadRepository, ServiceCategoryReadRepository>();
         services.AddScoped<IServiceRequestRepository, ServiceRequestRepository>();
+        services.AddScoped<IServiceRequestReadRepository, ServiceRequestReadRepository>();
         return services;
     }
 }

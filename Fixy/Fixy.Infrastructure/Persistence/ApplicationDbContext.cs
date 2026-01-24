@@ -21,6 +21,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<ServiceCategory> ServiceCategories { get; set; }
     public virtual DbSet<ServiceRequest> ServiceRequests { get; set; }
     public virtual DbSet<ServiceRequestCategories> ServiceRequestCategories { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

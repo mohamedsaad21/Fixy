@@ -9,5 +9,6 @@ public record RegisterTechnicianCommand(
     string Email, 
     string NationalId,
     int YearsOfExperience,
+    Guid ServiceCategoryId,
     IFormFile ProfilePicture,
     IFormFile NationalIdCardImage, string Password, string ConfirmPassword) : IRequest<Result<Guid>>;

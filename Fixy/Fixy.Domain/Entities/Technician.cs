@@ -17,4 +17,6 @@ public class Technician : ApplicationUser
     public int? ResponseTime { get; set; }
     public double? CancellationRate { get; set; }
     public double? AverageRating { get; set; }
+    public Guid ServiceCategoryId { get; set; }
+    public ServiceCategory ServiceCategory { get; set; }
 }

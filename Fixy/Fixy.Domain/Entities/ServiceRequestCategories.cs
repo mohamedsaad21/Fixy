@@ -1,6 +1,6 @@
 ﻿namespace Fixy.Domain.Entities;
 
-public class ServiceRequestCategories : BaseEntity
+public class ServiceRequestCategories
 {
     public Guid CategoryId { get; set; } 
     public ServiceCategory Category { get; set; } 

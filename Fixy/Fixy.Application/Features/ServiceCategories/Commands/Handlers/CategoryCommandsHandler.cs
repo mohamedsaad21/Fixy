@@ -30,7 +30,6 @@ public class CategoryCommandsHandler : IRequestHandler<AddCategoryCommand, Resul
     {
         var category = _mapper.Map<ServiceCategory>(request);
         await _serviceCategoryRepository.AddAsync(category);
-
         return category.Id;
     }
 
