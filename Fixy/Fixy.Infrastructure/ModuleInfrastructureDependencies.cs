@@ -16,7 +16,6 @@ public static class ModuleInfrastructureDependencies
         services.AddScoped<IServiceCategoryRepository, ServiceCategoryRepository>();
         services.AddScoped<IServiceCategoryReadRepository, ServiceCategoryReadRepository>();
         services.AddScoped<IServiceRequestRepository, ServiceRequestRepository>();
-        services.AddScoped<IServiceRequestReadRepository, ServiceRequestReadRepository>();
         return services;
     }
 }

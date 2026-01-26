@@ -36,7 +36,9 @@ public static class Router
     public static class ServiceRequestRouting
     {
         public const string prefix = Rule + "/Request";
-        public const string List = prefix + "/List";
+        public const string ServiceRequestsList = prefix + "/Service-Requests-List";
+        public const string CustomerServiceRequestsList = prefix + "/Customer-Service-Requests-List";
+        public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-List";
         public const string GetById = prefix + "/GetById" + SingleRoute;
         public const string Create = prefix + "/Create";
         public const string Edit = prefix + "/Edit";

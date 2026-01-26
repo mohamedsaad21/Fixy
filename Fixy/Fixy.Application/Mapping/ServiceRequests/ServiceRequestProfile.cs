@@ -7,6 +7,5 @@ public partial class ServiceRequestProfile : Profile
     public ServiceRequestProfile()
     {
         AddRequestCommandToRequestDomainMapping();
-        RequestDomainListToRequestListMapping();
     }
 }

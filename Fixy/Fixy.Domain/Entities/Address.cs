@@ -10,6 +10,8 @@ public class Address
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
 
+    private Address() { }
+
     public Address(string country, string city, string area, string street, string buildingNumber, double? latitude, double? longitude)
     {
         Country = country;

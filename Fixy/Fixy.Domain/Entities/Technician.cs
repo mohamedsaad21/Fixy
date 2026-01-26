@@ -5,6 +5,10 @@ namespace Fixy.Domain.Entities;
 
 public class Technician : ApplicationUser
 {
+    public Technician()
+    {
+        ServiceBookings = new HashSet<ServiceBooking>();
+    }
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingVerification;
@@ -19,4 +23,5 @@ public class Technician : ApplicationUser
     public double? AverageRating { get; set; }
     public Guid ServiceCategoryId { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
+    public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }
 }

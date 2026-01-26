@@ -8,7 +8,7 @@ namespace Fixy.Application.Features.ServiceRequests.Commands.CreateServiceReques
 public record CreateServiceRequestCommand
     (
         string Description, 
-        IFormFile[] Images,
+        IFormFile[]? Images,
         DateTime ScheduledDateTime, 
         Guid[] ServiceCategoriesIds,
         AddressDto Address

@@ -16,4 +16,5 @@ public static class Errors
     public static Error InvalidCode => new("InvalidCode", ErrorType.BadRequest, "This code is invalid!");
     public static Error InvalidToken => new("InvalidToken", ErrorType.BadRequest, "This token is invalid!");
     public static Error InactiveToken => new("InactiveToken", ErrorType.BadRequest, "This token is inactive!");
+    public static Error RequestInsertionFailed => new("InsertionFailed", ErrorType.BadRequest, "Failed to insert Request");
 }

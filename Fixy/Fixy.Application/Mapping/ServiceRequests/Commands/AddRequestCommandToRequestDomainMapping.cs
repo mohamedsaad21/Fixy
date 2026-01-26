@@ -9,6 +9,6 @@ public partial class ServiceRequestProfile
     public void AddRequestCommandToRequestDomainMapping()
     {
         CreateMap<CreateServiceRequestCommand, ServiceRequest>();
-        CreateMap<AddressDto, Address>();
+        CreateMap<AddressDto, Address>().ReverseMap();
     }
 }
