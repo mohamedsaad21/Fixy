@@ -38,10 +38,16 @@ public static class Router
         public const string prefix = Rule + "/Request";
         public const string ServiceRequestsList = prefix + "/Service-Requests-List";
         public const string CustomerServiceRequestsList = prefix + "/Customer-Service-Requests-List";
-        public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-List";
         public const string GetById = prefix + "/GetById" + SingleRoute;
         public const string Create = prefix + "/Create";
         public const string Edit = prefix + "/Edit";
         public const string Delete = prefix + "/Delete" + SingleRoute;
     }
-}
+
+    public static class TechnicianRouting
+    {
+        public const string prefix = Rule + "/Technician";
+        public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-List";
+        public const string Location = prefix + "/Location";
+    }
+    }

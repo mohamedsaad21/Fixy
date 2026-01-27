@@ -4,6 +4,7 @@ public static class Errors
 {
     public static Error EmailAlreadyExists => new("EmailAlreadyExists", ErrorType.BadRequest, "Email already exists");
     public static Error IdentityCreateUserFailed => new("IdentityCreateUserFailed", ErrorType.BadRequest, "Failed to create user");
+    public static Error Unauthorized => new("Unauthorized", ErrorType.Unauthorized, "You are not authorized to perform this action");
     public static Error IdentityAddRoleFailed => new("IdentityAddRoleFailed", ErrorType.BadRequest, "Failed to add role");
     public static Error PhoneNumberAlreadyExists => new("PhoneNumberAlreadyExists", ErrorType.BadRequest, "Phone number already exists");
     public static Error NationalIdAlreadyExists => new("NationalIdAlreadyExists", ErrorType.BadRequest, "National Id already exists");
@@ -17,4 +18,5 @@ public static class Errors
     public static Error InvalidToken => new("InvalidToken", ErrorType.BadRequest, "This token is invalid!");
     public static Error InactiveToken => new("InactiveToken", ErrorType.BadRequest, "This token is inactive!");
     public static Error RequestInsertionFailed => new("InsertionFailed", ErrorType.BadRequest, "Failed to insert Request");
+    public static Error LocationNotUpdated => new("LocationNotUpdated", ErrorType.BadRequest, "You must update your location");
 }

@@ -23,5 +23,6 @@ public class Technician : ApplicationUser
     public double? AverageRating { get; set; }
     public Guid ServiceCategoryId { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
+    public TechnicianLocation TechnicianLocation { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }
 }
