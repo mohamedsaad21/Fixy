@@ -17,7 +17,7 @@ public class RefreshTokenValidator : AbstractValidator<RefreshTokenCommand>
 
     public void ApplyValidationRules()
     {
-        RuleFor(x => x.Token).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        //RuleFor(x => x.Token).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
+        //    .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
     }
 }

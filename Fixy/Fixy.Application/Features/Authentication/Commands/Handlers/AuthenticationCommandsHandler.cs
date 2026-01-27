@@ -111,12 +111,13 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
 
     public async Task<Result<AuthResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == request.Token));
+        var token = _httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
+        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
 
         if (user == null)
             return Errors.InvalidToken;
 
-        var refreshToken = user.RefreshTokens.Single(t => t.Token == request.Token);
+        var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
 
         if (!refreshToken.IsActive)
             return Errors.InactiveToken;
@@ -130,11 +131,12 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
         SetTokenAndRefreshTokenInCookie(accessToken, newRefreshToken.Token, newRefreshToken.ExpiresOn);
-
+        var roles = await _userManager.GetRolesAsync(user);
         return new AuthResponse
         {
             UserName = user.UserName,
             Email = user.Email,
+            Roles = roles.ToList(),
             Token = accessToken,
             RefreshToken = newRefreshToken.Token,
             RefreshTokenExpiration = newRefreshToken.ExpiresOn
@@ -280,12 +282,12 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         if (response == null)
             throw new InvalidOperationException("HTTP context is not available");
 
-        var cookieOptions = new CookieOptions
+        var refreshTokenCookieOptions = new CookieOptions
         {
             HttpOnly = true,
             Expires = expires.ToLocalTime()
         };
         response.Cookies.Append("token", token);
-        response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        response.Cookies.Append("refreshToken", refreshToken, refreshTokenCookieOptions);
     }
 }

@@ -45,9 +45,9 @@ public class AuthenticationController : AppControllerBase
     }
 
     [HttpPost(Router.AuthenticationRouting.RefreshToken)]
-    public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenCommand command)
+    public async Task<IActionResult> RefreshTokenAsync()
     {
-        return ToActionResult(await Mediator.Send(command));
+        return ToActionResult(await Mediator.Send(new RefreshTokenCommand()));
     }
 
     [HttpPost(Router.AuthenticationRouting.RevokeToken)]

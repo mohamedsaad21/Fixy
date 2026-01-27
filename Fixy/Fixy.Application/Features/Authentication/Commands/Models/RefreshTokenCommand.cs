@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Authentication.Commands.Models;
 
-public record RefreshTokenCommand(string Token) : IRequest<Result<AuthResponse>>;
+public record RefreshTokenCommand() : IRequest<Result<AuthResponse>>;
