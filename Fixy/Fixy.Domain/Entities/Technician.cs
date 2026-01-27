@@ -8,6 +8,7 @@ public class Technician : ApplicationUser
     public Technician()
     {
         ServiceBookings = new HashSet<ServiceBooking>();
+        PriceOffers = new HashSet<PriceOffer>();
     }
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
@@ -25,4 +26,5 @@ public class Technician : ApplicationUser
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }
+    public virtual ICollection<PriceOffer> PriceOffers { get; set; }
 }

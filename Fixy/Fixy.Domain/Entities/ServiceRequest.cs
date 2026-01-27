@@ -10,6 +10,7 @@ public class ServiceRequest : DatedEntity
         ServiceCategories = new HashSet<ServiceCategory>();
         ServiceRequestImages = new HashSet<ServiceRequestImage>();
         ServiceBookings = new HashSet<ServiceBooking>();
+        PriceOffers = new HashSet<PriceOffer>();
     }
     public Guid CustomerId { get; set; }
     public Customer Customer { get; set; }
@@ -21,4 +22,5 @@ public class ServiceRequest : DatedEntity
     public virtual ICollection<ServiceCategory> ServiceCategories { get; set; }
     public virtual ICollection<ServiceRequestImage> ServiceRequestImages { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }
+    public virtual ICollection<PriceOffer> PriceOffers { get; set; }
 }

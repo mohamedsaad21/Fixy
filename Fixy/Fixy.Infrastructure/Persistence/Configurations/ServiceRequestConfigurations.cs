@@ -33,5 +33,6 @@ public class ServiceRequestConfigurations : IEntityTypeConfiguration<ServiceRequ
         });
 
         builder.HasMany(x => x.ServiceRequestImages).WithOne(x => x.ServiceRequest).HasForeignKey(x => x.ServiceRequestId);
+        builder.HasMany(x => x.PriceOffers).WithOne(x => x.ServiceRequest).HasForeignKey(x => x.ServiceRequestId);
     }
 }

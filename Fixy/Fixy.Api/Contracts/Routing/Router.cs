@@ -38,6 +38,8 @@ public static class Router
         public const string prefix = Rule + "/Request";
         public const string ServiceRequestsList = prefix + "/Service-Requests-List";
         public const string CustomerServiceRequestsList = prefix + "/Customer-Service-Requests-List";
+        public const string CustomerServiceRequestById = prefix + "/Customer-Service-Request" + SingleRoute;
+        public const string CreatePriceOffer = prefix + "/price-offers";
         public const string GetById = prefix + "/GetById" + SingleRoute;
         public const string Create = prefix + "/Create";
         public const string Edit = prefix + "/Edit";
@@ -50,4 +52,9 @@ public static class Router
         public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-List";
         public const string Location = prefix + "/Location";
     }
+    public static class PriceOfferRouting
+    {
+        public const string prefix = Rule + "/Price-Offer";
+        public const string AcceptPriceOffer = prefix + "/Accept-Price-Offer/{PriceOfferId}";
     }
+}

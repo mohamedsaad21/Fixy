@@ -22,7 +22,7 @@ public class AuthenticationController : AppControllerBase
 
     [HttpPost(Router.AuthenticationRouting.SignIn)]
     public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
-    {
+    {       
         return ToActionResult(await Mediator.Send(command));
     }
 

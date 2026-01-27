@@ -14,5 +14,6 @@ public class TechniciansConfigurations : IEntityTypeConfiguration<Technician>
         builder.HasOne(x => x.ServiceCategory).WithMany(x => x.Technicians).HasForeignKey(x => x.ServiceCategoryId);
         builder.HasMany(x => x.ServiceBookings).WithOne(x => x.Technician).HasForeignKey(x => x.TechnicianId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.TechnicianLocation).WithOne(x => x.Technician).HasForeignKey<TechnicianLocation>(x => x.TechnicianId);
+        builder.HasMany(x => x.PriceOffers).WithOne(x => x.Technician).HasForeignKey(x => x.TechnicianId).OnDelete(DeleteBehavior.Restrict);
     }
 }

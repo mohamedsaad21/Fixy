@@ -1,7 +1,9 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
+using Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
+using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -27,8 +29,22 @@ public class ServiceRequestController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestById)]
+    public async Task<IActionResult> GetCustomerServiceRequestById([FromRoute] Guid Id)
+    {
+        return ToActionResult(await Mediator.Send(new GetServiceRequestByIdQuery(Id)));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
     [HttpPost(Router.ServiceRequestRouting.Create)]
     public async Task<IActionResult> CreateServiceRequest([FromForm] CreateServiceRequestCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize(Roles = Roles.Technician)]
+    [HttpPost(Router.ServiceRequestRouting.CreatePriceOffer)]
+    public async Task<IActionResult> CreatePriceOffer([FromBody] CreatePriceOfferCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }

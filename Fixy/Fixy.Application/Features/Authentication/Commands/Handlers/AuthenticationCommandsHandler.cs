@@ -9,6 +9,7 @@ using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Persistence.Abstracts;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
@@ -34,9 +35,10 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
     private readonly IMapper _mapper;
     private readonly ITechnicianRepository _technicianRepository;
     private readonly IFileService _fileService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
     public AuthenticationCommandsHandler(IStringLocalizer<SharedResources> stringLocalizer, 
         IAuthenticationService authenticationService, IMapper mapper, UserManager<ApplicationUser> userManager,
-        IEmailService emailService, ITechnicianRepository technicianRepository, IFileService fileService)
+        IEmailService emailService, ITechnicianRepository technicianRepository, IFileService fileService, IHttpContextAccessor httpContextAccessor)
     {
         _stringLocalizer = stringLocalizer;
         _authenticationService = authenticationService;
@@ -45,6 +47,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         _emailService = emailService;
         _technicianRepository = technicianRepository;
         _fileService = fileService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<Result> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
@@ -101,6 +104,8 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         authResponse.Roles = roles.ToList();
         authResponse.Token = accessToken;
 
+        SetTokenAndRefreshTokenInCookie(accessToken, authResponse.RefreshToken, authResponse.RefreshTokenExpiration);
+
         return authResponse;
     }
 
@@ -122,12 +127,15 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         user.RefreshTokens.Add(newRefreshToken);
         await _userManager.UpdateAsync(user);
         var jwtSecurityToken = await _authenticationService.CreateJwtToken(user);
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+        SetTokenAndRefreshTokenInCookie(accessToken, newRefreshToken.Token, newRefreshToken.ExpiresOn);
 
         return new AuthResponse
         {
             UserName = user.UserName,
             Email = user.Email,
-            Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+            Token = accessToken,
             RefreshToken = newRefreshToken.Token,
             RefreshTokenExpiration = newRefreshToken.ExpiresOn
         };
@@ -263,5 +271,21 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
 
             return Errors.FileUploadFailed;
         }
+    }
+
+    private void SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires)
+    {
+        var response = _httpContextAccessor.HttpContext?.Response;
+
+        if (response == null)
+            throw new InvalidOperationException("HTTP context is not available");
+
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = expires.ToLocalTime()
+        };
+        response.Cookies.Append("token", token);
+        response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
     }
 }

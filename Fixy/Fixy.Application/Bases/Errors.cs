@@ -19,4 +19,8 @@ public static class Errors
     public static Error InactiveToken => new("InactiveToken", ErrorType.BadRequest, "This token is inactive!");
     public static Error RequestInsertionFailed => new("InsertionFailed", ErrorType.BadRequest, "Failed to insert Request");
     public static Error LocationNotUpdated => new("LocationNotUpdated", ErrorType.BadRequest, "You must update your location");
+    public static Error ServiceRequestNotFound => new("ServiceRequestNotFound", ErrorType.NotFound, "Service request is not found");
+    public static Error AlreadyCreatedPriceOffer => new("AlreadyCreatedPriceOffer", ErrorType.BadRequest, "You have already created price offer for this service request");
+    public static Error PriceOfferNotFound => new("PriceOfferNotFound", ErrorType.BadRequest, "Price offer is not found");
+    public static Error ServiceAlreadyAssigned => new("ServiceAlreadyAssigned", ErrorType.BadRequest, "This service already assigned to a technician");
 }
