@@ -23,4 +23,10 @@ public static class Errors
     public static Error AlreadyCreatedPriceOffer => new("AlreadyCreatedPriceOffer", ErrorType.BadRequest, "You have already created price offer for this service request");
     public static Error PriceOfferNotFound => new("PriceOfferNotFound", ErrorType.BadRequest, "Price offer is not found");
     public static Error ServiceAlreadyAssigned => new("ServiceAlreadyAssigned", ErrorType.BadRequest, "This service already assigned to a technician");
+    public static Error BookingNotFound => new("BookingNotFound", ErrorType.NotFound, "Booking is not found");
+    public static Error BookingNotActive => new("BookingNotActive", ErrorType.BadRequest, "Booking is not active");
+    public static Error PriceChangeAlreadyPending => new("PriceChangeAlreadyPending", ErrorType.BadRequest, "Price change is already pending");
+    public static Error InvalidBookingState => new("InvalidBookingState", ErrorType.BadRequest, "Booking state is invalid");
+    public static Error NoPriceChangeToApprove => new("NoPriceChangeToApprove", ErrorType.BadRequest, "There is no price change to approve");
+    public static Error AlreadyAgreedPrice => new("AlreadyAgreedPrice", ErrorType.BadRequest, "This price is already the agreed price");
 }

@@ -6,7 +6,6 @@ public record PriceOfferDto
     (
         Guid Id,
         string TechnicianUserName,
-        decimal MinPrice,
-        decimal MaxPrice,
+        decimal Price,
         DateTime CreatedAt
     );

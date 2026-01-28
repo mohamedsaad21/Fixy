@@ -10,8 +10,7 @@ public static class CreatePriceOfferCommandToPriceOfferDomainMapping
         return new PriceOffer 
         { 
             ServiceRequestId = command.ServiceRequestId,
-            MinPrice = command.MinPrice, 
-            MaxPrice = command.MaxPrice
+            Price = command.Price, 
         };
     }
 }

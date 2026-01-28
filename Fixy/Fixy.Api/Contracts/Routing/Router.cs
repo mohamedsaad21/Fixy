@@ -57,4 +57,13 @@ public static class Router
         public const string prefix = Rule + "/Price-Offer";
         public const string AcceptPriceOffer = prefix + "/Accept-Price-Offer/{PriceOfferId}";
     }
+    public static class BookingRouting
+    {
+        public const string prefix = Rule + "/Booking";
+        public const string List = prefix + "/List";
+        public const string GetById = prefix + "/GetById" + SingleRoute;
+        public const string RequestPriceChange = prefix + "/request-price-change";
+        public const string ApprovePriceChange = prefix + "/approve-price-change/{BookingId}";
+        public const string RejectPriceChange = prefix + "/reject-price-change/{BookingId}";
+    }
 }

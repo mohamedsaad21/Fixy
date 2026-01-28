@@ -2,8 +2,8 @@
 
 public enum ServiceBookingStatus
 {
-    Accepted,
-    InProgress,
+    Active,
+    PriceChangePendingCustomerApproval,
     Completed,
     Cancelled
 }

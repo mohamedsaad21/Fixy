@@ -16,9 +16,7 @@ public class CreatePriceOfferCommandValidator : AbstractValidator<CreatePriceOff
     public void ApplyValidationRules()
     {
         RuleFor(x => x.ServiceRequestId).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
-        RuleFor(x => x.MinPrice).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
-            .GreaterThan(0).WithMessage(_stringLocalizer[SharedResourcesKeys.PriceMustBeGreaterThanZero]);
-        RuleFor(x => x.MaxPrice).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
+        RuleFor(x => x.Price).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
             .GreaterThan(0).WithMessage(_stringLocalizer[SharedResourcesKeys.PriceMustBeGreaterThanZero]);
     }
 }

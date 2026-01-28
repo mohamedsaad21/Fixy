@@ -6,18 +6,13 @@ namespace Fixy.Infrastructure.InfrastructureBases;
 
 public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : class
 {
-    #region Fields
     private readonly ApplicationDbContext _dbContext;
-    #endregion
 
-    #region Constructors
     public GenericRepositoryAsync(ApplicationDbContext dbContext)
     {
         _dbContext = dbContext;
     }
-    #endregion
 
-    #region Handle Functions
     public async Task AddAsync(T entity)
     {
         await _dbContext.AddAsync(entity);
@@ -88,5 +83,4 @@ public class GenericRepositoryAsync<T> : IGenericRepositoryAsync<T> where T : cl
         _dbContext.UpdateRange(entities);
         await _dbContext.SaveChangesAsync();
     }
-    #endregion
 }

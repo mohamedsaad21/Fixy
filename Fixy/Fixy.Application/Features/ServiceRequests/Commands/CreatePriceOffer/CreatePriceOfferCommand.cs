@@ -6,6 +6,5 @@ namespace Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
 public record CreatePriceOfferCommand
     (
             Guid ServiceRequestId,
-            decimal MinPrice,
-            decimal MaxPrice
+            decimal Price
     ) : IRequest<Result>;

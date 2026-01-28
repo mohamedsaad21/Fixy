@@ -1,0 +1,42 @@
+﻿using Fixy.Api.Base;
+using Fixy.Api.Contracts.Routing;
+using Fixy.Application.Features.Bookings.Commands.ApproveBookingPriceChange;
+using Fixy.Application.Features.Bookings.Commands.RejectBookingPriceChange;
+using Fixy.Application.Features.Bookings.Commands.RequestBookingPriceChange;
+using Fixy.Application.Features.Bookings.Queries.GetBookingById;
+using Fixy.Domain.Constants;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Fixy.Api.Controllers;
+
+[Authorize]
+public class BookingsController : AppControllerBase
+{
+    [HttpGet(Router.BookingRouting.GetById)]
+    public async Task<IActionResult> GetBookingById([FromRoute] Guid Id)
+    {
+        return ToActionResult(await Mediator.Send(new GetBookingByIdQuery(Id)));
+    }
+
+    [Authorize(Roles = Roles.Technician)]
+    [HttpPost(Router.BookingRouting.RequestPriceChange)]
+    public async Task<IActionResult> RequestBookingPriceChange([FromBody] RequestBookingPriceChangeCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [HttpPost(Router.BookingRouting.ApprovePriceChange)]
+    public async Task<IActionResult> ApproveBookingPriceChange([FromRoute] Guid BookingId)
+    {
+        return ToActionResult(await Mediator.Send(new ApproveBookingPriceChangeCommand(BookingId)));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [HttpPost(Router.BookingRouting.RejectPriceChange)]
+    public async Task<IActionResult> RejectBookingPriceChange([FromRoute] Guid BookingId)
+    {
+        return ToActionResult(await Mediator.Send(new RejectBookingPriceChangeCommand(BookingId)));
+    }
+}

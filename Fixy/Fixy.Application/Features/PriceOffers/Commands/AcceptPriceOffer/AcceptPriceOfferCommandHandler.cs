@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
+using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Infrastructure.Persistence.Abstracts;
 using MediatR;
@@ -11,10 +12,12 @@ public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCo
 {
     private readonly IPriceOfferRepository _priceOfferRepository;
     private readonly ICurrentUserService _currentUserService;
-    public AcceptPriceOfferCommandHandler(IPriceOfferRepository priceOfferRepository, ICurrentUserService currentUserService)
+    private readonly IServiceBookingRepository _serviceBookingRepository;
+    public AcceptPriceOfferCommandHandler(IPriceOfferRepository priceOfferRepository, ICurrentUserService currentUserService, IServiceBookingRepository serviceBookingRepository)
     {
         _priceOfferRepository = priceOfferRepository;
         _currentUserService = currentUserService;
+        _serviceBookingRepository = serviceBookingRepository;
     }
 
     public async Task<Result> Handle(AcceptPriceOfferCommand request, CancellationToken cancellationToken)
@@ -42,6 +45,8 @@ public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCo
                 offer.Status = PriceOfferStatus.Rejected;
         }
         await _priceOfferRepository.SaveChangesAsync();
+        var booking = new ServiceBooking { ServiceRequestId = serviceRequest.Id, TechnicianId = priceOffer.TechnicianId, PriceOfferId = priceOffer.Id, AgreedPrice = priceOffer.Price, ScheduledDateTime = serviceRequest.ScheduledDateTime };
+        await _serviceBookingRepository.AddAsync(booking);
         return Result.Success();
     }
 }

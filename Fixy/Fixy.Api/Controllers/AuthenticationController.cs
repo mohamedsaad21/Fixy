@@ -51,9 +51,9 @@ public class AuthenticationController : AppControllerBase
     }
 
     [HttpPost(Router.AuthenticationRouting.RevokeToken)]
-    public async Task<IActionResult> RevokeTokenAsync([FromBody] RevokeTokenCommand command)
+    public async Task<IActionResult> RevokeTokenAsync()
     {
-        return ToActionResult(await Mediator.Send(command));
+        return ToActionResult(await Mediator.Send(new RevokeTokenCommand()));
     }
 
     [HttpPost(Router.AuthenticationRouting.SendResetPassword)]

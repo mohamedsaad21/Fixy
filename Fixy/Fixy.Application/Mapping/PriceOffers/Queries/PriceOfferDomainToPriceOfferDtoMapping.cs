@@ -11,8 +11,7 @@ public static class PriceOfferDomainToPriceOfferDtoMapping
             (
                 priceOffer.Id,
                 priceOffer.Technician.UserName,
-                priceOffer.MinPrice,
-                priceOffer.MaxPrice,
+                priceOffer.Price,
                 priceOffer.CreatedAt
             );
     }

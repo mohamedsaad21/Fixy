@@ -18,6 +18,7 @@ public static class ModuleInfrastructureDependencies
         services.AddScoped<IServiceRequestRepository, ServiceRequestRepository>();
         services.AddScoped<ITechnicianLocationRepository, TechnicianLocationRepository>();
         services.AddScoped<IPriceOfferRepository, PriceOfferRepository>();
+        services.AddScoped<IServiceBookingRepository, ServiceBookingRepository>();
         return services;
     }
 }

@@ -8,8 +8,7 @@ public class PriceOffer : BaseEntity
     public ServiceRequest ServiceRequest { get; set; }
     public Guid TechnicianId { get; set; }
     public Technician Technician { get; set; }
-    public decimal MinPrice { get; set; }
-    public decimal MaxPrice { get; set; }
+    public decimal Price { get; set; }
     public PriceOfferStatus Status { get; set; } = PriceOfferStatus.Submitted;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
