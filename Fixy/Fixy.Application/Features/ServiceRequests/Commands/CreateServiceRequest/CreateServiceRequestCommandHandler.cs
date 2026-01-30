@@ -3,24 +3,22 @@ using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
 using Fixy.Application.Common.Models;
 using Fixy.Domain.Entities;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
 
 public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceRequestCommand, Result<Guid>>
 {
-    private readonly IServiceRequestRepository _serviceRequestRepository;
-    private readonly IServiceCategoryRepository _serviceCategoryRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
     private readonly IFileService _fileService;
     private readonly IMapper _mapper;
 
-    public CreateServiceRequestCommandHandler(IServiceRequestRepository serviceRequestRepository, ICurrentUserService currentUserService, IServiceCategoryRepository serviceCategoryRepository, IFileService fileService, IMapper mapper)
+    public CreateServiceRequestCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IFileService fileService, IMapper mapper)
     {
-        _serviceRequestRepository = serviceRequestRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
-        _serviceCategoryRepository = serviceCategoryRepository;
         _fileService = fileService;
         _mapper = mapper;
     }
@@ -37,7 +35,6 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
                 UploadResults.Add(uploadResult);
             }
         }
-        await _serviceRequestRepository.BeginTransactionAsync();
         try
         {
             var serviceRequest = _mapper.Map<ServiceRequest>(request);
@@ -47,12 +44,12 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
             var categories = new List<ServiceCategory>();
             foreach (var categoryId in request.ServiceCategoriesIds)
             {
-                var category = await _serviceCategoryRepository.GetByIdAsync(categoryId);
+                var category = await _unitOfWork.ServiceCategories.GetByIdAsync(categoryId);
                 categories.Add(category);
             }
             serviceRequest.ServiceCategories = categories;
             // Add Service Request
-            await _serviceRequestRepository.AddAsync(serviceRequest);
+            await _unitOfWork.ServiceRequests.AddAsync(serviceRequest);
             foreach (var uploadResult in UploadResults)
             {
                 serviceRequest.ServiceRequestImages.Add(new ServiceRequestImage
@@ -61,8 +58,7 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
                     ImagePublicId = uploadResult.PublicId
                 });
             }
-            await _serviceRequestRepository.UpdateAsync(serviceRequest);
-            await _serviceRequestRepository.CommitAsync();
+            await _unitOfWork.SaveChangesAsync();
             return serviceRequest.Id;
         }
         catch (Exception)
@@ -71,7 +67,6 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
             {
                 await _fileService.DeleteAsync(uploadResult.PublicId);
             }
-            await _serviceRequestRepository.RollBackAsync();
             return Errors.RequestInsertionFailed;
         }
     }

@@ -1,6 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Mapping.ServiceRequests.Queries;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,16 +8,16 @@ namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestByI
 
 public class GetServiceRequestByIdQueryHandler : IRequestHandler<GetServiceRequestByIdQuery, Result<GetServiceRequestByIdDto>>
 {
-    private readonly IServiceRequestRepository _serviceRequestRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public GetServiceRequestByIdQueryHandler(IServiceRequestRepository serviceRequestRepository)
+    public GetServiceRequestByIdQueryHandler(IUnitOfWork unitOfWork)
     {
-        _serviceRequestRepository = serviceRequestRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<Result<GetServiceRequestByIdDto>> Handle(GetServiceRequestByIdQuery request, CancellationToken cancellationToken)
     {
-        var serviceRequest = await _serviceRequestRepository.GetTableNoTracking().Include(x => x.Customer).Include(x => x.PriceOffers).ThenInclude(x => x.Technician)
+        var serviceRequest = await _unitOfWork.ServiceRequests.GetTableNoTracking().Include(x => x.Customer).Include(x => x.PriceOffers).ThenInclude(x => x.Technician)
             .Include(x => x.ServiceCategories)
             .FirstOrDefaultAsync(x => x.Id == request.Id);
         if (serviceRequest == null)

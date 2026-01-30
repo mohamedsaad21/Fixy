@@ -2,7 +2,7 @@
 using Fixy.Application.Bases;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,19 +10,17 @@ namespace Fixy.Application.Features.PriceOffers.Commands.AcceptPriceOffer;
 
 public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCommand, Result>
 {
-    private readonly IPriceOfferRepository _priceOfferRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IServiceBookingRepository _serviceBookingRepository;
-    public AcceptPriceOfferCommandHandler(IPriceOfferRepository priceOfferRepository, ICurrentUserService currentUserService, IServiceBookingRepository serviceBookingRepository)
+    public AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
-        _priceOfferRepository = priceOfferRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
-        _serviceBookingRepository = serviceBookingRepository;
     }
 
     public async Task<Result> Handle(AcceptPriceOfferCommand request, CancellationToken cancellationToken)
     {
-        var priceOffer = await _priceOfferRepository.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.PriceOffers)
+        var priceOffer = await _unitOfWork.PriceOffers.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.PriceOffers)
             .FirstOrDefaultAsync(x => x.Id == request.PriceOfferId);
         // check if price offer exists or not
         if (priceOffer == null)
@@ -44,9 +42,9 @@ public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCo
             if (offer.Id != priceOffer.Id)
                 offer.Status = PriceOfferStatus.Rejected;
         }
-        await _priceOfferRepository.SaveChangesAsync();
         var booking = new ServiceBooking { ServiceRequestId = serviceRequest.Id, TechnicianId = priceOffer.TechnicianId, PriceOfferId = priceOffer.Id, AgreedPrice = priceOffer.Price, ScheduledDateTime = serviceRequest.ScheduledDateTime };
-        await _serviceBookingRepository.AddAsync(booking);
+        await _unitOfWork.Bookings.AddAsync(booking);
+        await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

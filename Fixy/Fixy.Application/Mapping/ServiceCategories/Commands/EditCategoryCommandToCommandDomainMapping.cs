@@ -3,10 +3,13 @@ using Fixy.Domain.Entities;
 
 namespace Fixy.Application.Mapping.ServiceCategories;
 
-public partial class ServiceCategoriesProfile
+public static class EditCategoryCommandToCommandDomainMapping
 {
-    public void EditCategoryCommandToCommandDomainMapping()
+    public static ServiceCategory ToServiceCategory(this EditCategoryCommand command, ServiceCategory serviceCategory)
     {
-        CreateMap<EditCategoryCommand, ServiceCategory>();
+        serviceCategory.Name = command.Name;
+        serviceCategory.Description = command.Description;
+        serviceCategory.UpdatedAt = DateTime.UtcNow;
+        return serviceCategory;
     }
 }

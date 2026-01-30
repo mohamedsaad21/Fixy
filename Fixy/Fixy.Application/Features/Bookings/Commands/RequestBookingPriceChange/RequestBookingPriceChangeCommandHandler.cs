@@ -1,7 +1,7 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
 using Fixy.Domain.Enums;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,17 +9,17 @@ namespace Fixy.Application.Features.Bookings.Commands.RequestBookingPriceChange;
 
 public class RequestBookingPriceChangeCommandHandler : IRequestHandler<RequestBookingPriceChangeCommand, Result>
 {
-    private readonly IServiceBookingRepository _serviceBookingRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    public RequestBookingPriceChangeCommandHandler(IServiceBookingRepository serviceBookingRepository, ICurrentUserService currentUserService)
+    public RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
-        _serviceBookingRepository = serviceBookingRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
 
     public async Task<Result> Handle(RequestBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
-        var booking = await _serviceBookingRepository.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
+        var booking = await _unitOfWork.Bookings.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
         // check if booking exists or not
         if (booking == null)
             return Errors.BookingNotFound;
@@ -41,7 +41,8 @@ public class RequestBookingPriceChangeCommandHandler : IRequestHandler<RequestBo
         booking.ProposedPrice = request.NewProposedPrice;
         booking.PriceChangeRequestedAt = DateTime.UtcNow;
         booking.Status = ServiceBookingStatus.PriceChangePendingCustomerApproval;
-        await _serviceBookingRepository.UpdateAsync(booking);
+
+        await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

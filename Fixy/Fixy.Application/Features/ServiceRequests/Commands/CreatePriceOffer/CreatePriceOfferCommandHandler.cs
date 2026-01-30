@@ -2,7 +2,7 @@
 using Fixy.Application.Bases;
 using Fixy.Application.Mapping.PriceOffers.Commands;
 using Fixy.Domain.Entities;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +10,11 @@ namespace Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
 
 public class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCommand, Result>
 {
-    private readonly IServiceRequestRepository _serviceRequestRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    public CreatePriceOfferCommandHandler(IServiceRequestRepository serviceRequestRepository, ICurrentUserService currentUserService)
+    public CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
-        _serviceRequestRepository = serviceRequestRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
 
@@ -24,7 +24,7 @@ public class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCo
         if (currentTechnician is not Technician technician)
             return Errors.Unauthorized;
 
-        var serviceRequest = await _serviceRequestRepository.GetTableNoTracking().Include(x => x.PriceOffers).FirstOrDefaultAsync(x => x.Id == request.ServiceRequestId);
+        var serviceRequest = await _unitOfWork.ServiceRequests.GetTableAsTracking().Include(x => x.PriceOffers).FirstOrDefaultAsync(x => x.Id == request.ServiceRequestId);
         if (serviceRequest == null)
             return Errors.ServiceRequestNotFound;
 
@@ -35,7 +35,7 @@ public class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCo
         priceOffer.TechnicianId = technician.Id;
 
         serviceRequest.PriceOffers.Add(priceOffer);
-        await _serviceRequestRepository.UpdateAsync(serviceRequest);
+        await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

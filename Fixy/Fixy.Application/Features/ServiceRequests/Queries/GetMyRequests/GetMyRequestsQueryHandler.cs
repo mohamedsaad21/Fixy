@@ -2,7 +2,7 @@
 using Fixy.Application.Bases;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
 using Fixy.Application.Mapping.ServiceRequests;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,19 +10,19 @@ namespace Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 
 public class GetMyRequestsQueryHandler : IRequestHandler<GetMyRequestsQuery, Result<List<GetServiceRequestListDto>>>
 {
-    private readonly IServiceRequestRepository _serviceRequestRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
-    public GetMyRequestsQueryHandler(IServiceRequestRepository serviceRequestRepository, ICurrentUserService currentUserService)
+    public GetMyRequestsQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
-        _serviceRequestRepository = serviceRequestRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
 
     public async Task<Result<List<GetServiceRequestListDto>>> Handle(GetMyRequestsQuery request, CancellationToken cancellationToken)
     {
         var currentCustomerId = _currentUserService.GetCurrentUserId(); 
-        var myServiceRequests = await _serviceRequestRepository.GetTableNoTracking().Where(x => x.CustomerId == currentCustomerId)
+        var myServiceRequests = await _unitOfWork.ServiceRequests.GetTableNoTracking().Where(x => x.CustomerId == currentCustomerId)
             .Include(x => x.Customer)
             .Include(x => x.ServiceCategories).ToListAsync();
         var result = myServiceRequests.Select(x => x.ToServiceRequestListDto()).ToList();

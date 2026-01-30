@@ -65,5 +65,7 @@ public static class Router
         public const string RequestPriceChange = prefix + "/request-price-change";
         public const string ApprovePriceChange = prefix + "/approve-price-change/{BookingId}";
         public const string RejectPriceChange = prefix + "/reject-price-change/{BookingId}";
+        public const string MarkBookingCompleted = prefix + "/mark-booking-completed/{BookingId}";
+        public const string ConfirmBookingCompletion = prefix + "/confirm-booking-completion/{BookingId}";
     }
 }

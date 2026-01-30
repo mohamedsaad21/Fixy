@@ -7,7 +7,6 @@ public partial class ServiceCategoriesProfile : Profile
     public ServiceCategoriesProfile()
     {
         AddCategoryCommandToCommandDomainMapping();
-        EditCategoryCommandToCommandDomainMapping();
         CategoryDomainListToCategoryListResponseMapping();
         CategoryDomainToCategoryResponseMapping();
     }

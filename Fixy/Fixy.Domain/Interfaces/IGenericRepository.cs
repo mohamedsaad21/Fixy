@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿namespace Fixy.Domain.Interfaces;
 
-namespace Fixy.Infrastructure.InfrastructureBases;
-
-public interface IGenericRepositoryAsync<T> where T : class
+public interface IGenericRepository<T> where T : class
 {
     IQueryable<T> GetTableAsTracking();
     IQueryable<T> GetTableNoTracking();
@@ -13,8 +11,4 @@ public interface IGenericRepositoryAsync<T> where T : class
     Task UpdateRangeAsync(ICollection<T> entities);
     Task DeleteAsync(T entity);
     Task DeleteRangeAsync(ICollection<T> entities);
-    Task<IDbContextTransaction> BeginTransactionAsync();
-    Task CommitAsync();
-    Task RollBackAsync();
-    Task SaveChangesAsync();
 }

@@ -7,7 +7,7 @@ using Fixy.Application.Resources;
 using Fixy.Domain.Constants;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -31,21 +31,18 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly IAuthenticationService _authenticationService;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IEmailService _emailService;
     private readonly IMapper _mapper;
-    private readonly ITechnicianRepository _technicianRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IFileService _fileService;
     private readonly IHttpContextAccessor _httpContextAccessor;
     public AuthenticationCommandsHandler(IStringLocalizer<SharedResources> stringLocalizer, 
-        IAuthenticationService authenticationService, IMapper mapper, UserManager<ApplicationUser> userManager,
-        IEmailService emailService, ITechnicianRepository technicianRepository, IFileService fileService, IHttpContextAccessor httpContextAccessor)
+        IAuthenticationService authenticationService, IMapper mapper, UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork, IFileService fileService, IHttpContextAccessor httpContextAccessor)
     {
         _stringLocalizer = stringLocalizer;
         _authenticationService = authenticationService;
         _mapper = mapper;
+        _unitOfWork = unitOfWork;
         _userManager = userManager;
-        _emailService = emailService;
-        _technicianRepository = technicianRepository;
         _fileService = fileService;
         _httpContextAccessor = httpContextAccessor;
     }
@@ -221,7 +218,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         if (await _userManager.FindByEmailAsync(request.Email) != null)
             return Errors.EmailAlreadyExists;
 
-        if (await _technicianRepository.NationalIdExistsAsync(request.NationalId))
+        if (await _unitOfWork.Technicians.NationalIdExistsAsync(request.NationalId))
             return Errors.NationalIdAlreadyExists;
 
         var technician = _mapper.Map<Technician>(request);

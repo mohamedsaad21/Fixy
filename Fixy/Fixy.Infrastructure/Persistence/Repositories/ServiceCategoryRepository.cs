@@ -1,11 +1,10 @@
 ﻿using Fixy.Domain.Entities;
-using Fixy.Infrastructure.InfrastructureBases;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Infrastructure.Persistence.Repositories;
 
-public class ServiceCategoryRepository : GenericRepositoryAsync<ServiceCategory>, IServiceCategoryRepository
+public class ServiceCategoryRepository : GenericRepository<ServiceCategory>, IServiceCategoryRepository
 {
     private readonly DbSet<ServiceCategory> _serviceCategories;
 

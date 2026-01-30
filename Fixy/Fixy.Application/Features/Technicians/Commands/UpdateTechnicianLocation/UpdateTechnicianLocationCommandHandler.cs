@@ -1,8 +1,7 @@
-﻿using CloudinaryDotNet.Core;
-using Fixy.Application.Abstracts;
+﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
 using Fixy.Domain.Entities;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,30 +9,30 @@ namespace Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocatio
 
 public class UpdateTechnicianLocationCommandHandler : IRequestHandler<UpdateTechnicianLocationCommand, Result>
 {
-    private readonly ITechnicianLocationRepository _technicianLocationRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
 
-    public UpdateTechnicianLocationCommandHandler(ITechnicianLocationRepository technicianLocationRepository, ICurrentUserService currentUserService)
+    public UpdateTechnicianLocationCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
-        _technicianLocationRepository = technicianLocationRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
 
     public async Task<Result> Handle(UpdateTechnicianLocationCommand request, CancellationToken cancellationToken)
     {
         var technicianId = _currentUserService.GetCurrentUserId();
-        var location = await _technicianLocationRepository.GetTableNoTracking().Where(x => x.TechnicianId == technicianId).FirstOrDefaultAsync();
+        var location = await _unitOfWork.TechnicianLocations.GetTableNoTracking().Where(x => x.TechnicianId == technicianId).FirstOrDefaultAsync();
 
         if (location == null)
         {
             location = new TechnicianLocation(technicianId, request.Latitude, request.Longitude);
-            await _technicianLocationRepository.AddAsync(location);
+            await _unitOfWork.TechnicianLocations.AddAsync(location);
         }
         else
         {
             location.Update(request.Latitude, request.Longitude);
-            await _technicianLocationRepository.UpdateAsync(location);
         }
+        await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

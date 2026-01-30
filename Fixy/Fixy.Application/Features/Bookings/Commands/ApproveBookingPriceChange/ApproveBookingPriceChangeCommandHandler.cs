@@ -1,7 +1,7 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
 using Fixy.Domain.Enums;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,17 +9,17 @@ namespace Fixy.Application.Features.Bookings.Commands.ApproveBookingPriceChange;
 
 public class ApproveBookingPriceChangeCommandHandler : IRequestHandler<ApproveBookingPriceChangeCommand, Result>
 {
-    private readonly IServiceBookingRepository _serviceBookingRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    public ApproveBookingPriceChangeCommandHandler(IServiceBookingRepository serviceBookingRepository, ICurrentUserService currentUserService)
+    public ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
-        _serviceBookingRepository = serviceBookingRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
 
     public async Task<Result> Handle(ApproveBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
-        var booking = await _serviceBookingRepository.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
+        var booking = await _unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
@@ -40,7 +40,7 @@ public class ApproveBookingPriceChangeCommandHandler : IRequestHandler<ApproveBo
         booking.ProposedPrice = null;
         booking.Status = ServiceBookingStatus.Active;
 
-        await _serviceBookingRepository.UpdateAsync(booking);
+        await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

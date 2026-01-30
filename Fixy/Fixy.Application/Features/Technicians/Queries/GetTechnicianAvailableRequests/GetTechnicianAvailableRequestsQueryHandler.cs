@@ -5,7 +5,7 @@ using Fixy.Application.Mapping.ServiceRequests;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Helpers;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,18 +13,14 @@ namespace Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRe
 
 public class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTechnicianAvailableRequestsQuery, Result<List<GetServiceRequestListDto>>>
 {
-    private readonly IServiceRequestRepository _serviceRequestRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ITechnicianLocationRepository _technicianLocationRepository;
     private const int DefaultMaxDistanceKm = 25;
 
-    public GetTechnicianAvailableRequestsQueryHandler(IServiceRequestRepository serviceRequestRepository, 
-        ICurrentUserService currentUserService,
-        ITechnicianLocationRepository technicianLocationRepository)
+    public GetTechnicianAvailableRequestsQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
-        _serviceRequestRepository = serviceRequestRepository;
+        _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
-        _technicianLocationRepository = technicianLocationRepository;
     }
 
     public async Task<Result<List<GetServiceRequestListDto>>> Handle(GetTechnicianAvailableRequestsQuery request, CancellationToken cancellationToken)
@@ -34,12 +30,12 @@ public class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTec
         if (currentTechnician is not Technician technician)
             return Errors.Unauthorized;
 
-        var location = await _technicianLocationRepository.GetTableNoTracking().Where(x => x.TechnicianId == currentTechnician.Id).FirstOrDefaultAsync();
+        var location = await _unitOfWork.TechnicianLocations.GetTableNoTracking().Where(x => x.TechnicianId == currentTechnician.Id).FirstOrDefaultAsync();
         // if location not exist 
         if (location == null)
             return Errors.LocationNotUpdated;
         
-        var availableServiceRequests = await _serviceRequestRepository.GetTableNoTracking()            
+        var availableServiceRequests = await _unitOfWork.ServiceRequests.GetTableNoTracking()            
             .Where(x => x.Status == ServiceRequestStatus.Pending).Include(x => x.ServiceCategories).Include(x => x.Customer)
             .Where(x => x.ServiceCategories.Any(x => x.Id == technician.ServiceCategoryId))
             .ToListAsync();
