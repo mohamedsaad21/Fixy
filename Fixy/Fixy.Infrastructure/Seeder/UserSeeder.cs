@@ -9,7 +9,7 @@ public static class UserSeeder
 {
     public static async Task SeedAsync(UserManager<ApplicationUser> userManager)
     {
-        var user = new Admin
+        var user = new ApplicationUser
         {
             FullName = "Mohamed Saad",
             UserName = "admin",

@@ -13,8 +13,8 @@ public class Technician : ApplicationUser
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingVerification;
-    public string ProfilePictureUrl {  get; set; }
-    public string ProfilePicturePublicId {  get; set; }
+    public string? ProfilePictureUrl {  get; set; }
+    public string? ProfilePicturePublicId {  get; set; }
     public string NationalIdCardImageUrl {  get; set; }
     public string NationalIdCardImagePublicId {  get; set; }
     public int? TotalCompletedJobs { get; set; }

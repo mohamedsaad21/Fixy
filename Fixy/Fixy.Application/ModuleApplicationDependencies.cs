@@ -24,6 +24,7 @@ public static class ModuleApplicationDependencies
         services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<ICurrentUserService, CurrentUserService>();
+        services.AddTransient<IPaymentService, PaymentService>();
         return services;
     }
 }

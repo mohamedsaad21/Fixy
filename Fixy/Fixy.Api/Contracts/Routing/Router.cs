@@ -68,4 +68,10 @@ public static class Router
         public const string MarkBookingCompleted = prefix + "/mark-booking-completed/{BookingId}";
         public const string ConfirmBookingCompletion = prefix + "/confirm-booking-completion/{BookingId}";
     }
+    public static class PaymentRouting
+    {
+        public const string prefix = Rule + "/Payments";
+        public const string CreatePaymentIntent = prefix + "/{BookingId}";
+        public const string WebHook = prefix + "/WebHook";
+    }
 }

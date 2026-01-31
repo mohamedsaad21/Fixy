@@ -25,8 +25,6 @@ public class RegisterTechnicianValidator : AbstractValidator<RegisterTechnicianC
 
         RuleFor(x => x.NationalId).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]).Matches(@"^\d{14}$");
 
-        RuleFor(x => x.ProfilePicture).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required]);
-
         RuleFor(x => x.NationalIdCardImage).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required]);
 
         RuleFor(x => x.Password).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);

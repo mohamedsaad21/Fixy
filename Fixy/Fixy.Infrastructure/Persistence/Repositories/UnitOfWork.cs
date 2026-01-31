@@ -24,14 +24,6 @@ public class UnitOfWork : IUnitOfWork
         Technicians = new TechnicianRepository(dbContext);
         TechnicianLocations = new GenericRepository<TechnicianLocation>(dbContext);
     }
-
-    public void Dispose()
-    {
-        _dbContext.Dispose();
-    }
-
-    public async Task<int> SaveChangesAsync()
-    {
-        return await _dbContext.SaveChangesAsync();
-    }
+    public void Dispose() => _dbContext.Dispose();
+    public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 }

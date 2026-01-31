@@ -224,27 +224,22 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         var technician = _mapper.Map<Technician>(request);
         technician.UserName = new MailAddress(request.Email).User;
 
-        var createResult = await _userManager.CreateAsync(technician, request.Password);
-        if (!createResult.Succeeded)
-            return Errors.IdentityCreateUserFailed;
-
-        var roleResult = await _userManager.AddToRoleAsync(technician, Roles.Technician);
-        if (!roleResult.Succeeded)
-            return Errors.IdentityAddRoleFailed;
-
         string? profilePicturePublicId = null;
         string? nationalIdCardImagePublicId = null;
 
         try
         {
-            var ProfileResult = await _fileService.UploadAsync($"Technicians/{technician.Id}/Profiles", request.ProfilePicture);
+            if(request.ProfilePicture != null)
+            {
+                var ProfileResult = await _fileService.UploadAsync($"Technicians/{technician.Id}/Profiles", request.ProfilePicture);
 
-            if (!ProfileResult.IsSuccess)
-                throw new Exception("Profile Upload Failed");
+                if (!ProfileResult.IsSuccess)
+                    throw new Exception("Profile Upload Failed");
 
-            technician.ProfilePictureUrl = ProfileResult.Url;
-            technician.ProfilePicturePublicId = ProfileResult.PublicId;
-            profilePicturePublicId = ProfileResult.PublicId;
+                technician.ProfilePictureUrl = ProfileResult.Url;
+                technician.ProfilePicturePublicId = ProfileResult.PublicId;
+                profilePicturePublicId = ProfileResult.PublicId;
+            }
 
             var nationalIdResult = await _fileService.UploadAsync($"Technicians/{technician.Id}/NationalIds", request.NationalIdCardImage);
 
@@ -255,7 +250,15 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
             technician.NationalIdCardImagePublicId = nationalIdResult.PublicId;
             nationalIdCardImagePublicId = nationalIdResult.PublicId;
 
-            await _userManager.UpdateAsync(technician);
+            var createResult = await _userManager.CreateAsync(technician, request.Password);
+            if (!createResult.Succeeded)
+                return Errors.IdentityCreateUserFailed;
+
+            var roleResult = await _userManager.AddToRoleAsync(technician, Roles.Technician);
+            if (!roleResult.Succeeded)
+                return Errors.IdentityAddRoleFailed;
+
+            //await _userManager.UpdateAsync(technician);
             await _authenticationService.SendCodeAsync(technician, "confirm your account", "Confirm Account");
             return technician.Id;
         }
