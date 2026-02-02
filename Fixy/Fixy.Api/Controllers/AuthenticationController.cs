@@ -15,7 +15,7 @@ public class AuthenticationController : AppControllerBase
     }
 
     [HttpPost(Router.AuthenticationRouting.RegisterCustomer)]
-    public async Task<IActionResult> RegisterCustomerAsync([FromBody] RegisterCustomerCommand command)
+    public async Task<IActionResult> RegisterCustomerAsync([FromForm] RegisterCustomerCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }

@@ -18,7 +18,7 @@ using System.Net.Mail;
 
 namespace Fixy.Application.Features.Authentication.Commands.Handlers;
 
-public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCommand, Result>,
+public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCommand, Result<Guid>>,
                                                                                       IRequestHandler<SignInCommand, Result<AuthResponse>>,
                                                                                       IRequestHandler<RefreshTokenCommand, Result<AuthResponse>>,
                                                                                       IRequestHandler<RevokeTokenCommand, Result>,
@@ -47,7 +47,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<Result> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
     {
         if (await _userManager.FindByEmailAsync(request.Email) != null)
             return Errors.EmailAlreadyExists;
@@ -55,14 +55,56 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         var customer = _mapper.Map<Customer>(request);
         customer.UserName = new MailAddress(request.Email).User;
 
-        var result = await _userManager.CreateAsync(customer, request.Password);
+        string? profilePicturePublicId = null;
+        string? nationalIdCardImagePublicId = null;
 
-        if (!result.Succeeded)
-            return Errors.IdentityCreateUserFailed;
+        try
+        {
+            if (request.ProfilePicture != null)
+            {
+                var ProfileResult = await _fileService.UploadAsync($"Technicians/{customer.Id}/Profiles", request.ProfilePicture);
 
-        await _userManager.AddToRoleAsync(customer, Roles.Customer);
-        await _authenticationService.SendCodeAsync(customer, "confirm your account", "Confirm Account");
-        return Result.Success();
+                if (!ProfileResult.IsSuccess)
+                    throw new Exception("Profile Upload Failed");
+
+                customer.ProfilePictureUrl = ProfileResult.Url;
+                customer.ProfilePicturePublicId = ProfileResult.PublicId;
+                profilePicturePublicId = ProfileResult.PublicId;
+            }
+
+            var nationalIdResult = await _fileService.UploadAsync($"Technicians/{customer.Id}/NationalIds", request.NationalIdCardImage);
+
+            if (!nationalIdResult.IsSuccess)
+                throw new Exception("NationalId Upload Failed");
+
+            customer.NationalIdCardImageUrl = nationalIdResult.Url;
+            customer.NationalIdCardImagePublicId = nationalIdResult.PublicId;
+            nationalIdCardImagePublicId = nationalIdResult.PublicId;
+
+            var createResult = await _userManager.CreateAsync(customer, request.Password);
+            if (!createResult.Succeeded)
+                return Errors.IdentityCreateUserFailed;
+
+            var roleResult = await _userManager.AddToRoleAsync(customer, Roles.Customer);
+            if (!roleResult.Succeeded)
+                return Errors.IdentityAddRoleFailed;
+
+            //await _userManager.UpdateAsync(technician);
+            await _authenticationService.SendCodeAsync(customer, "confirm your account", "Confirm Account");
+            return customer.Id;
+        }
+        catch (Exception)
+        {
+            if (!string.IsNullOrWhiteSpace(profilePicturePublicId))
+                await _fileService.DeleteAsync(profilePicturePublicId);
+
+            if (!string.IsNullOrWhiteSpace(nationalIdCardImagePublicId))
+                await _fileService.DeleteAsync(nationalIdCardImagePublicId);
+
+            await _userManager.DeleteAsync(customer);
+
+            return Errors.FileUploadFailed;
+        }
     }
 
     public async Task<Result<AuthResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
@@ -98,7 +140,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         var roles = await _userManager.GetRolesAsync(user);
         authResponse.UserName = user.UserName;
         authResponse.Email = user.Email;
-        authResponse.Roles = roles.ToList();
+        authResponse.Role = roles.FirstOrDefault();
         authResponse.Token = accessToken;
 
         SetTokenAndRefreshTokenInCookie(accessToken, authResponse.RefreshToken, authResponse.RefreshTokenExpiration);
@@ -133,7 +175,7 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
         {
             UserName = user.UserName,
             Email = user.Email,
-            Roles = roles.ToList(),
+            Role = roles.FirstOrDefault(),
             Token = accessToken,
             RefreshToken = newRefreshToken.Token,
             RefreshTokenExpiration = newRefreshToken.ExpiresOn

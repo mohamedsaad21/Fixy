@@ -29,4 +29,5 @@ public static class Errors
     public static Error InvalidBookingState => new("InvalidBookingState", ErrorType.BadRequest, "Booking state is invalid");
     public static Error NoPriceChangeToApprove => new("NoPriceChangeToApprove", ErrorType.BadRequest, "There is no price change to approve");
     public static Error AlreadyAgreedPrice => new("AlreadyAgreedPrice", ErrorType.BadRequest, "This price is already the agreed price");
+    public static Error ImageNotFound => new("ImageNotFound", ErrorType.BadRequest, "This image is not found");
 }

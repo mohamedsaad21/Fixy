@@ -7,6 +7,6 @@ public record AddressDto
         string Area, 
         string Street, 
         string BuildingNumber, 
-        double? Latitude, 
-        double? Longitude
+        double Latitude, 
+        double Longitude
   );

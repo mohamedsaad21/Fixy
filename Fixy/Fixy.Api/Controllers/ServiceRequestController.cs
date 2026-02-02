@@ -1,7 +1,10 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
+using Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
 using Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
+using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
+using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
@@ -40,6 +43,27 @@ public class ServiceRequestController : AppControllerBase
     public async Task<IActionResult> CreateServiceRequest([FromForm] CreateServiceRequestCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [HttpPut(Router.ServiceRequestRouting.Edit)]
+    public async Task<IActionResult> EditServiceRequest([FromForm] EditServiceRequestCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [HttpPost(Router.ServiceRequestRouting.AddServiceRequestImages)]
+    public async Task<IActionResult> AddServiceRequestImages([FromForm] AddServiceRequestImagesCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [HttpDelete(Router.ServiceRequestRouting.DeleteServiceRequestImageById)]
+    public async Task<IActionResult> DeleteServiceRequestImages([FromRoute] Guid ImageId)
+    {
+        return ToActionResult(await Mediator.Send(new DeleteServiceRequestImageByIdCommand(ImageId)));
     }
 
     [Authorize(Roles = Roles.Technician)]

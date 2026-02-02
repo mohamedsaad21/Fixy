@@ -44,6 +44,8 @@ public static class Router
         public const string Create = prefix + "/Create";
         public const string Edit = prefix + "/Edit";
         public const string Delete = prefix + "/Delete" + SingleRoute;
+        public const string AddServiceRequestImages = prefix + "/Add-Images";
+        public const string DeleteServiceRequestImageById = prefix + "/Delete-Image-ById/{ImageId}";
     }
 
     public static class TechnicianRouting

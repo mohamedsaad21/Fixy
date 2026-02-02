@@ -11,4 +11,7 @@ public record RegisterTechnicianCommand(
     int YearsOfExperience,
     Guid ServiceCategoryId,
     IFormFile? ProfilePicture,
-    IFormFile NationalIdCardImage, string Password, string ConfirmPassword) : IRequest<Result<Guid>>;
+    IFormFile NationalIdCardImage, 
+    string Password, 
+    string ConfirmPassword
+    ) : IRequest<Result<Guid>>;
