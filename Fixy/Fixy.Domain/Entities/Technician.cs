@@ -22,9 +22,13 @@ public class Technician : ApplicationUser
     public int? ResponseTime { get; set; }
     public double? CancellationRate { get; set; }
     public double? AverageRating { get; set; }
+    public string? StripeAccountId { get; set; }
+    public bool IsActive { get; set; }
     public Guid ServiceCategoryId { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
+    public TechnicianStripeAccount TechnicianStripeAccount { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }
     public virtual ICollection<PriceOffer> PriceOffers { get; set; }
+    public virtual ICollection<TechnicianTransfer> Transfers { get; set; }
 }

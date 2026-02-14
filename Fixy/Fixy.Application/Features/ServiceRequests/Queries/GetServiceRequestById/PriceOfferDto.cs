@@ -6,6 +6,8 @@ public record PriceOfferDto
     (
         Guid Id,
         string TechnicianUserName,
+        double? AverageRating,
         decimal Price,
+        double DistanceKm,
         DateTime CreatedAt
     );

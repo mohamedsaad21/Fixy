@@ -4,7 +4,7 @@ using Fixy.Application.Abstracts;
 using Fixy.Application.Common.Models;
 using Microsoft.AspNetCore.Http;
 
-namespace Fixy.Application.Services;
+namespace Fixy.Infrastructure.Services;
 
 public class FileService : IFileService
 {

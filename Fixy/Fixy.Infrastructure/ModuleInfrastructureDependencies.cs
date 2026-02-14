@@ -1,5 +1,7 @@
-﻿using Fixy.Domain.Interfaces;
+﻿using Fixy.Application.Abstracts;
+using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Persistence.Repositories;
+using Fixy.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fixy.Infrastructure;
@@ -11,7 +13,20 @@ public static class ModuleInfrastructureDependencies
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IServiceCategoryRepository, ServiceCategoryRepository>();
         services.AddScoped<ITechnicianRepository, TechnicianRepository>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+        services.AddTransient<IAuthenticationService, AuthenticationService>();
+        services.AddTransient<IEmailService, EmailService>();
+        services.AddTransient<IFileService, FileService>();
+        services.AddTransient<ICurrentUserService, CurrentUserService>();
+        services.AddTransient<IStripeConnectService, StripeConnectService>();
+        services.AddTransient<IStripePaymentService, StripePaymentService>();
+        services.AddTransient<IStripeTransferService, StripeTransferService>();
+        services.AddTransient<IStripeWebhookService, StripeWebhookService>();
+        services.AddTransient<INotificationService, NotificationService>();
+        
         return services;
     }
 }

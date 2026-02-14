@@ -11,10 +11,12 @@ public class ConfirmBookingCompletionCommandHandler : IRequestHandler<ConfirmBoo
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    public ConfirmBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    private readonly INotificationService _notificationService;
+    public ConfirmBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _notificationService = notificationService;
     }
     public async Task<Result> Handle(ConfirmBookingCompletionCommand request, CancellationToken cancellationToken)
     {
@@ -35,6 +37,11 @@ public class ConfirmBookingCompletionCommandHandler : IRequestHandler<ConfirmBoo
         booking.Status = ServiceBookingStatus.Completed;
 
         await _unitOfWork.SaveChangesAsync();
+        // Notify technician about escrow release
+        //await _notificationService.NotifyEscrowReleased(
+        //    booking.TechnicianId.ToString(),
+        //    technicianAmount
+        //);
         return Result.Success();
     }
 }

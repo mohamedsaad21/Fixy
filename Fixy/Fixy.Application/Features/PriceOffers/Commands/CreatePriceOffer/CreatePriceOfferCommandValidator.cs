@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
+namespace Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 
 public class CreatePriceOfferCommandValidator : AbstractValidator<CreatePriceOfferCommand>
 {

@@ -6,16 +6,18 @@ using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
+namespace Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 
 public class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    public CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    private readonly INotificationService _notificationService;
+    public CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _notificationService = notificationService;
     }
 
     public async Task<Result> Handle(CreatePriceOfferCommand request, CancellationToken cancellationToken)
@@ -36,6 +38,16 @@ public class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCo
 
         serviceRequest.PriceOffers.Add(priceOffer);
         await _unitOfWork.SaveChangesAsync();
+        // Notify customer with new price offer
+        await _notificationService.NotifyOfferReceivedAsync(serviceRequest.CustomerId, new
+        {
+            offerId = priceOffer.Id,
+            serviceRequestId = priceOffer.ServiceRequestId,
+            technicianName = priceOffer.Technician.UserName,
+            technicianRating = priceOffer.Technician.AverageRating,
+            price = priceOffer.Price,
+            createdAt = priceOffer.CreatedAt
+        });
         return Result.Success();
     }
 }

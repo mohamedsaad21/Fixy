@@ -4,7 +4,7 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using Fixy.Infrastructure.Configurations;
 
-namespace Fixy.Application.Services;
+namespace Fixy.Infrastructure.Services;
 
 public class EmailService : IEmailService
 {

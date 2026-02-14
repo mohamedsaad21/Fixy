@@ -30,4 +30,9 @@ public static class Errors
     public static Error NoPriceChangeToApprove => new("NoPriceChangeToApprove", ErrorType.BadRequest, "There is no price change to approve");
     public static Error AlreadyAgreedPrice => new("AlreadyAgreedPrice", ErrorType.BadRequest, "This price is already the agreed price");
     public static Error ImageNotFound => new("ImageNotFound", ErrorType.BadRequest, "This image is not found");
+    public static Error TechnicianNotFound => new("TechnicianNotFound", ErrorType.NotFound, "This technician is not found");
+    public static Error TechnicianAlreadyApproved => new("TechnicianAlreadyApproved", ErrorType.BadRequest, "This technician is already approved");
+    public static Error StripeOnboardingInitializationFailed => new("StripeOnboardingInitializationFailed", ErrorType.BadRequest, "Technician approved successfully, but payment onboarding could not be initialized. Please try again later.");
+    public static Error MissingStripeSignature => new("MissingStripeSignature", ErrorType.BadRequest, "Stripe signature is missed");
+    public static Error WebhookProcessingFailed => new("WebhookProcessingFailed", ErrorType.BadRequest, "Failed to process Webhook");
 }

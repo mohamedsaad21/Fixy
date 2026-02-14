@@ -1,6 +1,6 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
+using Fixy.Application.Common.DTOs;
 using Fixy.Application.Mapping.ServiceRequests;
 using Fixy.Domain.Interfaces;
 using MediatR;

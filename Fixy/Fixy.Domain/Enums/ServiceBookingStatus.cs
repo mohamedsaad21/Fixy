@@ -7,10 +7,14 @@ public enum ServiceBookingStatus
     Active,
     PriceChangePendingCustomerApproval,
     CompletedPendingCustomerConfirmation,
+    PaymentPending,
     PaymentRecieved,
     PaymentFailed,
     Completed,
-    Cancelled
+    Cancelled,
+    FundsTransferred,
+    Refunded,
+    Disputed
 }
 //pending
 //c

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Fixy.Application\Fixy.Application.csproj" />
+    <ProjectReference Include="..\Fixy.Infrastructure\Fixy.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

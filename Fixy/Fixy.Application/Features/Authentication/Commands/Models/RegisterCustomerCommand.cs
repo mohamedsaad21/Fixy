@@ -9,7 +9,6 @@ public record RegisterCustomerCommand(
     string Email, 
     string NationalId,
     IFormFile? ProfilePicture,
-    IFormFile NationalIdCardImage,
     string Password, 
     string ConfirmPassword
     ) : IRequest<Result<Guid>>;

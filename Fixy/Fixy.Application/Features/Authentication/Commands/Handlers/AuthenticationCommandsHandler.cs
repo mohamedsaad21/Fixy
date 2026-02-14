@@ -72,15 +72,6 @@ public class AuthenticationCommandsHandler : IRequestHandler<RegisterCustomerCom
                 profilePicturePublicId = ProfileResult.PublicId;
             }
 
-            var nationalIdResult = await _fileService.UploadAsync($"Technicians/{customer.Id}/NationalIds", request.NationalIdCardImage);
-
-            if (!nationalIdResult.IsSuccess)
-                throw new Exception("NationalId Upload Failed");
-
-            customer.NationalIdCardImageUrl = nationalIdResult.Url;
-            customer.NationalIdCardImagePublicId = nationalIdResult.PublicId;
-            nationalIdCardImagePublicId = nationalIdResult.PublicId;
-
             var createResult = await _userManager.CreateAsync(customer, request.Password);
             if (!createResult.Succeeded)
                 return Errors.IdentityCreateUserFailed;

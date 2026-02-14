@@ -20,4 +20,6 @@ public class ServiceBooking : BaseEntity
     public DateTime? CancelledAt { get; set; }
     public string? PaymentIntentId { get; set; }
     public string? ClientSecret { get; set; }
+    public Payment Payment { get; set; }
+    public TechnicianTransfer Transfer { get; set; }
 }

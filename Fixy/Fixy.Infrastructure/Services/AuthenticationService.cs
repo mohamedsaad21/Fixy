@@ -1,5 +1,4 @@
 ﻿using Fixy.Application.Abstracts;
-using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Fixy.Application.Services;
+namespace Fixy.Infrastructure.Services;
 
 public class AuthenticationService : IAuthenticationService
 {

@@ -1,5 +1,4 @@
 ﻿using Fixy.Application.Common.DTOs;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
 using Fixy.Domain.Entities;
 
 namespace Fixy.Application.Mapping.ServiceRequests;

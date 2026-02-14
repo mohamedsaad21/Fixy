@@ -1,6 +1,7 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
+using Fixy.Application.Features.Technicians.Queries.GetStripeStatus;
 using Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,12 @@ public class TechnicianController : AppControllerBase
     public async Task<IActionResult> GetTechnicianAvailableServiceRequests()
     {
         return ToActionResult(await Mediator.Send(new GetTechnicianAvailableRequestsQuery()));
+    }
+
+    [HttpGet(Router.TechnicianRouting.TechnicianStripeStatus)]
+    public async Task<IActionResult> GetTechnicianStripeStatus()
+    {
+        return ToActionResult(await Mediator.Send(new GetStripeStatusQuery()));
     }
 
     [HttpPost(Router.TechnicianRouting.Location)]

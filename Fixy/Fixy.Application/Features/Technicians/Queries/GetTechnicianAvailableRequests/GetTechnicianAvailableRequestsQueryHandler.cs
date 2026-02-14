@@ -1,6 +1,6 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
+using Fixy.Application.Common.DTOs;
 using Fixy.Application.Mapping.ServiceRequests;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
@@ -25,7 +25,6 @@ public class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTec
 
     public async Task<Result<List<GetServiceRequestListDto>>> Handle(GetTechnicianAvailableRequestsQuery request, CancellationToken cancellationToken)
     {
-        //throw new NotImplementedException();
         var currentTechnician = await _currentUserService.GetCurrentUserAsync();
         if (currentTechnician is not Technician technician)
             return Errors.Unauthorized;

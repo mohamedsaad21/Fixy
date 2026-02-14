@@ -23,8 +23,6 @@ public class RegisterCustomerValidator : AbstractValidator<RegisterCustomerComma
 
         RuleFor(x => x.NationalId).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]).Matches(@"^\d{14}$");
 
-        RuleFor(x => x.NationalIdCardImage).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required]);
-
         RuleFor(x => x.Password).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
 
         RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])

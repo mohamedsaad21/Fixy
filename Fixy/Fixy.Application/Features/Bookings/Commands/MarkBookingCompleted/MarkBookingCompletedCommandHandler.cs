@@ -11,16 +11,18 @@ public class MarkBookingCompletedCommandHandler : IRequestHandler<MarkBookingCom
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly INotificationService _notificationService;
 
-    public MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    public MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _notificationService = notificationService;
     }
 
     public async Task<Result> Handle(MarkBookingCompletedCommand request, CancellationToken cancellationToken)
     {
-        var booking = await _unitOfWork.Bookings.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
+        var booking = await _unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
             return Errors.BookingNotFound;
@@ -36,6 +38,11 @@ public class MarkBookingCompletedCommandHandler : IRequestHandler<MarkBookingCom
         booking.CompletedAt = DateTime.UtcNow;
 
         await _unitOfWork.SaveChangesAsync();
+        // Notify customer to confirm completion
+        await _notificationService.NotifyServiceMarkedCompleteAsync(
+            booking.ServiceRequest.CustomerId,
+            booking
+        );
         return Result.Success();
     }
 }

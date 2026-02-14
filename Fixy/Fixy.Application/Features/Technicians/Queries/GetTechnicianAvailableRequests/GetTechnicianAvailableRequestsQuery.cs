@@ -1,5 +1,5 @@
 ﻿using Fixy.Application.Bases;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
+using Fixy.Application.Common.DTOs;
 using MediatR;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;

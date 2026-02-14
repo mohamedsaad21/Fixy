@@ -6,5 +6,5 @@ public interface ICurrentUserService
 {
     Guid GetCurrentUserId();
     Task<ApplicationUser> GetCurrentUserAsync();
-    Task<List<string>> GetCurrentUserRolesAsync();
+    Task<string> GetCurrentUserRoleAsync();
 }

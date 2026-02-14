@@ -14,6 +14,13 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<ServiceBooking> Bookings { get; private set; }
     public ITechnicianRepository Technicians { get; private set; }
     public IGenericRepository<TechnicianLocation> TechnicianLocations { get; private set; }
+    public IGenericRepository<TechnicianStripeAccount> TechnicianStripeAccounts { get; private set; }
+    public IGenericRepository<TechnicianTransfer> TechnicianTransfers { get; private set; }
+    public IGenericRepository<StripeWebhookEvent> StripeWebhookEvents { get; private set; }
+    public IGenericRepository<PaymentRefund> PaymentRefunds { get; private set; }
+    public IGenericRepository<Payment> Payments { get; private set; }
+    public IGenericRepository<Dispute> Disputes { get; private set; }
+    public INotificationRepository Notifications { get; private set; }
 
     public UnitOfWork(ApplicationDbContext dbContext)
     {
@@ -25,6 +32,13 @@ public class UnitOfWork : IUnitOfWork
         Bookings = new GenericRepository<ServiceBooking>(dbContext);
         Technicians = new TechnicianRepository(dbContext);
         TechnicianLocations = new GenericRepository<TechnicianLocation>(dbContext);
+        TechnicianStripeAccounts = new GenericRepository<TechnicianStripeAccount>(dbContext);
+        TechnicianTransfers = new GenericRepository<TechnicianTransfer>(dbContext);
+        StripeWebhookEvents = new GenericRepository<StripeWebhookEvent>(dbContext);
+        Payments = new GenericRepository<Payment>(dbContext);
+        PaymentRefunds = new GenericRepository<PaymentRefund>(dbContext);
+        Disputes = new GenericRepository<Dispute>(dbContext);
+        Notifications = new NotificationRepository(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();
     public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();

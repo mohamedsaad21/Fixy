@@ -12,10 +12,12 @@ public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCo
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    public AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    private readonly INotificationService _notificationService;
+    public AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _notificationService = notificationService;
     }
 
     public async Task<Result> Handle(AcceptPriceOfferCommand request, CancellationToken cancellationToken)
@@ -33,6 +35,9 @@ public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCo
         var serviceRequest = priceOffer.ServiceRequest;
         if (serviceRequest.Status != ServiceRequestStatus.Pending)
             return Errors.ServiceAlreadyAssigned;
+
+
+
         // Accept offer
         priceOffer.Status = PriceOfferStatus.Accepted;
         serviceRequest.Status = ServiceRequestStatus.Assigned;
@@ -45,6 +50,20 @@ public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCo
         var booking = new ServiceBooking { ServiceRequestId = serviceRequest.Id, TechnicianId = priceOffer.TechnicianId, PriceOfferId = priceOffer.Id, AgreedPrice = priceOffer.Price, ScheduledDateTime = serviceRequest.ScheduledDateTime };
         await _unitOfWork.Bookings.AddAsync(booking);
         await _unitOfWork.SaveChangesAsync();
+        // Notify technician that offer has been accepted
+        await _notificationService.NotifyOfferAcceptedAsync(
+            booking.TechnicianId,
+            new
+            {
+                bookingId = booking.Id,
+                serviceRequestId = booking.ServiceRequestId,
+                serviceTitle = serviceRequest.Description,
+                customerName = currentCustomer.UserName,
+                scheduledDate = booking.ScheduledDateTime,
+                totalPrice = booking.AgreedPrice,
+                createdAt = booking.CreatedAt
+            }
+        );
         return Result.Success();
     }
 }

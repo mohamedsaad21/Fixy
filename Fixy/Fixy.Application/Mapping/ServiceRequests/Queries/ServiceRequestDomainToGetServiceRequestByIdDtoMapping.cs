@@ -17,7 +17,9 @@ public static class ServiceRequestDomainToGetServiceRequestByIdDtoMapping
             serviceRequest.ServiceCategories.Select(x => x.Name).ToList(),
             new AddressDto(serviceRequest.Address.Country, serviceRequest.Address.City, serviceRequest.Address.Area, serviceRequest.Address.Street, serviceRequest.Address.BuildingNumber, serviceRequest.Address.Latitude, serviceRequest.Address.Longitude),
             serviceRequest.Status,
-            serviceRequest.PriceOffers.Select(x => x.ToPriceOfferDto()).ToList()
+            serviceRequest.PriceOffers
+            .Select(x => x.ToPriceOfferDto(serviceRequest)).OrderByDescending(x => x.AverageRating).ThenBy(x => x.DistanceKm)
+            .ThenBy(x => x.Price).ToList()
             );
     }
 }

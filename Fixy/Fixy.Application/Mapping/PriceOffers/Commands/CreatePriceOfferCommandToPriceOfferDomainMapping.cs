@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
+﻿using Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 using Fixy.Domain.Entities;
 
 namespace Fixy.Application.Mapping.PriceOffers.Commands;

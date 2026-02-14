@@ -1,7 +1,7 @@
 ﻿using Fixy.Application.Bases;
 using MediatR;
 
-namespace Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
+namespace Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 
 public record CreatePriceOfferCommand
     (

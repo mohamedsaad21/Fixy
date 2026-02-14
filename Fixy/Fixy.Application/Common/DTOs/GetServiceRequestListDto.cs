@@ -1,7 +1,6 @@
-﻿using Fixy.Application.Common.DTOs;
-using Fixy.Domain.Enums;
+﻿using Fixy.Domain.Enums;
 
-namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
+namespace Fixy.Application.Common.DTOs;
 
 public record GetServiceRequestListDto
     (

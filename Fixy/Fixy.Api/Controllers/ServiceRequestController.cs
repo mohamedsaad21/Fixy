@@ -1,7 +1,7 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
+using Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 using Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
-using Fixy.Application.Features.ServiceRequests.Commands.CreatePriceOffer;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
 using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
@@ -64,12 +64,5 @@ public class ServiceRequestController : AppControllerBase
     public async Task<IActionResult> DeleteServiceRequestImages([FromRoute] Guid ImageId)
     {
         return ToActionResult(await Mediator.Send(new DeleteServiceRequestImageByIdCommand(ImageId)));
-    }
-
-    [Authorize(Roles = Roles.Technician)]
-    [HttpPost(Router.ServiceRequestRouting.CreatePriceOffer)]
-    public async Task<IActionResult> CreatePriceOffer([FromBody] CreatePriceOfferCommand command)
-    {
-        return ToActionResult(await Mediator.Send(command));
     }
 }

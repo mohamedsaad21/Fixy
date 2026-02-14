@@ -15,7 +15,6 @@ public static class UserSeeder
             UserName = "admin",
             Email = "admin@fixy.com",
             EmailConfirmed = true,
-            IsActive = true
         };
         var password = "Ad@123";
 

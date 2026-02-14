@@ -39,7 +39,6 @@ public static class Router
         public const string ServiceRequestsList = prefix + "/Service-Requests-List";
         public const string CustomerServiceRequestsList = prefix + "/Customer-Service-Requests-List";
         public const string CustomerServiceRequestById = prefix + "/Customer-Service-Request" + SingleRoute;
-        public const string CreatePriceOffer = prefix + "/price-offers";
         public const string GetById = prefix + "/GetById" + SingleRoute;
         public const string Create = prefix + "/Create";
         public const string Edit = prefix + "/Edit";
@@ -53,10 +52,12 @@ public static class Router
         public const string prefix = Rule + "/Technician";
         public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-List";
         public const string Location = prefix + "/Location";
+        public const string TechnicianStripeStatus = prefix + "/technician-stripe-status";
     }
     public static class PriceOfferRouting
     {
         public const string prefix = Rule + "/Price-Offer";
+        public const string CreatePriceOffer = prefix + "/Create";
         public const string AcceptPriceOffer = prefix + "/Accept-Price-Offer/{PriceOfferId}";
     }
     public static class BookingRouting
@@ -75,5 +76,16 @@ public static class Router
         public const string prefix = Rule + "/Payments";
         public const string CreatePaymentIntent = prefix + "/{BookingId}";
         public const string WebHook = prefix + "/WebHook";
+    }
+
+    public static class AdminRouting
+    {
+        public const string prefix = Rule + "/Admin";
+        public const string ApproveTechnician = prefix + "/approve-technician/{TechnicianId}";
+    }
+    public static class NotificationsRouting
+    {
+        public const string prefix = Rule + "/Notifications";
+        public const string List = prefix + "/List";
     }
 }

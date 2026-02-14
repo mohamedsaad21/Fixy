@@ -1,6 +1,5 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Behaviors;
-using Fixy.Application.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,13 +17,7 @@ public static class ModuleApplicationDependencies
         // Add Fluent Validation
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         // Add AutoMapper
-        services.AddAutoMapper(mapper => { }, Assembly.GetExecutingAssembly());
-        // Add Services
-        services.AddTransient<IAuthenticationService, AuthenticationService>();
-        services.AddTransient<IEmailService, EmailService>();
-        services.AddTransient<IFileService, FileService>();
-        services.AddTransient<ICurrentUserService, CurrentUserService>();
-        services.AddTransient<IPaymentService, PaymentService>();
+        services.AddAutoMapper(mapper => { }, Assembly.GetExecutingAssembly());        
         return services;
     }
 }

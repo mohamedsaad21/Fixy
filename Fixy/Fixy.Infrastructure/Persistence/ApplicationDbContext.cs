@@ -20,7 +20,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<Technician> Technicians { get; set; }
     public virtual DbSet<ServiceCategory> ServiceCategories { get; set; }
     public virtual DbSet<ServiceRequest> ServiceRequests { get; set; }
+    public virtual DbSet<PriceOffer> PriceOffers { get; set; }
     public virtual DbSet<ServiceRequestCategories> ServiceRequestCategories { get; set; }
+    public virtual DbSet<StripeWebhookEvent> StripeWebhookEvents { get; set; }
+    public virtual DbSet<Notification> Notifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
