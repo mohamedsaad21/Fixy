@@ -1,4 +1,5 @@
 ﻿using Fixy.Domain.Entities;
+using Fixy.Domain.Entities.Payments;
 
 namespace Fixy.Domain.Interfaces;
 
@@ -11,11 +12,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<ServiceBooking> Bookings { get; }
     ITechnicianRepository Technicians { get; }
     IGenericRepository<TechnicianLocation> TechnicianLocations { get; }
-    IGenericRepository<TechnicianStripeAccount> TechnicianStripeAccounts { get; }
-    IGenericRepository<TechnicianTransfer> TechnicianTransfers { get; }
-    IGenericRepository<StripeWebhookEvent> StripeWebhookEvents { get; }
     IGenericRepository<Payment> Payments { get; }
-    IGenericRepository<PaymentRefund> PaymentRefunds { get; }
     IGenericRepository<Dispute> Disputes { get; }
     INotificationRepository Notifications { get; }
     Task<int> SaveChangesAsync();

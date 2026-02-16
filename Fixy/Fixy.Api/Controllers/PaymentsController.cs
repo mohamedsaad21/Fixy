@@ -1,26 +1,36 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
-using Fixy.Application.Features.Payments.Commands.HandleStripePaymentSucceeded;
-using Fixy.Application.Features.Payments.Commands.PayBooking;
+using Fixy.Application.Common.DTOs.Payment;
+using Fixy.Application.Features.Payments.Commands.CreatePayment;
+using Fixy.Application.Features.Payments.Commands.ProcessCallback;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fixy.Api.Controllers;
 
-
 public class PaymentsController : AppControllerBase
 {
+    /// <summary>
+    /// Create payment for a booking
+    /// Customer endpoint
+    /// </summary>
     [Authorize(Roles = Roles.Customer)]
-    [HttpPost(Router.PaymentRouting.CreatePaymentIntent)]
-    public async Task<IActionResult> CreateOrUpdatePaymentIntent([FromRoute] Guid BookingId)
+    [HttpPost(Router.PaymentRouting.Create)]
+    public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentCommand command)
     {
-        return ToActionResult(await Mediator.Send(new PayBookingCommand(BookingId)));
+        return ToActionResult(await Mediator.Send(command));
     }
 
-    [HttpPost(Router.PaymentRouting.WebHook)]
-    public async Task<IActionResult> WebHook()
+    /// <summary>
+    /// Paymob callback endpoint
+    /// MUST be public (no authorization)
+    /// </summary>
+    [AllowAnonymous]
+    [HttpPost(Router.PaymentRouting.Callback)]
+    public async Task<IActionResult> PaymobCallback([FromBody] PaymobCallbackDto callback)
     {
-        return ToActionResult(await Mediator.Send(new HandleStripePaymentSucceededCommand()));
+        return ToActionResult(await Mediator.Send(new ProcessCallbackCommand(callback)));
     }
+
 }

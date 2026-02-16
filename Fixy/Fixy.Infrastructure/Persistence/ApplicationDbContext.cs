@@ -3,6 +3,7 @@ using EntityFrameworkCore.EncryptColumn.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Util;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Entities.Payments;
 using Fixy.Infrastructure.Persistence.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -22,8 +23,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<ServiceRequest> ServiceRequests { get; set; }
     public virtual DbSet<PriceOffer> PriceOffers { get; set; }
     public virtual DbSet<ServiceRequestCategories> ServiceRequestCategories { get; set; }
-    public virtual DbSet<StripeWebhookEvent> StripeWebhookEvents { get; set; }
     public virtual DbSet<Notification> Notifications { get; set; }
+    public virtual DbSet<Payment> Payments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

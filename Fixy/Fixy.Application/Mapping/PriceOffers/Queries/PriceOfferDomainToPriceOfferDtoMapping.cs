@@ -1,7 +1,6 @@
 ﻿using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Helpers;
-using Stripe.Terminal;
 
 namespace Fixy.Application.Mapping.PriceOffers.Queries;
 

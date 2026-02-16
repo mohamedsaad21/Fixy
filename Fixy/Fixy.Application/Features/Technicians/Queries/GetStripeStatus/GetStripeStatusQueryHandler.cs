@@ -10,31 +10,30 @@ public class GetStripeStatusQueryHandler : IRequestHandler<GetStripeStatusQuery,
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IStripeConnectService _stripeConnectService;
 
-    public GetStripeStatusQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStripeConnectService stripeConnectService)
+    public GetStripeStatusQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
-        _stripeConnectService = stripeConnectService;
     }
 
     public async Task<Result<GetStripeStatusResponse>> Handle(GetStripeStatusQuery request, CancellationToken cancellationToken)
     {
-        var technicianId = _currentUserService.GetCurrentUserId();
-        var account = await _unitOfWork.TechnicianStripeAccounts.GetTableNoTracking()
-            .FirstOrDefaultAsync(a => a.TechnicianId == technicianId);
+        throw new NotImplementedException();
+        //var technicianId = _currentUserService.GetCurrentUserId();
+        //var account = await _unitOfWork.TechnicianStripeAccounts.GetTableNoTracking()
+        //    .FirstOrDefaultAsync(a => a.TechnicianId == technicianId);
 
-        if (account == null)
-            return new GetStripeStatusResponse { IsOnboarded = false, CanReceivePayments = false, Status = "Not yet onboarded" };
+        //if (account == null)
+        //    return new GetStripeStatusResponse { IsOnboarded = false, CanReceivePayments = false, Status = "Not yet onboarded" };
 
-        var isReady = await _stripeConnectService.IsAccountFullyOnboardedAsync(account.StripeAccountId);
+        ////var isReady = await _stripeConnectService.IsAccountFullyOnboardedAsync(account.StripeAccountId);
 
-        return new GetStripeStatusResponse
-        {
-            IsOnboarded = isReady,
-            CanReceivePayments = account.PayoutsEnabled,
-            Status = account.OnboardingStatus
-        };
+        //return new GetStripeStatusResponse
+        //{
+        //    IsOnboarded = isReady,
+        //    CanReceivePayments = account.PayoutsEnabled,
+        //    Status = account.OnboardingStatus
+        //};
     }
 }

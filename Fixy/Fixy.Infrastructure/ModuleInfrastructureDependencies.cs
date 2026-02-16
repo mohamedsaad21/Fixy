@@ -21,11 +21,9 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<ICurrentUserService, CurrentUserService>();
-        services.AddTransient<IStripeConnectService, StripeConnectService>();
-        services.AddTransient<IStripePaymentService, StripePaymentService>();
-        services.AddTransient<IStripeTransferService, StripeTransferService>();
-        services.AddTransient<IStripeWebhookService, StripeWebhookService>();
         services.AddTransient<INotificationService, NotificationService>();
+        services.AddTransient<IPaymobService, PaymobService>();
+        services.AddHttpClient<IPaymobService, PaymobService>();
         
         return services;
     }

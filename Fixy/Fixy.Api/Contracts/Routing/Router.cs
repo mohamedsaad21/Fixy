@@ -74,8 +74,8 @@ public static class Router
     public static class PaymentRouting
     {
         public const string prefix = Rule + "/Payments";
-        public const string CreatePaymentIntent = prefix + "/{BookingId}";
-        public const string WebHook = prefix + "/WebHook";
+        public const string Create = prefix + "/Create";
+        public const string Callback = prefix + "/Callback";
     }
 
     public static class AdminRouting

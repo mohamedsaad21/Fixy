@@ -3,5 +3,5 @@
 public enum PaymentMethod
 {
     Cash,
-    CreditCard
+    Card,
 }

@@ -34,9 +34,9 @@ public static class ServiceRegisteration
         cloudinary.Api.Secure = true;
         services.AddSingleton(cloudinary);
 
-        var stripeSettings = new StripeSettings();
-        configuration.GetSection(nameof(stripeSettings)).Bind(stripeSettings);
-        services.AddSingleton(stripeSettings);
+        var paymobSettings = new PaymobSettings();
+        configuration.GetSection(nameof(paymobSettings)).Bind(paymobSettings);
+        services.AddSingleton(paymobSettings);
 
         services.AddAuthentication(options =>
         {

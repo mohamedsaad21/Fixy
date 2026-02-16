@@ -34,7 +34,7 @@ public class ConfirmBookingCompletionCommandHandler : IRequestHandler<ConfirmBoo
         if (booking.Status != ServiceBookingStatus.CompletedPendingCustomerConfirmation)
             return Errors.InvalidBookingState;
 
-        booking.Status = ServiceBookingStatus.Completed;
+        booking.Status = ServiceBookingStatus.PaymentPending;
 
         await _unitOfWork.SaveChangesAsync();
         // Notify technician about escrow release

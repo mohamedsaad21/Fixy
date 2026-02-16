@@ -32,7 +32,11 @@ public static class Errors
     public static Error ImageNotFound => new("ImageNotFound", ErrorType.BadRequest, "This image is not found");
     public static Error TechnicianNotFound => new("TechnicianNotFound", ErrorType.NotFound, "This technician is not found");
     public static Error TechnicianAlreadyApproved => new("TechnicianAlreadyApproved", ErrorType.BadRequest, "This technician is already approved");
-    public static Error StripeOnboardingInitializationFailed => new("StripeOnboardingInitializationFailed", ErrorType.BadRequest, "Technician approved successfully, but payment onboarding could not be initialized. Please try again later.");
-    public static Error MissingStripeSignature => new("MissingStripeSignature", ErrorType.BadRequest, "Stripe signature is missed");
-    public static Error WebhookProcessingFailed => new("WebhookProcessingFailed", ErrorType.BadRequest, "Failed to process Webhook");
+    public static Error PaymentCreationFailed => new("PaymentCreationFailed", ErrorType.BadRequest, "Failed to create payment");
+    public static Error BookingNotReadyForPayment => new("BookingNotReadyForPayment", ErrorType.BadRequest, "This booking is not ready for payment");
+    public static Error PaymentAlreadyCompleted => new("PaymentAlreadyCompleted", ErrorType.BadRequest, "Payment is already completed");
+    public static Error InvalidHmacSignature => new("InvalidHmacSignature", ErrorType.BadRequest, "Invalid HMAC signature in Paymob callback");
+    public static Error InvalidMerchantOrderId => new("InvalidMerchantOrderId", ErrorType.BadRequest, "Merchant OrderId is invalid");
+    public static Error PaymentNotFound => new("InvalidMerchantOrderId", ErrorType.NotFound, "Payment is not found");
+    public static Error CallbackProcessingFailed => new("CallbackProcessingFailed", ErrorType.BadRequest, "Error processing Paymob callback");
 }
