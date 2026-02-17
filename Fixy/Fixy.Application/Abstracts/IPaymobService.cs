@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Common.DTOs.Payment;
+using Microsoft.AspNetCore.Http;
 
 namespace Fixy.Application.Abstracts;
 
@@ -18,5 +19,5 @@ public interface IPaymobService
     /// <summary>
     /// Verify HMAC signature from Paymob callback
     /// </summary>
-    bool VerifyHmacSignature(PaymobCallbackDto callback);
+    bool VerifyHmac(IQueryCollection query, string receivedHmac);
 }

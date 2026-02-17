@@ -1,6 +1,7 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Application.Common.DTOs.Payment;
 using Fixy.Infrastructure.Configurations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 using System.Text;
@@ -163,48 +164,57 @@ public class PaymobService : IPaymobService
         }
     }
 
-
-    public bool VerifyHmacSignature(PaymobCallbackDto callback)
+    /// <summary>
+    /// Verify HMAC signature according to Paymob documentation
+    /// </summary>
+    public bool VerifyHmac(IQueryCollection query, string receivedHmac)
     {
         try
         {
-            var transaction = callback.obj;
-            var order = transaction.order;
+            // Build concatenated string in EXACT order per Paymob docs
+            var concatenated =
+                query["amount_cents"].ToString() +
+                query["created_at"].ToString() +
+                query["currency"].ToString() +
+                query["error_occured"].ToString().ToLower() +
+                query["has_parent_transaction"].ToString().ToLower() +
+                query["id"].ToString() +
+                query["integration_id"].ToString() +
+                query["is_3d_secure"].ToString().ToLower() +
+                query["is_auth"].ToString().ToLower() +
+                query["is_capture"].ToString().ToLower() +
+                query["is_refunded"].ToString().ToLower() +
+                query["is_standalone_payment"].ToString().ToLower() +
+                query["is_voided"].ToString().ToLower() +
+                query["order"].ToString() +
+                query["owner"].ToString() +
+                query["pending"].ToString().ToLower() +
+                query["source_data.pan"].ToString() +
+                query["source_data.sub_type"].ToString() +
+                query["source_data.type"].ToString() +
+                query["success"].ToString().ToLower() +
+                _paymobSetings.HMAC;
 
-            var concatenatedString = string.Concat(
-                transaction.amount_Cents.ToString(),
-                transaction.created_At,
-                transaction.currency,
-                transaction.id.ToString(),
-                order.merchant_Order_Id,
-                order.id.ToString(),
-                transaction.success.ToString().ToLower(),
-                _paymobSetings.HmacSecret
-            );
+            _logger.LogDebug($"Concatenated string: {concatenated}");
 
-            _logger.LogDebug($"HMAC Concatenated String: {concatenatedString}");
+            // Calculate HMAC SHA512
+            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(_paymobSetings.HMAC));
+            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(concatenated));
+            var calculatedHmac = BitConverter.ToString(hash).Replace("-", "").ToLower();
 
-            using var hmac = new HMACSHA512(Encoding.UTF8.GetBytes(_paymobSetings.HmacSecret));
-            var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(concatenatedString));
-            var calculatedHmac = BitConverter.ToString(hash).Replace("-", "").ToUpper();
+            _logger.LogInformation($"Calculated: {calculatedHmac}");
+            _logger.LogInformation($"Received:   {receivedHmac.ToLower()}");
 
-            _logger.LogInformation($"Calculated HMAC: {calculatedHmac}");
-            _logger.LogInformation($"Received HMAC:   {callback.hmac}");
+            var isValid = calculatedHmac.Equals(receivedHmac, StringComparison.OrdinalIgnoreCase);
 
-            var isValid = calculatedHmac.Equals(callback.hmac, StringComparison.OrdinalIgnoreCase);
-
-            if (!isValid)
-            {
-                _logger.LogWarning("HMAC MISMATCH!");
-                _logger.LogWarning($"Expected: {calculatedHmac}");
-                _logger.LogWarning($"Received: {callback.hmac}");
-            }
+            _logger.LogInformation(isValid ? "✅ HMAC VALID" : "❌ HMAC INVALID");
+            _logger.LogInformation("======================================");
 
             return isValid;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error verifying HMAC");
+            _logger.LogError(ex, "HMAC error");
             return false;
         }
     }

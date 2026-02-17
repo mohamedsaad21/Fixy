@@ -27,10 +27,26 @@ public class PaymentsController : AppControllerBase
     /// MUST be public (no authorization)
     /// </summary>
     [AllowAnonymous]
-    [HttpPost(Router.PaymentRouting.Callback)]
-    public async Task<IActionResult> PaymobCallback([FromBody] PaymobCallbackDto callback)
+    [HttpGet(Router.PaymentRouting.Callback)]
+    public async Task<IActionResult> PaymobCallback()
     {
-        return ToActionResult(await Mediator.Send(new ProcessCallbackCommand(callback)));
-    }
+        try
+        {
+            var query = Request.Query;
 
+            // Validate required parameters
+            if (!query.ContainsKey("id") || !query.ContainsKey("merchant_order_id") || !query.ContainsKey("hmac"))
+            {
+                return Ok(new { status = "error", message = "Missing parameters" });
+            }
+
+            // Process callback
+            return ToActionResult(await Mediator.Send(new ProcessCallbackCommand(query)));
+
+        }
+        catch (Exception ex)
+        {
+            return Ok(new { status = "error" });
+        }
+    }
 }
