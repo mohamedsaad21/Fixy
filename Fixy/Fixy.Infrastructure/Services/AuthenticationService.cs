@@ -1,6 +1,7 @@
 ﻿using Fixy.Application.Abstracts;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,12 +16,14 @@ public class AuthenticationService : IAuthenticationService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailService _emailService;
     private readonly JWTSettings _jWTSettings;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings)
+    public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _emailService = emailService;
         _jWTSettings = jWTSettings;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     
@@ -80,5 +83,21 @@ public class AuthenticationService : IAuthenticationService
         // send code to user
         var message = $"This code to {actionText}: {code}";
         await _emailService.SendEmailAsync(user.Email, message, reason);
+    }
+
+    public async Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires)
+    {
+        var response = _httpContextAccessor.HttpContext?.Response;
+
+        if (response == null)
+            throw new InvalidOperationException("HTTP context is not available");
+
+        var refreshTokenCookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Expires = expires.ToLocalTime()
+        };
+        response.Cookies.Append("token", token);
+        response.Cookies.Append("refreshToken", refreshToken, refreshTokenCookieOptions);
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
 
-public class DeleteServiceRequestImageByIdCommandHandler : IRequestHandler<DeleteServiceRequestImageByIdCommand, Result>
+public sealed class DeleteServiceRequestImageByIdCommandHandler : IRequestHandler<DeleteServiceRequestImageByIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IFileService _fileService;

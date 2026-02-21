@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
 
-public class AddServiceRequestImagesCommandHandler : IRequestHandler<AddServiceRequestImagesCommand, Result>
+public sealed class AddServiceRequestImagesCommandHandler : IRequestHandler<AddServiceRequestImagesCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IFileService _fileService;

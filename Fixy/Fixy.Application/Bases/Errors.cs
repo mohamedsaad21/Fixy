@@ -39,4 +39,8 @@ public static class Errors
     public static Error InvalidMerchantOrderId => new("InvalidMerchantOrderId", ErrorType.BadRequest, "Merchant OrderId is invalid");
     public static Error PaymentNotFound => new("InvalidMerchantOrderId", ErrorType.NotFound, "Payment is not found");
     public static Error CallbackProcessingFailed => new("CallbackProcessingFailed", ErrorType.BadRequest, "Error processing Paymob callback");
+    public static Error BookingNotCompleted => new("CallbackProcessingFailed", ErrorType.BadRequest, "Feedback can only be submitted after the booking is marked as completed");
+    public static Error FeebackAlreadySubmitted => new("CallbackProcessingFailed", ErrorType.BadRequest, "Feedback has already been submitted for this booking");
+    public static Error NotificationSendFailed => new("NotificationSendFailed", ErrorType.BadRequest, "The notification could not be delivered");
+    public static Error NotificationNotFound => new("NotificationNotFound", ErrorType.NotFound, "This notification is not found");
 }

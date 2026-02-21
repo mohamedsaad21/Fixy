@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
 
-public record UpdateTechnicianLocationCommand(double Latitude, double Longitude) : IRequest<Result>;
+public sealed record UpdateTechnicianLocationCommand(double Latitude, double Longitude) : IRequest<Result>;

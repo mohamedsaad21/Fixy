@@ -1,5 +1,4 @@
 ﻿using Fixy.Application.Common.DTOs;
-using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;

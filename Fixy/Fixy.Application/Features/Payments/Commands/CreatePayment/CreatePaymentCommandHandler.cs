@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Payments.Commands.CreatePayment;
 
-public class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, Result<CreatePaymentResponse>>
+public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, Result<CreatePaymentResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPaymobService _paymobService;

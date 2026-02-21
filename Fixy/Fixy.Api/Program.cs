@@ -1,7 +1,5 @@
 using Fixy.Api.Extensions;
-using Fixy.Api.Services;
 using Fixy.Application;
-using Fixy.Application.Abstracts;
 using Fixy.Infrastructure;
 using Fixy.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Localization;
@@ -14,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllersConfiguration();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 
 // 
@@ -59,7 +57,6 @@ builder.Services.AddCorsPolicy();
 
 // SignalR
 builder.Services.AddSignalR();
-builder.Services.AddScoped<IRealtimeNotificationSender, SignalRNotificationSender>();
 
 var app = builder.Build();
 

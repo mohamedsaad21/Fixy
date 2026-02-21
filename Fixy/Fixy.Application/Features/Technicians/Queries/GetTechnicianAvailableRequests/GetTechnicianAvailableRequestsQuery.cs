@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
 
-public record GetTechnicianAvailableRequestsQuery() : IRequest<Result<List<GetServiceRequestListDto>>>;
+public sealed record GetTechnicianAvailableRequestsQuery() : IRequest<Result<List<GetServiceRequestListDto>>>;

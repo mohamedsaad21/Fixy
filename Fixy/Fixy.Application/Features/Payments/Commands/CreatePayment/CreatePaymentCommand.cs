@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Fixy.Application.Features.Payments.Commands.CreatePayment;
 
-public record CreatePaymentCommand
+public sealed record CreatePaymentCommand
     (
         Guid BookingId,
         Guid CustomerId,

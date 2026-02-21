@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 
-public class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCommand, Result>
+public sealed class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
@@ -38,16 +38,6 @@ public class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCo
 
         serviceRequest.PriceOffers.Add(priceOffer);
         await _unitOfWork.SaveChangesAsync();
-        // Notify customer with new price offer
-        await _notificationService.NotifyOfferReceivedAsync(serviceRequest.CustomerId, new
-        {
-            offerId = priceOffer.Id,
-            serviceRequestId = priceOffer.ServiceRequestId,
-            technicianName = priceOffer.Technician.UserName,
-            technicianRating = priceOffer.Technician.AverageRating,
-            price = priceOffer.Price,
-            createdAt = priceOffer.CreatedAt
-        });
         return Result.Success();
     }
 }

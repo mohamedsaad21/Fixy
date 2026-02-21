@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.ServiceCategories.Queries.Models;
 
-public record GetCategoryByIdQuery(Guid Id) : IRequest<Result<GetCategoryByIdResponse>>;
+public sealed record GetCategoryByIdQuery(Guid Id) : IRequest<Result<GetCategoryByIdResponse>>;

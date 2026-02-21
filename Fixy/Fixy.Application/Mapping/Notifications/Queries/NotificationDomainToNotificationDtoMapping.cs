@@ -10,8 +10,6 @@ public static class NotificationDomainToNotificationDtoMapping
         return new GetNotificationsDto
         {
             Id = notification.Id,
-            Title = notification.Title,
-            Message = notification.Message,
             Type = notification.Type.ToString(),
             Data = notification.Data,
             IsRead = notification.IsRead,

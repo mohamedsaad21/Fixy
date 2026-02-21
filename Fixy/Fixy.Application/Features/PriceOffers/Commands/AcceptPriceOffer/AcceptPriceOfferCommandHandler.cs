@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.PriceOffers.Commands.AcceptPriceOffer;
 
-public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCommand, Result>
+public sealed class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
@@ -50,20 +50,7 @@ public class AcceptPriceOfferCommandHandler : IRequestHandler<AcceptPriceOfferCo
         var booking = new ServiceBooking { ServiceRequestId = serviceRequest.Id, TechnicianId = priceOffer.TechnicianId, PriceOfferId = priceOffer.Id, AgreedPrice = priceOffer.Price, ScheduledDateTime = serviceRequest.ScheduledDateTime };
         await _unitOfWork.Bookings.AddAsync(booking);
         await _unitOfWork.SaveChangesAsync();
-        // Notify technician that offer has been accepted
-        await _notificationService.NotifyOfferAcceptedAsync(
-            booking.TechnicianId,
-            new
-            {
-                bookingId = booking.Id,
-                serviceRequestId = booking.ServiceRequestId,
-                serviceTitle = serviceRequest.Description,
-                customerName = currentCustomer.UserName,
-                scheduledDate = booking.ScheduledDateTime,
-                totalPrice = booking.AgreedPrice,
-                createdAt = booking.CreatedAt
-            }
-        );
+        
         return Result.Success();
     }
 }

@@ -1,8 +1,6 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
 using Fixy.Domain.Interfaces;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Admin.Commands.ApproveTechnician;
@@ -10,15 +8,10 @@ namespace Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 public class ApproveTechnicianCommandHandler : IRequestHandler<ApproveTechnicianCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly INotificationService _notificationService;
 
-    public ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor,
-        INotificationService notificationService)
+    public ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _httpContextAccessor = httpContextAccessor;
-        _notificationService = notificationService;
     }
 
     public async Task<Result> Handle(ApproveTechnicianCommand request, CancellationToken cancellationToken)
@@ -34,8 +27,6 @@ public class ApproveTechnicianCommandHandler : IRequestHandler<ApproveTechnician
         technician.IsActive = true;
 
         await _unitOfWork.SaveChangesAsync();
-        // Notify technician that account has been approved
-        await _notificationService.NotifyAccountApprovedAsync(technician.Id);
         return Result.Success();
     }
 }

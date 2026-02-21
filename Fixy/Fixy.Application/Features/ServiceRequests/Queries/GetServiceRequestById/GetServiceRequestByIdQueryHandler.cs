@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 
-public class GetServiceRequestByIdQueryHandler : IRequestHandler<GetServiceRequestByIdQuery, Result<GetServiceRequestByIdDto>>
+public sealed class GetServiceRequestByIdQueryHandler : IRequestHandler<GetServiceRequestByIdQuery, Result<GetServiceRequestByIdDto>>
 {
     private readonly IUnitOfWork _unitOfWork;
 

@@ -8,4 +8,5 @@ public interface IAuthenticationService
     Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user);
     Task<RefreshToken> GenerateRefreshToken();
     Task SendCodeAsync(ApplicationUser user, string actionText, string reason);
+    Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires);
 }

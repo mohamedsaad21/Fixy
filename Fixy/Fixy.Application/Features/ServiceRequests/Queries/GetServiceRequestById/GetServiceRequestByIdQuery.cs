@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 
-public record GetServiceRequestByIdQuery(Guid Id) : IRequest<Result<GetServiceRequestByIdDto>>;
+public sealed record GetServiceRequestByIdQuery(Guid Id) : IRequest<Result<GetServiceRequestByIdDto>>;

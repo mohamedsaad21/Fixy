@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 
-public record ApproveTechnicianCommand(Guid TechnicianId) : IRequest<Result>;
+public sealed record ApproveTechnicianCommand(Guid TechnicianId) : IRequest<Result>;

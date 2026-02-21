@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Bookings.Commands.MarkBookingCompleted;
 
-public record MarkBookingCompletedCommand(Guid BookingId) : IRequest<Result>;
+public sealed record MarkBookingCompletedCommand(Guid BookingId) : IRequest<Result>;

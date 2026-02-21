@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
 
-public class UpdateTechnicianLocationCommandHandler : IRequestHandler<UpdateTechnicianLocationCommand, Result>
+public sealed class UpdateTechnicianLocationCommandHandler : IRequestHandler<UpdateTechnicianLocationCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;

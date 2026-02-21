@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 
-public class EditServiceRequestCommandHandler : IRequestHandler<EditServiceRequestCommand, Result>
+public sealed class EditServiceRequestCommandHandler : IRequestHandler<EditServiceRequestCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IFileService _fileService;

@@ -40,6 +40,7 @@ public class SharedResourcesKeys
 
     public const string CategoryAlreadyExists = "CategoryAlreadyExists";
     public const string PriceMustBeGreaterThanZero = "PriceMustBeGreaterThanZero";
-
-
+    public const string RatingMustBeBetweenOneandFive = "RatingMustBeBetweenOneandFive";
+    public const string JobDurationMinutesMustBeGreaterThanZero = "JobDurationMinutesMustBeGreaterThanZero";
+    public const string ResponseTimeMinutesMustBeGreaterThanZero = "ResponseTimeMinutesMustBeGreaterThanZero";
 }

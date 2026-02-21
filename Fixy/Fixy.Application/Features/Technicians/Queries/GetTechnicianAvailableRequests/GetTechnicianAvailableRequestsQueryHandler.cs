@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
 
-public class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTechnicianAvailableRequestsQuery, Result<List<GetServiceRequestListDto>>>
+public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTechnicianAvailableRequestsQuery, Result<List<GetServiceRequestListDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;

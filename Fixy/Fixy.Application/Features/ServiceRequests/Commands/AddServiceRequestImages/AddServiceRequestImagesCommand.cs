@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
 
-public record AddServiceRequestImagesCommand
+public sealed record AddServiceRequestImagesCommand
     (
         Guid ServiceRequestId,
         IFormFile[] Images

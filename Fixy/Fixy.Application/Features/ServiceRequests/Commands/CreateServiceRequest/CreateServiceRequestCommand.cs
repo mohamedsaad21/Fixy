@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
 
-public record CreateServiceRequestCommand
+public sealed record CreateServiceRequestCommand
     (
         string Description, 
         IFormFile[]? Images,

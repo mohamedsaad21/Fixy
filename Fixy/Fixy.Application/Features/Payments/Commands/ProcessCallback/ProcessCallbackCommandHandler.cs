@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Payments.Commands.ProcessCallback;
 
-public class ProcessCallbackCommandHandler : IRequestHandler<ProcessCallbackCommand, Result<bool>>
+public sealed class ProcessCallbackCommandHandler : IRequestHandler<ProcessCallbackCommand, Result<bool>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPaymobService _paymobService;

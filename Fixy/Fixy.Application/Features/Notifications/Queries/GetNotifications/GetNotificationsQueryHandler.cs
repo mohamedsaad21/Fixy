@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Notifications.Queries.GetNotifications;
 
-public class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, Result<List<GetNotificationsDto>>>
+public sealed class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, Result<List<GetNotificationsDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;

@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 
-public record CreatePriceOfferCommand
+public sealed record CreatePriceOfferCommand
     (
             Guid ServiceRequestId,
             decimal Price

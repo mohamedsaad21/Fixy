@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Notifications.Queries.GetNotifications;
 
-public record GetNotificationsQuery() : IRequest<Result<List<GetNotificationsDto>>>;
+public sealed record GetNotificationsQuery() : IRequest<Result<List<GetNotificationsDto>>>;

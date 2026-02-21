@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
 
-public class GetServiceRequestListQueryHandler : IRequestHandler<GetServiceRequestListQuery, Result<List<GetServiceRequestListDto>>>
+public sealed class GetServiceRequestListQueryHandler : IRequestHandler<GetServiceRequestListQuery, Result<List<GetServiceRequestListDto>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;

@@ -2,6 +2,7 @@
 using EntityFrameworkCore.EncryptColumn.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Util;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Infrastructure.Persistence.Configurations;
@@ -25,6 +26,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<ServiceRequestCategories> ServiceRequestCategories { get; set; }
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<CustomerFeedback> CustomerFeedbacks { get; set; }
+    public virtual DbSet<TechnicianFeedback> TechnicianFeedbacks  { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

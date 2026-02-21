@@ -1,5 +1,4 @@
-﻿using Fixy.Application.Features.Authentication.Commands.Models;
-using Fixy.Application.Features.Authentication.Queries.Models;
+﻿using Fixy.Application.Features.Authentication.Queries.Models;
 using Fixy.Application.Resources;
 using FluentValidation;
 using Microsoft.Extensions.Localization;

@@ -87,5 +87,14 @@ public static class Router
     {
         public const string prefix = Rule + "/Notifications";
         public const string List = prefix + "/List";
+        public const string SendNotification = prefix + "/Send-Notification";
+        public const string MarkAsRead = prefix + "/Mark-As-Read/{NotificationId}";
+    }
+
+    public static class FeedbackRouting
+    {
+        public const string prefix = Rule + "/Feedback";
+        public const string SubmitCustomerFeedback = prefix + "/Submit-Customer-Feedback";
+        public const string SubmitTechnicianFeedback = prefix + "/Submit-Technician-Feedback";
     }
 }

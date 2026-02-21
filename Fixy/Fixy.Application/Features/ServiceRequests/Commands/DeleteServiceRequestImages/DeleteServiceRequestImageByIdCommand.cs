@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
 
-public record DeleteServiceRequestImageByIdCommand(Guid ImageId) : IRequest<Result>;
+public sealed record DeleteServiceRequestImageByIdCommand(Guid ImageId) : IRequest<Result>;

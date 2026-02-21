@@ -1,6 +1,14 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
-using Fixy.Application.Features.Authentication.Commands.Models;
+using Fixy.Application.Features.Authentication.Commands.ConfirmEmail;
+using Fixy.Application.Features.Authentication.Commands.RefreshToken;
+using Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
+using Fixy.Application.Features.Authentication.Commands.RegisterTechnician;
+using Fixy.Application.Features.Authentication.Commands.ResetPassword;
+using Fixy.Application.Features.Authentication.Commands.RevokeToken;
+using Fixy.Application.Features.Authentication.Commands.SendConfirmEmail;
+using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
+using Fixy.Application.Features.Authentication.Commands.SignIn;
 using Fixy.Application.Features.Authentication.Queries.Models;
 using Microsoft.AspNetCore.Mvc;
 

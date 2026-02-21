@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 
-public record GetMyRequestsQuery() : IRequest<Result<List<GetServiceRequestListDto>>>;
+public sealed record GetMyRequestsQuery() : IRequest<Result<List<GetServiceRequestListDto>>>;

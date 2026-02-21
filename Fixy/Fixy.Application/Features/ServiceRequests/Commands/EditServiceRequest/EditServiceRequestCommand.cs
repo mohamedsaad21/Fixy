@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 
-public record EditServiceRequestCommand(
+public sealed record EditServiceRequestCommand(
         Guid Id,
         string Description,
         DateTime ScheduledDateTime,

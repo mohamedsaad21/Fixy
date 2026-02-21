@@ -21,7 +21,7 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<ICurrentUserService, CurrentUserService>();
-        services.AddTransient<INotificationService, NotificationService>();
+        services.AddScoped<INotificationService, NotificationService>();
         services.AddTransient<IPaymobService, PaymobService>();
         services.AddHttpClient<IPaymobService, PaymobService>();
         

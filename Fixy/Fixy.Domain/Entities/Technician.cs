@@ -1,4 +1,5 @@
-﻿using Fixy.Domain.Entities.Identity;
+﻿using Fixy.Domain.Entities.Feedback;
+using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Enums;
 
 namespace Fixy.Domain.Entities;
@@ -9,6 +10,8 @@ public class Technician : ApplicationUser
     {
         ServiceBookings = new HashSet<ServiceBooking>();
         PriceOffers = new HashSet<PriceOffer>();
+        CustomerFeedbacks = new HashSet<CustomerFeedback>();
+        TechnicianFeedbacks = new HashSet<TechnicianFeedback>();
     }
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
@@ -29,4 +32,6 @@ public class Technician : ApplicationUser
     public TechnicianLocation TechnicianLocation { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }
     public virtual ICollection<PriceOffer> PriceOffers { get; set; }
+    public virtual ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }
+    public virtual ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
 }

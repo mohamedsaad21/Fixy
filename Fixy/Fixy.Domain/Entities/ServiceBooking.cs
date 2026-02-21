@@ -1,4 +1,5 @@
-﻿using Fixy.Domain.Entities.Payments;
+﻿using Fixy.Domain.Entities.Feedback;
+using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 namespace Fixy.Domain.Entities;
 
@@ -20,4 +21,6 @@ public class ServiceBooking : BaseEntity
     public DateTime? CompletedAt { get; set; }
     public DateTime? CancelledAt { get; set; }
     public Payment Payment { get; set; }
+    public CustomerFeedback CustomerFeedback { get; set; }
+    public TechnicianFeedback TechnicianFeedback { get; set; }
 }

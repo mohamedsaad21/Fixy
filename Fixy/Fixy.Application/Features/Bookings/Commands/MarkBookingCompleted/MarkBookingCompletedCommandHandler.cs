@@ -38,11 +38,6 @@ public class MarkBookingCompletedCommandHandler : IRequestHandler<MarkBookingCom
         booking.CompletedAt = DateTime.UtcNow;
 
         await _unitOfWork.SaveChangesAsync();
-        // Notify customer to confirm completion
-        await _notificationService.NotifyServiceMarkedCompleteAsync(
-            booking.ServiceRequest.CustomerId,
-            booking
-        );
         return Result.Success();
     }
 }
