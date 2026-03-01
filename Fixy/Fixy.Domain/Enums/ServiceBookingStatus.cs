@@ -2,8 +2,6 @@
 
 public enum ServiceBookingStatus
 {
-    //Pending
-    // 
     Active,
     PriceChangePendingCustomerApproval,
     CompletedPendingCustomerConfirmation,
@@ -16,9 +14,3 @@ public enum ServiceBookingStatus
     Refunded,
     Disputed
 }
-//pending
-//c
-//rej
-
-//tech
-//

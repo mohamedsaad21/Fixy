@@ -51,7 +51,6 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
 builder.Services.AddSerilog();
 
-
 // CORS
 builder.Services.AddCorsPolicy();
 

@@ -1,5 +1,6 @@
 ﻿using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 
 namespace Fixy.Domain.Entities;
@@ -34,4 +35,6 @@ public class Technician : ApplicationUser
     public virtual ICollection<PriceOffer> PriceOffers { get; set; }
     public virtual ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }
     public virtual ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
+    public virtual ICollection<Payout> Payouts { get; set; }
+    public virtual ICollection<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
 }

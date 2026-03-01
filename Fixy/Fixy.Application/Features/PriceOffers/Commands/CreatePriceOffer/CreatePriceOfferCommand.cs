@@ -7,4 +7,4 @@ public sealed record CreatePriceOfferCommand
     (
             Guid ServiceRequestId,
             decimal Price
-    ) : IRequest<Result>;
+    ) : IRequest<Result<Guid>>;

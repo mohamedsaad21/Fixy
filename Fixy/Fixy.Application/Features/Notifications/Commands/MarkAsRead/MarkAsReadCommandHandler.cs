@@ -4,13 +4,14 @@ using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Fixy.Application.Features.Notifications.Commands.MarkAsRead;
 
 public sealed class MarkAsReadCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-    : IRequestHandler<MarkAsReadCommand, Result<bool>>
+    : IRequestHandler<MarkAsReadCommand, Result>
 {
-    public async Task<Result<bool>> Handle(MarkAsReadCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(MarkAsReadCommand request, CancellationToken cancellationToken)
     {
         var userId = currentUserService.GetCurrentUserId();
 
@@ -25,6 +26,6 @@ public sealed class MarkAsReadCommandHandler(IUnitOfWork unitOfWork, ICurrentUse
 
         await unitOfWork.SaveChangesAsync();
 
-        return true;
+        return Result.Success();
     }
 }

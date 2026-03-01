@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 
-public sealed class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCommand, Result>
+public sealed class CreatePriceOfferCommandHandler : IRequestHandler<CreatePriceOfferCommand, Result<Guid>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
@@ -20,7 +20,7 @@ public sealed class CreatePriceOfferCommandHandler : IRequestHandler<CreatePrice
         _notificationService = notificationService;
     }
 
-    public async Task<Result> Handle(CreatePriceOfferCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreatePriceOfferCommand request, CancellationToken cancellationToken)
     {
         var currentTechnician = await _currentUserService.GetCurrentUserAsync();
         if (currentTechnician is not Technician technician)
@@ -38,6 +38,6 @@ public sealed class CreatePriceOfferCommandHandler : IRequestHandler<CreatePrice
 
         serviceRequest.PriceOffers.Add(priceOffer);
         await _unitOfWork.SaveChangesAsync();
-        return Result.Success();
+        return priceOffer.Id;
     }
 }

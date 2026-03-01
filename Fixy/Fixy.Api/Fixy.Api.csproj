@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Fixy.Infrastructure\Fixy.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Requests\" />
+  </ItemGroup>
+
 </Project>

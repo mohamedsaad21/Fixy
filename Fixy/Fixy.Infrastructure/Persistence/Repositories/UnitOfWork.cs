@@ -20,6 +20,8 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Dispute> Disputes { get; private set; }
     public IGenericRepository<CustomerFeedback> CustomerFeedbacks { get; private set; }
     public IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; private set; }
+    public IGenericRepository<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; private set; }
+    public IGenericRepository<Payout> Payouts { get; private set; }
     public INotificationRepository Notifications { get; private set; }
 
     public UnitOfWork(ApplicationDbContext dbContext)
@@ -36,6 +38,8 @@ public class UnitOfWork : IUnitOfWork
         Disputes = new GenericRepository<Dispute>(dbContext);
         CustomerFeedbacks = new GenericRepository<CustomerFeedback>(dbContext);
         TechnicianFeedbacks = new GenericRepository<TechnicianFeedback>(dbContext);
+        TechnicianCommissionsOwed = new GenericRepository<TechnicianCommissionOwed>(dbContext);
+        Payouts = new GenericRepository<Payout>(dbContext);
         Notifications = new NotificationRepository(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();

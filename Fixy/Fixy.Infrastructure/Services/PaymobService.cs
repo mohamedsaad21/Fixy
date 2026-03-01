@@ -63,16 +63,16 @@ public class PaymobService : IPaymobService
         }
     }
 
-    public async Task<PaymentUrlResult> CreatePaymentUrlAsync(decimal amount, Guid bookingId, string customerName, string customerEmail, string customerPhone)
+    public async Task<PaymentUrlResult> CreatePaymentUrlAsync(decimal amount, Guid referenceId, string customerName, string customerEmail, string customerPhone, string orderPrefix = "BK")
     {
         try
         {
             var authToken = await GetAuthTokenAsync();
             var amountCents = (int)(amount * 100);
             //var merchantOrderId = $"BK-{bookingId}";
-            var merchantOrderId = $"BK-{bookingId}-{Guid.NewGuid().ToString("N").Substring(0, 8)}";
+            var merchantOrderId = $"{orderPrefix}-{referenceId}-{Guid.NewGuid().ToString("N").Substring(0, 8)}";
 
-            _logger.LogInformation($"Creating Paymob payment for booking {bookingId}, amount: {amount} EGP");
+            _logger.LogInformation($"Creating Paymob payment for booking {referenceId}, amount: {amount} EGP");
             //Exception
             // Step 1: Create Order
             HttpRequestMessage request = new HttpRequestMessage();
@@ -148,7 +148,7 @@ public class PaymobService : IPaymobService
             var paymentToken = key["token"].GetString();
 
             var paymentUrl = $"https://accept.paymob.com/api/acceptance/iframes/{_paymobSetings.IframeId}?payment_token={paymentToken}";
-            _logger.LogInformation($"Payment URL generated for booking {bookingId}");
+            _logger.LogInformation($"Payment URL generated for booking {referenceId}");
 
             return new PaymentUrlResult
             {
@@ -159,7 +159,7 @@ public class PaymobService : IPaymobService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error creating payment URL for booking {bookingId}");
+            _logger.LogError(ex, $"Error creating payment URL for booking {referenceId}");
             throw;
         }
     }

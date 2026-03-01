@@ -14,7 +14,7 @@ public interface IPaymobService
     /// Create payment URL for customer
     /// Returns the full URL to redirect customer to
     /// </summary>
-    Task<PaymentUrlResult> CreatePaymentUrlAsync(decimal amount, Guid bookingId, string customerName, string customerEmail, string customerPhone);
+    Task<PaymentUrlResult> CreatePaymentUrlAsync(decimal amount, Guid referenceId, string customerName, string customerEmail, string customerPhone, string orderPrefix = "BK");
 
     /// <summary>
     /// Verify HMAC signature from Paymob callback

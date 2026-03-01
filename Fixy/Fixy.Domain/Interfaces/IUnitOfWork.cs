@@ -17,6 +17,8 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<Dispute> Disputes { get; }
     IGenericRepository<CustomerFeedback> CustomerFeedbacks { get; }
     IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; }
+    IGenericRepository<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; }
+    IGenericRepository<Payout> Payouts { get; }
     INotificationRepository Notifications { get; }
     Task<int> SaveChangesAsync();
 }

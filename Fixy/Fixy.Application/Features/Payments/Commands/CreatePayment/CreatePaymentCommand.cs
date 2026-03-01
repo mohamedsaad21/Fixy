@@ -8,6 +8,7 @@ public sealed record CreatePaymentCommand
     (
         Guid BookingId,
         Guid CustomerId,
+        int PaymentMethod,
         string CustomerName,
         string CustomerEmail,
         string CustomerPhone

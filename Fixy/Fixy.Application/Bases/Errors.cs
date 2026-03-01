@@ -43,4 +43,8 @@ public static class Errors
     public static Error FeebackAlreadySubmitted => new("CallbackProcessingFailed", ErrorType.BadRequest, "Feedback has already been submitted for this booking");
     public static Error NotificationSendFailed => new("NotificationSendFailed", ErrorType.BadRequest, "The notification could not be delivered");
     public static Error NotificationNotFound => new("NotificationNotFound", ErrorType.NotFound, "This notification is not found");
+    public static Error PaymentAlreadyInitiated => new("PaymentAlreadyInitiated", ErrorType.NotFound, "A payment process has already been started for this transaction");
+    public static Error InvalidBookingStatus => new("InvalidBookingStatus", ErrorType.BadRequest, "Booking is not awaiting payment");
+    public static Error PaymentNotCash => new("PaymentNotCash", ErrorType.BadRequest, "This payment is not a cash payment");
+    public static Error CommissionNoneFound => new("CommissionNoneFound", ErrorType.BadRequest, "No unpaid commissions found");
 }
