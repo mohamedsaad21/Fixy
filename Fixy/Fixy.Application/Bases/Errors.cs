@@ -47,4 +47,8 @@ public static class Errors
     public static Error InvalidBookingStatus => new("InvalidBookingStatus", ErrorType.BadRequest, "Booking is not awaiting payment");
     public static Error PaymentNotCash => new("PaymentNotCash", ErrorType.BadRequest, "This payment is not a cash payment");
     public static Error CommissionNoneFound => new("CommissionNoneFound", ErrorType.BadRequest, "No unpaid commissions found");
+    public static Error AlreadyNoProfilePictureExists => new("AlreadyNoProfilePictureExists", ErrorType.BadRequest, "There's no already profile picture");
+    public static Error PasswordInCorrect => new("PasswordInCorrect", ErrorType.BadRequest, "Current Password Is InCorrect");
+    public static Error IdentityChangePasswordFailed => new("IdentityChangePasswordFailed", ErrorType.BadRequest, "Failed to change password");
+    public static Error PasswordPreviouslyUsed => new("PasswordPreviouslyUsed", ErrorType.BadRequest, "You cannot reuse a recently used password. Please choose a new one.");
 }

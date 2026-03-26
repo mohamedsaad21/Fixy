@@ -8,20 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Feedbacks.Commands.SubmitCustomerFeedback;
 
-public class SubmitCustomerFeedbackCommandHandler : IRequestHandler<SubmitCustomerFeedbackCommand, Result>
+public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<SubmitCustomerFeedbackCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICurrentUserService _currentUserService;
-
-    public SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-    {
-        _unitOfWork = unitOfWork;
-        _currentUserService = currentUserService;
-    }
-
     public async Task<Result> Handle(SubmitCustomerFeedbackCommand request, CancellationToken cancellationToken)
     {
-        var booking = await _unitOfWork.Bookings.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
+        var booking = await unitOfWork.Bookings.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
             return Errors.BookingNotFound;
@@ -29,17 +20,17 @@ public class SubmitCustomerFeedbackCommandHandler : IRequestHandler<SubmitCustom
         if (booking.Status != ServiceBookingStatus.Completed)
             return Errors.BookingNotCompleted;
 
-        var currentCustomer = await _currentUserService.GetCurrentUserAsync();
+        var currentCustomer = await currentUserService.GetCurrentUserAsync();
 
-        var IsExists = await _unitOfWork.CustomerFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == booking.Id);
+        var IsExists = await unitOfWork.CustomerFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == booking.Id);
 
         if (IsExists)
             return Errors.FeebackAlreadySubmitted;
 
         var feedback = request.ToCustomerFeedbackDomain(currentCustomer.Id, booking.TechnicianId);
 
-        await _unitOfWork.CustomerFeedbacks.AddAsync(feedback);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.CustomerFeedbacks.AddAsync(feedback);
+        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

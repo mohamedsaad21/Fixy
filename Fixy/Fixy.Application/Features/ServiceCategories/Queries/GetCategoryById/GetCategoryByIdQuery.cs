@@ -1,7 +1,6 @@
 ﻿using Fixy.Application.Bases;
-using Fixy.Application.Features.ServiceCategories.Queries.Results;
 using MediatR;
 
-namespace Fixy.Application.Features.ServiceCategories.Queries.Models;
+namespace Fixy.Application.Features.ServiceCategories.Queries.GetCategoryById;
 
 public sealed record GetCategoryByIdQuery(Guid Id) : IRequest<Result<GetCategoryByIdResponse>>;

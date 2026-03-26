@@ -2,9 +2,7 @@
 
 public static class GeoDistance
 {
-    public static double CalculateKm(
-        double lat1, double lon1,
-        double lat2, double lon2)
+    public static double CalculateKm(double lat1, double lon1, double lat2, double lon2)
     {
         const double R = 6371;
         var dLat = ToRad(lat2 - lat1);
@@ -16,7 +14,6 @@ public static class GeoDistance
 
         return R * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
     }
-
     private static double ToRad(double value) => value * Math.PI / 180;
 }
 

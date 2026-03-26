@@ -120,4 +120,7 @@
   <data name="CategoryAlreadyExists" xml:space="preserve">
     <value>This category is already exists</value>
   </data>
+  <data name="NewPasswordSameAsCurrentPassword" xml:space="preserve">
+    <value>The new password must be different</value>
+  </data>
 </root>

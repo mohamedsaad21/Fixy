@@ -1,5 +1,6 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
+using Fixy.Application.Features.Authentication.Commands.ChangePassword;
 using Fixy.Application.Features.Authentication.Commands.ConfirmEmail;
 using Fixy.Application.Features.Authentication.Commands.RefreshToken;
 using Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
@@ -9,7 +10,9 @@ using Fixy.Application.Features.Authentication.Commands.RevokeToken;
 using Fixy.Application.Features.Authentication.Commands.SendConfirmEmail;
 using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
 using Fixy.Application.Features.Authentication.Commands.SignIn;
+using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 using Fixy.Application.Features.Authentication.Queries.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fixy.Api.Controllers;
@@ -78,6 +81,13 @@ public class AuthenticationController : AppControllerBase
 
     [HttpPost(Router.AuthenticationRouting.ResetPassword)]
     public async Task<IActionResult> ResetPasswordAsync([FromForm] ResetPasswordCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize]
+    [HttpPost(Router.AuthenticationRouting.ChangePassword)]
+    public async Task<IActionResult> ChangePasswordAsync([FromForm] ChangePasswordCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }

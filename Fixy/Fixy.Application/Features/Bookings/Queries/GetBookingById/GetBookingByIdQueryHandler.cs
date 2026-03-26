@@ -6,18 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Bookings.Queries.GetBookingById;
 
-public class GetBookingByIdQueryHandler : IRequestHandler<GetBookingByIdQuery, Result<GetBookingByIdDto>>
+public class GetBookingByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetBookingByIdQuery, Result<GetBookingByIdDto>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public GetBookingByIdQueryHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<Result<GetBookingByIdDto>> Handle(GetBookingByIdQuery request, CancellationToken cancellationToken)
     {
-        var booking = await _unitOfWork.Bookings.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.Id);
+        var booking = await unitOfWork.Bookings.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (booking == null)
             return Errors.BookingNotFound;

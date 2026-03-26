@@ -11,8 +11,6 @@ public class Customer : ApplicationUser
         CustomerFeedbacks = new HashSet<CustomerFeedback>();
         TechnicianFeedbacks = new HashSet<TechnicianFeedback>();
     }
-    public string? ProfilePictureUrl { get; set; }
-    public string? ProfilePicturePublicId { get; set; }
     public string? StripeCustomerId { get; set; }
     public virtual ICollection<ServiceRequest> ServiceRequests { get; set; }
     public virtual ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }

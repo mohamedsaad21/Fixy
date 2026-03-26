@@ -1,7 +1,6 @@
 ﻿using Fixy.Application.Bases;
-using Fixy.Application.Features.ServiceCategories.Queries.Results;
 using MediatR;
 
-namespace Fixy.Application.Features.ServiceCategories.Queries.Models;
+namespace Fixy.Application.Features.ServiceCategories.Queries.GetCategoriesList;
 
 public sealed record GetCategoriesListQuery : IRequest<Result<List<GetCategoriesListResponse>>>;

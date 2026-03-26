@@ -1,15 +1,14 @@
-﻿using Fixy.Application.Features.Authentication.Queries.Models;
-using Fixy.Application.Resources;
+﻿using Fixy.Application.Resources;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Features.Authentication.Queries.Validators;
+namespace Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 
-public class ConfirmResetPasswordValidator : AbstractValidator<ConfirmResetPasswordQuery>
+public class ConfirmResetPasswordQueryValidator : AbstractValidator<ConfirmResetPasswordQuery>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
 
-    public ConfirmResetPasswordValidator(IStringLocalizer<SharedResources> stringLocalizer)
+    public ConfirmResetPasswordQueryValidator(IStringLocalizer<SharedResources> stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         ApplyValidationRules();

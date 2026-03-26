@@ -29,7 +29,7 @@ public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> 
         {
             if (request.ProfilePicture != null)
             {
-                var ProfileResult = await fileService.UploadAsync($"Technicians/{customer.Id}/Profiles", request.ProfilePicture);
+                var ProfileResult = await fileService.UploadAsync($"Customers/{customer.Id}/Profiles", request.ProfilePicture);
 
                 if (!ProfileResult.IsSuccess)
                     throw new Exception("Profile Upload Failed");

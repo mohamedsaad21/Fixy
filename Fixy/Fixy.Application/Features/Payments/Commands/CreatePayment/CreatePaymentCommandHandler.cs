@@ -6,7 +6,7 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Fixy.Application.Features.Payments.Commands.CreatePayment;
 
@@ -14,21 +14,19 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPaymobService _paymobService;
-    private readonly ILogger<CreatePaymentCommandHandler> _logger;
     private const decimal PLATFORM_COMMISSION_RATE = 0.15m;
 
-    public CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPaymobService paymobService, ILogger<CreatePaymentCommandHandler> logger)
+    public CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPaymobService paymobService)
     {
         _unitOfWork = unitOfWork;
         _paymobService = paymobService;
-        _logger = logger;
     }
 
     public async Task<Result<CreatePaymentResponse>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            _logger.LogInformation($"Creating payment for booking {request.BookingId}");
+            Log.Information($"Creating payment for booking {request.BookingId}");
 
             // 1. Get booking details
             var booking = await _unitOfWork.Bookings.GetTableAsTracking()
@@ -36,14 +34,14 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
 
             if (booking == null)
             {
-                _logger.LogWarning($"Booking {request.BookingId} not found");
+                Log.Warning($"Booking {request.BookingId} not found");
                 return Errors.BookingNotFound;
             }
 
             // 2. Validate booking status
             if (booking.Status != ServiceBookingStatus.PaymentPending)
             {
-                _logger.LogWarning($"Booking {request.BookingId} is not in WaitingPayment status");
+                Log.Warning($"Booking {request.BookingId} is not in WaitingPayment status");
                 return Errors.BookingNotReadyForPayment;
             }
             // 3. Check if payment already exists
@@ -96,7 +94,7 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
                 response.PaymentUrl = paymentUrlResult.PaymentUrl;
 
                 response.PaymentId = payment.Id;
-                _logger.LogInformation($"Card payment created - Paymob Order: {payment.PaymobOrderId}");
+                Log.Information($"Card payment created - Paymob Order: {payment.PaymobOrderId}");
             }
             else if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Cash)
             {
@@ -114,13 +112,13 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
             // 9. Send notifications
             //await SendNotificationsAsync(request.PaymentMethod, booking, payment, cancellationToken);
 
-            _logger.LogInformation($"✅ Payment {payment.Id} created successfully for booking {request.BookingId}");
+            Log.Information($"Payment {payment.Id} created successfully for booking {request.BookingId}");
 
             return response;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error creating payment for booking {request.BookingId}");
+            Log.Error(ex, $"Error creating payment for booking {request.BookingId}");
             return Errors.PaymentCreationFailed;
         }
     }

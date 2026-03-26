@@ -1,6 +1,5 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
-using Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 using Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
@@ -25,10 +24,10 @@ public class ServiceRequestController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
-    [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestsList)]
-    public async Task<IActionResult> GetCustomerServiceRequests()
+    [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestsPaginated)]
+    public async Task<IActionResult> GetCustomerServiceRequestsPaginated([FromQuery] GetMyRequestsQuery query)
     {
-        return ToActionResult(await Mediator.Send(new GetMyRequestsQuery()));
+        return ToActionResult(await Mediator.Send(query));
     }
 
     [Authorize(Roles = Roles.Customer)]

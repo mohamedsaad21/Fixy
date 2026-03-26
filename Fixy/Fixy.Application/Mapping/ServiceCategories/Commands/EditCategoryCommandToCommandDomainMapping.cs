@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Features.ServiceCategories.Commands.Models;
+﻿using Fixy.Application.Features.ServiceCategories.Commands.EditCategory;
 using Fixy.Domain.Entities;
 
 namespace Fixy.Application.Mapping.ServiceCategories;

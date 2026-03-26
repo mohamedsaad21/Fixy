@@ -1,5 +1,4 @@
 ﻿using Fixy.Domain.Constants;
-using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 

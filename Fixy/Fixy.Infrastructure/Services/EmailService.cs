@@ -6,23 +6,16 @@ using Fixy.Infrastructure.Configurations;
 
 namespace Fixy.Infrastructure.Services;
 
-public class EmailService : IEmailService
+public class EmailService(EmailSettings emailSettings) : IEmailService
 {
-    private readonly EmailSettings _emailSettings;
-
-    public EmailService(EmailSettings emailSettings)
-    {
-        _emailSettings = emailSettings;
-    }
-
     public async Task<string> SendEmailAsync(string Email, string Message, string? reason)
     {
         try
         {
             using (var client = new SmtpClient())
             {
-                await client.ConnectAsync(_emailSettings.Host, _emailSettings.Port, SecureSocketOptions.StartTls);
-                client.Authenticate(_emailSettings.FromEmail, _emailSettings.Password);
+                await client.ConnectAsync(emailSettings.Host, emailSettings.Port, SecureSocketOptions.StartTls);
+                client.Authenticate(emailSettings.FromEmail, emailSettings.Password);
                 var bodybuilder = new BodyBuilder
                 {
                     HtmlBody = $"{Message}",
@@ -32,7 +25,7 @@ public class EmailService : IEmailService
                 {
                     Body = bodybuilder.ToMessageBody()
                 };
-                message.From.Add(new MailboxAddress("Fixy", _emailSettings.FromEmail));
+                message.From.Add(new MailboxAddress("Fixy", emailSettings.FromEmail));
                 message.To.Add(new MailboxAddress("testing", Email));
                 message.Subject = reason == null ? "No Submitted" : reason;
                 await client.SendAsync(message);

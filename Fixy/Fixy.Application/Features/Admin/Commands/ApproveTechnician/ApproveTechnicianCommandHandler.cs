@@ -5,18 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 
-public class ApproveTechnicianCommandHandler : IRequestHandler<ApproveTechnicianCommand, Result>
+public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<ApproveTechnicianCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     public async Task<Result> Handle(ApproveTechnicianCommand request, CancellationToken cancellationToken)
     {
-        var technician = await _unitOfWork.Technicians.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.TechnicianId);
+        var technician = await unitOfWork.Technicians.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.TechnicianId);
 
         if (technician == null)
             return Errors.TechnicianNotFound;
@@ -26,7 +19,7 @@ public class ApproveTechnicianCommandHandler : IRequestHandler<ApproveTechnician
 
         technician.IsActive = true;
 
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

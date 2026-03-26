@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Features.ServiceCategories.Queries.Results;
+﻿using Fixy.Application.Features.ServiceCategories.Queries.GetCategoryById;
 using Fixy.Domain.Entities;
 
 namespace Fixy.Application.Mapping.ServiceCategories;

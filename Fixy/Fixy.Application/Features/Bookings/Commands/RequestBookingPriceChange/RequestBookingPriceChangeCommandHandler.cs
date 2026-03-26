@@ -7,24 +7,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Bookings.Commands.RequestBookingPriceChange;
 
-public class RequestBookingPriceChangeCommandHandler : IRequestHandler<RequestBookingPriceChangeCommand, Result>
+public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<RequestBookingPriceChangeCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICurrentUserService _currentUserService;
-    public RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-    {
-        _unitOfWork = unitOfWork;
-        _currentUserService = currentUserService;
-    }
-
     public async Task<Result> Handle(RequestBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
-        var booking = await _unitOfWork.Bookings.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
+        var booking = await unitOfWork.Bookings.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
         // check if booking exists or not
         if (booking == null)
             return Errors.BookingNotFound;
 
-        var currentTechnician = await _currentUserService.GetCurrentUserAsync();
+        var currentTechnician = await currentUserService.GetCurrentUserAsync();
         // Ensure that technician who involved in booking is same who request price change
         if (booking.TechnicianId != currentTechnician.Id)
             return Errors.Unauthorized;
@@ -42,7 +34,7 @@ public class RequestBookingPriceChangeCommandHandler : IRequestHandler<RequestBo
         booking.PriceChangeRequestedAt = DateTime.UtcNow;
         booking.Status = ServiceBookingStatus.PriceChangePendingCustomerApproval;
 
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Features.ServiceCategories.Queries.Results;
+﻿namespace Fixy.Application.Features.ServiceCategories.Queries.GetCategoriesList;
 
 public record GetCategoriesListResponse
 (

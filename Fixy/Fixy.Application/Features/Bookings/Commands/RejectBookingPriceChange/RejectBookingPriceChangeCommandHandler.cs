@@ -7,25 +7,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Bookings.Commands.RejectBookingPriceChange;
 
-public class RejectBookingPriceChangeCommandHandler : IRequestHandler<RejectBookingPriceChangeCommand, Result>
+public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<RejectBookingPriceChangeCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICurrentUserService _currentUserService;
-    public RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
-    {
-        _unitOfWork = unitOfWork;
-        _currentUserService = currentUserService;
-    }
-
     public async Task<Result> Handle(RejectBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
-        var booking = await _unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
+        var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
             return Errors.BookingNotFound;
 
-        var currentCustomer = await _currentUserService.GetCurrentUserAsync();
+        var currentCustomer = await currentUserService.GetCurrentUserAsync();
 
         if (booking.ServiceRequest.Customer.Id != currentCustomer.Id)
             return Errors.Unauthorized;
@@ -36,7 +28,7 @@ public class RejectBookingPriceChangeCommandHandler : IRequestHandler<RejectBook
         booking.ProposedPrice = null;
         booking.Status = ServiceBookingStatus.Active;
 
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

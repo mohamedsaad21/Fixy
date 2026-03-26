@@ -15,6 +15,16 @@ public sealed class ResetPasswordCommandHandler(UserManager<ApplicationUser> use
         if (user == null)
             return Errors.UserNotFound;
 
+        // Check if new password is the same as the current one
+        if (user.PasswordHash is not null)
+        {
+            var isSamePassword = userManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password)
+                != PasswordVerificationResult.Failed;
+
+            if (isSamePassword)
+                return Errors.PasswordPreviouslyUsed;
+        }
+
         await userManager.RemovePasswordAsync(user);
         await userManager.AddPasswordAsync(user, request.Password);
 

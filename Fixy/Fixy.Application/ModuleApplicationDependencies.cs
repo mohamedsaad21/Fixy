@@ -1,5 +1,4 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Behaviors;
+﻿using Fixy.Application.Behaviors;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,15 +1,14 @@
-﻿using Fixy.Application.Features.ServiceCategories.Commands.Models;
-using Fixy.Application.Resources;
+﻿using Fixy.Application.Resources;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Features.ServiceCategories.Commands.Validators;
+namespace Fixy.Application.Features.ServiceCategories.Commands.DeleteCategory;
 
-public class DeleteCategoryValidator : AbstractValidator<DeleteCategoryCommand>
+public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
 
-    public DeleteCategoryValidator(IStringLocalizer<SharedResources> stringLocalizer)
+    public DeleteCategoryCommandValidator(IStringLocalizer<SharedResources> stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         ApplyValidationRules();

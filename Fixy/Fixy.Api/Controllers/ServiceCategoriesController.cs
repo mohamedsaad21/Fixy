@@ -1,7 +1,10 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
-using Fixy.Application.Features.ServiceCategories.Commands.Models;
-using Fixy.Application.Features.ServiceCategories.Queries.Models;
+using Fixy.Application.Features.ServiceCategories.Commands.AddCategory;
+using Fixy.Application.Features.ServiceCategories.Commands.DeleteCategory;
+using Fixy.Application.Features.ServiceCategories.Commands.EditCategory;
+using Fixy.Application.Features.ServiceCategories.Queries.GetCategoriesList;
+using Fixy.Application.Features.ServiceCategories.Queries.GetCategoryById;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

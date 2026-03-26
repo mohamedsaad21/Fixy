@@ -6,24 +6,20 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Fixy.Application.Features.Payments.Commands.ConfirmCashReceipt;
 
-public class ConfirmCashReceiptCommandHandler
-        : IRequestHandler<ConfirmCashReceiptCommand, Result<ConfirmCashReceiptResponse>>
+public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashReceiptCommand, Result<ConfirmCashReceiptResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    private readonly ILogger<ConfirmCashReceiptCommandHandler> _logger;
     private const decimal PLATFORM_COMMISSION_RATE = 0.15m;
 
-    public ConfirmCashReceiptCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
-        ILogger<ConfirmCashReceiptCommandHandler> logger)
+    public ConfirmCashReceiptCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
-        _logger = logger;
     }
 
     public async Task<Result<ConfirmCashReceiptResponse>> Handle(ConfirmCashReceiptCommand request, CancellationToken cancellationToken)
@@ -31,7 +27,7 @@ public class ConfirmCashReceiptCommandHandler
         // 1. Get current user (technician)
         var userId = _currentUserService.GetCurrentUserId();
 
-        _logger.LogInformation($"Technician {userId} confirming cash receipt for booking {request.BookingId}");
+        Log.Information($"Technician {userId} confirming cash receipt for booking {request.BookingId}");
 
         // 2. Get booking with all related data
         var booking = await _unitOfWork.Bookings.GetTableAsTracking()
@@ -40,34 +36,34 @@ public class ConfirmCashReceiptCommandHandler
 
         if (booking == null)
         {
-            _logger.LogWarning($"Booking not found: {request.BookingId}");
+            Log.Warning($"Booking not found: {request.BookingId}");
             return Errors.BookingNotFound;
         }
 
         // 3. Verify booking status is PaymentPending
         if (booking.Status != ServiceBookingStatus.PaymentPending)
         {
-            _logger.LogWarning($"Booking {request.BookingId} is not awaiting payment. Status: {booking.Status}");
+            Log.Warning($"Booking {request.BookingId} is not awaiting payment. Status: {booking.Status}");
             return Errors.InvalidBookingStatus;
         }
 
         // 4. Verify payment exists and is cash payment
         if (booking.Payment == null)
         {
-            _logger.LogWarning($"Payment not found for booking {request.BookingId}");
+            Log.Warning($"Payment not found for booking {request.BookingId}");
             return Errors.PaymentNotFound;
         }
 
         if (booking.Payment.Method != PaymentMethod.Cash)
         {
-            _logger.LogWarning($"Payment for booking {request.BookingId} is not cash payment");
+            Log.Warning($"Payment for booking {request.BookingId} is not cash payment");
             return Errors.PaymentNotCash;
         }
 
         // 5. Verify payment is still pending
         if (booking.Payment.Status == PaymentStatus.Success)
         {
-            _logger.LogWarning($"Cash already confirmed for booking {request.BookingId}");
+            Log.Warning($"Cash already confirmed for booking {request.BookingId}");
             return Errors.PaymentAlreadyCompleted;
         }
 
@@ -91,14 +87,14 @@ public class ConfirmCashReceiptCommandHandler
 
         await _unitOfWork.TechnicianCommissionsOwed.AddAsync(commissionOwed);
 
-        _logger.LogInformation($"Cash payment created - Commission owed: {platformCommission}");
+        Log.Information($"Cash payment created - Commission owed: {platformCommission}");
 
         // 7. Update booking status
         booking.Status = ServiceBookingStatus.Completed;
 
         await _unitOfWork.SaveChangesAsync();
 
-        _logger.LogInformation($"✅ Cash receipt confirmed for booking {request.BookingId}");
+        Log.Information($"Cash receipt confirmed for booking {request.BookingId}");
 
         // 8. Send notifications
         //await SendNotificationsAsync(booking, payment, cancellationToken);

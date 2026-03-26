@@ -10,7 +10,5 @@ public enum ServiceBookingStatus
     PaymentFailed,
     Completed,
     Cancelled,
-    FundsTransferred,
-    Refunded,
     Disputed
 }

@@ -43,4 +43,5 @@ public class SharedResourcesKeys
     public const string RatingMustBeBetweenOneandFive = "RatingMustBeBetweenOneandFive";
     public const string JobDurationMinutesMustBeGreaterThanZero = "JobDurationMinutesMustBeGreaterThanZero";
     public const string ResponseTimeMinutesMustBeGreaterThanZero = "ResponseTimeMinutesMustBeGreaterThanZero";
+    public const string NewPasswordSameAsCurrentPassword = "NewPasswordSameAsCurrentPassword";
 }

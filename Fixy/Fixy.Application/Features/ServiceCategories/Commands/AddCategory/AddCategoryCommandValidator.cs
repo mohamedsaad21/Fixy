@@ -1,17 +1,16 @@
-﻿using Fixy.Application.Features.ServiceCategories.Commands.Models;
-using Fixy.Application.Resources;
+﻿using Fixy.Application.Resources;
 using Fixy.Domain.Interfaces;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Features.ServiceCategories.Commands.Validators;
+namespace Fixy.Application.Features.ServiceCategories.Commands.AddCategory;
 
-public class EditCategoryValidator : AbstractValidator<EditCategoryCommand>
+public class AddCategoryCommandValidator : AbstractValidator<AddCategoryCommand>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly IUnitOfWork _unitOfWork;
 
-    public EditCategoryValidator(IStringLocalizer<SharedResources> stringLocalizer, IUnitOfWork unitOfWork)
+    public AddCategoryCommandValidator(IStringLocalizer<SharedResources> stringLocalizer, IUnitOfWork unitOfWork)
     {
         _stringLocalizer = stringLocalizer;
         _unitOfWork = unitOfWork;
@@ -26,7 +25,7 @@ public class EditCategoryValidator : AbstractValidator<EditCategoryCommand>
 
     public void ApplyCustomValidationRules()
     {
-        RuleFor(x => x.Name).MustAsync(async (model, key, CancellationToken) => !await _unitOfWork.ServiceCategories.IsExistsExcludeSelfAsync(model.Id, key))
+        RuleFor(x => x.Name).MustAsync(async (model, key, CancellationToken) => !await _unitOfWork.ServiceCategories.IsExistsAsync(key))
             .WithMessage(_stringLocalizer[SharedResourcesKeys.CategoryAlreadyExists]);
     }
 }
