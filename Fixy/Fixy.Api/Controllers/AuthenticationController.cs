@@ -86,7 +86,7 @@ public class AuthenticationController : AppControllerBase
     }
 
     [Authorize]
-    [HttpPost(Router.AuthenticationRouting.ChangePassword)]
+    [HttpPut(Router.AuthenticationRouting.ChangePassword)]
     public async Task<IActionResult> ChangePasswordAsync([FromForm] ChangePasswordCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
