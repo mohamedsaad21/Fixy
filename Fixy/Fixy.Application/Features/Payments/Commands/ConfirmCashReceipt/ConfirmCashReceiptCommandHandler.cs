@@ -1,5 +1,5 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Payments.Commands.ConfirmCashReceipt.Responses;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;

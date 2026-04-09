@@ -1,5 +1,5 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
+using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Mapping.ServiceRequests.Commands;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;

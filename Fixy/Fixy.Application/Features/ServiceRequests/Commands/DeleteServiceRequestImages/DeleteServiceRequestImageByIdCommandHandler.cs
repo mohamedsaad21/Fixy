@@ -1,6 +1,6 @@
 ﻿using CloudinaryDotNet.Actions;
-using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
+using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

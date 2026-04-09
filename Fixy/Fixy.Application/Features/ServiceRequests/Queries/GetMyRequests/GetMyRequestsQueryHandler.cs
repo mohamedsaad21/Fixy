@@ -1,6 +1,6 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
 using Fixy.Application.Common.DTOs;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.ServiceRequests;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Enums;

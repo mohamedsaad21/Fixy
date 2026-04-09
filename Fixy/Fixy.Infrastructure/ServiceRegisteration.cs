@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System.Text;
 
 namespace Fixy.Infrastructure;
@@ -37,6 +38,11 @@ public static class ServiceRegisteration
         var paymobSettings = new PaymobSettings();
         configuration.GetSection(nameof(paymobSettings)).Bind(paymobSettings);
         services.AddSingleton(paymobSettings);
+
+        var stripeSettings = new StripeSettings();
+        configuration.GetSection(nameof(stripeSettings)).Bind(stripeSettings);
+        services.AddSingleton(stripeSettings);
+        StripeConfiguration.ApiKey = stripeSettings.Secretkey;
 
         services.AddAuthentication(options =>
         {

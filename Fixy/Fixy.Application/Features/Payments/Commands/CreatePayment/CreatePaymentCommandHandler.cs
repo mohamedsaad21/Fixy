@@ -1,5 +1,5 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Payments.Commands.CreatePayment.Responses;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
@@ -13,13 +13,13 @@ namespace Fixy.Application.Features.Payments.Commands.CreatePayment;
 public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, Result<CreatePaymentResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IPaymobService _paymobService;
+    private readonly IPaymentService _paymentService;
     private const decimal PLATFORM_COMMISSION_RATE = 0.15m;
 
-    public CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPaymobService paymobService)
+    public CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService)
     {
         _unitOfWork = unitOfWork;
-        _paymobService = paymobService;
+        _paymentService = paymentService;
     }
 
     public async Task<Result<CreatePaymentResponse>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
@@ -66,7 +66,6 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
                 TotalAmount = totalAmount,
                 TechnicianAmount = totalAmount * 0.85m,
                 PlatformCommission = totalAmount * 0.15m,
-                //PaymobOrderId = paymentUrlResult.PaymobOrderId.ToString(),
                 Method = (PaymentMethod)request.PaymentMethod,
                 Status = PaymentStatus.Pending,
             };
@@ -80,21 +79,17 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
 
             if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Card)
             {
-                // Create Paymob payment URL
-                var paymentUrlResult = await _paymobService.CreatePaymentUrlAsync(
+                // Create stripe payment URL
+                var paymentUrlResult = await _paymentService.CreatePaymentUrlAsync(
                     totalAmount,
                     request.BookingId,
                     request.CustomerName,
                     request.CustomerEmail,
                     request.CustomerPhone
                 );
-
-                payment.PaymobOrderId = paymentUrlResult.PaymobOrderId.ToString();
-                payment.MerchantOrderId = paymentUrlResult.MerchantOrderId;
                 response.PaymentUrl = paymentUrlResult.PaymentUrl;
+                payment.MerchantOrderId = paymentUrlResult.MerchantOrderId;
 
-                response.PaymentId = payment.Id;
-                Log.Information($"Card payment created - Paymob Order: {payment.PaymobOrderId}");
             }
             else if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Cash)
             {
@@ -103,6 +98,7 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
 
             // 7. Save payment
             await _unitOfWork.Payments.AddAsync(payment);
+            response.PaymentId = payment.Id;
 
             // 8. Update booking status
             booking.Status = ServiceBookingStatus.PaymentPending;

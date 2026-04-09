@@ -1,5 +1,7 @@
-﻿using Fixy.Application.Abstracts;
+﻿using Fixy.Application.Contracts.ExternalServices;
+using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Interfaces;
+using Fixy.Infrastructure.ExternalServices;
 using Fixy.Infrastructure.Persistence.Repositories;
 using Fixy.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,8 +24,8 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<ICurrentUserService, CurrentUserService>();
         services.AddScoped<INotificationService, NotificationService>();
-        services.AddTransient<IPaymobService, PaymobService>();
-        services.AddHttpClient<IPaymobService, PaymobService>();
+        services.AddTransient<IPaymentService, StripeService>();
+        services.AddScoped<ICacheService, CacheService>();
         
         return services;
     }

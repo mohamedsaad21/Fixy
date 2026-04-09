@@ -1,6 +1,6 @@
 ﻿using Fixy.Domain.Entities.Identity;
 
-namespace Fixy.Application.Abstracts;
+namespace Fixy.Application.Contracts.Services;
 
 public interface ICurrentUserService
 {

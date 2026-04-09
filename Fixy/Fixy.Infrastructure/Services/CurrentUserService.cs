@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Abstracts;
+﻿using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

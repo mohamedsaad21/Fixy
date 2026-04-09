@@ -1,5 +1,5 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Payments.Commands.PayCommission.Responses;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
@@ -10,7 +10,7 @@ using Serilog;
 
 namespace Fixy.Application.Features.Payments.Commands.PayCommission;
 
-public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IPaymobService paymobService) : IRequestHandler<PayCommissionCommand, Result<PayCommissionResponse>>
+public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IPaymentService paymobService) : IRequestHandler<PayCommissionCommand, Result<PayCommissionResponse>>
 {
     public async Task<Result<PayCommissionResponse>> Handle(PayCommissionCommand request, CancellationToken cancellationToken)
     {
@@ -51,10 +51,10 @@ public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSer
             TotalAmount = totalAmount,
             TechnicianAmount = 0,
             PlatformCommission = totalAmount,
-            PaymobOrderId = paymentUrlResult.PaymobOrderId.ToString(),
+            //PaymobOrderId = paymentUrlResult.PaymobOrderId.ToString(),
             Method = PaymentMethod.Card,
             Status = PaymentStatus.Pending,
-            MerchantOrderId = paymentUrlResult.MerchantOrderId,
+            //MerchantOrderId = paymentUrlResult.MerchantOrderId,
             CreatedAt = DateTime.UtcNow
         };
 

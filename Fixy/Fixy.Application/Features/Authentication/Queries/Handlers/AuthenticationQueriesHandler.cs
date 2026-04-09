@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Authentication.Queries.Models;
 using Fixy.Application.Features.Authentication.Queries.Results;
 using Fixy.Application.Resources;

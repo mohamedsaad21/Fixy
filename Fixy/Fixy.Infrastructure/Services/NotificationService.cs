@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Abstracts;
+﻿using Fixy.Application.Contracts.Services;
 using Fixy.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 

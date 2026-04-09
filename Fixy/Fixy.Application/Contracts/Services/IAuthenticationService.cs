@@ -1,7 +1,7 @@
 ﻿using Fixy.Domain.Entities.Identity;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Fixy.Application.Abstracts;
+namespace Fixy.Application.Contracts.Services;
 
 public interface IAuthenticationService
 {

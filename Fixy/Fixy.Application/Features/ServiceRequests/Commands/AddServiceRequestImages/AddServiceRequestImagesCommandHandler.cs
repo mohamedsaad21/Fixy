@@ -1,6 +1,6 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
 using Fixy.Application.Common.Models;
+using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
 using MediatR;

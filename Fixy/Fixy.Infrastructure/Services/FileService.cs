@@ -1,7 +1,7 @@
 using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Fixy.Application.Abstracts;
 using Fixy.Application.Common.Models;
+using Fixy.Application.Contracts.ExternalServices;
 using Microsoft.AspNetCore.Http;
 
 namespace Fixy.Infrastructure.Services;

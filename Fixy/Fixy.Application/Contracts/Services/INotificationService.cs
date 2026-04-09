@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Abstracts;
+﻿namespace Fixy.Application.Contracts.Services;
 
 public interface INotificationService
 {

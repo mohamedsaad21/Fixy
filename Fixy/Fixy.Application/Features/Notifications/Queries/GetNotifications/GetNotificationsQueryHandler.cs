@@ -1,5 +1,5 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.Notifications.Queries;
 using Fixy.Domain.Interfaces;
 using MediatR;

@@ -30,26 +30,22 @@ public class PaymentsController : AppControllerBase
     /// MUST be public (no authorization)
     /// </summary>
     [AllowAnonymous]
-    [HttpGet(Router.PaymentRouting.Callback)]
+    [HttpPost(Router.PaymentRouting.Callback)]
     public async Task<IActionResult> PaymobCallback()
     {
         try
         {
-            var query = Request.Query;
+            var result = await Mediator.Send(new ProcessCallbackCommand());
 
-            // Validate required parameters
-            if (!query.ContainsKey("id") || !query.ContainsKey("merchant_order_id") || !query.ContainsKey("hmac"))
-            {
-                return Ok(new { status = "error", message = "Missing parameters" });
-            }
+            if (!result.IsSuccess)
+                return BadRequest(result);
 
-            // Process callback
-            return ToActionResult(await Mediator.Send(new ProcessCallbackCommand(query)));
-
+            return Redirect("https://drive.google.com/drive/folders/1XATpVuqb4YR6FWURsu15zOOPZqAdVcEw");
         }
         catch (Exception ex)
         {
-            return Ok(new { status = "error" });
+            //return Redirect($"https://your-frontend.com/payment/failed?error={ex.Message}");
+            return Redirect("https://www.google.com/");
         }
     }
 

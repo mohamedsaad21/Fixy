@@ -1,5 +1,5 @@
-﻿using Fixy.Application.Abstracts;
-using Fixy.Application.Bases;
+﻿using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;

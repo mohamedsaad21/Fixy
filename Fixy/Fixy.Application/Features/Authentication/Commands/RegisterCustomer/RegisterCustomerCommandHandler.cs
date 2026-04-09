@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
+using Fixy.Application.Contracts.ExternalServices;
+using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Constants;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
