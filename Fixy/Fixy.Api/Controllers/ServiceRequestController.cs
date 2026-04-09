@@ -1,4 +1,5 @@
-﻿using Fixy.Api.Base;
+﻿using Fixy.Api.Attributes;
+using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
@@ -16,6 +17,7 @@ namespace Fixy.Api.Controllers;
 [Authorize]
 public class ServiceRequestController : AppControllerBase
 {
+    [RedisCache(60)]
     [Authorize(Roles = Roles.Admin)]
     [HttpGet(Router.ServiceRequestRouting.ServiceRequestsList)]
     public async Task<IActionResult> GetServiceRequests()
@@ -23,6 +25,7 @@ public class ServiceRequestController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetServiceRequestListQuery()));
     }
 
+    [RedisCache(60)]
     [Authorize(Roles = Roles.Customer)]
     [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestsPaginated)]
     public async Task<IActionResult> GetCustomerServiceRequestsPaginated([FromQuery] GetMyRequestsQuery query)
@@ -30,6 +33,7 @@ public class ServiceRequestController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [RedisCache(60)]
     [Authorize(Roles = Roles.Customer)]
     [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestById)]
     public async Task<IActionResult> GetCustomerServiceRequestById([FromRoute] Guid Id)

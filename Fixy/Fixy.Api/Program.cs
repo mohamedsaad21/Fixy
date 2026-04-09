@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllersConfiguration();
+builder.Services.AddControllersConfiguration().AddHealthChecks();
 
 builder.Services.AddOpenApi();
 

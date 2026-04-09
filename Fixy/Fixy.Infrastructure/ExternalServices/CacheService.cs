@@ -12,7 +12,7 @@ public class CacheService : ICacheService
         var redis =  ConnectionMultiplexer.Connect("localhost:6379");
         _cacheDb = redis.GetDatabase();
     }
-    public T GetData<T>(string key)
+    public async Task<T> GetData<T>(string key)
     {
         var value = _cacheDb.StringGet(key);
         if (!string.IsNullOrEmpty(value))
@@ -21,13 +21,13 @@ public class CacheService : ICacheService
         return default;
     }
 
-    public bool SetData<T>(string key, T value, DateTimeOffset expirationTime)
+    public async Task<bool> SetData<T>(string key, T value, DateTimeOffset expirationTime)
     {
         var expiryTime = expirationTime.DateTime.Subtract(DateTime.Now);
         return _cacheDb.StringSet(key, JsonSerializer.Serialize(value), expiryTime);
     }
 
-    public object RemoveData(string key)
+    public async Task<object> RemoveData(string key)
     {
         var _exist = _cacheDb.KeyExists(key);
 

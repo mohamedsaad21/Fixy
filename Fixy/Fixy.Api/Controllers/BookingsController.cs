@@ -1,4 +1,5 @@
-﻿using Fixy.Api.Base;
+﻿using Fixy.Api.Attributes;
+using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Bookings.Commands.ApproveBookingPriceChange;
 using Fixy.Application.Features.Bookings.Commands.ConfirmBookingCompletion;
@@ -15,6 +16,7 @@ namespace Fixy.Api.Controllers;
 [Authorize]
 public class BookingsController : AppControllerBase
 {
+    [RedisCache(60)]
     [HttpGet(Router.BookingRouting.GetById)]
     public async Task<IActionResult> GetBookingById([FromRoute] Guid Id)
     {

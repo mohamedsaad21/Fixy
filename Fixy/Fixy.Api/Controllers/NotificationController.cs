@@ -1,4 +1,5 @@
-﻿using Fixy.Api.Base;
+﻿using Fixy.Api.Attributes;
+using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Notifications.Commands.MarkAsRead;
 using Fixy.Application.Features.Notifications.Commands.SendNotification;
@@ -16,6 +17,7 @@ public class NotificationController : AppControllerBase
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [RedisCache(60)]
     [HttpGet(Router.NotificationsRouting.List)]
     public async Task<IActionResult> GetNotifications()
     {

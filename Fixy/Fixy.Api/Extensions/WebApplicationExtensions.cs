@@ -25,6 +25,8 @@ public static class WebApplicationExtensions
         //}
         app.UseHttpsRedirection();
 
+        app.UseHealthChecks("/health");
+
         app.UseCors("DevelopmentPolicy");
 
         app.UseRouting();
