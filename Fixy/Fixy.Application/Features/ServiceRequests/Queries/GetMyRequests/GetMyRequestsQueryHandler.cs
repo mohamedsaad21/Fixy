@@ -32,7 +32,7 @@ public sealed class GetMyRequestsQueryHandler(IUnitOfWork unitOfWork, ICurrentUs
             myServiceRequests = myServiceRequests.Where(x => x.Description.Contains(request.Search));
         }
 
-        var PaginatedList = await myServiceRequests.Select(x => x.ToServiceRequestListDto()).ToPaginatedListAsync(request.pageNumber, request.pageSize);
+        var PaginatedList = await myServiceRequests.Select(x => x.ToServiceRequestListDto()).ToPaginatedListAsync(request.PageNumber, request.PageSize);
         return PaginatedList;
     }
 }

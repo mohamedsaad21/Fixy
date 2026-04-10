@@ -14,10 +14,10 @@ public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSer
 {
     public async Task<Result<PayCommissionResponse>> Handle(PayCommissionCommand request, CancellationToken cancellationToken)
     {
-        // 1. Get current user (technician)
+        // Get current user (technician)
         var technician = await currentUserService.GetCurrentUserAsync();
 
-        // 2. Get  commissions
+        // Get  commissions
         var commissions = await unitOfWork.TechnicianCommissionsOwed.GetTableNoTracking()
             .Where(c => c.TechnicianId == technician.Id && !c.IsPaid)
             .Include(c => c.Booking)
@@ -29,12 +29,12 @@ public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSer
             return Errors.CommissionNoneFound;
         }
 
-        // 3. Calculate total amount
+        // Calculate total amount
         var totalAmount = commissions.Sum(c => c.AmountOwed);
 
         Log.Information($"Total commission amount: {totalAmount:C} for {commissions.Count} commissions");
 
-        // 5. Create Paymob payment URL for commission
+        // Create payment URL for commission
         var paymentUrlResult = await paymobService.CreatePaymentUrlAsync(
             totalAmount,
             technician.Id,
@@ -44,7 +44,7 @@ public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSer
             "COMM"
         );
 
-        // 6. Create a Payment record to track this commission payment
+        // Create a Payment record to track this commission payment
         var commissionPayment = new Payment
         {
             UserId = technician.Id,
@@ -54,7 +54,7 @@ public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSer
             //PaymobOrderId = paymentUrlResult.PaymobOrderId.ToString(),
             Method = PaymentMethod.Card,
             Status = PaymentStatus.Pending,
-            //MerchantOrderId = paymentUrlResult.MerchantOrderId,
+            MerchantOrderId = paymentUrlResult.MerchantOrderId,
             CreatedAt = DateTime.UtcNow
         };
 

@@ -7,6 +7,7 @@ using Fixy.Application.Features.Bookings.Commands.MarkBookingCompleted;
 using Fixy.Application.Features.Bookings.Commands.RejectBookingPriceChange;
 using Fixy.Application.Features.Bookings.Commands.RequestBookingPriceChange;
 using Fixy.Application.Features.Bookings.Queries.GetBookingById;
+using Fixy.Application.Features.Bookings.Queries.GetBookingsForCustomer;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,14 @@ namespace Fixy.Api.Controllers;
 [Authorize]
 public class BookingsController : AppControllerBase
 {
+    [RedisCache(60)]
+    [Authorize(Roles = Roles.Customer)]
+    [HttpGet(Router.BookingRouting.CustomerPaginatedList)]
+    public async Task<IActionResult> GetBookingsForCustomer([FromQuery] GetBookingsForCustomerQuery query)
+    {
+        return ToActionResult(await Mediator.Send(query));
+    }
+
     [RedisCache(60)]
     [HttpGet(Router.BookingRouting.GetById)]
     public async Task<IActionResult> GetBookingById([FromRoute] Guid Id)

@@ -64,7 +64,7 @@ public static class Router
     public static class BookingRouting
     {
         public const string prefix = Rule + "/Booking";
-        public const string List = prefix + "/List";
+        public const string CustomerPaginatedList = prefix + "/Customer-PaginatedList";
         public const string GetById = prefix + "/GetById" + SingleRoute;
         public const string RequestPriceChange = prefix + "/request-price-change";
         public const string ApprovePriceChange = prefix + "/approve-price-change/{BookingId}";

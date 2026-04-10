@@ -8,8 +8,8 @@ namespace Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 
 public sealed record GetMyRequestsQuery
     (
-        int pageNumber,
-        int pageSize,
+        int PageNumber,
+        int PageSize,
         ServiceRequestOrdering OrderBy,
         string? Search
     )
