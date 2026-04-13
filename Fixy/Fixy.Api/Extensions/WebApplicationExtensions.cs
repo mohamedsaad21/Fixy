@@ -1,6 +1,8 @@
 ﻿using Fixy.Api.Middleware;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Hubs;
+using Fixy.Infrastructure.Seeder;
+using Microsoft.AspNetCore.Identity;
 using Fixy.Infrastructure.Persistence;
 using Fixy.Infrastructure.Seeder;
 using Microsoft.AspNetCore.Identity;

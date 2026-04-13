@@ -4,12 +4,14 @@ using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
+
 namespace Fixy.Application.Features.Authentication.Commands.SignIn;
 
 public sealed class SignInCommandHandler(UserManager<ApplicationUser> userManager, IAuthenticationService authenticationService)
-    : IRequestHandler<SignInCommand, Result<string>>
+    : IRequestHandler<SignInCommand, Result<AuthResponse>>
 {
-    public async Task<Result<string>> Handle(SignInCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AuthResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
