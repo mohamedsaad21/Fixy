@@ -17,11 +17,7 @@ namespace Fixy.Api.Controllers;
 [Authorize]
 public class ServiceRequestController : AppControllerBase
 {
-<<<<<<< HEAD
-    [RedisCache(60)]
-=======
     //[RedisCache(60)]
->>>>>>> feature/MFA
     [Authorize(Roles = Roles.Admin)]
     [HttpGet(Router.ServiceRequestRouting.ServiceRequestsList)]
     public async Task<IActionResult> GetServiceRequests()
@@ -29,11 +25,7 @@ public class ServiceRequestController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetServiceRequestListQuery()));
     }
 
-<<<<<<< HEAD
-    [RedisCache(60)]
-=======
     //[RedisCache(60)]
->>>>>>> feature/MFA
     [Authorize(Roles = Roles.Customer)]
     [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestsPaginated)]
     public async Task<IActionResult> GetCustomerServiceRequestsPaginated([FromQuery] GetMyRequestsQuery query)
@@ -41,11 +33,7 @@ public class ServiceRequestController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-<<<<<<< HEAD
-    [RedisCache(60)]
-=======
     //[RedisCache(60)]
->>>>>>> feature/MFA
     [Authorize(Roles = Roles.Customer)]
     [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestById)]
     public async Task<IActionResult> GetCustomerServiceRequestById([FromRoute] Guid Id)

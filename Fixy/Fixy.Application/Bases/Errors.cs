@@ -51,9 +51,6 @@ public static class Errors
     public static Error PasswordInCorrect => new("PasswordInCorrect", ErrorType.BadRequest, "Current Password Is InCorrect");
     public static Error IdentityChangePasswordFailed => new("IdentityChangePasswordFailed", ErrorType.BadRequest, "Failed to change password");
     public static Error PasswordPreviouslyUsed => new("PasswordPreviouslyUsed", ErrorType.BadRequest, "You cannot reuse a recently used password. Please choose a new one.");
-<<<<<<< HEAD
-=======
     public static Error TwoFactorAlreadyEnabled => new("TwoFactorAlreadyEnabled", ErrorType.BadRequest, "2FA is Already Enabled");
     public static Error TwoFactorAlreadyDisabled => new("TwoFactorAlreadyDisabled", ErrorType.BadRequest, "2FA is Already Disabled");
->>>>>>> feature/MFA
 }

@@ -4,11 +4,7 @@ using Fixy.Application.Common.Models;
 using Fixy.Application.Contracts.ExternalServices;
 using Microsoft.AspNetCore.Http;
 
-<<<<<<<< HEAD:Fixy/Fixy.Infrastructure/Services/FileService.cs
-namespace Fixy.Infrastructure.Services;
-========
 namespace Fixy.Infrastructure.ExternalServices;
->>>>>>>> feature/MFA:Fixy/Fixy.Infrastructure/ExternalServices/FileService.cs
 
 public class FileService(Cloudinary cloudinary) : IFileService
 {

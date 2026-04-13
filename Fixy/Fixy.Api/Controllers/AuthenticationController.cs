@@ -2,11 +2,8 @@
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Authentication.Commands.ChangePassword;
 using Fixy.Application.Features.Authentication.Commands.ConfirmEmail;
-<<<<<<< HEAD
-=======
 using Fixy.Application.Features.Authentication.Commands.DisableTwoFactor;
 using Fixy.Application.Features.Authentication.Commands.EnableTwoFactor;
->>>>>>> feature/MFA
 using Fixy.Application.Features.Authentication.Commands.RefreshToken;
 using Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
 using Fixy.Application.Features.Authentication.Commands.RegisterTechnician;
@@ -15,10 +12,7 @@ using Fixy.Application.Features.Authentication.Commands.RevokeToken;
 using Fixy.Application.Features.Authentication.Commands.SendConfirmEmail;
 using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
 using Fixy.Application.Features.Authentication.Commands.SignIn;
-<<<<<<< HEAD
-=======
 using Fixy.Application.Features.Authentication.Commands.VerifyOTP;
->>>>>>> feature/MFA
 using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 using Fixy.Application.Features.Authentication.Queries.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -43,8 +37,6 @@ public class AuthenticationController : AppControllerBase
     [HttpPost(Router.AuthenticationRouting.SignIn)]
     public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
     {       
-<<<<<<< HEAD
-=======
         return ToActionResult(await Mediator.Send(command));
     }
 
@@ -65,7 +57,6 @@ public class AuthenticationController : AppControllerBase
     [HttpPost(Router.AuthenticationRouting.VerifyOtp)]
     public async Task<IActionResult> VerifyOtp([FromForm] VerifyOTPCommand command)
     {
->>>>>>> feature/MFA
         return ToActionResult(await Mediator.Send(command));
     }
 

@@ -109,9 +109,6 @@ public static class Router
     {
         public const string prefix = Rule + "/Users";
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
-<<<<<<< HEAD
-=======
         public const string GetUserById = prefix + "/Get-User-By-Id/{Id}";
->>>>>>> feature/MFA
     }
-    }
+}

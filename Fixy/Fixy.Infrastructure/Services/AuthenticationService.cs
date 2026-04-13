@@ -1,10 +1,4 @@
 ﻿using Fixy.Application.Contracts.Services;
-<<<<<<< HEAD
-using Fixy.Domain.Entities.Identity;
-using Fixy.Infrastructure.Configurations;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-=======
 using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
@@ -12,7 +6,6 @@ using Fixy.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
->>>>>>> feature/MFA
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,29 +16,20 @@ namespace Fixy.Infrastructure.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
-<<<<<<< HEAD
-=======
     private readonly IUnitOfWork _unitOfWork;
->>>>>>> feature/MFA
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailService _emailService;
     private readonly JWTSettings _jWTSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-<<<<<<< HEAD
-    public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
-    {
-=======
     public AuthenticationService(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
     {
         _unitOfWork = unitOfWork;
->>>>>>> feature/MFA
         _userManager = userManager;
         _emailService = emailService;
         _jWTSettings = jWTSettings;
         _httpContextAccessor = httpContextAccessor;
     }
-
     
     public async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
     {
@@ -92,16 +76,6 @@ public class AuthenticationService : IAuthenticationService
             ExpiresOn = DateTime.UtcNow.AddDays(30)
         };
     }
-
-<<<<<<< HEAD
-    public async Task SendCodeAsync(ApplicationUser user, string actionText, string reason)
-    {
-        // Generate  code
-        var random = new Random();
-        var code = random.Next(1, 1000000).ToString("D6");
-        user.Code = code;
-        await _userManager.UpdateAsync(user);
-=======
     public async Task SendOtpAsync(ApplicationUser user, string actionText, string reason)
     {
         // Generate  code
@@ -114,14 +88,11 @@ public class AuthenticationService : IAuthenticationService
         };
         await _unitOfWork.OtpCodes.AddAsync(otp);
         await _unitOfWork.SaveChangesAsync();
->>>>>>> feature/MFA
-        // send code to user
+
         var message = $"This code to {actionText}: {code}";
         await _emailService.SendEmailAsync(user.Email, message, reason);
     }
 
-<<<<<<< HEAD
-=======
     public async Task<bool> VerifyOtpAsync(Guid userId, string code)
     {
         var otp = await _unitOfWork.OtpCodes
@@ -137,7 +108,6 @@ public class AuthenticationService : IAuthenticationService
         return true;
     }
 
->>>>>>> feature/MFA
     public async Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires)
     {
         var response = _httpContextAccessor.HttpContext?.Response;
@@ -153,8 +123,6 @@ public class AuthenticationService : IAuthenticationService
         response.Cookies.Append("token", token);
         response.Cookies.Append("refreshToken", refreshToken, refreshTokenCookieOptions);
     }
-<<<<<<< HEAD
-=======
 
     public async Task<AuthResponse> GetJwtToken(ApplicationUser user)
     {
@@ -185,5 +153,4 @@ public class AuthenticationService : IAuthenticationService
         authResponse.Token = accessToken;
         return authResponse;
     }
->>>>>>> feature/MFA
 }
