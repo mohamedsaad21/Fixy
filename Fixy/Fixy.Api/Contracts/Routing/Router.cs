@@ -14,6 +14,7 @@ public static class Router
         public const string RegisterCustomer = prefix + "/Register-Customer";
         public const string RegisterTechnician = prefix + "/Register-Technician";
         public const string SignIn = prefix + "/SignIn";
+        public const string VerifyOtp = prefix + "/Verify-Otp";
         public const string CustomersList = prefix + "/Customers-List";
         public const string SendConfirmEmail = prefix + "/Send-Confirm-Email";
         public const string ConfirmEmail = prefix + "/Confirm-Email";

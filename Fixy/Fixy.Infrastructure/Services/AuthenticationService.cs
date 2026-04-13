@@ -1,8 +1,10 @@
 ﻿using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,13 +15,15 @@ namespace Fixy.Infrastructure.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
+    private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailService _emailService;
     private readonly JWTSettings _jWTSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
+    public AuthenticationService(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
     {
+        _unitOfWork = unitOfWork;
         _userManager = userManager;
         _emailService = emailService;
         _jWTSettings = jWTSettings;
@@ -73,16 +77,36 @@ public class AuthenticationService : IAuthenticationService
         };
     }
 
-    public async Task SendCodeAsync(ApplicationUser user, string actionText, string reason)
+    public async Task SendOtpAsync(ApplicationUser user, string actionText, string reason)
     {
         // Generate  code
-        var random = new Random();
-        var code = random.Next(1, 1000000).ToString("D6");
-        user.Code = code;
-        await _userManager.UpdateAsync(user);
+        var code = new Random().Next(1, 1000000).ToString("D6");
+        var otp = new OtpCode
+        {
+            ApplicationUserId = user.Id,
+            Code = code,
+            ExpiresAt = DateTime.UtcNow.AddMinutes(5)
+        };
+        await _unitOfWork.OtpCodes.AddAsync(otp);
+        await _unitOfWork.SaveChangesAsync();
         // send code to user
         var message = $"This code to {actionText}: {code}";
         await _emailService.SendEmailAsync(user.Email, message, reason);
+    }
+
+    public async Task<bool> VerifyOtpAsync(Guid userId, string code)
+    {
+        var otp = await _unitOfWork.OtpCodes
+            .GetTableAsTracking().Where(o => o.ApplicationUserId == userId && o.Code == code && !o.IsUsed)
+            .OrderByDescending(o => o.ExpiresAt)
+            .FirstOrDefaultAsync();
+
+        if (otp == null || otp.ExpiresAt < DateTime.UtcNow)
+            return false;
+
+        otp.IsUsed = true; // mark as used so it can't be reused
+        await _unitOfWork.SaveChangesAsync();
+        return true;
     }
 
     public async Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires)
