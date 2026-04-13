@@ -1,11 +1,10 @@
 ﻿using Fixy.Domain.Entities;
-using Fixy.Infrastructure.InfrastructureBases;
-using Fixy.Infrastructure.Persistence.Abstracts;
+using Fixy.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Infrastructure.Persistence.Repositories;
 
-public class TechnicianRepository : GenericRepositoryAsync<Technician>, ITechnicianRepository
+public class TechnicianRepository : GenericRepository<Technician>, ITechnicianRepository
 {
     private readonly DbSet<Technician> _technicians;
 

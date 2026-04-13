@@ -1,7 +1,18 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
-using Fixy.Application.Features.Authentication.Commands.Models;
+using Fixy.Application.Features.Authentication.Commands.ChangePassword;
+using Fixy.Application.Features.Authentication.Commands.ConfirmEmail;
+using Fixy.Application.Features.Authentication.Commands.RefreshToken;
+using Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
+using Fixy.Application.Features.Authentication.Commands.RegisterTechnician;
+using Fixy.Application.Features.Authentication.Commands.ResetPassword;
+using Fixy.Application.Features.Authentication.Commands.RevokeToken;
+using Fixy.Application.Features.Authentication.Commands.SendConfirmEmail;
+using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
+using Fixy.Application.Features.Authentication.Commands.SignIn;
+using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 using Fixy.Application.Features.Authentication.Queries.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fixy.Api.Controllers;
@@ -15,14 +26,14 @@ public class AuthenticationController : AppControllerBase
     }
 
     [HttpPost(Router.AuthenticationRouting.RegisterCustomer)]
-    public async Task<IActionResult> RegisterCustomerAsync([FromBody] RegisterCustomerCommand command)
+    public async Task<IActionResult> RegisterCustomerAsync([FromForm] RegisterCustomerCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
     [HttpPost(Router.AuthenticationRouting.SignIn)]
     public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
-    {
+    {       
         return ToActionResult(await Mediator.Send(command));
     }
 
@@ -45,15 +56,15 @@ public class AuthenticationController : AppControllerBase
     }
 
     [HttpPost(Router.AuthenticationRouting.RefreshToken)]
-    public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenCommand command)
+    public async Task<IActionResult> RefreshTokenAsync()
     {
-        return ToActionResult(await Mediator.Send(command));
+        return ToActionResult(await Mediator.Send(new RefreshTokenCommand()));
     }
 
     [HttpPost(Router.AuthenticationRouting.RevokeToken)]
-    public async Task<IActionResult> RevokeTokenAsync([FromBody] RevokeTokenCommand command)
+    public async Task<IActionResult> RevokeTokenAsync()
     {
-        return ToActionResult(await Mediator.Send(command));
+        return ToActionResult(await Mediator.Send(new RevokeTokenCommand()));
     }
 
     [HttpPost(Router.AuthenticationRouting.SendResetPassword)]
@@ -70,6 +81,13 @@ public class AuthenticationController : AppControllerBase
 
     [HttpPost(Router.AuthenticationRouting.ResetPassword)]
     public async Task<IActionResult> ResetPasswordAsync([FromForm] ResetPasswordCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize]
+    [HttpPut(Router.AuthenticationRouting.ChangePassword)]
+    public async Task<IActionResult> ChangePasswordAsync([FromForm] ChangePasswordCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }

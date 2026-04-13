@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Features.Authentication.Commands.Models;
+﻿using Fixy.Application.Features.Authentication.Commands.RegisterTechnician;
 using Fixy.Domain.Entities;
 
 namespace Fixy.Application.Mapping.Authentication;

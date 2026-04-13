@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Features.Authentication.Commands.Models;
+﻿using Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
 using Fixy.Application.Features.Authentication.Queries.Results;
 using Fixy.Domain.Entities;
 

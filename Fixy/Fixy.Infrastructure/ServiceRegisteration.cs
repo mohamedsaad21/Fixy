@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Stripe;
 using System.Text;
 
 namespace Fixy.Infrastructure;
@@ -34,6 +35,15 @@ public static class ServiceRegisteration
         cloudinary.Api.Secure = true;
         services.AddSingleton(cloudinary);
 
+        var paymobSettings = new PaymobSettings();
+        configuration.GetSection(nameof(paymobSettings)).Bind(paymobSettings);
+        services.AddSingleton(paymobSettings);
+
+        var stripeSettings = new StripeSettings();
+        configuration.GetSection(nameof(stripeSettings)).Bind(stripeSettings);
+        services.AddSingleton(stripeSettings);
+        StripeConfiguration.ApiKey = stripeSettings.Secretkey;
+
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -52,6 +62,23 @@ public static class ServiceRegisteration
                 ValidAudience = jwtSettings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
                 ClockSkew = TimeSpan.Zero,
+            };
+            // Required for SignalR authentication!
+            o.Events = new JwtBearerEvents
+            {
+                OnMessageReceived = context =>
+                {
+                    var accessToken = context.Request.Query["access_token"];
+                    var path = context.HttpContext.Request.Path;
+
+                    // Only for SignalR hubs
+                    if (!string.IsNullOrEmpty(accessToken) &&
+                        path.StartsWithSegments("/hubs/notification"))
+                    {
+                        context.Token = accessToken;
+                    }
+                    return Task.CompletedTask;
+                }
             };
         });
 

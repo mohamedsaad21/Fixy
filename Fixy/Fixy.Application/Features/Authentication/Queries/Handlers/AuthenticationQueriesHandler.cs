@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Fixy.Application.Abstracts;
 using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Authentication.Queries.Models;
 using Fixy.Application.Features.Authentication.Queries.Results;
 using Fixy.Application.Resources;
@@ -13,8 +13,8 @@ using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Authentication.Queries.Handlers;
 
-public class AuthenticationQueriesHandler : IRequestHandler<GetCustomersQuery, Result<List<GetCustomersResponse>>>,
-                                                                                IRequestHandler<ConfirmResetPasswordQuery, Result>
+public class AuthenticationQueriesHandler : IRequestHandler<GetCustomersQuery, Result<List<GetCustomersResponse>>>
+                                                                                
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly IAuthenticationService _authenticationService;
@@ -36,18 +36,5 @@ public class AuthenticationQueriesHandler : IRequestHandler<GetCustomersQuery, R
         var customers = await _userManager.Users.Where(u => u.GetType() == typeof(Customer)).ToListAsync();
         var result = _mapper.Map<List<GetCustomersResponse>>(customers);
         return result;
-    }
-
-    public async Task<Result> Handle(ConfirmResetPasswordQuery request, CancellationToken cancellationToken)
-    {
-        var user = await _userManager.FindByEmailAsync(request.Email);
-
-        if (user == null)
-            return Errors.UserNotFound;
-
-        if (user.Code != request.Code)
-            return Errors.InvalidCode;
-
-        return Result.Success();
     }
 }

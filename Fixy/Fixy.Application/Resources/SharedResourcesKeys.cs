@@ -36,4 +36,12 @@ public class SharedResourcesKeys
     public const string RoleAlreadyExists = "RoleAlreadyExists";
     public const string FailedToEditRole = "FailedToEditRole";
     public const string FailedToUpdateUserRoles = "FailedToUpdateUserRoles";
+
+
+    public const string CategoryAlreadyExists = "CategoryAlreadyExists";
+    public const string PriceMustBeGreaterThanZero = "PriceMustBeGreaterThanZero";
+    public const string RatingMustBeBetweenOneandFive = "RatingMustBeBetweenOneandFive";
+    public const string JobDurationMinutesMustBeGreaterThanZero = "JobDurationMinutesMustBeGreaterThanZero";
+    public const string ResponseTimeMinutesMustBeGreaterThanZero = "ResponseTimeMinutesMustBeGreaterThanZero";
+    public const string NewPasswordSameAsCurrentPassword = "NewPasswordSameAsCurrentPassword";
 }

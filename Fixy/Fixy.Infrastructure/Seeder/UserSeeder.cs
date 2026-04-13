@@ -1,5 +1,4 @@
 ﻿using Fixy.Domain.Constants;
-using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 
@@ -9,12 +8,12 @@ public static class UserSeeder
 {
     public static async Task SeedAsync(UserManager<ApplicationUser> userManager)
     {
-        var user = new Admin
+        var user = new ApplicationUser
         {
             FullName = "Mohamed Saad",
             UserName = "admin",
             Email = "admin@fixy.com",
-            EmailConfirmed = true
+            EmailConfirmed = true,
         };
         var password = "Ad@123";
 

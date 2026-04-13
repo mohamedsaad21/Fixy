@@ -2,7 +2,9 @@
 using EntityFrameworkCore.EncryptColumn.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Util;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Entities.Payments;
 using Fixy.Infrastructure.Persistence.Configurations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -18,6 +20,17 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         _encryptionProvider = new GenerateEncryptionProvider("BC205508E3ED4C42ACE5E2FE4B1B2431");
     }
     public virtual DbSet<Technician> Technicians { get; set; }
+    public virtual DbSet<ServiceCategory> ServiceCategories { get; set; }
+    public virtual DbSet<ServiceRequest> ServiceRequests { get; set; }
+    public virtual DbSet<PriceOffer> PriceOffers { get; set; }
+    public virtual DbSet<ServiceRequestCategories> ServiceRequestCategories { get; set; }
+    public virtual DbSet<Notification> Notifications { get; set; }
+    public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<CustomerFeedback> CustomerFeedbacks { get; set; }
+    public virtual DbSet<TechnicianFeedback> TechnicianFeedbacks  { get; set; }
+    public virtual DbSet<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
+    public virtual DbSet<Payout> Payouts { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -33,5 +46,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         builder.Entity<IdentityRoleClaim<Guid>>().ToTable("RoleClaims");
         builder.Entity<IdentityUserLogin<Guid>>().ToTable("UserLogins");
         builder.Entity<IdentityUserToken<Guid>>().ToTable("UserTokens");
+
+        builder.Entity<ApplicationUser>(options =>
+        {
+            options.UseTptMappingStrategy();
+        });
     }
 }
