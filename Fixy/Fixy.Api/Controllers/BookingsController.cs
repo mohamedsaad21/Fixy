@@ -17,7 +17,7 @@ namespace Fixy.Api.Controllers;
 [Authorize]
 public class BookingsController : AppControllerBase
 {
-    [RedisCache(60)]
+    //[RedisCache(60)]
     [Authorize(Roles = Roles.Customer)]
     [HttpGet(Router.BookingRouting.CustomerPaginatedList)]
     public async Task<IActionResult> GetBookingsForCustomer([FromQuery] GetBookingsForCustomerQuery query)
@@ -25,7 +25,7 @@ public class BookingsController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-    [RedisCache(60)]
+    //[RedisCache(60)]
     [HttpGet(Router.BookingRouting.GetById)]
     public async Task<IActionResult> GetBookingById([FromRoute] Guid Id)
     {

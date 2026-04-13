@@ -44,6 +44,7 @@ public sealed class SignInCommandHandler(UserManager<ApplicationUser> userManage
         var roles = await userManager.GetRolesAsync(user);
         authResponse.UserName = user.UserName;
         authResponse.Email = user.Email;
+        authResponse.ProfilePictureUrl = user.ProfilePictureUrl;
         authResponse.Role = roles.FirstOrDefault();
         authResponse.Token = accessToken;
 
