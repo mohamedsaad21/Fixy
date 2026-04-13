@@ -14,14 +14,14 @@ namespace Fixy.Api.Controllers;
 
 public class ServiceCategoriesController : AppControllerBase
 {
-    [RedisCache(60)]
+    //[RedisCache(60)]
     [HttpGet(Router.CategoryRouting.List)]
     public async Task<IActionResult> GetCategories()
     {
         return ToActionResult(await Mediator.Send(new GetCategoriesListQuery()));
     }
 
-    [RedisCache(60)]
+    //[RedisCache(60)]
     [HttpGet(Router.CategoryRouting.GetById)]
     public async Task<IActionResult> GetById([FromRoute] Guid Id)
     {

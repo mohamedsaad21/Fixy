@@ -2,6 +2,8 @@
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Authentication.Commands.ChangePassword;
 using Fixy.Application.Features.Authentication.Commands.ConfirmEmail;
+using Fixy.Application.Features.Authentication.Commands.DisableTwoFactor;
+using Fixy.Application.Features.Authentication.Commands.EnableTwoFactor;
 using Fixy.Application.Features.Authentication.Commands.RefreshToken;
 using Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
 using Fixy.Application.Features.Authentication.Commands.RegisterTechnician;
@@ -10,6 +12,7 @@ using Fixy.Application.Features.Authentication.Commands.RevokeToken;
 using Fixy.Application.Features.Authentication.Commands.SendConfirmEmail;
 using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
 using Fixy.Application.Features.Authentication.Commands.SignIn;
+using Fixy.Application.Features.Authentication.Commands.VerifyOTP;
 using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 using Fixy.Application.Features.Authentication.Queries.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -34,6 +37,27 @@ public class AuthenticationController : AppControllerBase
     [HttpPost(Router.AuthenticationRouting.SignIn)]
     public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
     {       
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+
+    [Authorize]
+    [HttpPost(Router.AuthenticationRouting.Enable2FA)]
+    public async Task<IActionResult> Enable2FA([FromForm] EnableTwoFactorCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize]
+    [HttpPost(Router.AuthenticationRouting.Disable2FA)]
+    public async Task<IActionResult> Disable2FA([FromForm] DisableTwoFactorCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [HttpPost(Router.AuthenticationRouting.VerifyOtp)]
+    public async Task<IActionResult> VerifyOtp([FromForm] VerifyOTPCommand command)
+    {
         return ToActionResult(await Mediator.Send(command));
     }
 

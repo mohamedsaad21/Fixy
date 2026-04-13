@@ -19,7 +19,7 @@ public sealed class SendResetPasswordCommandHandler(UserManager<ApplicationUser>
         if (!user.EmailConfirmed)
             return Errors.EmailNotConfirmed;
 
-        await authenticationService.SendCodeAsync(user, "reset your password", "Reset Password");
+        await authenticationService.SendOtpAsync(user, "reset your password", "Reset Password");
         return Result.Success();
     }
 }

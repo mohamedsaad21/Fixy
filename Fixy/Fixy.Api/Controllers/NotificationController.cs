@@ -17,7 +17,7 @@ public class NotificationController : AppControllerBase
         return ToActionResult(await Mediator.Send(command));
     }
 
-    [RedisCache(60)]
+    //[RedisCache(60)]
     [HttpGet(Router.NotificationsRouting.List)]
     public async Task<IActionResult> GetNotifications()
     {
