@@ -14,6 +14,8 @@ public static class Router
         public const string RegisterCustomer = prefix + "/Register-Customer";
         public const string RegisterTechnician = prefix + "/Register-Technician";
         public const string SignIn = prefix + "/SignIn";
+        public const string Enable2FA = prefix + "/Enable-2FA";
+        public const string Disable2FA = prefix + "/Disable-2FA";
         public const string VerifyOtp = prefix + "/Verify-Otp";
         public const string CustomersList = prefix + "/Customers-List";
         public const string SendConfirmEmail = prefix + "/Send-Confirm-Email";
@@ -107,5 +109,6 @@ public static class Router
     {
         public const string prefix = Rule + "/Users";
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
+        public const string GetUserById = prefix + "/Get-User-By-Id/{Id}";
     }
     }

@@ -19,6 +19,18 @@ public sealed class SignInCommandHandler(UserManager<ApplicationUser> userManage
         if (!user.EmailConfirmed)
             return Errors.EmailNotConfirmed;
 
+        if (user.IsTwoFactorEmailEnabled)
+        {
+            await authenticationService.SendOtpAsync(user, "Login", "Verifying your identity");
+            return new AuthResponse
+            {
+                Message = "OTP sent to your email"
+            };
+        }
+        var authResponse = await authenticationService.GetJwtToken(user);
+        await authenticationService.SetTokenAndRefreshTokenInCookie(authResponse.Token, authResponse.RefreshToken, authResponse.RefreshTokenExpiration);
+        return authResponse;
+        
         await authenticationService.SendOtpAsync(user, "Login", "Verifying your identity");
         return "OTP sent to your email";
     }

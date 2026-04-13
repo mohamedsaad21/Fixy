@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Contracts.Services;
+using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
@@ -123,5 +124,35 @@ public class AuthenticationService : IAuthenticationService
         };
         response.Cookies.Append("token", token);
         response.Cookies.Append("refreshToken", refreshToken, refreshTokenCookieOptions);
+    }
+
+    public async Task<AuthResponse> GetJwtToken(ApplicationUser user)
+    {
+        var authResponse = new AuthResponse();
+
+        if (user.RefreshTokens.Any(t => t.IsActive))
+        {
+            var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
+            authResponse.RefreshToken = activeRefreshToken.Token;
+            authResponse.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
+        }
+        else
+        {
+            var refreshToken = await GenerateRefreshToken();
+            authResponse.RefreshToken = refreshToken.Token;
+            authResponse.RefreshTokenExpiration = refreshToken.ExpiresOn;
+            user.RefreshTokens.Add(refreshToken);
+            await _userManager.UpdateAsync(user);
+        }
+
+        var jwtSecurityToken = await CreateJwtToken(user);
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        var roles = await _userManager.GetRolesAsync(user);
+        authResponse.UserName = user.UserName;
+        authResponse.Email = user.Email;
+        authResponse.ProfilePictureUrl = user.ProfilePictureUrl;
+        authResponse.Role = roles.FirstOrDefault();
+        authResponse.Token = accessToken;
+        return authResponse;
     }
 }
