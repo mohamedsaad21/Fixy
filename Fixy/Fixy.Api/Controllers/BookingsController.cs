@@ -55,9 +55,9 @@ public class BookingsController : AppControllerBase
 
     [Authorize(Roles = Roles.Technician)]
     [HttpPost(Router.BookingRouting.MarkBookingCompleted)]
-    public async Task<IActionResult> MarkBookingCompleted([FromRoute] Guid BookingId)
+    public async Task<IActionResult> MarkBookingCompleted([FromForm] MarkBookingCompletedCommand command)
     {
-        return ToActionResult(await Mediator.Send(new MarkBookingCompletedCommand(BookingId)));
+        return ToActionResult(await Mediator.Send(command));
     }
 
     [Authorize(Roles = Roles.Customer)]

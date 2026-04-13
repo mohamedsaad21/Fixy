@@ -44,4 +44,7 @@ public class SharedResourcesKeys
     public const string JobDurationMinutesMustBeGreaterThanZero = "JobDurationMinutesMustBeGreaterThanZero";
     public const string ResponseTimeMinutesMustBeGreaterThanZero = "ResponseTimeMinutesMustBeGreaterThanZero";
     public const string NewPasswordSameAsCurrentPassword = "NewPasswordSameAsCurrentPassword";
+    public const string CompletionNotesMaxLength1000 = "CompletionNotesMaxLength1000";
+    public const string CompletionImagesMax5 = "CompletionImagesMax5";
+    public const string EmptyImage = "EmptyImage";
 }
