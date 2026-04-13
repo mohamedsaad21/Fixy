@@ -40,6 +40,7 @@ public class AuthenticationController : AppControllerBase
         return ToActionResult(await Mediator.Send(command));
     }
 
+
     [Authorize]
     [HttpPost(Router.AuthenticationRouting.Enable2FA)]
     public async Task<IActionResult> Enable2FA([FromForm] EnableTwoFactorCommand command)

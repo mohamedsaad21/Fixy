@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Identity;
 namespace Fixy.Application.Features.Authentication.Commands.SignIn;
 
 public sealed class SignInCommandHandler(UserManager<ApplicationUser> userManager, IAuthenticationService authenticationService)
-    : IRequestHandler<SignInCommand, Result<AuthResponse>>
+    : IRequestHandler<SignInCommand, Result<string>>
 {
-    public async Task<Result<AuthResponse>> Handle(SignInCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
 
@@ -30,5 +30,8 @@ public sealed class SignInCommandHandler(UserManager<ApplicationUser> userManage
         var authResponse = await authenticationService.GetJwtToken(user);
         await authenticationService.SetTokenAndRefreshTokenInCookie(authResponse.Token, authResponse.RefreshToken, authResponse.RefreshTokenExpiration);
         return authResponse;
+        
+        await authenticationService.SendOtpAsync(user, "Login", "Verifying your identity");
+        return "OTP sent to your email";
     }
 }
