@@ -4,7 +4,6 @@ using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Fixy.Application.Features.Authentication.Commands.SignIn;
 

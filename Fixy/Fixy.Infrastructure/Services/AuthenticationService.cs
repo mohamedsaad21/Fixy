@@ -30,7 +30,6 @@ public class AuthenticationService : IAuthenticationService
         _jWTSettings = jWTSettings;
         _httpContextAccessor = httpContextAccessor;
     }
-
     
     public async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
     {
@@ -77,7 +76,6 @@ public class AuthenticationService : IAuthenticationService
             ExpiresOn = DateTime.UtcNow.AddDays(30)
         };
     }
-
     public async Task SendOtpAsync(ApplicationUser user, string actionText, string reason)
     {
         // Generate  code
@@ -90,7 +88,7 @@ public class AuthenticationService : IAuthenticationService
         };
         await _unitOfWork.OtpCodes.AddAsync(otp);
         await _unitOfWork.SaveChangesAsync();
-        // send code to user
+
         var message = $"This code to {actionText}: {code}";
         await _emailService.SendEmailAsync(user.Email, message, reason);
     }

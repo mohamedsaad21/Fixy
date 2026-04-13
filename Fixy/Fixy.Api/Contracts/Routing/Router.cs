@@ -111,4 +111,4 @@ public static class Router
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
         public const string GetUserById = prefix + "/Get-User-By-Id/{Id}";
     }
-    }
+}

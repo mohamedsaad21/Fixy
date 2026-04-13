@@ -31,7 +31,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
     public virtual DbSet<Payout> Payouts { get; set; }
     public virtual DbSet<OtpCode> OtpCodes { get; set; }
-
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
