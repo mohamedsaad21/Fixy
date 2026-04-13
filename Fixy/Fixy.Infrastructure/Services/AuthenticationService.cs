@@ -1,8 +1,18 @@
 ﻿using Fixy.Application.Contracts.Services;
+<<<<<<< HEAD
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+=======
+using Fixy.Application.Features.Authentication.DTOs;
+using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Interfaces;
+using Fixy.Infrastructure.Configurations;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+>>>>>>> feature/MFA
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -13,13 +23,23 @@ namespace Fixy.Infrastructure.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
+<<<<<<< HEAD
+=======
+    private readonly IUnitOfWork _unitOfWork;
+>>>>>>> feature/MFA
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IEmailService _emailService;
     private readonly JWTSettings _jWTSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
+<<<<<<< HEAD
     public AuthenticationService(UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
     {
+=======
+    public AuthenticationService(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
+    {
+        _unitOfWork = unitOfWork;
+>>>>>>> feature/MFA
         _userManager = userManager;
         _emailService = emailService;
         _jWTSettings = jWTSettings;
@@ -73,6 +93,7 @@ public class AuthenticationService : IAuthenticationService
         };
     }
 
+<<<<<<< HEAD
     public async Task SendCodeAsync(ApplicationUser user, string actionText, string reason)
     {
         // Generate  code
@@ -80,11 +101,43 @@ public class AuthenticationService : IAuthenticationService
         var code = random.Next(1, 1000000).ToString("D6");
         user.Code = code;
         await _userManager.UpdateAsync(user);
+=======
+    public async Task SendOtpAsync(ApplicationUser user, string actionText, string reason)
+    {
+        // Generate  code
+        var code = new Random().Next(1, 1000000).ToString("D6");
+        var otp = new OtpCode
+        {
+            ApplicationUserId = user.Id,
+            Code = code,
+            ExpiresAt = DateTime.UtcNow.AddMinutes(5)
+        };
+        await _unitOfWork.OtpCodes.AddAsync(otp);
+        await _unitOfWork.SaveChangesAsync();
+>>>>>>> feature/MFA
         // send code to user
         var message = $"This code to {actionText}: {code}";
         await _emailService.SendEmailAsync(user.Email, message, reason);
     }
 
+<<<<<<< HEAD
+=======
+    public async Task<bool> VerifyOtpAsync(Guid userId, string code)
+    {
+        var otp = await _unitOfWork.OtpCodes
+            .GetTableAsTracking().Where(o => o.ApplicationUserId == userId && o.Code == code && !o.IsUsed)
+            .OrderByDescending(o => o.ExpiresAt)
+            .FirstOrDefaultAsync();
+
+        if (otp == null || otp.ExpiresAt < DateTime.UtcNow)
+            return false;
+
+        otp.IsUsed = true; // mark as used so it can't be reused
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+>>>>>>> feature/MFA
     public async Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires)
     {
         var response = _httpContextAccessor.HttpContext?.Response;
@@ -100,4 +153,37 @@ public class AuthenticationService : IAuthenticationService
         response.Cookies.Append("token", token);
         response.Cookies.Append("refreshToken", refreshToken, refreshTokenCookieOptions);
     }
+<<<<<<< HEAD
+=======
+
+    public async Task<AuthResponse> GetJwtToken(ApplicationUser user)
+    {
+        var authResponse = new AuthResponse();
+
+        if (user.RefreshTokens.Any(t => t.IsActive))
+        {
+            var activeRefreshToken = user.RefreshTokens.FirstOrDefault(t => t.IsActive);
+            authResponse.RefreshToken = activeRefreshToken.Token;
+            authResponse.RefreshTokenExpiration = activeRefreshToken.ExpiresOn;
+        }
+        else
+        {
+            var refreshToken = await GenerateRefreshToken();
+            authResponse.RefreshToken = refreshToken.Token;
+            authResponse.RefreshTokenExpiration = refreshToken.ExpiresOn;
+            user.RefreshTokens.Add(refreshToken);
+            await _userManager.UpdateAsync(user);
+        }
+
+        var jwtSecurityToken = await CreateJwtToken(user);
+        var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+        var roles = await _userManager.GetRolesAsync(user);
+        authResponse.UserName = user.UserName;
+        authResponse.Email = user.Email;
+        authResponse.ProfilePictureUrl = user.ProfilePictureUrl;
+        authResponse.Role = roles.FirstOrDefault();
+        authResponse.Token = accessToken;
+        return authResponse;
+    }
+>>>>>>> feature/MFA
 }

@@ -1,5 +1,9 @@
 ﻿using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Feedback;
+<<<<<<< HEAD
+=======
+using Fixy.Domain.Entities.Identity;
+>>>>>>> feature/MFA
 using Fixy.Domain.Entities.Payments;
 
 namespace Fixy.Domain.Interfaces;
@@ -19,6 +23,10 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; }
     IGenericRepository<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; }
     IGenericRepository<Payout> Payouts { get; }
+<<<<<<< HEAD
+=======
+    IGenericRepository<OtpCode> OtpCodes { get; }
+>>>>>>> feature/MFA
     INotificationRepository Notifications { get; }
     Task<int> SaveChangesAsync();
 }

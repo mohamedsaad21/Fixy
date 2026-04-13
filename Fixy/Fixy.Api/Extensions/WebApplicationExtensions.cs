@@ -1,8 +1,15 @@
 ﻿using Fixy.Api.Middleware;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Hubs;
+<<<<<<< HEAD
 using Fixy.Infrastructure.Seeder;
 using Microsoft.AspNetCore.Identity;
+=======
+using Fixy.Infrastructure.Persistence;
+using Fixy.Infrastructure.Seeder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+>>>>>>> feature/MFA
 using Microsoft.Extensions.Options;
 
 namespace Fixy.Api.Extensions;
@@ -44,6 +51,11 @@ public static class WebApplicationExtensions
         // Seeders
         using (var scope = app.Services.CreateScope())
         {
+<<<<<<< HEAD
+=======
+            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            db.Database.Migrate(); // ← creates DB + runs migrations
+>>>>>>> feature/MFA
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
             await RoleSeeder.SeedAsync(roleManager);
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();

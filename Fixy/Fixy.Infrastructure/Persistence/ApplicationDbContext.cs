@@ -30,6 +30,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<TechnicianFeedback> TechnicianFeedbacks  { get; set; }
     public virtual DbSet<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
     public virtual DbSet<Payout> Payouts { get; set; }
+<<<<<<< HEAD
+=======
+    public virtual DbSet<OtpCode> OtpCodes { get; set; }
+>>>>>>> feature/MFA
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

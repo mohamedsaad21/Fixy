@@ -62,7 +62,11 @@ public sealed class RegisterTechnicianCommandHandler(UserManager<ApplicationUser
                 return Errors.IdentityAddRoleFailed;
 
             //await _userManager.UpdateAsync(technician);
+<<<<<<< HEAD
             await authenticationService.SendCodeAsync(technician, "confirm your account", "Confirm Account");
+=======
+            await authenticationService.SendOtpAsync(technician, "confirm your account", "Confirm Account");
+>>>>>>> feature/MFA
             return technician.Id;
         }
         catch (Exception)

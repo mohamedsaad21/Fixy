@@ -19,7 +19,11 @@ public sealed class SendConfirmEmailCommandHandler(UserManager<ApplicationUser> 
         if (user.EmailConfirmed)
             return Errors.EmailAlreadyConfirmed;
 
+<<<<<<< HEAD
         await authenticationService.SendCodeAsync(user, "confirm your account", "Confirm Account");
+=======
+        await authenticationService.SendOtpAsync(user, "confirm your account", "Confirm Account");
+>>>>>>> feature/MFA
         return Result.Success();
     }
 }

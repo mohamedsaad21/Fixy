@@ -1,5 +1,9 @@
 ﻿using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Feedback;
+<<<<<<< HEAD
+=======
+using Fixy.Domain.Entities.Identity;
+>>>>>>> feature/MFA
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Interfaces;
 
@@ -22,6 +26,10 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; private set; }
     public IGenericRepository<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; private set; }
     public IGenericRepository<Payout> Payouts { get; private set; }
+<<<<<<< HEAD
+=======
+    public IGenericRepository<OtpCode> OtpCodes { get; private set; }
+>>>>>>> feature/MFA
     public INotificationRepository Notifications { get; private set; }
 
     public UnitOfWork(ApplicationDbContext dbContext)
@@ -40,6 +48,10 @@ public class UnitOfWork : IUnitOfWork
         TechnicianFeedbacks = new GenericRepository<TechnicianFeedback>(dbContext);
         TechnicianCommissionsOwed = new GenericRepository<TechnicianCommissionOwed>(dbContext);
         Payouts = new GenericRepository<Payout>(dbContext);
+<<<<<<< HEAD
+=======
+        OtpCodes = new GenericRepository<OtpCode>(dbContext);
+>>>>>>> feature/MFA
         Notifications = new NotificationRepository(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();

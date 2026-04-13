@@ -17,7 +17,11 @@ public class NotificationController : AppControllerBase
         return ToActionResult(await Mediator.Send(command));
     }
 
+<<<<<<< HEAD
     [RedisCache(60)]
+=======
+    //[RedisCache(60)]
+>>>>>>> feature/MFA
     [HttpGet(Router.NotificationsRouting.List)]
     public async Task<IActionResult> GetNotifications()
     {
