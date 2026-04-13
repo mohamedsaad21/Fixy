@@ -4,10 +4,8 @@ using Fixy.Application.Common.Models;
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities;
-using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
 
@@ -17,16 +15,14 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
     private readonly ICurrentUserService _currentUserService;
     private readonly IFileService _fileService;
     private readonly IMapper _mapper;
-    private readonly INotificationService _notificationService;
 
     public CreateServiceRequestCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, 
-        IFileService fileService, IMapper mapper, INotificationService notificationService)
+        IFileService fileService, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
         _fileService = fileService;
         _mapper = mapper;
-        _notificationService = notificationService;
     }
 
     public async Task<Result<Guid>> Handle(CreateServiceRequestCommand request, CancellationToken cancellationToken)

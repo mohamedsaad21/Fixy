@@ -24,6 +24,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<ServiceRequest> ServiceRequests { get; set; }
     public virtual DbSet<PriceOffer> PriceOffers { get; set; }
     public virtual DbSet<ServiceRequestCategories> ServiceRequestCategories { get; set; }
+    public virtual DbSet<ServiceBooking> ServiceBookings { get; set; }
+    public virtual DbSet<ServiceBookingImage> ServiceBookingImages { get; set; }
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<Payment> Payments { get; set; }
     public virtual DbSet<CustomerFeedback> CustomerFeedbacks { get; set; }

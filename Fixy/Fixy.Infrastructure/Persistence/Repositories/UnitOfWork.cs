@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<ServiceRequestImage> ServiceRequestImages { get; private set; }
     public IGenericRepository<PriceOffer> PriceOffers { get; private set; }
     public IGenericRepository<ServiceBooking> Bookings { get; private set; }
+    public IGenericRepository<ServiceBookingImage> ServiceBookingImages { get; private set; }
     public ITechnicianRepository Technicians { get; private set; }
     public IGenericRepository<TechnicianLocation> TechnicianLocations { get; private set; }
     public IGenericRepository<Payment> Payments { get; private set; }
@@ -34,6 +35,7 @@ public class UnitOfWork : IUnitOfWork
         ServiceRequestImages = new GenericRepository<ServiceRequestImage>(dbContext);
         PriceOffers = new GenericRepository<PriceOffer>(dbContext);
         Bookings = new GenericRepository<ServiceBooking>(dbContext);
+        ServiceBookingImages = new GenericRepository<ServiceBookingImage>(dbContext);
         Technicians = new TechnicianRepository(dbContext);
         TechnicianLocations = new GenericRepository<TechnicianLocation>(dbContext);
         Payments = new GenericRepository<Payment>(dbContext);

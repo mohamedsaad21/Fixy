@@ -120,6 +120,9 @@
   <data name="CategoryAlreadyExists" xml:space="preserve">
     <value>هذه المهنة موجودة بالفعل</value>
   </data>
+  <data name="EmptyImage" xml:space="preserve">
+    <value>إحدى الصور المرفوعة تالفة أو فارغة</value>
+  </data>
   <data name="NewPasswordSameAsCurrentPassword" xml:space="preserve">
     <value>يجب أن تكون كلمة السر الجديدة مختلفة</value>
   </data>

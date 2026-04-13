@@ -12,6 +12,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<ServiceRequestImage> ServiceRequestImages { get; }
     IGenericRepository<PriceOffer> PriceOffers { get; }
     IGenericRepository<ServiceBooking> Bookings { get; }
+    IGenericRepository<ServiceBookingImage> ServiceBookingImages { get; }
     ITechnicianRepository Technicians { get; }
     IGenericRepository<TechnicianLocation> TechnicianLocations { get; }
     IGenericRepository<Payment> Payments { get; }

@@ -16,6 +16,7 @@ public class ServiceBooking : BaseEntity
     public DateTime? PriceChangeRequestedAt { get; set; }
     public DateTime ScheduledDateTime { get; set; }
     public ServiceBookingStatus Status { get; set; } = ServiceBookingStatus.Active;
+    public string? CompletionNotes { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? StartedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
@@ -24,4 +25,5 @@ public class ServiceBooking : BaseEntity
     public CustomerFeedback CustomerFeedback { get; set; }
     public TechnicianFeedback TechnicianFeedback { get; set; }
     public Payout Payout { get; set; }
+    public virtual List<ServiceBookingImage> ServiceBookingImages { get; set; }
 }
