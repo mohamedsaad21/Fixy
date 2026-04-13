@@ -4,8 +4,6 @@ using Fixy.Infrastructure.Hubs;
 using Fixy.Infrastructure.Seeder;
 using Microsoft.AspNetCore.Identity;
 using Fixy.Infrastructure.Persistence;
-using Fixy.Infrastructure.Seeder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 

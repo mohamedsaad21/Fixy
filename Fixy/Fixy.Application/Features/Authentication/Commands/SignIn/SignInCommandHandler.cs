@@ -32,8 +32,5 @@ public sealed class SignInCommandHandler(UserManager<ApplicationUser> userManage
         var authResponse = await authenticationService.GetJwtToken(user);
         await authenticationService.SetTokenAndRefreshTokenInCookie(authResponse.Token, authResponse.RefreshToken, authResponse.RefreshTokenExpiration);
         return authResponse;
-        
-        await authenticationService.SendOtpAsync(user, "Login", "Verifying your identity");
-        return "OTP sent to your email";
     }
 }
