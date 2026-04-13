@@ -49,7 +49,7 @@ public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> 
                 return Errors.IdentityAddRoleFailed;
 
             //await _userManager.UpdateAsync(technician);
-            await authenticationService.SendCodeAsync(customer, "confirm your account", "Confirm Account");
+            await authenticationService.SendOtpAsync(customer, "confirm your account", "Confirm Account");
             return customer.Id;
         }
         catch (Exception)

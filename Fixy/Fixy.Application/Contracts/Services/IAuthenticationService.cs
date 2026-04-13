@@ -7,6 +7,7 @@ public interface IAuthenticationService
 {
     Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user);
     Task<RefreshToken> GenerateRefreshToken();
-    Task SendCodeAsync(ApplicationUser user, string actionText, string reason);
+    Task SendOtpAsync(ApplicationUser user, string actionText, string reason);
+    Task<bool> VerifyOtpAsync(Guid userId, string code);
     Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires);
 }

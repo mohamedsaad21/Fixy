@@ -1,5 +1,6 @@
 ﻿using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Feedback;
+using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Interfaces;
 
@@ -22,6 +23,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; private set; }
     public IGenericRepository<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; private set; }
     public IGenericRepository<Payout> Payouts { get; private set; }
+    public IGenericRepository<OtpCode> OtpCodes { get; private set; }
     public INotificationRepository Notifications { get; private set; }
 
     public UnitOfWork(ApplicationDbContext dbContext)
@@ -40,6 +42,7 @@ public class UnitOfWork : IUnitOfWork
         TechnicianFeedbacks = new GenericRepository<TechnicianFeedback>(dbContext);
         TechnicianCommissionsOwed = new GenericRepository<TechnicianCommissionOwed>(dbContext);
         Payouts = new GenericRepository<Payout>(dbContext);
+        OtpCodes = new GenericRepository<OtpCode>(dbContext);
         Notifications = new NotificationRepository(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();

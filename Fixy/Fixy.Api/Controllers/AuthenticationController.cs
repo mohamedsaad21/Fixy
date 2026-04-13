@@ -10,6 +10,7 @@ using Fixy.Application.Features.Authentication.Commands.RevokeToken;
 using Fixy.Application.Features.Authentication.Commands.SendConfirmEmail;
 using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
 using Fixy.Application.Features.Authentication.Commands.SignIn;
+using Fixy.Application.Features.Authentication.Commands.VerifyOTP;
 using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 using Fixy.Application.Features.Authentication.Queries.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -34,6 +35,12 @@ public class AuthenticationController : AppControllerBase
     [HttpPost(Router.AuthenticationRouting.SignIn)]
     public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
     {       
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [HttpPost(Router.AuthenticationRouting.VerifyOtp)]
+    public async Task<IActionResult> VerifyOtp([FromForm] VerifyOTPCommand command)
+    {
         return ToActionResult(await Mediator.Send(command));
     }
 
