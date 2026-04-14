@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Contracts.Services;
+using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;

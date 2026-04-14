@@ -1,6 +1,5 @@
 ﻿using Fixy.Domain.Entities.Identity;
 ﻿using Fixy.Application.Features.Authentication.DTOs;
-using Fixy.Domain.Entities.Identity;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace Fixy.Application.Contracts.Services;

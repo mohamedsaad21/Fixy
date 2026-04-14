@@ -1,4 +1,4 @@
-﻿using Fixy.Domain.Entities.Feedback;
+using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 namespace Fixy.Domain.Entities;
