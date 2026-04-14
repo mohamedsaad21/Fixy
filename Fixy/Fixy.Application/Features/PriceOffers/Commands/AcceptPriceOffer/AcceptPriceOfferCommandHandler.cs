@@ -28,7 +28,7 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
 
         // Accept offer
         priceOffer.Status = PriceOfferStatus.Accepted;
-        serviceRequest.Status = ServiceRequestStatus.Assigned;
+        serviceRequest.Status = ServiceRequestStatus.Accepted;
 
         var booking = new ServiceBooking { ServiceRequestId = serviceRequest.Id, TechnicianId = priceOffer.TechnicianId, PriceOfferId = priceOffer.Id, AgreedPrice = priceOffer.Price, ScheduledDateTime = serviceRequest.ScheduledDateTime };
         await unitOfWork.Bookings.AddAsync(booking);

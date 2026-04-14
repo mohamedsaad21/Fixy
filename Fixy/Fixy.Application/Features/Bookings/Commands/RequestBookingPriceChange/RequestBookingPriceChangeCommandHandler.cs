@@ -21,7 +21,7 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
         if (booking.TechnicianId != currentTechnician.Id)
             return Errors.Unauthorized;
 
-        if (booking.Status != ServiceBookingStatus.Active)
+        if (booking.Status != ServiceBookingStatus.InProgress)
             return Errors.BookingNotActive;
 
         if (booking.ProposedPrice.HasValue)

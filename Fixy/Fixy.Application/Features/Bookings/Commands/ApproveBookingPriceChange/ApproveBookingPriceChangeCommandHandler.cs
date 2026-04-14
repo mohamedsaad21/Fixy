@@ -30,7 +30,7 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         booking.AgreedPrice = booking.ProposedPrice.Value;
         booking.ProposedPrice = null;
-        booking.Status = ServiceBookingStatus.Active;
+        booking.Status = ServiceBookingStatus.InProgress;
 
         await unitOfWork.SaveChangesAsync();
         return Result.Success();

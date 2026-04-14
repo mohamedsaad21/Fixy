@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities;
@@ -13,7 +13,7 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
 {
     public async Task<Result> Handle(MarkBookingCompletedCommand request, CancellationToken cancellationToken)
     {
-        var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).FirstOrDefaultAsync(x => x.Id == request.BookingId);
+        var booking = await unitOfWork.Bookings.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
             return Errors.BookingNotFound;
@@ -22,7 +22,7 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
         if (booking.TechnicianId != currentTechnician.Id)
             return Errors.Unauthorized;
 
-        if (booking.Status != ServiceBookingStatus.Active)
+        if (booking.Status != ServiceBookingStatus.InProgress)
             return Errors.BookingNotActive;
 
         foreach(var image in request.CompletionImages)
@@ -36,7 +36,7 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
             });
         }
 
-        booking.Status = ServiceBookingStatus.CompletedPendingCustomerConfirmation;
+        booking.Status = ServiceBookingStatus.Completed;
         booking.CompletedAt = DateTime.UtcNow;
 
         await unitOfWork.SaveChangesAsync();

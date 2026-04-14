@@ -2,13 +2,12 @@
 
 public enum ServiceBookingStatus
 {
-    Active,
+    Pending,
+    InProgress,
     PriceChangePendingCustomerApproval,
-    CompletedPendingCustomerConfirmation,
-    PaymentPending,
-    PaymentRecieved,
-    PaymentFailed,
     Completed,
+    AwaitingPayment,
+    Paid,
     Cancelled,
     Disputed
 }
