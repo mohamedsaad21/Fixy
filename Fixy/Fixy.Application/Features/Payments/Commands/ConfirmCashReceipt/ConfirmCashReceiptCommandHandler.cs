@@ -41,7 +41,7 @@ public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashRecei
         }
 
         // 3. Verify booking status is PaymentPending
-        if (booking.Status != ServiceBookingStatus.PaymentPending)
+        if (booking.Status != ServiceBookingStatus.AwaitingPayment)
         {
             Log.Warning($"Booking {request.BookingId} is not awaiting payment. Status: {booking.Status}");
             return Errors.InvalidBookingStatus;

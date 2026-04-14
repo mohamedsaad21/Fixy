@@ -26,7 +26,7 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
             return Errors.InvalidBookingState;
 
         booking.ProposedPrice = null;
-        booking.Status = ServiceBookingStatus.Active;
+        booking.Status = ServiceBookingStatus.InProgress;
 
         await unitOfWork.SaveChangesAsync();
         return Result.Success();

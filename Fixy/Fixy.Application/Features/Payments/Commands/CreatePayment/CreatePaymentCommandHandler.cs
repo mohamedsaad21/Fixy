@@ -39,7 +39,7 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
             }
 
             // 2. Validate booking status
-            if (booking.Status != ServiceBookingStatus.PaymentPending)
+            if (booking.Status != ServiceBookingStatus.AwaitingPayment)
             {
                 Log.Warning($"Booking {request.BookingId} is not in WaitingPayment status");
                 return Errors.BookingNotReadyForPayment;
@@ -100,12 +100,9 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
             await _unitOfWork.Payments.AddAsync(payment);
             response.PaymentId = payment.Id;
 
-            // 8. Update booking status
-            booking.Status = ServiceBookingStatus.PaymentPending;
-
             await _unitOfWork.SaveChangesAsync();
 
-            // 9. Send notifications
+            // 8. Send notifications
             //await SendNotificationsAsync(request.PaymentMethod, booking, payment, cancellationToken);
 
             Log.Information($"Payment {payment.Id} created successfully for booking {request.BookingId}");

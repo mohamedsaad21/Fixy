@@ -22,10 +22,12 @@ public class ConfirmBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
         if (booking.ServiceRequest.Customer.Id != currentCustomer.Id)
             return Errors.Unauthorized;
 
-        if (booking.Status != ServiceBookingStatus.CompletedPendingCustomerConfirmation)
+        if (booking.Status != ServiceBookingStatus.Completed)
             return Errors.InvalidBookingState;
 
-        booking.Status = ServiceBookingStatus.PaymentPending;
+        booking.Status = ServiceBookingStatus.AwaitingPayment;
+        booking.IsCustomerConfirmed = true;
+        booking.CustomerConfirmedAt = DateTime.UtcNow;
 
         await unitOfWork.SaveChangesAsync();
         return Result.Success();

@@ -15,12 +15,14 @@ public class ServiceBooking : BaseEntity
     public decimal? ProposedPrice { get; set; }
     public DateTime? PriceChangeRequestedAt { get; set; }
     public DateTime ScheduledDateTime { get; set; }
-    public ServiceBookingStatus Status { get; set; } = ServiceBookingStatus.Active;
+    public ServiceBookingStatus Status { get; set; } = ServiceBookingStatus.Pending;
     public string? CompletionNotes { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? StartedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
     public DateTime? CancelledAt { get; set; }
+    public bool IsCustomerConfirmed { get; set; }
+    public DateTime? CustomerConfirmedAt { get; set; }
     public Payment Payment { get; set; }
     public CustomerFeedback CustomerFeedback { get; set; }
     public TechnicianFeedback TechnicianFeedback { get; set; }
