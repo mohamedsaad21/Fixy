@@ -6,8 +6,6 @@ public class Payout : BaseEntity
 {
     public Guid TechnicianId { get; set; }
     public Technician Technician { get; set; }
-    public Guid BookingId { get; set; }
-    public ServiceBooking Booking { get; set; }
     public decimal Amount { get; set; }
     public PayoutStatus Status { get; set; }
     public string? Method { get; set; }  // VodafoneCash, OrangeCash, etc.

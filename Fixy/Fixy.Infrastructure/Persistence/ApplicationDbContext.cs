@@ -28,9 +28,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
     public virtual DbSet<ServiceBookingImage> ServiceBookingImages { get; set; }
     public virtual DbSet<Notification> Notifications { get; set; }
     public virtual DbSet<Payment> Payments { get; set; }
+    public virtual DbSet<Wallet> Wallets { get; set; }
+    public virtual DbSet<WalletTransaction> WalletTransactions { get; set; }
     public virtual DbSet<CustomerFeedback> CustomerFeedbacks { get; set; }
     public virtual DbSet<TechnicianFeedback> TechnicianFeedbacks  { get; set; }
-    public virtual DbSet<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
     public virtual DbSet<Payout> Payouts { get; set; }
     public virtual DbSet<OtpCode> OtpCodes { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)

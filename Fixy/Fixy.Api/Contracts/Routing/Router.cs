@@ -111,4 +111,12 @@ public static class Router
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
         public const string GetUserById = prefix + "/Get-User-By-Id/{Id}";
     }
-}
+
+    public static class WalletRouting
+    {
+        public const string prefix = Rule + "/Wallet";
+        public const string GetWalletBalance = prefix + "/Get-Wallet-Balance";
+        public const string AddFundsToWallet = prefix + "/Add-Funds-To-Wallet";
+
+    }
+    }

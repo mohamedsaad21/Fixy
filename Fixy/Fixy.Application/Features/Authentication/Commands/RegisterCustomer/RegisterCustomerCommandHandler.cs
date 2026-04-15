@@ -5,13 +5,15 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Constants;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Entities.Payments;
+using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Net.Mail;
 
 namespace Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
 
-public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> userManager, IMapper mapper,
+public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork, IMapper mapper,
     IFileService fileService, IAuthenticationService authenticationService)
     : IRequestHandler<RegisterCustomerCommand, Result<Guid>>
 {
@@ -48,7 +50,13 @@ public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> 
             if (!roleResult.Succeeded)
                 return Errors.IdentityAddRoleFailed;
 
-            //await _userManager.UpdateAsync(technician);
+            await unitOfWork.Wallets.AddAsync(new Wallet
+            {
+                ApplicationUserId = customer.Id,
+                Balance = 0
+            });
+            await unitOfWork.SaveChangesAsync();
+
             await authenticationService.SendOtpAsync(customer, "confirm your account", "Confirm Account");
             return customer.Id;
         }

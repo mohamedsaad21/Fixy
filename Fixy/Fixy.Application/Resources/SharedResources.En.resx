@@ -126,4 +126,7 @@
   <data name="NewPasswordSameAsCurrentPassword" xml:space="preserve">
     <value>The new password must be different</value>
   </data>
+  <data name="PriceMustBeBetween100And1500" xml:space="preserve">
+    <value>Price must be between 100 and 1,500.</value>
+  </data>
 </root>
