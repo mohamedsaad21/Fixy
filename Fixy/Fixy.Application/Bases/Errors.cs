@@ -53,4 +53,9 @@ public static class Errors
     public static Error PasswordPreviouslyUsed => new("PasswordPreviouslyUsed", ErrorType.BadRequest, "You cannot reuse a recently used password. Please choose a new one.");
     public static Error TwoFactorAlreadyEnabled => new("TwoFactorAlreadyEnabled", ErrorType.BadRequest, "2FA is Already Enabled");
     public static Error TwoFactorAlreadyDisabled => new("TwoFactorAlreadyDisabled", ErrorType.BadRequest, "2FA is Already Disabled");
+    public static Error WalletNotFound => new("WalletNotFound", ErrorType.NotFound, "Wallet is not found");
+    public static Error TechnicianWalletNotFound => new("TechnicianWalletNotFound", ErrorType.NotFound, "Technician Wallet is not found");
+    public static Error CustomerWalletNotFound => new("CustomerWalletNotFound", ErrorType.NotFound, "Customer Wallet is not found");
+    public static Error TransactionNotFound => new("TransactionNotFound", ErrorType.NotFound, "Transaction is not found");
+    public static Error InsufficientWalletBalance => new("InsufficientWalletBalance", ErrorType.BadRequest, "You do not have enough balance in your wallet to complete this transaction.");
 }

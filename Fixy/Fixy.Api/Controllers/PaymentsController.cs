@@ -1,10 +1,9 @@
 ﻿using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Payments.Commands.ConfirmCashReceipt;
-using Fixy.Application.Features.Payments.Commands.CreatePayment;
+using Fixy.Application.Features.Payments.Commands.PayBooking;
 using Fixy.Application.Features.Payments.Commands.PayCommission;
 using Fixy.Application.Features.Payments.Commands.ProcessCallback;
-using Fixy.Application.Features.Payments.Queries.GetPendingCommissions;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +19,7 @@ public class PaymentsController : AppControllerBase
     /// </summary>
     [Authorize(Roles = Roles.Customer)]
     [HttpPost(Router.PaymentRouting.Create)]
-    public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentCommand command)
+    public async Task<IActionResult> CreatePayment([FromBody] PayBookingCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
@@ -61,12 +60,5 @@ public class PaymentsController : AppControllerBase
     public async Task<IActionResult> PayCommissions([FromBody] PayCommissionCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
-    }
-
-    [Authorize(Roles = Roles.Technician)]
-    [HttpGet(Router.PaymentRouting.GetPendingCommissions)]
-    public async Task<IActionResult> GetPendingCommissions()
-    {
-        return ToActionResult(await Mediator.Send(new GetPendingCommissionsQuery()));
     }
 }

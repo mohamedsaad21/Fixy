@@ -26,6 +26,7 @@ public class Technician : ApplicationUser
     public double? AverageRating { get; set; }
     public string? StripeAccountId { get; set; }
     public bool IsActive { get; set; }
+    public bool IsBlockedDueToDebt { get; set; }
     public Guid ServiceCategoryId { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
@@ -34,5 +35,4 @@ public class Technician : ApplicationUser
     public virtual ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }
     public virtual ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
     public virtual ICollection<Payout> Payouts { get; set; }
-    public virtual ICollection<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
 }

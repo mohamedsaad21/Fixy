@@ -26,6 +26,6 @@ public class ServiceBooking : BaseEntity
     public Payment Payment { get; set; }
     public CustomerFeedback CustomerFeedback { get; set; }
     public TechnicianFeedback TechnicianFeedback { get; set; }
-    public Payout Payout { get; set; }
+    //public Payout Payout { get; set; }
     public virtual List<ServiceBookingImage> ServiceBookingImages { get; set; }
 }

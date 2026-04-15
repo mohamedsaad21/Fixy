@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Bases;
+using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,12 @@ public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork) : IRequestH
 
         technician.IsActive = true;
 
+        await unitOfWork.Wallets.AddAsync(new Wallet
+        {
+            ApplicationUserId = technician.Id,
+            Balance = 0
+        });
+        
         await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }

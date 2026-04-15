@@ -126,4 +126,7 @@
   <data name="NewPasswordSameAsCurrentPassword" xml:space="preserve">
     <value>يجب أن تكون كلمة السر الجديدة مختلفة</value>
   </data>
+  <data name="PriceMustBeBetween100And1500" xml:space="preserve">
+    <value>يجب أن يكون السعر بين 100 و1,500.</value>
+  </data>
 </root>
