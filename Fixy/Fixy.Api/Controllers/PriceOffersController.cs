@@ -11,6 +11,10 @@ namespace Fixy.Api.Controllers;
 public class PriceOffersController : AppControllerBase
 {
     [Authorize(Roles = Roles.Technician)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.PriceOfferRouting.CreatePriceOffer)]
     public async Task<IActionResult> CreatePriceOffer([FromBody] CreatePriceOfferCommand command)
     {
@@ -18,6 +22,10 @@ public class PriceOffersController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.PriceOfferRouting.AcceptPriceOffer)]
     public async Task<IActionResult> AcceptPriceOffer([FromRoute] Guid PriceOfferId)
     {

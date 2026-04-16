@@ -22,18 +22,25 @@ namespace Fixy.Api.Controllers;
 
 public class AuthenticationController : AppControllerBase
 {
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPost(Router.AuthenticationRouting.RegisterTechnician)]
     public async Task<IActionResult> RegisterTechnicianAsync([FromForm] RegisterTechnicianCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPost(Router.AuthenticationRouting.RegisterCustomer)]
     public async Task<IActionResult> RegisterCustomerAsync([FromForm] RegisterCustomerCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPost(Router.AuthenticationRouting.SignIn)]
     public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
     {       
@@ -41,6 +48,10 @@ public class AuthenticationController : AppControllerBase
     }
 
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.AuthenticationRouting.Enable2FA)]
     public async Task<IActionResult> Enable2FA([FromForm] EnableTwoFactorCommand command)
     {
@@ -48,60 +59,87 @@ public class AuthenticationController : AppControllerBase
     }
 
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.AuthenticationRouting.Disable2FA)]
     public async Task<IActionResult> Disable2FA([FromForm] DisableTwoFactorCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost(Router.AuthenticationRouting.VerifyOtp)]
     public async Task<IActionResult> VerifyOtp([FromForm] VerifyOTPCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet(Router.AuthenticationRouting.CustomersList)]
     public async Task<IActionResult> GetCustomersAsync()
     {
         return ToActionResult(await Mediator.Send(new GetCustomersQuery()));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost(Router.AuthenticationRouting.SendConfirmEmail)]
     public async Task<IActionResult> SendConfirmEmailAsync([FromForm] SendConfirmEmailCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost(Router.AuthenticationRouting.ConfirmEmail)]
     public async Task<IActionResult> ConfirmEmailAsync([FromForm] ConfirmEmailCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPost(Router.AuthenticationRouting.RefreshToken)]
     public async Task<IActionResult> RefreshTokenAsync()
     {
         return ToActionResult(await Mediator.Send(new RefreshTokenCommand()));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPost(Router.AuthenticationRouting.RevokeToken)]
     public async Task<IActionResult> RevokeTokenAsync()
     {
         return ToActionResult(await Mediator.Send(new RevokeTokenCommand()));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost(Router.AuthenticationRouting.SendResetPassword)]
     public async Task<IActionResult> SendResetPasswordAsync([FromForm] SendResetPasswordCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet(Router.AuthenticationRouting.ConfirmResetPassword)]
     public async Task<IActionResult> ConfirmResetPasswordAsync([FromQuery] ConfirmResetPasswordQuery query)
     {
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost(Router.AuthenticationRouting.ResetPassword)]
     public async Task<IActionResult> ResetPasswordAsync([FromForm] ResetPasswordCommand command)
     {
@@ -109,6 +147,9 @@ public class AuthenticationController : AppControllerBase
     }
 
     [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPut(Router.AuthenticationRouting.ChangePassword)]
     public async Task<IActionResult> ChangePasswordAsync([FromForm] ChangePasswordCommand command)
     {

@@ -18,6 +18,8 @@ namespace Fixy.Api.Controllers;
 public class BookingsController : AppControllerBase
 {
     //[RedisCache(60)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize(Roles = Roles.Customer)]
     [HttpGet(Router.BookingRouting.CustomerPaginatedList)]
     public async Task<IActionResult> GetBookingsForCustomer([FromQuery] GetBookingsForCustomerQuery query)
@@ -26,6 +28,8 @@ public class BookingsController : AppControllerBase
     }
 
     //[RedisCache(60)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet(Router.BookingRouting.GetById)]
     public async Task<IActionResult> GetBookingById([FromRoute] Guid Id)
     {
@@ -33,6 +37,10 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Technician)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.BookingRouting.RequestPriceChange)]
     public async Task<IActionResult> RequestBookingPriceChange([FromBody] RequestBookingPriceChangeCommand command)
     {
@@ -40,6 +48,10 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.BookingRouting.ApprovePriceChange)]
     public async Task<IActionResult> ApproveBookingPriceChange([FromRoute] Guid BookingId)
     {
@@ -47,6 +59,10 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.BookingRouting.RejectPriceChange)]
     public async Task<IActionResult> RejectBookingPriceChange([FromRoute] Guid BookingId)
     {
@@ -54,6 +70,10 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Technician)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.BookingRouting.MarkBookingCompleted)]
     public async Task<IActionResult> MarkBookingCompleted([FromForm] MarkBookingCompletedCommand command)
     {
@@ -61,6 +81,10 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.BookingRouting.ConfirmBookingCompletion)]
     public async Task<IActionResult> ConfirmBookingCompletion([FromRoute] Guid BookingId)
     {

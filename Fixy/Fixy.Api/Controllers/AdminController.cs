@@ -10,6 +10,9 @@ namespace Fixy.Api.Controllers;
 [Authorize(Roles = Roles.Admin)]
 public class AdminController : AppControllerBase
 {
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost(Router.AdminRouting.ApproveTechnician)]
     public async Task<IActionResult> ApproveTechnician([FromRoute] Guid TechnicianId)
     {

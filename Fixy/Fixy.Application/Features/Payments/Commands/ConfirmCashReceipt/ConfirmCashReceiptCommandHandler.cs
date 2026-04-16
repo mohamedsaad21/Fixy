@@ -85,7 +85,7 @@ public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashRecei
             CreatedAt = DateTime.UtcNow
         };
 
-        await _unitOfWork.TechnicianCommissionsOwed.AddAsync(commissionOwed);
+        //await _unitOfWork.TechnicianCommissionsOwed.AddAsync(commissionOwed);
 
         Log.Information($"Cash payment created - Commission owed: {platformCommission}");
 
