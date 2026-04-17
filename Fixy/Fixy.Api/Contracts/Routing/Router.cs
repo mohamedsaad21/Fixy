@@ -83,6 +83,7 @@ public static class Router
         public const string confirmCashReceipt = prefix + "/confirm-cash-receipt/{BookingId}";
         public const string PayCommissions = prefix + "/Pay-Commissions";
         public const string GetPendingCommissions = prefix + "/Get-Pending-Commissions";
+        public const string Withdraw = prefix + "/Withdraw";
     }
 
     public static class AdminRouting

@@ -10,7 +10,8 @@ public static class UserSeeder
     {
         var user = new ApplicationUser
         {
-            FullName = "Mohamed Saad",
+            FirstName = "Mohamed",
+            LastName = "Saad",
             UserName = "admin",
             Email = "admin@fixy.com",
             EmailConfirmed = true,

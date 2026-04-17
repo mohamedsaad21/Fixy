@@ -25,6 +25,8 @@ public class Technician : ApplicationUser
     public double? CancellationRate { get; set; }
     public double? AverageRating { get; set; }
     public string? StripeAccountId { get; set; }
+    public bool IsStripeOnboarded { get; set; }
+    public string? StripeOnboardingUrl { get; set; }
     public bool IsActive { get; set; }
     public bool IsBlockedDueToDebt { get; set; }
     public Guid ServiceCategoryId { get; set; }

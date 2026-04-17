@@ -19,10 +19,10 @@ public sealed class AddFundsToWalletCommandHandler(IUnitOfWork unitOfWork, ICurr
         if (wallet == null)
             return Errors.WalletNotFound;
 
-        var paymentUrlResult = await paymentService.CreateTopUpSessionAsync(
+        var paymentUrlResult = await paymentService.CreateSessionAsync(
             amount: request.Amount,
             userId: currentUser.Id.ToString(),
-            customerName: $"{currentUser.FullName}",
+            customerName: $"{currentUser.FirstName} {currentUser.LastName}",
             customerEmail: currentUser.Email!,
             customerPhone: currentUser.PhoneNumber!);
 

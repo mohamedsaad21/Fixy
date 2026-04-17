@@ -10,7 +10,8 @@ public class ApplicationUser : IdentityUser<Guid>
         RefreshTokens = new HashSet<RefreshToken>();
         Notifications = new HashSet<Notification>();
     }
-    public string FullName { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     [EncryptColumn]
     public string? Code { get; set; }
     public string? ProfilePictureUrl { get; set; }

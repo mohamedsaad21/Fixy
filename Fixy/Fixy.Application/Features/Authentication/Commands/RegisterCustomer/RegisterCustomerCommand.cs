@@ -6,7 +6,8 @@ namespace Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
 
 public sealed record RegisterCustomerCommand
     (
-        string FullName,
+        string FirstName,
+        string LastName,
         string Email, 
         string NationalId,
         IFormFile? ProfilePicture,

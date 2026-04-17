@@ -14,7 +14,7 @@ public sealed class GetMyRequestsQueryHandler(IUnitOfWork unitOfWork, ICurrentUs
 {
     public async Task<Result<PaginatedResult<GetServiceRequestListDto>>> Handle(GetMyRequestsQuery request, CancellationToken cancellationToken)
     {
-        var currentCustomerId = currentUserService.GetCurrentUserId(); 
+        var currentCustomerId = await currentUserService.GetCurrentUserId(); 
         var myServiceRequests = unitOfWork.ServiceRequests.GetTableNoTracking().Where(x => x.CustomerId == currentCustomerId)
             .Include(x => x.Customer)
             .Include(x => x.ServiceCategories).AsQueryable();

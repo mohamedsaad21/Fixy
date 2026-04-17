@@ -19,12 +19,7 @@ public class StripeService : IPaymentService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    // ─────────────────────────────────────────────
-    // Only one session type now — wallet top-up
-    // Covers: manual top-up, booking shortfall,
-    //         technician debt clearance
-    // ─────────────────────────────────────────────
-    public async Task<PaymentUrlResult> CreateTopUpSessionAsync(decimal amount, string userId, string customerName, string customerEmail, string customerPhone)
+    public async Task<PaymentUrlResult> CreateSessionAsync(decimal amount, string userId, string customerName, string customerEmail, string customerPhone)
     {
         try
         {
@@ -105,9 +100,7 @@ public class StripeService : IPaymentService
         }
     }
 
-    // ─────────────────────────────────────────────
-    // Webhook — only handles TOPUP-* now
-    // ─────────────────────────────────────────────
+    // Webhook
     public async Task<PaymentCallbackResult> ProcessCallbackAsync()
     {
         try
@@ -244,9 +237,7 @@ public class StripeService : IPaymentService
         }
     }
 
-    // ─────────────────────────────────────────────
     // Signature verification
-    // ─────────────────────────────────────────────
     public async Task<bool> VerifyWebhookSignature(string payload, string signature)
     {
         try
@@ -259,6 +250,153 @@ public class StripeService : IPaymentService
         }
         catch (StripeException)
         {
+            return false;
+        }
+    }
+
+    // Create a Stripe Connect account for a technician
+    public async Task<string> CreateConnectAccountAsync(string technicianId, string email, string firstName, string lastName)
+    {
+        try
+        {
+            var options = new AccountCreateOptions
+            {
+                Type = "express",         // Express = Stripe handles KYC UI
+                Email = email,
+                Capabilities = new AccountCapabilitiesOptions
+                {
+                    Transfers = new AccountCapabilitiesTransfersOptions
+                    {
+                        Requested = true
+                    }
+                },
+                BusinessType = "individual",
+                Individual = new AccountIndividualOptions
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                },
+                Metadata = new Dictionary<string, string>
+            {
+                { "technician_id", technicianId }
+            }
+            };
+
+            var service = new AccountService();
+            var account = await service.CreateAsync(options);
+
+            Log.Information(
+                "Stripe Connect account created - " +
+                "TechnicianId: {TechnicianId}, AccountId: {AccountId}",
+                technicianId, account.Id);
+
+            return account.Id;
+        }
+        catch (StripeException ex)
+        {
+            Log.Error(ex,
+                "Stripe error creating Connect account - " +
+                "TechnicianId: {TechnicianId}", technicianId);
+            throw new Exception($"Stripe Connect failed: {ex.Message}");
+        }
+    }
+
+    // Generate onboarding link (technician fills their bank/card details on Stripe's hosted page)
+    public async Task<string> CreateOnboardingLinkAsync(string stripeAccountId)
+    {
+        try
+        {
+            var options = new AccountLinkCreateOptions
+            {
+                Account = stripeAccountId,
+                RefreshUrl = _stripeSettings.ConnectRefreshUrl,
+                ReturnUrl = _stripeSettings.ConnectReturnUrl,
+                Type = "account_onboarding"
+            };
+
+            var service = new AccountLinkService();
+            var link = await service.CreateAsync(options);
+
+            Log.Information(
+                "Stripe onboarding link created - AccountId: {AccountId}",
+                stripeAccountId);
+
+            return link.Url;
+        }
+        catch (StripeException ex)
+        {
+            Log.Error(ex,
+                "Stripe error creating onboarding link - " +
+                "AccountId: {AccountId}", stripeAccountId);
+            throw new Exception($"Stripe onboarding failed: {ex.Message}");
+        }
+    }
+
+    // Transfer earnings to technician's connected account
+    // Stripe then auto-pays out to their Visa/bank
+    public async Task<StripeTransferResult> TransferToTechnicianAsync(string stripeAccountId, decimal amount, string payoutId)
+    {
+        try
+        {
+            var amountCents = (long)(amount * 100);
+
+            var transferOptions = new TransferCreateOptions
+            {
+                Amount = amountCents,
+                Currency = "egp",
+                Destination = stripeAccountId,
+                Metadata = new Dictionary<string, string>
+            {
+                { "payout_id", payoutId }
+            }
+            };
+
+            var transferService = new TransferService();
+            var transfer = await transferService.CreateAsync(transferOptions);
+
+            Log.Information(
+                "Stripe transfer created - TransferId: {TransferId}, " +
+                "AccountId: {AccountId}, Amount: {Amount}",
+                transfer.Id, stripeAccountId, amount);
+
+            return new StripeTransferResult
+            {
+                IsSuccess = true,
+                StripeTransferId = transfer.Id
+            };
+        }
+        catch (StripeException ex)
+        {
+            Log.Error(ex,
+                "Stripe transfer failed - AccountId: {AccountId}, " +
+                "Amount: {Amount}", stripeAccountId, amount);
+
+            return new StripeTransferResult
+            {
+                IsSuccess = false,
+                FailureReason = ex.Message
+            };
+        }
+    }
+
+    // Check if technician completed Stripe onboarding
+    public async Task<bool> IsAccountOnboardedAsync(string stripeAccountId)
+    {
+        try
+        {
+            var service = new AccountService();
+            var account = await service.GetAsync(stripeAccountId);
+
+            return account.DetailsSubmitted
+                && account.ChargesEnabled
+                && account.PayoutsEnabled;
+        }
+        catch (StripeException ex)
+        {
+            Log.Error(ex,
+                "Error checking Stripe account status - " +
+                "AccountId: {AccountId}", stripeAccountId);
             return false;
         }
     }

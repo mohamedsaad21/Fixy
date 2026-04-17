@@ -4,7 +4,7 @@ namespace Fixy.Application.Contracts.Services;
 
 public interface ICurrentUserService
 {
-    Guid GetCurrentUserId();
+    Task<Guid> GetCurrentUserId();
     Task<ApplicationUser> GetCurrentUserAsync();
     Task<string> GetCurrentUserRoleAsync();
 }

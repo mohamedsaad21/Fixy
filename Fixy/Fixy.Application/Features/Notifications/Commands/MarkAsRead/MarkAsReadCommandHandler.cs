@@ -13,7 +13,7 @@ public sealed class MarkAsReadCommandHandler(IUnitOfWork unitOfWork, ICurrentUse
 {
     public async Task<Result> Handle(MarkAsReadCommand request, CancellationToken cancellationToken)
     {
-        var userId = currentUserService.GetCurrentUserId();
+        var userId = await currentUserService.GetCurrentUserId();
 
         var notification = await unitOfWork.Notifications.GetTableAsTracking().FirstOrDefaultAsync
             (x => x.Id == request.NotificationId && x.UserId == userId, cancellationToken);

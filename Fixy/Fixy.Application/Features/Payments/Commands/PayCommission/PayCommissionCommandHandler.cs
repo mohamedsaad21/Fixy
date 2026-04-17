@@ -15,6 +15,15 @@ public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSer
     public async Task<Result<PayCommissionResponse>> Handle(PayCommissionCommand request, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+        //var currentTechnician = await currentUserService.GetCurrentUserAsync();
+
+        //var wallet = await unitOfWork.Wallets.GetTableAsTracking().FirstOrDefaultAsync(x => x.ApplicationUserId == currentTechnician.Id);
+
+        //if (wallet == null)
+        //    return Errors.WalletNotFound;
+
+
+
         //// Get current user (technician)
         //var technician = await currentUserService.GetCurrentUserAsync();
 

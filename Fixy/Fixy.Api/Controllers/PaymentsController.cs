@@ -4,6 +4,7 @@ using Fixy.Application.Features.Payments.Commands.ConfirmCashReceipt;
 using Fixy.Application.Features.Payments.Commands.PayBooking;
 using Fixy.Application.Features.Payments.Commands.PayCommission;
 using Fixy.Application.Features.Payments.Commands.ProcessCallback;
+using Fixy.Application.Features.Payments.Commands.RequestWithdrawal;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,13 @@ public class PaymentsController : AppControllerBase
     public async Task<IActionResult> ConfirmCashReceipt([FromRoute] Guid BookingId)
     {
         return ToActionResult(await Mediator.Send(new ConfirmCashReceiptCommand(BookingId)));
+    }
+
+    [Authorize(Roles = Roles.Technician)]
+    [HttpPost(Router.PaymentRouting.Withdraw)]
+    public async Task<IActionResult> Withdraw([FromForm] RequestWithdrawalCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
     }
 
     [Authorize(Roles = Roles.Technician)]

@@ -20,7 +20,7 @@ public sealed class GetNotificationsQueryHandler : IRequestHandler<GetNotificati
 
     public async Task<Result<List<GetNotificationsDto>>> Handle(GetNotificationsQuery request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetCurrentUserId();
+        var userId = await _currentUserService.GetCurrentUserId();
         var notifications = await _unitOfWork.Notifications.GetTableNoTracking().Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).ToListAsync();
         return notifications.Select(x => x.ToNotificationsDto()).ToList();
     }

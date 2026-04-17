@@ -58,4 +58,6 @@ public static class Errors
     public static Error CustomerWalletNotFound => new("CustomerWalletNotFound", ErrorType.NotFound, "Customer Wallet is not found");
     public static Error TransactionNotFound => new("TransactionNotFound", ErrorType.NotFound, "Transaction is not found");
     public static Error InsufficientWalletBalance => new("InsufficientWalletBalance", ErrorType.BadRequest, "You do not have enough balance in your wallet to complete this transaction.");
+    public static Error TechnicianAlreadyOnboarded => new("TechnicianAlreadyOnboarded", ErrorType.BadRequest, "This technician is already registered and onboarded with stripe");
+    public static Error StripeOnboardingNotCompleted => new("StripeOnboardingNotCompleted", ErrorType.BadRequest, "The technician must complete the Stripe onboarding");
 }
