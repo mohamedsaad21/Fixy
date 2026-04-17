@@ -1,11 +1,12 @@
 ﻿using Fixy.Application.Bases;
+using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 
-public sealed class ConfirmResetPasswordQueryHandler(UserManager<ApplicationUser> userManager) : IRequestHandler<ConfirmResetPasswordQuery, Result>
+public sealed class ConfirmResetPasswordQueryHandler(UserManager<ApplicationUser> userManager, IAuthenticationService authenticationService) : IRequestHandler<ConfirmResetPasswordQuery, Result>
 {
     public async Task<Result> Handle(ConfirmResetPasswordQuery request, CancellationToken cancellationToken)
     {
@@ -14,7 +15,8 @@ public sealed class ConfirmResetPasswordQueryHandler(UserManager<ApplicationUser
         if (user == null)
             return Errors.UserNotFound;
 
-        if (user.Code != request.Code)
+        var isCodeValid = await authenticationService.VerifyOtpAsync(user.Id, request.Code);
+        if (!isCodeValid)
             return Errors.InvalidCode;
 
         return Result.Success();
