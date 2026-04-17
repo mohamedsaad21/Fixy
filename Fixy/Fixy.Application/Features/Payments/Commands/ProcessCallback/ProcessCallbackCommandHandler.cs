@@ -132,49 +132,50 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
 
     private async Task HandleCommissionPaymentSuccessAsync(Payment payment, CancellationToken cancellationToken)
     {
-        Log.Information($"Processing successful commission payment: {payment.MerchantOrderId}");
+        throw new NotImplementedException();
+        //Log.Information($"Processing successful commission payment: {payment.MerchantOrderId}");
 
-        // Extract technician ID from merchant order (COMM-{technicianId}-{random})
-        // Format: COMM-guid-randomchars
-        // Guid format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (5 parts)
-        var parts = payment.MerchantOrderId.Split('-');
+        //// Extract technician ID from merchant order (COMM-{technicianId}-{random})
+        //// Format: COMM-guid-randomchars
+        //// Guid format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (5 parts)
+        //var parts = payment.MerchantOrderId.Split('-');
 
-        if (parts.Length < 6)
-        {
-            Log.Error($"Invalid merchant order ID format: {payment.MerchantOrderId}");
-            return;
-        }
+        //if (parts.Length < 6)
+        //{
+        //    Log.Error($"Invalid merchant order ID format: {payment.MerchantOrderId}");
+        //    return;
+        //}
 
-        // Reconstruct GUID from parts 1-5
-        var technicianIdString = $"{parts[1]}-{parts[2]}-{parts[3]}-{parts[4]}-{parts[5]}";
+        //// Reconstruct GUID from parts 1-5
+        //var technicianIdString = $"{parts[1]}-{parts[2]}-{parts[3]}-{parts[4]}-{parts[5]}";
 
-        if (!Guid.TryParse(technicianIdString, out var technicianId))
-        {
-            Log.Error($"Cannot extract technician ID from: {payment.MerchantOrderId}");
-            return;
-        }
+        //if (!Guid.TryParse(technicianIdString, out var technicianId))
+        //{
+        //    Log.Error($"Cannot extract technician ID from: {payment.MerchantOrderId}");
+        //    return;
+        //}
 
-        Log.Information($"Extracted technician ID: {technicianId}");
+        //Log.Information($"Extracted technician ID: {technicianId}");
 
-        // Get all unpaid commissions for this technician
-        var commissions = await unitOfWork.TechnicianCommissionsOwed.GetTableAsTracking()
-            .Where(c => c.TechnicianId == technicianId && !c.IsPaid)
-            .ToListAsync(cancellationToken);
+        //// Get all unpaid commissions for this technician
+        ////var commissions = await unitOfWork.TechnicianCommissionsOwed.GetTableAsTracking()
+        //    .Where(c => c.TechnicianId == technicianId && !c.IsPaid)
+        //    .ToListAsync(cancellationToken);
 
-        if (!commissions.Any())
-        {
-            Log.Warning($"No unpaid commissions found for technician {technicianId}");
-            return;
-        }
+        //if (!commissions.Any())
+        //{
+        //    Log.Warning($"No unpaid commissions found for technician {technicianId}");
+        //    return;
+        //}
 
-        // Mark all as paid
-        foreach (var commission in commissions)
-        {
-            commission.IsPaid = true;
-            commission.PaidAt = DateTime.UtcNow;
-            await unitOfWork.TechnicianCommissionsOwed.UpdateAsync(commission);
-        }
+        //// Mark all as paid
+        //foreach (var commission in commissions)
+        //{
+        //    commission.IsPaid = true;
+        //    commission.PaidAt = DateTime.UtcNow;
+        //    //await unitOfWork.TechnicianCommissionsOwed.UpdateAsync(commission);
+        //}
 
-        Log.Information($"Marked {commissions.Count} commissions as paid for technician {technicianId}");
+        //Log.Information($"Marked {commissions.Count} commissions as paid for technician {technicianId}");
     }
 }
