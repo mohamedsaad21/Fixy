@@ -15,9 +15,9 @@ public class TechnicianController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.TechnicianRouting.TechnicianServiceRequestsList)]
-    public async Task<IActionResult> GetTechnicianAvailableServiceRequests()
+    public async Task<IActionResult> GetTechnicianAvailableServiceRequests([FromQuery] GetTechnicianAvailableRequestsQuery query)
     {
-        return ToActionResult(await Mediator.Send(new GetTechnicianAvailableRequestsQuery()));
+        return ToActionResult(await Mediator.Send(query));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

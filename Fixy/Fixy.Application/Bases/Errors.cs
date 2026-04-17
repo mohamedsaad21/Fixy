@@ -52,4 +52,5 @@ public static class Errors
     public static Error PasswordPreviouslyUsed => new("PasswordPreviouslyUsed", ErrorType.BadRequest);
     public static Error TwoFactorAlreadyEnabled => new("TwoFactorAlreadyEnabled", ErrorType.BadRequest);
     public static Error TwoFactorAlreadyDisabled => new("TwoFactorAlreadyDisabled", ErrorType.BadRequest);
+    public static Error ServiceCategoryNotFound => new("ServiceCategoryNotFound", ErrorType.NotFound);
 }

@@ -91,4 +91,5 @@ public class SharedResourcesKeys
     public const string CompletionNotesMaxLength1000 = "CompletionNotesMaxLength1000";
     public const string CompletionImagesMax5 = "CompletionImagesMax5";
     public const string EmptyImage = "EmptyImage";
+    public const string ServiceCategoryNotFound = "ServiceCategoryNotFound";
 }

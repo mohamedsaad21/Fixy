@@ -1,143 +1,369 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-		<xsd:element name="root" msdata:IsDataSet="true">
-			<xsd:complexType>
-				<xsd:choice maxOccurs="unbounded">
-					<xsd:element name="metadata">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" />
-							</xsd:sequence>
-							<xsd:attribute name="name" use="required" type="xsd:string" />
-							<xsd:attribute name="type" type="xsd:string" />
-							<xsd:attribute name="mimetype" type="xsd:string" />
-							<xsd:attribute ref="xml:space" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="assembly">
-						<xsd:complexType>
-							<xsd:attribute name="alias" type="xsd:string" />
-							<xsd:attribute name="name" type="xsd:string" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="data">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-							<xsd:attribute ref="xml:space" />
-						</xsd:complexType>
-					</xsd:element>
-					<xsd:element name="resheader">
-						<xsd:complexType>
-							<xsd:sequence>
-								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-							</xsd:sequence>
-							<xsd:attribute name="name" type="xsd:string" use="required" />
-						</xsd:complexType>
-					</xsd:element>
-				</xsd:choice>
-			</xsd:complexType>
-		</xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>2.0</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="Deleted" xml:space="preserve"><value>تم الحذف بنجاح</value></data>
-	<data name="Success" xml:space="preserve"><value>تمت العملية بنجاح</value></data>
-	<data name="Failed" xml:space="preserve"><value>فشلت العملية</value></data>
-	<data name="UnAuthorized" xml:space="preserve"><value>غير مصرح بالدخول</value></data>
-	<data name="Created" xml:space="preserve"><value>تم الإنشاء بنجاح</value></data>
-	<data name="NotFound" xml:space="preserve"><value>غير موجود</value></data>
-	<data name="BadRequest" xml:space="preserve"><value>طلب غير صالح</value></data>
-	<data name="UnprocessableEntity" xml:space="preserve"><value>كيان غير قابل للمعالجة</value></data>
-	<data name="Forbidden" xml:space="preserve"><value>الوصول محظور</value></data>
-	<data name="Required" xml:space="preserve"><value>هذا الحقل مطلوب</value></data>
-	<data name="NotEmpty" xml:space="preserve"><value>لا يمكن ترك هذا الحقل فارغاً</value></data>
-	<data name="PasswordNotMatchConfirmPassword" xml:space="preserve"><value>كلمة المرور غير متطابقة</value></data>
-	<data name="UserNameAlreadyExists" xml:space="preserve"><value>اسم المستخدم موجود بالفعل</value></data>
-	<data name="EmailAlreadyExists" xml:space="preserve"><value>البريد الإلكتروني موجود بالفعل</value></data>
-	<data name="FailedToCreateUser" xml:space="preserve"><value>فشل في إنشاء المستخدم</value></data>
-	<data name="IdentityCreateUserFailed" xml:space="preserve"><value>فشل إنشاء الهوية</value></data>
-	<data name="IdentityAddRoleFailed" xml:space="preserve"><value>فشل في إضافة الدور</value></data>
-	<data name="PhoneNumberAlreadyExists" xml:space="preserve"><value>رقم الهاتف موجود بالفعل</value></data>
-	<data name="NationalIdAlreadyExists" xml:space="preserve"><value>الرقم القومي موجود بالفعل</value></data>
-	<data name="FileUploadFailed" xml:space="preserve"><value>فشل في رفع الملف</value></data>
-	<data name="TryToRegisterAgain" xml:space="preserve"><value>يرجى محاولة التسجيل مرة أخرى</value></data>
-	<data name="UserNotFound" xml:space="preserve"><value>المستخدم غير موجود</value></data>
-	<data name="FailedToConfirmEmail" xml:space="preserve"><value>فشل في تأكيد البريد الإلكتروني</value></data>
-	<data name="EmailOrPasswordIncorrect" xml:space="preserve"><value>البريد الإلكتروني أو كلمة المرور غير صحيحة</value></data>
-	<data name="EmailNotConfirmed" xml:space="preserve"><value>لم يتم تأكيد البريد الإلكتروني بعد</value></data>
-	<data name="EmailAlreadyConfirmed" xml:space="preserve"><value>تم تأكيد البريد الإلكتروني بالفعل</value></data>
-	<data name="InvalidToken" xml:space="preserve"><value>رمز غير صالح</value></data>
-	<data name="InactiveToken" xml:space="preserve"><value>الرمز غير نشط</value></data>
-	<data name="FailedToSendResetPassword" xml:space="preserve"><value>فشل في إرسال بريد إعادة تعيين كلمة المرور</value></data>
-	<data name="InvalidCode" xml:space="preserve"><value>كود غير صالح</value></data>
-	<data name="FailedToResetPassword" xml:space="preserve"><value>فشل في إعادة تعيين كلمة المرور</value></data>
-	<data name="FailedToEditUser" xml:space="preserve"><value>فشل في تحديث بيانات المستخدم</value></data>
-	<data name="FailedToDeleteUser" xml:space="preserve"><value>فشل في حذف المستخدم</value></data>
-	<data name="FailedToChangePassword" xml:space="preserve"><value>فشل في تغيير كلمة المرور</value></data>
-	<data name="FailedToAddRole" xml:space="preserve"><value>فشل في إضافة الدور</value></data>
-	<data name="RoleAlreadyExists" xml:space="preserve"><value>الدور موجود بالفعل</value></data>
-	<data name="FailedToEditRole" xml:space="preserve"><value>فشل في تعديل الدور</value></data>
-	<data name="FailedToUpdateUserRoles" xml:space="preserve"><value>فشل في تحديث أدوار المستخدم</value></data>
-	<data name="CategoryAlreadyExists" xml:space="preserve"><value>الفئة موجودة بالفعل</value></data>
-	<data name="RequestInsertionFailed" xml:space="preserve"><value>فشل في إدراج الطلب</value></data>
-	<data name="LocationNotUpdated" xml:space="preserve"><value>لم يتم تحديث الموقع</value></data>
-	<data name="ServiceRequestNotFound" xml:space="preserve"><value>طلب الخدمة غير موجود</value></data>
-	<data name="AlreadyCreatedPriceOffer" xml:space="preserve"><value>تم إنشاء عرض سعر بالفعل</value></data>
-	<data name="PriceOfferNotFound" xml:space="preserve"><value>عرض السعر غير موجود</value></data>
-	<data name="ServiceAlreadyAssigned" xml:space="preserve"><value>الخدمة مخصصة بالفعل</value></data>
-	<data name="BookingNotFound" xml:space="preserve"><value>الحجز غير موجود</value></data>
-	<data name="BookingNotActive" xml:space="preserve"><value>الحجز غير نشط</value></data>
-	<data name="PriceChangeAlreadyPending" xml:space="preserve"><value>يوجد طلب تغيير سعر قيد الانتظار</value></data>
-	<data name="InvalidBookingState" xml:space="preserve"><value>حالة حجز غير صالحة</value></data>
-	<data name="NoPriceChangeToApprove" xml:space="preserve"><value>لا يوجد تغيير سعر لاعتماده</value></data>
-	<data name="AlreadyAgreedPrice" xml:space="preserve"><value>تم الاتفاق على السعر بالفعل</value></data>
-	<data name="ImageNotFound" xml:space="preserve"><value>الصورة غير موجودة</value></data>
-	<data name="TechnicianNotFound" xml:space="preserve"><value>الفني غير موجود</value></data>
-	<data name="TechnicianAlreadyApproved" xml:space="preserve"><value>تمت الموافقة على الفني بالفعل</value></data>
-	<data name="PaymentCreationFailed" xml:space="preserve"><value>فشل في إنشاء عملية الدفع</value></data>
-	<data name="BookingNotReadyForPayment" xml:space="preserve"><value>الحجز غير جاهز للدفع</value></data>
-	<data name="PaymentAlreadyCompleted" xml:space="preserve"><value>تم إكمال الدفع بالفعل</value></data>
-	<data name="InvalidHmacSignature" xml:space="preserve"><value>توقيع أمان غير صالح</value></data>
-	<data name="InvalidMerchantOrderId" xml:space="preserve"><value>رقم طلب التاجر غير صالح</value></data>
-	<data name="PaymentNotFound" xml:space="preserve"><value>سجل الدفع غير موجود</value></data>
-	<data name="CallbackProcessingFailed" xml:space="preserve"><value>فشل في معالجة بيانات الدفع</value></data>
-	<data name="BookingNotCompleted" xml:space="preserve"><value>الحجز لم يكتمل بعد</value></data>
-	<data name="FeebackAlreadySubmitted" xml:space="preserve"><value>تم تقديم التقييم بالفعل</value></data>
-	<data name="NotificationSendFailed" xml:space="preserve"><value>فشل في إرسال الإشعار</value></data>
-	<data name="NotificationNotFound" xml:space="preserve"><value>الإشعار غير موجود</value></data>
-	<data name="PaymentAlreadyInitiated" xml:space="preserve"><value>تم بدء عملية الدفع بالفعل</value></data>
-	<data name="InvalidBookingStatus" xml:space="preserve"><value>حالة الحجز غير صالحة</value></data>
-	<data name="PaymentNotCash" xml:space="preserve"><value>طريقة الدفع ليست نقداً</value></data>
-	<data name="AlreadyNoProfilePictureExists" xml:space="preserve"><value>لا توجد صورة شخصية لحذفها</value></data>
-	<data name="PasswordInCorrect" xml:space="preserve"><value>كلمة المرور غير صحيحة</value></data>
-	<data name="IdentityChangePasswordFailed" xml:space="preserve"><value>فشل تغيير كلمة المرور في النظام</value></data>
-	<data name="PasswordPreviouslyUsed" xml:space="preserve"><value>لا يمكن استخدام كلمة مرور استخدمت سابقاً</value></data>
-	<data name="TwoFactorAlreadyEnabled" xml:space="preserve"><value>المصادقة الثنائية مفعلة بالفعل</value></data>
-	<data name="TwoFactorAlreadyDisabled" xml:space="preserve"><value>المصادقة الثنائية معطلة بالفعل</value></data>
-	<data name="PriceMustBeGreaterThanZero" xml:space="preserve"><value>يجب أن يكون السعر أكبر من صفر</value></data>
-	<data name="RatingMustBeBetweenOneandFive" xml:space="preserve"><value>يجب أن يكون التقييم بين 1 و 5</value></data>
-	<data name="JobDurationMinutesMustBeGreaterThanZero" xml:space="preserve"><value>يجب أن تكون مدة العمل أكبر من صفر</value></data>
-	<data name="ResponseTimeMinutesMustBeGreaterThanZero" xml:space="preserve"><value>يجب أن يكون وقت الاستجابة أكبر من صفر</value></data>
-	<data name="NewPasswordSameAsCurrentPassword" xml:space="preserve"><value>كلمة المرور الجديدة لا يمكن أن تكون مطابقة للحالية</value></data>
-	<data name="CompletionNotesMaxLength1000" xml:space="preserve"><value>لا يمكن أن تتجاوز الملاحظات 1000 حرف</value></data>
-	<data name="CompletionImagesMax5" xml:space="preserve"><value>الحد الأقصى المسموح به هو 5 صور</value></data>
-	<data name="EmptyImage" xml:space="preserve"><value>ملف الصورة فارغ</value></data>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Deleted" xml:space="preserve">
+    <value>تم الحذف بنجاح</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>تمت العملية بنجاح</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>فشلت العملية</value>
+  </data>
+  <data name="UnAuthorized" xml:space="preserve">
+    <value>غير مصرح بالدخول</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>تم الإنشاء بنجاح</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>غير موجود</value>
+  </data>
+  <data name="BadRequest" xml:space="preserve">
+    <value>طلب غير صالح</value>
+  </data>
+  <data name="UnprocessableEntity" xml:space="preserve">
+    <value>كيان غير قابل للمعالجة</value>
+  </data>
+  <data name="Forbidden" xml:space="preserve">
+    <value>الوصول محظور</value>
+  </data>
+  <data name="Required" xml:space="preserve">
+    <value>هذا الحقل مطلوب</value>
+  </data>
+  <data name="NotEmpty" xml:space="preserve">
+    <value>لا يمكن ترك هذا الحقل فارغاً</value>
+  </data>
+  <data name="PasswordNotMatchConfirmPassword" xml:space="preserve">
+    <value>كلمة المرور غير متطابقة</value>
+  </data>
+  <data name="UserNameAlreadyExists" xml:space="preserve">
+    <value>اسم المستخدم موجود بالفعل</value>
+  </data>
+  <data name="EmailAlreadyExists" xml:space="preserve">
+    <value>البريد الإلكتروني موجود بالفعل</value>
+  </data>
+  <data name="FailedToCreateUser" xml:space="preserve">
+    <value>فشل في إنشاء المستخدم</value>
+  </data>
+  <data name="IdentityCreateUserFailed" xml:space="preserve">
+    <value>فشل إنشاء الهوية</value>
+  </data>
+  <data name="IdentityAddRoleFailed" xml:space="preserve">
+    <value>فشل في إضافة الدور</value>
+  </data>
+  <data name="PhoneNumberAlreadyExists" xml:space="preserve">
+    <value>رقم الهاتف موجود بالفعل</value>
+  </data>
+  <data name="NationalIdAlreadyExists" xml:space="preserve">
+    <value>الرقم القومي موجود بالفعل</value>
+  </data>
+  <data name="FileUploadFailed" xml:space="preserve">
+    <value>فشل في رفع الملف</value>
+  </data>
+  <data name="TryToRegisterAgain" xml:space="preserve">
+    <value>يرجى محاولة التسجيل مرة أخرى</value>
+  </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>المستخدم غير موجود</value>
+  </data>
+  <data name="FailedToConfirmEmail" xml:space="preserve">
+    <value>فشل في تأكيد البريد الإلكتروني</value>
+  </data>
+  <data name="EmailOrPasswordIncorrect" xml:space="preserve">
+    <value>البريد الإلكتروني أو كلمة المرور غير صحيحة</value>
+  </data>
+  <data name="EmailNotConfirmed" xml:space="preserve">
+    <value>لم يتم تأكيد البريد الإلكتروني بعد</value>
+  </data>
+  <data name="EmailAlreadyConfirmed" xml:space="preserve">
+    <value>تم تأكيد البريد الإلكتروني بالفعل</value>
+  </data>
+  <data name="InvalidToken" xml:space="preserve">
+    <value>رمز غير صالح</value>
+  </data>
+  <data name="InactiveToken" xml:space="preserve">
+    <value>الرمز غير نشط</value>
+  </data>
+  <data name="FailedToSendResetPassword" xml:space="preserve">
+    <value>فشل في إرسال بريد إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="InvalidCode" xml:space="preserve">
+    <value>كود غير صالح</value>
+  </data>
+  <data name="FailedToResetPassword" xml:space="preserve">
+    <value>فشل في إعادة تعيين كلمة المرور</value>
+  </data>
+  <data name="FailedToEditUser" xml:space="preserve">
+    <value>فشل في تحديث بيانات المستخدم</value>
+  </data>
+  <data name="FailedToDeleteUser" xml:space="preserve">
+    <value>فشل في حذف المستخدم</value>
+  </data>
+  <data name="FailedToChangePassword" xml:space="preserve">
+    <value>فشل في تغيير كلمة المرور</value>
+  </data>
+  <data name="FailedToAddRole" xml:space="preserve">
+    <value>فشل في إضافة الدور</value>
+  </data>
+  <data name="RoleAlreadyExists" xml:space="preserve">
+    <value>الدور موجود بالفعل</value>
+  </data>
+  <data name="FailedToEditRole" xml:space="preserve">
+    <value>فشل في تعديل الدور</value>
+  </data>
+  <data name="FailedToUpdateUserRoles" xml:space="preserve">
+    <value>فشل في تحديث أدوار المستخدم</value>
+  </data>
+  <data name="CategoryAlreadyExists" xml:space="preserve">
+    <value>الفئة موجودة بالفعل</value>
+  </data>
+  <data name="RequestInsertionFailed" xml:space="preserve">
+    <value>فشل في إدراج الطلب</value>
+  </data>
+  <data name="LocationNotUpdated" xml:space="preserve">
+    <value>لم يتم تحديث الموقع</value>
+  </data>
+  <data name="ServiceRequestNotFound" xml:space="preserve">
+    <value>طلب الخدمة غير موجود</value>
+  </data>
+  <data name="AlreadyCreatedPriceOffer" xml:space="preserve">
+    <value>تم إنشاء عرض سعر بالفعل</value>
+  </data>
+  <data name="PriceOfferNotFound" xml:space="preserve">
+    <value>عرض السعر غير موجود</value>
+  </data>
+  <data name="ServiceAlreadyAssigned" xml:space="preserve">
+    <value>الخدمة مخصصة بالفعل</value>
+  </data>
+  <data name="BookingNotFound" xml:space="preserve">
+    <value>الحجز غير موجود</value>
+  </data>
+  <data name="BookingNotActive" xml:space="preserve">
+    <value>الحجز غير نشط</value>
+  </data>
+  <data name="PriceChangeAlreadyPending" xml:space="preserve">
+    <value>يوجد طلب تغيير سعر قيد الانتظار</value>
+  </data>
+  <data name="InvalidBookingState" xml:space="preserve">
+    <value>حالة حجز غير صالحة</value>
+  </data>
+  <data name="NoPriceChangeToApprove" xml:space="preserve">
+    <value>لا يوجد تغيير سعر لاعتماده</value>
+  </data>
+  <data name="AlreadyAgreedPrice" xml:space="preserve">
+    <value>تم الاتفاق على السعر بالفعل</value>
+  </data>
+  <data name="ImageNotFound" xml:space="preserve">
+    <value>الصورة غير موجودة</value>
+  </data>
+  <data name="TechnicianNotFound" xml:space="preserve">
+    <value>الفني غير موجود</value>
+  </data>
+  <data name="TechnicianAlreadyApproved" xml:space="preserve">
+    <value>تمت الموافقة على الفني بالفعل</value>
+  </data>
+  <data name="PaymentCreationFailed" xml:space="preserve">
+    <value>فشل في إنشاء عملية الدفع</value>
+  </data>
+  <data name="BookingNotReadyForPayment" xml:space="preserve">
+    <value>الحجز غير جاهز للدفع</value>
+  </data>
+  <data name="PaymentAlreadyCompleted" xml:space="preserve">
+    <value>تم إكمال الدفع بالفعل</value>
+  </data>
+  <data name="InvalidHmacSignature" xml:space="preserve">
+    <value>توقيع أمان غير صالح</value>
+  </data>
+  <data name="InvalidMerchantOrderId" xml:space="preserve">
+    <value>رقم طلب التاجر غير صالح</value>
+  </data>
+  <data name="PaymentNotFound" xml:space="preserve">
+    <value>سجل الدفع غير موجود</value>
+  </data>
+  <data name="CallbackProcessingFailed" xml:space="preserve">
+    <value>فشل في معالجة بيانات الدفع</value>
+  </data>
+  <data name="BookingNotCompleted" xml:space="preserve">
+    <value>الحجز لم يكتمل بعد</value>
+  </data>
+  <data name="FeebackAlreadySubmitted" xml:space="preserve">
+    <value>تم تقديم التقييم بالفعل</value>
+  </data>
+  <data name="NotificationSendFailed" xml:space="preserve">
+    <value>فشل في إرسال الإشعار</value>
+  </data>
+  <data name="NotificationNotFound" xml:space="preserve">
+    <value>الإشعار غير موجود</value>
+  </data>
+  <data name="PaymentAlreadyInitiated" xml:space="preserve">
+    <value>تم بدء عملية الدفع بالفعل</value>
+  </data>
+  <data name="InvalidBookingStatus" xml:space="preserve">
+    <value>حالة الحجز غير صالحة</value>
+  </data>
+  <data name="PaymentNotCash" xml:space="preserve">
+    <value>طريقة الدفع ليست نقداً</value>
+  </data>
+  <data name="AlreadyNoProfilePictureExists" xml:space="preserve">
+    <value>لا توجد صورة شخصية لحذفها</value>
+  </data>
+  <data name="PasswordInCorrect" xml:space="preserve">
+    <value>كلمة المرور غير صحيحة</value>
+  </data>
+  <data name="IdentityChangePasswordFailed" xml:space="preserve">
+    <value>فشل تغيير كلمة المرور في النظام</value>
+  </data>
+  <data name="PasswordPreviouslyUsed" xml:space="preserve">
+    <value>لا يمكن استخدام كلمة مرور استخدمت سابقاً</value>
+  </data>
+  <data name="TwoFactorAlreadyEnabled" xml:space="preserve">
+    <value>المصادقة الثنائية مفعلة بالفعل</value>
+  </data>
+  <data name="TwoFactorAlreadyDisabled" xml:space="preserve">
+    <value>المصادقة الثنائية معطلة بالفعل</value>
+  </data>
+  <data name="PriceMustBeGreaterThanZero" xml:space="preserve">
+    <value>يجب أن يكون السعر أكبر من صفر</value>
+  </data>
+  <data name="RatingMustBeBetweenOneandFive" xml:space="preserve">
+    <value>يجب أن يكون التقييم بين 1 و 5</value>
+  </data>
+  <data name="JobDurationMinutesMustBeGreaterThanZero" xml:space="preserve">
+    <value>يجب أن تكون مدة العمل أكبر من صفر</value>
+  </data>
+  <data name="ResponseTimeMinutesMustBeGreaterThanZero" xml:space="preserve">
+    <value>يجب أن يكون وقت الاستجابة أكبر من صفر</value>
+  </data>
+  <data name="NewPasswordSameAsCurrentPassword" xml:space="preserve">
+    <value>كلمة المرور الجديدة لا يمكن أن تكون مطابقة للحالية</value>
+  </data>
+  <data name="CompletionNotesMaxLength1000" xml:space="preserve">
+    <value>لا يمكن أن تتجاوز الملاحظات 1000 حرف</value>
+  </data>
+  <data name="CompletionImagesMax5" xml:space="preserve">
+    <value>الحد الأقصى المسموح به هو 5 صور</value>
+  </data>
+  <data name="EmptyImage" xml:space="preserve">
+    <value>ملف الصورة فارغ</value>
+  </data>
+  <data name="ServiceCategoryNotFound" xml:space="preserve">
+    <value>Service category is not found</value>
+  </data>
 </root>

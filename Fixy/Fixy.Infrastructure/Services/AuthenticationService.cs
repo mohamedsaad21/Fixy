@@ -146,6 +146,7 @@ public class AuthenticationService : IAuthenticationService
         var jwtSecurityToken = await CreateJwtToken(user);
         var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
         var roles = await _userManager.GetRolesAsync(user);
+        authResponse.UserId = user.Id;
         authResponse.UserName = user.UserName;
         authResponse.Email = user.Email;
         authResponse.ProfilePictureUrl = user.ProfilePictureUrl;

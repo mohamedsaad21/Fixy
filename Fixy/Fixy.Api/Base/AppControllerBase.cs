@@ -43,7 +43,6 @@ public abstract class AppControllerBase : ControllerBase
 
     private object GetLocalizedResult(Error error)
     {
-        //var localizedString = Localizer[error.Id];
         var localizedString = Localizer[error.Id];
 
         var localizedDescription = localizedString.ResourceNotFound
