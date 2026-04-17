@@ -25,10 +25,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddInfrastructureDependencies().AddApplicationDependencies().AddServiceRegisteration(builder.Configuration);
 
 // Localization
-builder.Services.AddLocalization(opt =>
-{
-    opt.ResourcesPath = "";
-});
+builder.Services.AddLocalization(opt => opt.ResourcesPath = "");
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {

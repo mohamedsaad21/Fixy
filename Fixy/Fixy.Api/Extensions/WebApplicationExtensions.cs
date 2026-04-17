@@ -25,6 +25,11 @@ public static class WebApplicationExtensions
             options.RoutePrefix = "swagger";
         });
         //}
+
+        // Localization Middleware
+        var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+        app.UseRequestLocalization(options.Value);
+
         app.UseHttpsRedirection();
 
         app.UseHealthChecks("/health");
@@ -32,10 +37,6 @@ public static class WebApplicationExtensions
         app.UseCors("DevelopmentPolicy");
 
         app.UseRouting();
-
-        // Localization Middleware
-        var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
-        app.UseRequestLocalization(options.Value);
 
         app.UseAuthentication();
 

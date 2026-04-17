@@ -16,7 +16,9 @@ public class RegisterCustomerCommandValidator : AbstractValidator<RegisterCustom
 
     public void ApplyValidationRules()
     {
-        RuleFor(x => x.FullName).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.FirstName).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+
+        RuleFor(x => x.LastName).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
 
         RuleFor(x => x.Email).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
 

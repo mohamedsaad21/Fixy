@@ -1,129 +1,143 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="CategoryAlreadyExists" xml:space="preserve">
-    <value>This category is already exists</value>
-  </data>
-  <data name="EmptyImage" xml:space="preserve">
-    <value>One of the uploaded images is corrupted or empty.</value>
-  </data>
-  <data name="NewPasswordSameAsCurrentPassword" xml:space="preserve">
-    <value>The new password must be different</value>
-  </data>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="Deleted" xml:space="preserve"><value>Deleted successfully</value></data>
+	<data name="Success" xml:space="preserve"><value>Success</value></data>
+	<data name="Failed" xml:space="preserve"><value>Operation failed</value></data>
+	<data name="UnAuthorized" xml:space="preserve"><value>Unauthorized access</value></data>
+	<data name="Created" xml:space="preserve"><value>Created successfully</value></data>
+	<data name="NotFound" xml:space="preserve"><value>Resource not found</value></data>
+	<data name="BadRequest" xml:space="preserve"><value>Bad request</value></data>
+	<data name="UnprocessableEntity" xml:space="preserve"><value>Unprocessable entity</value></data>
+	<data name="Forbidden" xml:space="preserve"><value>Access forbidden</value></data>
+	<data name="Required" xml:space="preserve"><value>This field is required</value></data>
+	<data name="NotEmpty" xml:space="preserve"><value>This field cannot be empty</value></data>
+	<data name="PasswordNotMatchConfirmPassword" xml:space="preserve"><value>Password does not match confirm password</value></data>
+	<data name="UserNameAlreadyExists" xml:space="preserve"><value>Username already exists</value></data>
+	<data name="EmailAlreadyExists" xml:space="preserve"><value>Email already exists</value></data>
+	<data name="FailedToCreateUser" xml:space="preserve"><value>Failed to create user</value></data>
+	<data name="IdentityCreateUserFailed" xml:space="preserve"><value>Identity creation failed</value></data>
+	<data name="IdentityAddRoleFailed" xml:space="preserve"><value>Failed to add role</value></data>
+	<data name="PhoneNumberAlreadyExists" xml:space="preserve"><value>Phone number already exists</value></data>
+	<data name="NationalIdAlreadyExists" xml:space="preserve"><value>National ID already exists</value></data>
+	<data name="FileUploadFailed" xml:space="preserve"><value>File upload failed</value></data>
+	<data name="TryToRegisterAgain" xml:space="preserve"><value>Please try to register again</value></data>
+	<data name="UserNotFound" xml:space="preserve"><value>User is not found!</value></data>
+	<data name="FailedToConfirmEmail" xml:space="preserve"><value>Failed to confirm email</value></data>
+	<data name="EmailOrPasswordIncorrect" xml:space="preserve"><value>Email or password is incorrect</value></data>
+	<data name="EmailNotConfirmed" xml:space="preserve"><value>Email is not confirmed</value></data>
+	<data name="EmailAlreadyConfirmed" xml:space="preserve"><value>Email is already confirmed</value></data>
+	<data name="InvalidToken" xml:space="preserve"><value>Invalid token</value></data>
+	<data name="InactiveToken" xml:space="preserve"><value>Token is inactive</value></data>
+	<data name="FailedToSendResetPassword" xml:space="preserve"><value>Failed to send reset password email</value></data>
+	<data name="InvalidCode" xml:space="preserve"><value>Invalid code</value></data>
+	<data name="FailedToResetPassword" xml:space="preserve"><value>Failed to reset password</value></data>
+	<data name="FailedToEditUser" xml:space="preserve"><value>Failed to update user</value></data>
+	<data name="FailedToDeleteUser" xml:space="preserve"><value>Failed to delete user</value></data>
+	<data name="FailedToChangePassword" xml:space="preserve"><value>Failed to change password</value></data>
+	<data name="FailedToAddRole" xml:space="preserve"><value>Failed to add role</value></data>
+	<data name="RoleAlreadyExists" xml:space="preserve"><value>Role already exists</value></data>
+	<data name="FailedToEditRole" xml:space="preserve"><value>Failed to edit role</value></data>
+	<data name="FailedToUpdateUserRoles" xml:space="preserve"><value>Failed to update user roles</value></data>
+	<data name="CategoryAlreadyExists" xml:space="preserve"><value>Category already exists</value></data>
+	<data name="RequestInsertionFailed" xml:space="preserve"><value>Request insertion failed</value></data>
+	<data name="LocationNotUpdated" xml:space="preserve"><value>Location could not be updated</value></data>
+	<data name="ServiceRequestNotFound" xml:space="preserve"><value>Service request not found</value></data>
+	<data name="AlreadyCreatedPriceOffer" xml:space="preserve"><value>Price offer already created</value></data>
+	<data name="PriceOfferNotFound" xml:space="preserve"><value>Price offer not found</value></data>
+	<data name="ServiceAlreadyAssigned" xml:space="preserve"><value>Service already assigned</value></data>
+	<data name="BookingNotFound" xml:space="preserve"><value>Booking is not found</value></data>
+	<data name="BookingNotActive" xml:space="preserve"><value>Booking is not active</value></data>
+	<data name="PriceChangeAlreadyPending" xml:space="preserve"><value>A price change is already pending</value></data>
+	<data name="InvalidBookingState" xml:space="preserve"><value>Invalid booking state</value></data>
+	<data name="NoPriceChangeToApprove" xml:space="preserve"><value>No price change found to approve</value></data>
+	<data name="AlreadyAgreedPrice" xml:space="preserve"><value>Price is already agreed upon</value></data>
+	<data name="ImageNotFound" xml:space="preserve"><value>Image not found</value></data>
+	<data name="TechnicianNotFound" xml:space="preserve"><value>Technician not found</value></data>
+	<data name="TechnicianAlreadyApproved" xml:space="preserve"><value>Technician is already approved</value></data>
+	<data name="PaymentCreationFailed" xml:space="preserve"><value>Payment creation failed</value></data>
+	<data name="BookingNotReadyForPayment" xml:space="preserve"><value>Booking is not ready for payment</value></data>
+	<data name="PaymentAlreadyCompleted" xml:space="preserve"><value>Payment already completed</value></data>
+	<data name="InvalidHmacSignature" xml:space="preserve"><value>Invalid security signature</value></data>
+	<data name="InvalidMerchantOrderId" xml:space="preserve"><value>Invalid merchant order ID</value></data>
+	<data name="PaymentNotFound" xml:space="preserve"><value>Payment record not found</value></data>
+	<data name="CallbackProcessingFailed" xml:space="preserve"><value>Failed to process payment callback</value></data>
+	<data name="BookingNotCompleted" xml:space="preserve"><value>Booking is not completed</value></data>
+	<data name="FeebackAlreadySubmitted" xml:space="preserve"><value>Feedback has already been submitted</value></data>
+	<data name="NotificationSendFailed" xml:space="preserve"><value>Failed to send notification</value></data>
+	<data name="NotificationNotFound" xml:space="preserve"><value>Notification not found</value></data>
+	<data name="PaymentAlreadyInitiated" xml:space="preserve"><value>Payment already initiated</value></data>
+	<data name="InvalidBookingStatus" xml:space="preserve"><value>Invalid booking status</value></data>
+	<data name="PaymentNotCash" xml:space="preserve"><value>Payment method is not cash</value></data>
+	<data name="AlreadyNoProfilePictureExists" xml:space="preserve"><value>No profile picture exists to remove</value></data>
+	<data name="PasswordInCorrect" xml:space="preserve"><value>Incorrect password</value></data>
+	<data name="IdentityChangePasswordFailed" xml:space="preserve"><value>Failed to change password in system</value></data>
+	<data name="PasswordPreviouslyUsed" xml:space="preserve"><value>Cannot use a previously used password</value></data>
+	<data name="TwoFactorAlreadyEnabled" xml:space="preserve"><value>Two-factor authentication is already enabled</value></data>
+	<data name="TwoFactorAlreadyDisabled" xml:space="preserve"><value>Two-factor authentication is already disabled</value></data>
+	<data name="PriceMustBeGreaterThanZero" xml:space="preserve"><value>Price must be greater than zero</value></data>
+	<data name="RatingMustBeBetweenOneandFive" xml:space="preserve"><value>Rating must be between 1 and 5</value></data>
+	<data name="JobDurationMinutesMustBeGreaterThanZero" xml:space="preserve"><value>Job duration must be greater than zero</value></data>
+	<data name="ResponseTimeMinutesMustBeGreaterThanZero" xml:space="preserve"><value>Response time must be greater than zero</value></data>
+	<data name="NewPasswordSameAsCurrentPassword" xml:space="preserve"><value>New password cannot be the same as current password</value></data>
+	<data name="CompletionNotesMaxLength1000" xml:space="preserve"><value>Notes cannot exceed 1000 characters</value></data>
+	<data name="CompletionImagesMax5" xml:space="preserve"><value>Maximum 5 images allowed</value></data>
+	<data name="EmptyImage" xml:space="preserve"><value>The image file is empty</value></data>
 </root>
