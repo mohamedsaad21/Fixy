@@ -17,7 +17,7 @@ public static class ServiceRegisteration
 {
     public static IServiceCollection AddServiceRegisteration(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+        services.AddIdentity<ApplicationUser, IdentityRole<Guid>>().AddEntityFrameworkStores<FixyDbContext>().AddDefaultTokenProviders();
         
         var jwtSettings = new JWTSettings();
         configuration.GetSection(nameof(jwtSettings)).Bind(jwtSettings);

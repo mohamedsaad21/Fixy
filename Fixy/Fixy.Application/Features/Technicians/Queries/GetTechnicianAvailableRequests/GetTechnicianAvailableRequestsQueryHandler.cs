@@ -4,8 +4,6 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.ServiceRequests;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Entities;
-using Fixy.Domain.Enums;
-using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +14,6 @@ public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    private const int DefaultMaxDistanceKm = 25;
-
     public GetTechnicianAvailableRequestsQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
         _unitOfWork = unitOfWork;
@@ -35,17 +31,11 @@ public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler
         if (location == null)
             return Errors.LocationNotUpdated;
 
-        var availableServiceRequests = _unitOfWork.ServiceRequests.GetTableNoTracking()
-            .Where(x => x.Status == ServiceRequestStatus.Pending).Include(x => x.ServiceCategories).Include(x => x.Customer)
-            .Where(x => x.ServiceCategories.Any(x => x.Id == technician.ServiceCategoryId)).AsQueryable();
+        var filterQuery = _unitOfWork.ServiceRequestReadRepository
+            .GetTechnicianAvailableServiceRequest(technician.Id, location.Latitude, location.Longitude, technician.ServiceCategoryId);
+        var paginatedResponse = await filterQuery.Select(x => x.ToServiceRequestListDto()).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+        //var paginatedResponse = await filterQuery.ToListAsync();
 
-        var FilteredServiceRequestsByLocation = await availableServiceRequests
-            .Where(x => GeoDistance.CalculateKm(location.Latitude, location.Longitude, x.Address.Latitude, x.Address.Longitude)
-            <= DefaultMaxDistanceKm)
-            .Select(x => x.ToServiceRequestListDto()).ToPaginatedListAsync(request.PageNumber, request.PageSize);
-
-        //var FilteredResult = FilteredServiceRequestsByLocation.
-
-        return FilteredServiceRequestsByLocation;
+        return paginatedResponse;
     }
 }

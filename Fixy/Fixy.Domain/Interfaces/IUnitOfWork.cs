@@ -2,6 +2,7 @@
 using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
+using Fixy.Domain.SP.TechnicianAvailableRequests;
 
 namespace Fixy.Domain.Interfaces;
 
@@ -22,5 +23,6 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<Payout> Payouts { get; }
     IGenericRepository<OtpCode> OtpCodes { get; }
     INotificationRepository Notifications { get; }
+    IServiceRequestReadRepository ServiceRequestReadRepository { get; }
     Task<int> SaveChangesAsync();
 }

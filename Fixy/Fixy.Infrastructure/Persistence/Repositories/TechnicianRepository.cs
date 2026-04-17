@@ -8,7 +8,7 @@ public class TechnicianRepository : GenericRepository<Technician>, ITechnicianRe
 {
     private readonly DbSet<Technician> _technicians;
 
-    public TechnicianRepository(ApplicationDbContext dbContext) : base(dbContext)
+    public TechnicianRepository(FixyDbContext dbContext) : base(dbContext)
     {
         _technicians = dbContext.Set<Technician>();
     }

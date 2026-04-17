@@ -22,7 +22,8 @@ public sealed class GetServiceRequestListQueryHandler : IRequestHandler<GetServi
     public async Task<Result<List<GetServiceRequestListDto>>> Handle(GetServiceRequestListQuery request, CancellationToken cancellationToken)
     {
         var serviceRequests = await _unitOfWork.ServiceRequests.GetTableNoTracking().Include(x => x.Customer).Include(x => x.ServiceCategories).ToListAsync();
-        var result = serviceRequests.Select(x => x.ToServiceRequestListDto()).ToList();
-        return result;
+        //var result = serviceRequests.Select(x => x.ToServiceRequestListDto()).ToList();
+        //return result;
+        throw new NotImplementedException();
     }
 }

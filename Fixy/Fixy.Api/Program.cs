@@ -16,7 +16,7 @@ builder.Services.AddControllersConfiguration().AddHealthCheck().AddCustomRateLim
 builder.Services.AddOpenApi();
 
 // 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<FixyDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

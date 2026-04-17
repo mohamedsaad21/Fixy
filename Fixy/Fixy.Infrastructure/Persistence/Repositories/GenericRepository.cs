@@ -6,9 +6,8 @@ namespace Fixy.Infrastructure.Persistence.Repositories;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
-    private readonly ApplicationDbContext _dbContext;
-
-    public GenericRepository(ApplicationDbContext dbContext)
+    private readonly FixyDbContext _dbContext;
+    public GenericRepository(FixyDbContext dbContext)
     {
         _dbContext = dbContext;
     }

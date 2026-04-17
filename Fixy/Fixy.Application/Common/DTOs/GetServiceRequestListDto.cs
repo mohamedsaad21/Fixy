@@ -8,7 +8,7 @@ public record GetServiceRequestListDto
         string CustomerUserName,
         string Description, 
         DateTime ScheduledDateTime,
-        List<string> ServiceCategories,
-        AddressDto Address,
+        //List<string> ServiceCategories,
+        //AddressDto Address,
         ServiceRequestStatus Status
     );

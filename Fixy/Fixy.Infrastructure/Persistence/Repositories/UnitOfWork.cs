@@ -3,12 +3,14 @@ using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Interfaces;
+using Fixy.Domain.SP.TechnicianAvailableRequests;
+using Fixy.Infrastructure.Persistence.SP.TechnicianAvailableRequests;
 
 namespace Fixy.Infrastructure.Persistence.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly FixyDbContext _dbContext;
 
     public IServiceCategoryRepository ServiceCategories { get; private set; }
     public IGenericRepository<ServiceRequest> ServiceRequests { get; private set; }
@@ -25,8 +27,9 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Payout> Payouts { get; private set; }
     public IGenericRepository<OtpCode> OtpCodes { get; private set; }
     public INotificationRepository Notifications { get; private set; }
+    public IServiceRequestReadRepository ServiceRequestReadRepository { get; private set; }
 
-    public UnitOfWork(ApplicationDbContext dbContext)
+    public UnitOfWork(FixyDbContext dbContext)
     {
         _dbContext = dbContext;
         ServiceCategories = new ServiceCategoryRepository(dbContext);
@@ -44,6 +47,7 @@ public class UnitOfWork : IUnitOfWork
         Payouts = new GenericRepository<Payout>(dbContext);
         OtpCodes = new GenericRepository<OtpCode>(dbContext);
         Notifications = new NotificationRepository(dbContext);
+        ServiceRequestReadRepository = new ServiceRequestReadRepository(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();
     public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();

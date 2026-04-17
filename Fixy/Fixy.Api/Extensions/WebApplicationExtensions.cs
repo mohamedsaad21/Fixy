@@ -47,7 +47,7 @@ public static class WebApplicationExtensions
         // Seeders
         using (var scope = app.Services.CreateScope())
         {
-            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var db = scope.ServiceProvider.GetRequiredService<FixyDbContext>();
             db.Database.Migrate(); // ← creates DB + runs migrations
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
             await RoleSeeder.SeedAsync(roleManager);

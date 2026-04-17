@@ -54,7 +54,7 @@ public static class Router
     public static class TechnicianRouting
     {
         public const string prefix = Rule + "/Technician";
-        public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-List";
+        public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-Paginated";
         public const string Location = prefix + "/Location";
         public const string TechnicianStripeStatus = prefix + "/technician-stripe-status";
     }
