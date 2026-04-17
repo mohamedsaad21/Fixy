@@ -11,8 +11,6 @@ public class ApplicationUser : IdentityUser<Guid>
         Notifications = new HashSet<Notification>();
     }
     public string FullName { get; set; }
-    [EncryptColumn]
-    public string? Code { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public string? ProfilePicturePublicId { get; set; }
     public bool IsTwoFactorEmailEnabled { get; set; }
