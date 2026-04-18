@@ -25,6 +25,11 @@ public static class WebApplicationExtensions
             options.RoutePrefix = "swagger";
         });
         //}
+
+        // Localization Middleware
+        var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+        app.UseRequestLocalization(options.Value);
+
         app.UseHttpsRedirection();
 
         app.UseHealthChecks("/health");
@@ -32,10 +37,6 @@ public static class WebApplicationExtensions
         app.UseCors("DevelopmentPolicy");
 
         app.UseRouting();
-
-        // Localization Middleware
-        var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
-        app.UseRequestLocalization(options.Value);
 
         app.UseAuthentication();
 
@@ -46,7 +47,7 @@ public static class WebApplicationExtensions
         // Seeders
         using (var scope = app.Services.CreateScope())
         {
-            var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            var db = scope.ServiceProvider.GetRequiredService<FixyDbContext>();
             db.Database.Migrate(); // ← creates DB + runs migrations
             var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
             await RoleSeeder.SeedAsync(roleManager);

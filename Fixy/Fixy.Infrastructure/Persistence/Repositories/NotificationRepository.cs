@@ -8,7 +8,7 @@ public class NotificationRepository : GenericRepository<Notification>, INotifica
 {
     private readonly DbSet<Notification> _notifications;
 
-    public NotificationRepository(ApplicationDbContext dbContext) : base(dbContext)
+    public NotificationRepository(FixyDbContext dbContext) : base(dbContext)
     {
         _notifications = dbContext.Set<Notification>();
     }

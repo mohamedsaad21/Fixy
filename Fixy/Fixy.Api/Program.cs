@@ -16,7 +16,7 @@ builder.Services.AddControllersConfiguration().AddHealthCheck().AddCustomRateLim
 builder.Services.AddOpenApi();
 
 // 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<FixyDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -25,10 +25,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddInfrastructureDependencies().AddApplicationDependencies().AddServiceRegisteration(builder.Configuration);
 
 // Localization
-builder.Services.AddLocalization(opt =>
-{
-    opt.ResourcesPath = "";
-});
+builder.Services.AddLocalization(opt => opt.ResourcesPath = "");
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {

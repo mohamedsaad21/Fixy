@@ -2,28 +2,26 @@
 using Fixy.Application.Common.DTOs;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.ServiceRequests;
+using Fixy.Application.Wrappers;
 using Fixy.Domain.Entities;
-using Fixy.Domain.Enums;
-using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
+using Fixy.Domain.SP.TechnicianAvailableRequests;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
 
-public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTechnicianAvailableRequestsQuery, Result<List<GetServiceRequestListDto>>>
+public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTechnicianAvailableRequestsQuery, Result<List<ServiceRequestSpResult>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    private const int DefaultMaxDistanceKm = 25;
-
     public GetTechnicianAvailableRequestsQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
     }
 
-    public async Task<Result<List<GetServiceRequestListDto>>> Handle(GetTechnicianAvailableRequestsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<ServiceRequestSpResult>>> Handle(GetTechnicianAvailableRequestsQuery request, CancellationToken cancellationToken)
     {
         var currentTechnician = await _currentUserService.GetCurrentUserAsync();
         if (currentTechnician is not Technician technician)
@@ -33,14 +31,9 @@ public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler
         // if location not exist 
         if (location == null)
             return Errors.LocationNotUpdated;
-        
-        var availableServiceRequests = await _unitOfWork.ServiceRequests.GetTableNoTracking()            
-            .Where(x => x.Status == ServiceRequestStatus.Pending).Include(x => x.ServiceCategories).Include(x => x.Customer)
-            .Where(x => x.ServiceCategories.Any(x => x.Id == technician.ServiceCategoryId))
-            .ToListAsync();
-        var FilteredServiceRequestsByLocation = availableServiceRequests
-            .Where(x => GeoDistance.CalculateKm(location.Latitude, location.Longitude, x.Address.Latitude, x.Address.Longitude) 
-            <= DefaultMaxDistanceKm).Select(x => x.ToServiceRequestListDto()).ToList();
-        return FilteredServiceRequestsByLocation;
+
+        var paginatedResponse = await _unitOfWork.ServiceRequestReadRepository
+            .GetTechnicianAvailableServiceRequest(request.PageNumber, request.PageSize, technician.Id, location.Latitude, location.Longitude, technician.ServiceCategoryId);
+        return paginatedResponse;
     }
 }

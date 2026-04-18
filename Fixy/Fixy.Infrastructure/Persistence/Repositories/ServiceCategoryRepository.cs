@@ -8,7 +8,7 @@ public class ServiceCategoryRepository : GenericRepository<ServiceCategory>, ISe
 {
     private readonly DbSet<ServiceCategory> _serviceCategories;
 
-    public ServiceCategoryRepository(ApplicationDbContext dbContext) : base(dbContext)
+    public ServiceCategoryRepository(FixyDbContext dbContext) : base(dbContext)
     {
         _serviceCategories = dbContext.Set<ServiceCategory>();
     }

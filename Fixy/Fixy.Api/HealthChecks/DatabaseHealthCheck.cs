@@ -6,9 +6,9 @@ namespace Fixy.Api.HealthChecks;
 
 public class DatabaseHealthCheck : IHealthCheck
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly FixyDbContext _dbContext;
 
-    public DatabaseHealthCheck(ApplicationDbContext dbContext)
+    public DatabaseHealthCheck(FixyDbContext dbContext)
     {
         _dbContext = dbContext;
     }

@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Http;
 namespace Fixy.Application.Features.Authentication.Commands.RegisterTechnician;
 
 public sealed record RegisterTechnicianCommand(
-    string FullName, 
+    string FirstName,
+    string LastName,
     string Email, 
     string NationalId,
     int YearsOfExperience,

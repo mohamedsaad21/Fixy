@@ -39,6 +39,7 @@ public sealed class RefreshTokenCommandHandler(UserManager<ApplicationUser> user
         var roles = await userManager.GetRolesAsync(user);
         return new AuthResponse
         {
+            UserId = user.Id,
             UserName = user.UserName,
             Email = user.Email,
             Role = roles.FirstOrDefault(),
