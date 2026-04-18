@@ -1,4 +1,4 @@
-﻿using Fixy.Api.Base;
+using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
 using Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
