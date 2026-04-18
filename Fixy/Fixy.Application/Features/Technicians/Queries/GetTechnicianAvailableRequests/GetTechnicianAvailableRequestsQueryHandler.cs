@@ -5,12 +5,13 @@ using Fixy.Application.Mapping.ServiceRequests;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
+using Fixy.Domain.SP.TechnicianAvailableRequests;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
 
-public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTechnicianAvailableRequestsQuery, Result<PaginatedResult<GetServiceRequestListDto>>>
+public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler<GetTechnicianAvailableRequestsQuery, Result<List<ServiceRequestSpResult>>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
@@ -20,7 +21,7 @@ public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler
         _currentUserService = currentUserService;
     }
 
-    public async Task<Result<PaginatedResult<GetServiceRequestListDto>>> Handle(GetTechnicianAvailableRequestsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<ServiceRequestSpResult>>> Handle(GetTechnicianAvailableRequestsQuery request, CancellationToken cancellationToken)
     {
         var currentTechnician = await _currentUserService.GetCurrentUserAsync();
         if (currentTechnician is not Technician technician)
@@ -31,11 +32,8 @@ public sealed class GetTechnicianAvailableRequestsQueryHandler : IRequestHandler
         if (location == null)
             return Errors.LocationNotUpdated;
 
-        var filterQuery = _unitOfWork.ServiceRequestReadRepository
-            .GetTechnicianAvailableServiceRequest(technician.Id, location.Latitude, location.Longitude, technician.ServiceCategoryId);
-        var paginatedResponse = await filterQuery.Select(x => x.ToServiceRequestListDto()).ToPaginatedListAsync(request.PageNumber, request.PageSize);
-        //var paginatedResponse = await filterQuery.ToListAsync();
-
+        var paginatedResponse = await _unitOfWork.ServiceRequestReadRepository
+            .GetTechnicianAvailableServiceRequest(request.PageNumber, request.PageSize, technician.Id, location.Latitude, location.Longitude, technician.ServiceCategoryId);
         return paginatedResponse;
     }
 }

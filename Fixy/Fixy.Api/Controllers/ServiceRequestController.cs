@@ -7,7 +7,7 @@ using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestIma
 using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestList;
+using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestPaginaredList;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +21,10 @@ public class ServiceRequestController : AppControllerBase
     [Authorize(Roles = Roles.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpGet(Router.ServiceRequestRouting.ServiceRequestsList)]
-    public async Task<IActionResult> GetServiceRequests()
+    [HttpGet(Router.ServiceRequestRouting.ServiceRequestPaginatedList)]
+    public async Task<IActionResult> GetServiceRequests([FromQuery] GetServiceRequestPaginaredListQuery query)
     {
-        return ToActionResult(await Mediator.Send(new GetServiceRequestListQuery()));
+        return ToActionResult(await Mediator.Send(query));
     }
 
     //[RedisCache(60)]
@@ -32,7 +32,7 @@ public class ServiceRequestController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestsPaginated)]
-    public async Task<IActionResult> GetCustomerServiceRequestsPaginated([FromQuery] GetMyRequestsQuery query)
+    public async Task<IActionResult> GetCustomerServiceRequestsPaginated([FromQuery] GetMyRequestPaginatedListQuery query)
     {
         return ToActionResult(await Mediator.Send(query));
     }
@@ -45,7 +45,7 @@ public class ServiceRequestController : AppControllerBase
     [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestById)]
     public async Task<IActionResult> GetCustomerServiceRequestById([FromRoute] Guid Id)
     {
-        return ToActionResult(await Mediator.Send(new GetServiceRequestByIdQuery(Id)));
+        return ToActionResult(await Mediator.Send(new GetCustomerServiceRequestByIdQuery(Id)));
     }
 
     [Authorize(Roles = Roles.Customer)]

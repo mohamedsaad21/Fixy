@@ -40,7 +40,7 @@ public static class Router
     public static class ServiceRequestRouting
     {
         public const string prefix = Rule + "/Request";
-        public const string ServiceRequestsList = prefix + "/Service-Requests-List";
+        public const string ServiceRequestPaginatedList = prefix + "/Service-Requests-Paginated-List";
         public const string CustomerServiceRequestsPaginated = prefix + "/Customer-Service-Requests-Paginated";
         public const string CustomerServiceRequestById = prefix + "/Customer-Service-Request" + SingleRoute;
         public const string GetById = prefix + "/GetById" + SingleRoute;
@@ -55,6 +55,7 @@ public static class Router
     {
         public const string prefix = Rule + "/Technician";
         public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-Paginated";
+        public const string ServiceRequestById = prefix + "/Service-Request-By-Id/{Id}";
         public const string Location = prefix + "/Location";
         public const string TechnicianStripeStatus = prefix + "/technician-stripe-status";
     }
