@@ -3,6 +3,6 @@
 public enum ServiceRequestStatus
 {
     Pending,
-    Accepted,
+    Assigned,
     Cancelled
 }

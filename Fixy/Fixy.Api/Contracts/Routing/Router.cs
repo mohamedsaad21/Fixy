@@ -97,6 +97,8 @@ public static class Router
         public const string List = prefix + "/List";
         public const string SendNotification = prefix + "/Send-Notification";
         public const string MarkAsRead = prefix + "/Mark-As-Read/{NotificationId}";
+        public const string SaveFcmToken = prefix + "/Save-Fcm-Token";
+        public const string Test = prefix + "/Test";
     }
 
     public static class FeedbackRouting
