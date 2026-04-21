@@ -7,11 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Bookings.Commands.RejectBookingPriceChange;
 
-public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<RejectBookingPriceChangeCommand, Result>
+public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<RejectBookingPriceChangeCommand, Result>
 {
     public async Task<Result> Handle(RejectBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
-        var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
+        var booking = await unitOfWork.Bookings.GetTableAsTracking()
+            .Include(x => x.Technician).Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
@@ -29,6 +30,30 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
         booking.Status = ServiceBookingStatus.InProgress;
 
         await unitOfWork.SaveChangesAsync();
+
+        var technician = booking.Technician;
+        await notificationService.SendNotificationToUserAsync(technician.Id, new
+        {
+            type = "PRICE_CHANGE_REJECTED",
+            message = $"The customer has rejected the price change. The original agreed price of {booking.AgreedPrice} remains.",
+            createdAt = DateTime.UtcNow
+        });
+
+        if (!string.IsNullOrEmpty(technician.FcmToken))
+        {
+            await notificationService.SendPushNotificationAsync(
+                fcmToken: technician.FcmToken,
+                title: "Price Change Rejected",
+                body: $"The customer has rejected the price change. The original agreed price of {booking.AgreedPrice} remains.",
+                data: new Dictionary<string, string>
+                {
+                    { "type", "PRICE_CHANGE_REJECTED" },
+                    { "bookingId", booking.Id.ToString() },
+                    { "agreedPrice", booking.AgreedPrice.ToString() },
+                    { "createdAt", DateTime.UtcNow.ToString("O") }
+                }
+            );
+        }
         return Result.Success();
     }
 }

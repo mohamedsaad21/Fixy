@@ -1,7 +1,9 @@
 ﻿using CloudinaryDotNet;
+using FirebaseAdmin;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
 using Fixy.Infrastructure.Persistence;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -43,6 +45,17 @@ public static class ServiceRegisteration
         configuration.GetSection(nameof(stripeSettings)).Bind(stripeSettings);
         services.AddSingleton(stripeSettings);
         StripeConfiguration.ApiKey = stripeSettings.Secretkey;
+
+        // Firebase
+        var path = Path.Combine(AppContext.BaseDirectory,configuration["Firebase:ServiceAccountPath"]!);
+
+        using var stream = System.IO.File.OpenRead(path);
+
+        FirebaseApp.Create(new AppOptions
+        {
+            Credential = GoogleCredential.FromStream(stream),
+            ProjectId = configuration["Firebase:ProjectId"]
+        });
 
         services.AddAuthentication(options =>
         {

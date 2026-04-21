@@ -16,7 +16,7 @@ public static class ModuleApplicationDependencies
         // Add Fluent Validation
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         // Add AutoMapper
-        services.AddAutoMapper(mapper => { }, Assembly.GetExecutingAssembly());        
+        services.AddAutoMapper(mapper => { }, Assembly.GetExecutingAssembly());  
         return services;
     }
 }
