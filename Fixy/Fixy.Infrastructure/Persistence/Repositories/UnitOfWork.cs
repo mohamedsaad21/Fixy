@@ -1,4 +1,5 @@
 ﻿using Fixy.Domain.Entities;
+using Fixy.Domain.Entities.Chat;
 using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
@@ -26,6 +27,8 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; private set; }
     public IGenericRepository<Payout> Payouts { get; private set; }
     public IGenericRepository<OtpCode> OtpCodes { get; private set; }
+    public IConversationRepository Conversations { get; private set; }
+    public IGenericRepository<ChatMessage> ChatMessages { get; private set; }
     public INotificationRepository Notifications { get; private set; }
     public IServiceRequestReadRepository ServiceRequestReadRepository { get; private set; }
 
@@ -46,6 +49,8 @@ public class UnitOfWork : IUnitOfWork
         TechnicianFeedbacks = new GenericRepository<TechnicianFeedback>(dbContext);
         Payouts = new GenericRepository<Payout>(dbContext);
         OtpCodes = new GenericRepository<OtpCode>(dbContext);
+        Conversations = new ConversationRepository(dbContext);
+        ChatMessages = new GenericRepository<ChatMessage>(dbContext);
         Notifications = new NotificationRepository(dbContext);
         ServiceRequestReadRepository = new ServiceRequestReadRepository(dbContext);
     }

@@ -1,4 +1,5 @@
-﻿using Fixy.Domain.Entities.Feedback;
+﻿using Fixy.Domain.Entities.Chat;
+using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 
 namespace Fixy.Domain.Entities;
