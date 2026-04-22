@@ -1,8 +1,9 @@
-﻿using System.Globalization;
+﻿using Fixy.Domain.Entities;
+using System.Globalization;
 
 namespace Fixy.Domain.Common;
 
-public class GeneralLocalizableEntity
+public class GeneralLocalizableEntity : DatedEntity
 {
     public string Localize(string textAr, string textEn)
     {
