@@ -58,5 +58,6 @@ public static class WebApplicationExtensions
         app.UseMiddleware<ErrorHandlerMiddleware>();
 
         app.MapHub<NotificationHub>("/hubs/notification");
+        app.MapHub<ChatHub>("/hubs/chat");
     }
 }
