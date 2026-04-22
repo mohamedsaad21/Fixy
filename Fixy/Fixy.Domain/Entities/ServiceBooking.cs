@@ -15,7 +15,7 @@ public class ServiceBooking : BaseEntity
     public decimal? ProposedPrice { get; set; }
     public DateTime? PriceChangeRequestedAt { get; set; }
     public DateTime ScheduledDateTime { get; set; }
-    public ServiceBookingStatus Status { get; set; } = ServiceBookingStatus.Pending;
+    public ServiceBookingStatus Status { get; set; } = ServiceBookingStatus.InProgress;
     public string? CompletionNotes { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? StartedAt { get; set; }

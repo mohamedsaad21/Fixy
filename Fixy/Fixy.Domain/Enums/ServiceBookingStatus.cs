@@ -2,7 +2,6 @@
 
 public enum ServiceBookingStatus
 {
-    Pending,
     InProgress,
     PriceChangePendingCustomerApproval,
     Completed,
