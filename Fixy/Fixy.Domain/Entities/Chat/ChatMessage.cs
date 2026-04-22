@@ -13,5 +13,5 @@ public class ChatMessage : BaseEntity
     public string Content { get; set; }
     public bool IsSeen { get; set; }
     public DateTime SentAt { get; set; }
-    public DateTime SeenAt { get; set; }
+    public DateTime? SeenAt { get; set; }
 }

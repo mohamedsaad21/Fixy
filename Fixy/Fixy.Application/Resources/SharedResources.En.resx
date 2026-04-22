@@ -366,4 +366,7 @@
   <data name="ServiceCategoryNotFound" xml:space="preserve">
     <value>هذه الوظيفة غير موجوده</value>
   </data>
+  <data name="ServiceAlreadyAccepted" xml:space="preserve">
+    <value>Cannot delete after technician accepted</value>
+  </data>
 </root>

@@ -366,4 +366,7 @@
   <data name="ServiceCategoryNotFound" xml:space="preserve">
     <value>Service category is not found</value>
   </data>
+  <data name="ServiceAlreadyAccepted" xml:space="preserve">
+    <value>تعذر الحذف نظرًا لقبول الطلب من قبل الفني</value>
+  </data>
 </root>

@@ -15,7 +15,8 @@ public class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCat
                 NameEn = "Electrical",
                 NameAr = "أعمال كهربائية",
                 Description = "",
-                CreatedAt = DateTime.Parse("2026-10-05")
+                CreatedAt = DateTime.Parse("2026-10-05"),
+                IsDeleted = false
             },
             new
             {
@@ -23,7 +24,8 @@ public class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCat
                 NameEn = "Carpentry Repair",
                 NameAr = "تصليح نجارة",
                 Description = "",
-                CreatedAt = DateTime.Parse("2026-10-05")
+                CreatedAt = DateTime.Parse("2026-10-05"),
+                IsDeleted = false
             },
             new
             {
@@ -31,7 +33,8 @@ public class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCat
                 NameEn = "Air Conditioning",
                 NameAr = "تكييف وتبريد",
                 Description = "",
-                CreatedAt = DateTime.Parse("2026-10-05")
+                CreatedAt = DateTime.Parse("2026-10-05"),
+                IsDeleted = false
             },
             new
             {
@@ -39,7 +42,8 @@ public class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCat
                 NameEn = "Painting and Wall Repair",
                 NameAr = "دهانات وإصلاح جدران",
                 Description = "",
-                CreatedAt = DateTime.Parse("2026-10-05")
+                CreatedAt = DateTime.Parse("2026-10-05"),
+                IsDeleted = false
             },
             new
             {
@@ -47,7 +51,8 @@ public class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCat
                 NameEn = "Appliance Repair",
                 NameAr = "تصليح أجهزة منزلية",
                 Description = "",
-                CreatedAt = DateTime.Parse("2026-10-05")
+                CreatedAt = DateTime.Parse("2026-10-05"),
+                IsDeleted = false
             },
             new
             {
@@ -55,7 +60,8 @@ public class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCat
                 NameEn = "Cleaning Services",
                 NameAr = "خدمات تنظيف",
                 Description = "",
-                CreatedAt = DateTime.Parse("2026-10-05")
+                CreatedAt = DateTime.Parse("2026-10-05"),
+                IsDeleted = false
             }
 );
     }
