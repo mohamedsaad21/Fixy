@@ -7,6 +7,7 @@ public partial class ServiceCategoriesProfile
 {
     public void CategoryDomainListToCategoryListResponseMapping()
     {
-        CreateMap<ServiceCategory, GetCategoriesListResponse>();
+        CreateMap<ServiceCategory, GetCategoriesListResponse>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Localize(src.NameAr, src.NameEn)));
     }
 }

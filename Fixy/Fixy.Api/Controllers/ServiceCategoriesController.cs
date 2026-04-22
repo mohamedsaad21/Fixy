@@ -35,7 +35,7 @@ public class ServiceCategoriesController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.CategoryRouting.Create)]
-    public async Task<IActionResult> CreateCategory([FromQuery] AddCategoryCommand command)
+    public async Task<IActionResult> CreateCategory([FromForm] AddCategoryCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }
@@ -45,7 +45,7 @@ public class ServiceCategoriesController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPut(Router.CategoryRouting.Edit)]
-    public async Task<IActionResult> EditCategory([FromQuery] EditCategoryCommand command)
+    public async Task<IActionResult> EditCategory([FromForm] EditCategoryCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
     }

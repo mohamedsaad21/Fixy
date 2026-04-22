@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.ServiceCategories.Commands.AddCategory;
 
-public sealed record AddCategoryCommand(string Name, string Description) : IRequest<Result<Guid>>;
+public sealed record AddCategoryCommand(string NameEn, string NameAr, string Description) : IRequest<Result<Guid>>;
