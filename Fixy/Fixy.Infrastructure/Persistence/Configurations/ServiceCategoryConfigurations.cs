@@ -1,4 +1,4 @@
-﻿using Fixy.Domain.Entities;
+using Fixy.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

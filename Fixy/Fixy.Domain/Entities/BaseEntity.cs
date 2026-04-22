@@ -1,4 +1,4 @@
-﻿namespace Fixy.Domain.Entities;
+namespace Fixy.Domain.Entities;
 
 public class BaseEntity
 {
