@@ -27,7 +27,7 @@ public sealed class GetUserByIdQueryHandler(IUnitOfWork unitOfWork, UserManager<
             if (serviceCategory == null)
                 return Errors.ServiceCategoryNotFound;
 
-            response.ServiceCategory = serviceCategory.Name;
+            response.ServiceCategory = serviceCategory.Localize(serviceCategory.NameAr, serviceCategory.NameEn);
         }
 
         return response;

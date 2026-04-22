@@ -7,7 +7,8 @@ public static class EditCategoryCommandToCommandDomainMapping
 {
     public static ServiceCategory ToServiceCategory(this EditCategoryCommand command, ServiceCategory serviceCategory)
     {
-        serviceCategory.Name = command.Name;
+        serviceCategory.NameEn = command.NameEn;
+        serviceCategory.NameAr = command.NameAr;
         serviceCategory.Description = command.Description;
         serviceCategory.UpdatedAt = DateTime.UtcNow;
         return serviceCategory;

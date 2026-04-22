@@ -20,12 +20,16 @@ public class EditCategoryCommandValidator : AbstractValidator<EditCategoryComman
 
     public void ApplyValidationRules()
     {
-        RuleFor(x => x.Name).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.NameEn).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.NameAr).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
     }
 
     public void ApplyCustomValidationRules()
     {
-        RuleFor(x => x.Name).MustAsync(async (model, key, CancellationToken) => !await _unitOfWork.ServiceCategories.IsExistsExcludeSelfAsync(model.Id, key))
+        RuleFor(x => x.NameEn).MustAsync(async (model, key, CancellationToken) => !await _unitOfWork.ServiceCategories.IsExistsExcludeSelfAsync(model.Id, key))
+            .WithMessage(_stringLocalizer[SharedResourcesKeys.CategoryAlreadyExists]);
+
+        RuleFor(x => x.NameAr).MustAsync(async (model, key, CancellationToken) => !await _unitOfWork.ServiceCategories.IsExistsExcludeSelfAsync(model.Id, key))
             .WithMessage(_stringLocalizer[SharedResourcesKeys.CategoryAlreadyExists]);
     }
 }

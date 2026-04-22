@@ -3,6 +3,7 @@ using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
+using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
 using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
@@ -66,6 +67,16 @@ public class ServiceRequestController : AppControllerBase
     public async Task<IActionResult> EditServiceRequest([FromForm] EditServiceRequestCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpDelete(Router.ServiceRequestRouting.Delete)]
+    public async Task<IActionResult> DeleteServiceRequest([FromRoute] Guid Id)
+    {
+        return ToActionResult(await Mediator.Send(new DeleteServiceRequestCommand(Id)));
     }
 
     [Authorize(Roles = Roles.Customer)]

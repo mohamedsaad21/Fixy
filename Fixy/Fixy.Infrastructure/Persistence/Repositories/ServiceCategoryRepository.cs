@@ -15,13 +15,13 @@ public class ServiceCategoryRepository : GenericRepository<ServiceCategory>, ISe
 
     public async Task<bool> IsExistsAsync(string Name)
     {
-        var serviceCategory = await _serviceCategories.FirstOrDefaultAsync(x => x.Name == Name);
+        var serviceCategory = await _serviceCategories.FirstOrDefaultAsync(x => x.NameAr == Name || x.NameEn == Name);
         return serviceCategory != null;
     }
 
     public async Task<bool> IsExistsExcludeSelfAsync(Guid Id, string Name)
     {
-        var serviceCategory = await _serviceCategories.FirstOrDefaultAsync(x => x.Name == Name && x.Id != Id);
+        var serviceCategory = await _serviceCategories.FirstOrDefaultAsync(x => (x.NameAr == Name || x.NameEn == Name) && x.Id != Id);
         return serviceCategory != null;
     }
 }
