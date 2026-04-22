@@ -2,12 +2,14 @@
 using Fixy.Application.Resources;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Localization;
 using System.Net;
 
 namespace Fixy.Api.Base;
 
 [ApiController]
+[EnableRateLimiting("sliding")]
 public abstract class AppControllerBase : ControllerBase
 {
     private IMediator? _mediator;

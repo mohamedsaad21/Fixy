@@ -114,4 +114,11 @@ public static class Router
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
         public const string GetUserById = prefix + "/Get-User-By-Id/{Id}";
     }
+
+    public static class ChatRouting
+    {
+        public const string prefix = Rule + "/Chat";
+        public const string GetMessages = prefix + "/Get-Messages";
+        public const string MarkMessagesAsRead = prefix + "/Mark-Messages-As-Read/{BookingId}";
+    }
 }
