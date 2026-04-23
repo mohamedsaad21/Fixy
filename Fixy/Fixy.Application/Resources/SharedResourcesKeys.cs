@@ -95,4 +95,5 @@ public class SharedResourcesKeys
     public const string ServiceAlreadyAccepted = "ServiceAlreadyAccepted";
     public const string CannotCancelAtThisStage = "CannotCancelAtThisStage";
     public const string AlreadyCancelled = "AlreadyCancelled";
+    public const string InvalidCancellationReason = "InvalidCancellationReason";
 }

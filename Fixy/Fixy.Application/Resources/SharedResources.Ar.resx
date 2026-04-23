@@ -375,4 +375,7 @@
   <data name="AlreadyCancelled" xml:space="preserve">
     <value>تم الإلغاء بالفعل</value>
   </data>
+  <data name="InvalidCancellationReason" xml:space="preserve">
+    <value>سبب الإلغاء غير صحيح</value>
+  </data>
 </root>

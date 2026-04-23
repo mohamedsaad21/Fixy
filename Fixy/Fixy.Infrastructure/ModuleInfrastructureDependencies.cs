@@ -26,6 +26,7 @@ public static class ModuleInfrastructureDependencies
         services.AddScoped<INotificationService, NotificationService>();
         services.AddTransient<IPaymentService, StripeService>();
         services.AddScoped<ICacheService, CacheService>();
+        services.AddScoped<IBookingService, BookingService>();
         
         return services;
     }

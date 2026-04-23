@@ -24,6 +24,9 @@ public class ServiceBooking : BaseEntity
     public DateTime? CancelledAt { get; set; }
     public Guid? CancelledById { get; set; }
     public ApplicationUser CancelledBy { get; set; }
+    public CustomerCancellationReason? CustomerCancellationReason { get; set; }
+    public TechnicianCancellationReason? TechnicianCancellationReason { get; set; }
+    public string? CancellationNote { get; set; }
     public bool IsCustomerConfirmed { get; set; }
     public DateTime? CustomerConfirmedAt { get; set; }
     public Payment Payment { get; set; }

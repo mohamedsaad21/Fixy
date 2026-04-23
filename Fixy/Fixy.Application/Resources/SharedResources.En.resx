@@ -375,4 +375,7 @@
   <data name="AlreadyCancelled" xml:space="preserve">
     <value>This booking has already been cancelled</value>
   </data>
+  <data name="InvalidCancellationReason" xml:space="preserve">
+    <value>The cancellation reason provided is invalid</value>
+  </data>
 </root>
