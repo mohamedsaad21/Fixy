@@ -93,4 +93,6 @@ public class SharedResourcesKeys
     public const string EmptyImage = "EmptyImage";
     public const string ServiceCategoryNotFound = "ServiceCategoryNotFound";
     public const string ServiceAlreadyAccepted = "ServiceAlreadyAccepted";
+    public const string CannotCancelAtThisStage = "CannotCancelAtThisStage";
+    public const string AlreadyCancelled = "AlreadyCancelled";
 }

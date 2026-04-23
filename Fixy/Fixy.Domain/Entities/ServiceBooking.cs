@@ -1,4 +1,5 @@
 using Fixy.Domain.Entities.Feedback;
+using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 namespace Fixy.Domain.Entities;
@@ -21,6 +22,8 @@ public class ServiceBooking : BaseEntity
     public DateTime? StartedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
     public DateTime? CancelledAt { get; set; }
+    public Guid? CancelledById { get; set; }
+    public ApplicationUser CancelledBy { get; set; }
     public bool IsCustomerConfirmed { get; set; }
     public DateTime? CustomerConfirmedAt { get; set; }
     public Payment Payment { get; set; }

@@ -75,6 +75,7 @@ public static class Router
         public const string RejectPriceChange = prefix + "/reject-price-change/{BookingId}";
         public const string MarkBookingCompleted = prefix + "/mark-booking-completed";
         public const string ConfirmBookingCompletion = prefix + "/confirm-booking-completion/{BookingId}";
+        public const string CancelBooking = prefix + "/cancel-booking/{BookingId}";
     }
     public static class PaymentRouting
     {

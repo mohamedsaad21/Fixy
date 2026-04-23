@@ -71,6 +71,7 @@ public class ServiceRequestController : AppControllerBase
 
     [Authorize(Roles = Roles.Customer)]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpDelete(Router.ServiceRequestRouting.Delete)]

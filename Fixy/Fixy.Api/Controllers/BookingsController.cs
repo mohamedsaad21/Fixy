@@ -2,6 +2,7 @@
 using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Bookings.Commands.ApproveBookingPriceChange;
+using Fixy.Application.Features.Bookings.Commands.CancelBooking;
 using Fixy.Application.Features.Bookings.Commands.ConfirmBookingCompletion;
 using Fixy.Application.Features.Bookings.Commands.MarkBookingCompleted;
 using Fixy.Application.Features.Bookings.Commands.RejectBookingPriceChange;
@@ -89,5 +90,16 @@ public class BookingsController : AppControllerBase
     public async Task<IActionResult> ConfirmBookingCompletion([FromRoute] Guid BookingId)
     {
         return ToActionResult(await Mediator.Send(new ConfirmBookingCompletionCommand(BookingId)));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPost(Router.BookingRouting.CancelBooking)]
+    public async Task<IActionResult> CancelBooking([FromRoute] Guid BookingId)
+    {
+        return ToActionResult(await Mediator.Send(new CancelBookingCommand(BookingId)));
     }
 }
