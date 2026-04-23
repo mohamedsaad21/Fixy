@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Stripe;
@@ -76,20 +77,12 @@ public static class ServiceRegisteration
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
                 ClockSkew = TimeSpan.Zero,
             };
-            // Required for SignalR authentication!
+            // read token from cookie
             o.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>
                 {
-                    var accessToken = context.Request.Query["access_token"];
-                    var path = context.HttpContext.Request.Path;
-
-                    // Only for SignalR hubs
-                    if (!string.IsNullOrEmpty(accessToken) &&
-                        path.StartsWithSegments("/hubs/notification"))
-                    {
-                        context.Token = accessToken;
-                    }
+                    context.Token = context.Request.Cookies["token"];
                     return Task.CompletedTask;
                 }
             };
