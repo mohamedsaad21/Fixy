@@ -2,6 +2,8 @@
 using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Bookings.Commands.ApproveBookingPriceChange;
+using Fixy.Application.Features.Bookings.Commands.CancelBookingByCustomer;
+using Fixy.Application.Features.Bookings.Commands.CancelBookingByTechnician;
 using Fixy.Application.Features.Bookings.Commands.ConfirmBookingCompletion;
 using Fixy.Application.Features.Bookings.Commands.MarkBookingCompleted;
 using Fixy.Application.Features.Bookings.Commands.RejectBookingPriceChange;
@@ -89,5 +91,27 @@ public class BookingsController : AppControllerBase
     public async Task<IActionResult> ConfirmBookingCompletion([FromRoute] Guid BookingId)
     {
         return ToActionResult(await Mediator.Send(new ConfirmBookingCompletionCommand(BookingId)));
+    }
+
+    [Authorize(Roles = Roles.Customer)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPost(Router.BookingRouting.CancelBookingByCustomer)]
+    public async Task<IActionResult> CancelBookingByCustomer([FromForm] CancelBookingByCustomerCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [Authorize(Roles = Roles.Technician)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPost(Router.BookingRouting.CancelBookingByTechnician)]
+    public async Task<IActionResult> CancelBookingByTechnician([FromForm] CancelBookingByTechnicianCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
     }
 }

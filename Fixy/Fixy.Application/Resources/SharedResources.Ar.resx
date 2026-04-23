@@ -369,4 +369,13 @@
   <data name="ServiceAlreadyAccepted" xml:space="preserve">
     <value>تعذر الحذف نظرًا لقبول الطلب من قبل الفني</value>
   </data>
+  <data name="CannotCancelAtThisStage" xml:space="preserve">
+    <value>لا يمكن إلغاء هذا الحجز في هذه المرحلة</value>
+  </data>
+  <data name="AlreadyCancelled" xml:space="preserve">
+    <value>تم الإلغاء بالفعل</value>
+  </data>
+  <data name="InvalidCancellationReason" xml:space="preserve">
+    <value>سبب الإلغاء غير صحيح</value>
+  </data>
 </root>

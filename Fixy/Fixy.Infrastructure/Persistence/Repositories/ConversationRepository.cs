@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Infrastructure.Persistence.Repositories;
 
-public class ConversationRepository : IConversationRepository
+public class ConversationRepository : GenericRepository<Conversation>, IConversationRepository
 {
     private readonly DbSet<Conversation> _conversations;
-    public ConversationRepository(FixyDbContext dbContext)
+    public ConversationRepository(FixyDbContext dbContext) : base(dbContext)
     {
         _conversations = dbContext.Set<Conversation>();
     }

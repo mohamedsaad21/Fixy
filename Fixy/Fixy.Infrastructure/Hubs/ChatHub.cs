@@ -45,6 +45,9 @@ public class ChatHub : Hub
         var conversation = await _unitOfWork.Conversations
             .GetOrCreateAsync(booking.Id, booking.ServiceRequest.CustomerId, booking.TechnicianId);
 
+        if (conversation.IsClosed)
+            return;
+
         // Save message
         var msg = new ChatMessage
         {
