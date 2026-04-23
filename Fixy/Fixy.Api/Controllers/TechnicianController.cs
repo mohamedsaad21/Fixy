@@ -13,6 +13,16 @@ namespace Fixy.Api.Controllers;
 public class TechnicianController : AppControllerBase
 {
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.TechnicianRouting.GetById)]
+    public async Task<IActionResult> GetTechnicianById([FromRoute] Guid Id)
+    {
+        return ToActionResult(await Mediator.Send(new GetTechnicianServiceRequestByIdQuery(Id)));
+    }
+
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.TechnicianRouting.TechnicianServiceRequestsList)]

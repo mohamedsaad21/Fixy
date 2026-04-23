@@ -61,7 +61,6 @@ public sealed class RegisterTechnicianCommandHandler(UserManager<ApplicationUser
             if (!roleResult.Succeeded)
                 return Errors.IdentityAddRoleFailed;
 
-            //await _userManager.UpdateAsync(technician);
             await authenticationService.SendOtpAsync(technician, "confirm your account", "Confirm Account");
             return technician.Id;
         }
