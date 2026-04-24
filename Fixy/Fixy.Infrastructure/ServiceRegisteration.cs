@@ -76,20 +76,12 @@ public static class ServiceRegisteration
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
                 ClockSkew = TimeSpan.Zero,
             };
-            // Required for SignalR authentication!
+            // read token from cookie
             o.Events = new JwtBearerEvents
             {
                 OnMessageReceived = context =>
                 {
-                    var accessToken = context.Request.Query["access_token"];
-                    var path = context.HttpContext.Request.Path;
-
-                    // Only for SignalR hubs
-                    if (!string.IsNullOrEmpty(accessToken) &&
-                        path.StartsWithSegments("/hubs/notification"))
-                    {
-                        context.Token = accessToken;
-                    }
+                    context.Token = context.Request.Cookies["token"];
                     return Task.CompletedTask;
                 }
             };
