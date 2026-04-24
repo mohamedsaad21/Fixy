@@ -1,7 +1,7 @@
 ﻿using Fixy.Application.Common.DTOs;
 using Fixy.Domain.Enums;
 
-namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
+namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
 
 public class GetCustomerServiceRequestByIdResponse
 {
@@ -13,4 +13,5 @@ public class GetCustomerServiceRequestByIdResponse
     public AddressDto Address { get; set; }
     public ServiceRequestStatus Status { get; set; }
     public List<PriceOfferDto> PriceOffers { get; set; }
+    public List<ImageDto> Images { get; set; }
 }

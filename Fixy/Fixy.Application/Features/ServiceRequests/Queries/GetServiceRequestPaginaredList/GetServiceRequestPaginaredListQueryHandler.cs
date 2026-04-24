@@ -11,7 +11,8 @@ public sealed class GetServiceRequestPaginaredListQueryHandler(IUnitOfWork unitO
 {
     public async Task<Result<PaginatedResult<Common.DTOs.GetServiceRequestListResponse>>> Handle(GetServiceRequestPaginaredListQuery request, CancellationToken cancellationToken)
     {
-        var serviceRequests = unitOfWork.ServiceRequests.GetTableNoTracking().Include(x => x.Customer).Include(x => x.ServiceCategories);
+        var serviceRequests = unitOfWork.ServiceRequests
+            .GetTableNoTracking().Include(x => x.Customer).Include(x => x.ServiceCategories);
         var paginatedResponse = await serviceRequests.Select(x => x.ToServiceRequestListResponse()).ToPaginatedListAsync(request.PageNumber, request.PageSize);
         return paginatedResponse;
     }

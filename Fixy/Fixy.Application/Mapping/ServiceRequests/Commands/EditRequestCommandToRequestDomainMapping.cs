@@ -1,9 +1,5 @@
-﻿using Fixy.Application.Common.DTOs;
-using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
-using Fixy.Application.Mapping.PriceOffers.Queries;
+﻿using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 using Fixy.Domain.Entities;
-using Fixy.Domain.Enums;
 
 namespace Fixy.Application.Mapping.ServiceRequests.Commands;
 

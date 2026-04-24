@@ -3,6 +3,7 @@ using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
 using Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
 using Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
+using Fixy.Application.Features.Technicians.Queries.GetTechnicianById;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ public class TechnicianController : AppControllerBase
     [HttpGet(Router.TechnicianRouting.GetById)]
     public async Task<IActionResult> GetTechnicianById([FromRoute] Guid Id)
     {
-        return ToActionResult(await Mediator.Send(new GetTechnicianServiceRequestByIdQuery(Id)));
+        return ToActionResult(await Mediator.Send(new GetTechnicianByIdQuery(Id)));
     }
 
 
