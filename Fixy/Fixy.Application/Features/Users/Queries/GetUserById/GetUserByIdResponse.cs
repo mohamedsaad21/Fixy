@@ -9,5 +9,4 @@ public class GetUserByIdResponse
     public string Email { get; set; }
     public string ProfilePictureUrl { get; set; }
     public bool IsTwoFactorEmailEnabled { get; set; }
-    public string ServiceCategory { get; set; }
 }

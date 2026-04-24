@@ -3,6 +3,7 @@ using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
 using Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
 using Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
+using Fixy.Application.Features.Technicians.Queries.GetTechnicianById;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,16 @@ namespace Fixy.Api.Controllers;
 [Authorize(Roles = Roles.Technician)]
 public class TechnicianController : AppControllerBase
 {
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.TechnicianRouting.GetById)]
+    public async Task<IActionResult> GetTechnicianById([FromRoute] Guid Id)
+    {
+        return ToActionResult(await Mediator.Send(new GetTechnicianByIdQuery(Id)));
+    }
+
+
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
