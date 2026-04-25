@@ -16,6 +16,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<ServiceBooking> Bookings { get; }
     IGenericRepository<ServiceBookingImage> ServiceBookingImages { get; }
     ITechnicianRepository Technicians { get; }
+    IGenericRepository<Customer> Customers { get; }
     IGenericRepository<TechnicianLocation> TechnicianLocations { get; }
     IGenericRepository<Payment> Payments { get; }
     IGenericRepository<Dispute> Disputes { get; }

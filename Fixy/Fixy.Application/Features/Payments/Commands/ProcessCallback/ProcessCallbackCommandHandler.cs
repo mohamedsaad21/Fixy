@@ -111,7 +111,7 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
         }
 
         // Update booking status
-        booking.Status = ServiceBookingStatus.Paid;
+        //booking.Status = ServiceBookingStatus.Paid;
 
         Log.Information($"Booking {booking.Id} marked as Paid");
 

@@ -4,9 +4,8 @@ public enum ServiceBookingStatus
 {
     InProgress,
     PriceChangePendingCustomerApproval,
-    Completed,
     AwaitingPayment,
-    Paid,
+    Completed,
     Cancelled,
     Disputed
 }

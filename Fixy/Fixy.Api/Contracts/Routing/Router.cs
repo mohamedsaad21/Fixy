@@ -93,6 +93,7 @@ public static class Router
     {
         public const string prefix = Rule + "/Admin";
         public const string ApproveTechnician = prefix + "/approve-technician/{TechnicianId}";
+        public const string GetDashboard = prefix + "/dashboard";
     }
     public static class NotificationsRouting
     {

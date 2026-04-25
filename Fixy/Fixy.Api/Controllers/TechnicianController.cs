@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fixy.Api.Controllers;
 
-[Authorize(Roles = Roles.Technician)]
+[Authorize]
 public class TechnicianController : AppControllerBase
 {
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -22,7 +22,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetTechnicianByIdQuery(Id)));
     }
 
-
+    [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -32,6 +32,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -41,6 +42,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost(Router.TechnicianRouting.Location)]

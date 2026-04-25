@@ -5,7 +5,6 @@ using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Users.Queries.GetUserById;
 
@@ -19,15 +18,8 @@ public sealed class GetUserByIdQueryHandler(IUnitOfWork unitOfWork, UserManager<
 
         var response = mapper.Map<GetUserByIdResponse>(user);
 
-        if(user is Technician technician)
-        {
-            var serviceCategory = await unitOfWork.ServiceCategories.GetTableNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == technician.ServiceCategoryId);
-
-            if (serviceCategory == null)
-                return Errors.ServiceCategoryNotFound;
-        }
-
+        var roles = await userManager.GetRolesAsync(user);
+        response.Role = roles.FirstOrDefault()!;
         return response;
     }
 }
