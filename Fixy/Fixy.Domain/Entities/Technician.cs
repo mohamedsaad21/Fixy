@@ -19,6 +19,7 @@ public class Technician : ApplicationUser
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingVerification;
     public string NationalIdCardImageUrl {  get; set; }
     public string NationalIdCardImagePublicId {  get; set; }
+    public string? Bio {  get; set; }
     public int? TotalCompletedJobs { get; set; }
     public int? ComplaintsCount { get; set; }
     public int? ResponseTime { get; set; }
