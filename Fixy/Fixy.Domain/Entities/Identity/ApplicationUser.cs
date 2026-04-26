@@ -22,6 +22,10 @@ public class ApplicationUser : IdentityUser<Guid>
     public int? CompletedBookings { get; set; }
     public int? CancelledBookings { get; set; }
     public double? CancellationRate { get; set; }
+    public string? BlockReason { get; set; }
+    public DateTime? BlockedAt { get; set; }
+    public Guid? BlockedBy { get; set; }
+    public ApplicationUser BlockedByUser { get; set; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
     public virtual ICollection<Notification> Notifications { get; set; }
     public virtual ICollection<Conversation> CustomerConversations { get; set; }

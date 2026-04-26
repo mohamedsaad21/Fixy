@@ -15,6 +15,7 @@ namespace Fixy.Api.Controllers;
 public class PaymentsController : AppControllerBase
 {
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [HttpPost(Router.PaymentRouting.Create)]
     public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentCommand command)
     {

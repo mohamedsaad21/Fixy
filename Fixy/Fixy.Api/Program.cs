@@ -54,6 +54,7 @@ builder.Services.AddCorsPolicy();
 builder.Services.AddSignalR();
 
 builder.Services.AddScoped<TechnicianStatusFilter>();
+builder.Services.AddScoped<CustomerStatusFilter>();
 
 var app = builder.Build();
 

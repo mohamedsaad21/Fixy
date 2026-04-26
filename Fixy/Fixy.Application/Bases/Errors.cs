@@ -59,4 +59,6 @@ public static class Errors
     public static Error NationalIdUploadFailed => new("NationalIdUploadFailed", ErrorType.BadRequest);
     public static Error TechnicianAlreadyBlocked => new("TechnicianAlreadyBlocked", ErrorType.BadRequest);
     public static Error TechnicianAlreadyRejected => new("TechnicianAlreadyRejected", ErrorType.BadRequest);
+    public static Error CustomerNotFound => new("CustomerNotFound", ErrorType.NotFound);
+    public static Error CustomerAlreadyBlocked => new("CustomerAlreadyBlocked", ErrorType.BadRequest);
 }

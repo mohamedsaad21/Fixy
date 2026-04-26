@@ -27,8 +27,6 @@ public class Technician : ApplicationUser
     public Guid ServiceCategoryId { get; set; }
     public string? RejectionReason { get; set; }
     public DateTime? RejectedAt { get; set; }
-    public string? BlockReason { get; set; }
-    public DateTime? BlockedAt { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }

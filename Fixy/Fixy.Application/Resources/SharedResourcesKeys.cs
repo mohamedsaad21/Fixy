@@ -99,4 +99,6 @@ public class SharedResourcesKeys
     public const string NationalIdUploadFailed = "NationalIdUploadFailed";
     public const string TechnicianAlreadyBlocked = "TechnicianAlreadyBlocked";
     public const string TechnicianAlreadyRejected = "TechnicianAlreadyRejected";
+    public const string CustomerNotFound = "CustomerNotFound";
+    public const string CustomerAlreadyBlocked = "CustomerAlreadyBlocked";
 }

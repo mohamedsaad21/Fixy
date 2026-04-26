@@ -7,10 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
 
-public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, INotificationService notificationService) : IRequestHandler<BlockTecnhnicianCommand, Result>
+public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<BlockTecnhnicianCommand, Result>
 {
     public async Task<Result> Handle(BlockTecnhnicianCommand request, CancellationToken cancellationToken)
     {
+        var currentUser = await currentUserService.GetCurrentUserAsync();
+
+        if (currentUser == null)
+            return Errors.Unauthorized;
+
         var technician = await unitOfWork.Technicians.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.TechnicianId);
 
         if (technician == null)
@@ -22,6 +27,7 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, INoti
         technician.Status = TechnicianStatus.Blocked;
         technician.BlockReason = request.Reason;
         technician.BlockedAt = DateTime.UtcNow;
+        technician.BlockedBy = currentUser.Id;
 
         await unitOfWork.SaveChangesAsync();
 

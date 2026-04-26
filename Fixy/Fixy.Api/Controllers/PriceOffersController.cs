@@ -11,8 +11,8 @@ namespace Fixy.Api.Controllers;
 
 public class PriceOffersController : AppControllerBase
 {
-    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
+    [RequireActiveTechnician]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -24,6 +24,7 @@ public class PriceOffersController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

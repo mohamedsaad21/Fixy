@@ -22,6 +22,7 @@ namespace Fixy.Api.Controllers;
 public class BookingsController : AppControllerBase
 {
     //[RedisCache(60)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize(Roles = $"{Roles.Customer},{Roles.Admin}")]
@@ -43,6 +44,7 @@ public class BookingsController : AppControllerBase
     }
 
     //[RedisCache(60)]
+    [RequireActiveCustomer]
     [Authorize(Roles = $"{Roles.Customer},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -77,6 +79,7 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -88,6 +91,7 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -111,6 +115,7 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -122,6 +127,7 @@ public class BookingsController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

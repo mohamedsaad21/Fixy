@@ -12,6 +12,7 @@ namespace Fixy.Api.Controllers;
 public class FeedbacksController : AppControllerBase
 {
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -22,8 +23,8 @@ public class FeedbacksController : AppControllerBase
         return ToActionResult(await Mediator.Send(command));
     }
 
-    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
+    [RequireActiveTechnician]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
