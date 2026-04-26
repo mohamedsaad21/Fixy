@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Bases;
+namespace Fixy.Application.Bases;
 
 public static class Errors
 {

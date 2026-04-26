@@ -1,4 +1,4 @@
-﻿namespace Fixy.Api.Contracts.Routing;
+namespace Fixy.Api.Contracts.Routing;
 
 public static class Router
 {
