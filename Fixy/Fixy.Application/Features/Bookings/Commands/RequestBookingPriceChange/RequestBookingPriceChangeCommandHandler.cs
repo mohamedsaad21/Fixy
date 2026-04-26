@@ -34,7 +34,8 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         booking.ProposedPrice = request.NewProposedPrice;
         booking.PriceChangeRequestedAt = DateTime.UtcNow;
-        booking.Status = ServiceBookingStatus.PriceChangePendingCustomerApproval;
+        booking.PriceChangeNotes = request.Notes;
+        booking.Status = ServiceBookingStatus.AwaitingPriceChangeApproval;
 
         await unitOfWork.SaveChangesAsync();
 

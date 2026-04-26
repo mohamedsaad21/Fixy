@@ -1,3 +1,4 @@
+using Fixy.Api.Attributes;
 using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
@@ -35,6 +36,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetTechnicianProfileForCustomersQuery(TechnicianId)));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -45,6 +47,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -55,6 +58,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

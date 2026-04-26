@@ -13,7 +13,7 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
     public async Task<Result<Guid>> Handle(AcceptPriceOfferCommand request, CancellationToken cancellationToken)
     {
         var priceOffer = await unitOfWork.PriceOffers.GetTableAsTracking()
-            .Include(x => x.Technician).Include(x => x.ServiceRequest)
+            .Include(x => x.Technician).Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == request.PriceOfferId);
         // check if price offer exists or not
         if (priceOffer == null)
@@ -33,6 +33,9 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
 
         var booking = new ServiceBooking { ServiceRequestId = serviceRequest.Id, TechnicianId = priceOffer.TechnicianId, PriceOfferId = priceOffer.Id, AgreedPrice = priceOffer.Price, ScheduledDateTime = serviceRequest.ScheduledDateTime };
         await unitOfWork.Bookings.AddAsync(booking);
+        serviceRequest.Customer.TotalBookings += 1;
+        priceOffer.Technician.TotalBookings += 1;
+        
         await unitOfWork.SaveChangesAsync();
 
         var technician = priceOffer.Technician;

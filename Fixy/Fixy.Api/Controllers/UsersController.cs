@@ -27,18 +27,4 @@ public class UsersController : AppControllerBase
     {
         return ToActionResult(await Mediator.Send(new DeleteProfilePictureCommand()));
     }
-
-    //[HttpGet("test-localization")]
-    //public IActionResult TestLocalization()
-    //{
-    //    var localizedString = Localizer["EmailOrPasswordIncorrect"];
-    //    return Ok(new
-    //    {
-    //        Value = localizedString.Value,
-    //        ResourceNotFound = localizedString.ResourceNotFound,
-    //        SearchedLocation = localizedString.SearchedLocation,
-    //        CurrentCulture = Thread.CurrentThread.CurrentCulture.Name,
-    //        CurrentUICulture = Thread.CurrentThread.CurrentUICulture.Name
-    //    });
-    //}
 }

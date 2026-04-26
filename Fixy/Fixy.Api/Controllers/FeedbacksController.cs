@@ -1,4 +1,5 @@
-﻿using Fixy.Api.Base;
+﻿using Fixy.Api.Attributes;
+using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Feedbacks.Commands.SubmitCustomerFeedback;
 using Fixy.Application.Features.Feedbacks.Commands.SubmitTechnicianFeedback;
@@ -11,6 +12,7 @@ namespace Fixy.Api.Controllers;
 public class FeedbacksController : AppControllerBase
 {
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -22,6 +24,7 @@ public class FeedbacksController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Technician)]
+    [RequireActiveTechnician]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

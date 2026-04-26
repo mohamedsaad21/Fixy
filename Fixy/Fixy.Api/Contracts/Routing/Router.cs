@@ -1,4 +1,4 @@
-﻿namespace Fixy.Api.Contracts.Routing;
+namespace Fixy.Api.Contracts.Routing;
 
 public static class Router
 {
@@ -98,8 +98,11 @@ public static class Router
         public const string prefix = Rule + "/Admin";
         public const string ApproveTechnician = prefix + "/approve-technician/{TechnicianId}";
         public const string RejectTechnician = prefix + "/reject-technician";
+        public const string BlockTechnician = prefix + "/block-technician";
+        public const string BlockCustomer = prefix + "/block-customer";
         public const string GetDashboard = prefix + "/dashboard";
         public const string GetTechnicians = prefix + "/get-technicians";
+        public const string GetCustomers = prefix + "/get-customers";
     }
     public static class NotificationsRouting
     {

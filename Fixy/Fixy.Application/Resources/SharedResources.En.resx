@@ -381,4 +381,16 @@
   <data name="NationalIdUploadFailed" xml:space="preserve">
     <value>Failed to upload National ID image</value>
   </data>
+  <data name="TechnicianAlreadyBlocked" xml:space="preserve">
+    <value>Technician is already blocked</value>
+  </data>
+  <data name="TechnicianAlreadyRejected" xml:space="preserve">
+    <value>Technician is already rejected</value>
+  </data>
+  <data name="CustomerNotFound" xml:space="preserve">
+    <value>Customer is not found</value>
+  </data>
+  <data name="CustomerAlreadyBlocked" xml:space="preserve">
+    <value>Customer is already blocked</value>
+  </data>
 </root>

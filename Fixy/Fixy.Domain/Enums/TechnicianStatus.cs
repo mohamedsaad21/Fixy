@@ -1,9 +1,9 @@
-﻿namespace Fixy.Domain.Enums;
+namespace Fixy.Domain.Enums;
 
 public enum TechnicianStatus
 {
-    PendingVerification = 1,
+    PendingApproval = 1,
     Approved,
     Rejected,
-    Banned
+    Blocked
 }

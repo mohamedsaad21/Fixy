@@ -30,6 +30,7 @@ public class ServiceRequestController : AppControllerBase
 
     //[RedisCache(60)]
     [Authorize(Roles = $"{Roles.Customer},{Roles.Admin}")]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.ServiceRequestRouting.CustomerServiceRequestsPaginated)]
@@ -40,6 +41,7 @@ public class ServiceRequestController : AppControllerBase
 
     //[RedisCache(60)]
     [Authorize(Roles = $"{Roles.Customer},{Roles.Admin}")]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -50,6 +52,7 @@ public class ServiceRequestController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -60,6 +63,7 @@ public class ServiceRequestController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -70,6 +74,7 @@ public class ServiceRequestController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -81,6 +86,7 @@ public class ServiceRequestController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -92,6 +98,7 @@ public class ServiceRequestController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Customer)]
+    [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

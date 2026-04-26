@@ -1,3 +1,6 @@
-﻿namespace Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
+using Fixy.Application.Bases;
+using MediatR;
 
-public sealed record BlockTecnhnicianCommand();
+namespace Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
+
+public sealed record BlockTecnhnicianCommand(Guid TechnicianId, string Reason) : IRequest<Result>;

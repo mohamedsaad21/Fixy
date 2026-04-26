@@ -1,4 +1,4 @@
-﻿using Fixy.Domain.Entities.Feedback;
+using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
@@ -16,14 +16,12 @@ public class Technician : ApplicationUser
     }
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
-    public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingVerification;
+    public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingApproval;
     public string NationalIdCardImageUrl {  get; set; }
     public string NationalIdCardImagePublicId {  get; set; }
     public string? Bio {  get; set; }
-    public int? TotalCompletedJobs { get; set; }
     public int? ComplaintsCount { get; set; }
     public int? ResponseTime { get; set; }
-    public double? CancellationRate { get; set; }
     public double? AverageRating { get; set; }
     public string? StripeAccountId { get; set; }
     public Guid ServiceCategoryId { get; set; }

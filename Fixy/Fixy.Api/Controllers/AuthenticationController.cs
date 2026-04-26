@@ -14,7 +14,6 @@ using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
 using Fixy.Application.Features.Authentication.Commands.SignIn;
 using Fixy.Application.Features.Authentication.Commands.VerifyOTP;
 using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
-using Fixy.Application.Features.Authentication.Queries.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -76,13 +75,6 @@ public class AuthenticationController : AppControllerBase
     public async Task<IActionResult> VerifyOtp([FromForm] VerifyOTPCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
-    }
-
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [HttpGet(Router.AuthenticationRouting.CustomersList)]
-    public async Task<IActionResult> GetCustomersAsync()
-    {
-        return ToActionResult(await Mediator.Send(new GetCustomersQuery()));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

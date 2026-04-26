@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities;
@@ -35,7 +35,7 @@ public sealed class UpdateTechnicianProfileCommandHandler(IUnitOfWork unitOfWork
 
         if (technician.Status == TechnicianStatus.Rejected)
         {
-            technician.Status = TechnicianStatus.PendingVerification;
+            technician.Status = TechnicianStatus.PendingApproval;
             technician.RejectionReason = null;
             technician.RejectedAt = null;
         }
