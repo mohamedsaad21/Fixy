@@ -25,12 +25,12 @@ public sealed class UpdateTechnicianLocationCommandHandler : IRequestHandler<Upd
 
         if (location == null)
         {
-            location = new TechnicianLocation(technicianId, request.Latitude, request.Longitude);
+            location = new TechnicianLocation(technicianId, request.Latitude, request.Longitude, request.ServiceArea);
             await _unitOfWork.TechnicianLocations.AddAsync(location);
         }
         else
         {
-            location.Update(request.Latitude, request.Longitude);
+            location.Update(request.Latitude, request.Longitude, request.ServiceArea);
         }
         await _unitOfWork.SaveChangesAsync();
         return Result.Success();

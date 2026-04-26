@@ -7,5 +7,6 @@ public partial class TechnicianProfile : Profile
     public TechnicianProfile()
     {
         TechnicianDomainToGetTechnicianByIdResponseMapping();
+        TechnicianDomainToGetTechnicianProfileForCustomersResponseMapping();
     }
 }

@@ -19,14 +19,16 @@ public class Technician : ApplicationUser
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingVerification;
     public string NationalIdCardImageUrl {  get; set; }
     public string NationalIdCardImagePublicId {  get; set; }
+    public string? Bio {  get; set; }
     public int? TotalCompletedJobs { get; set; }
     public int? ComplaintsCount { get; set; }
     public int? ResponseTime { get; set; }
     public double? CancellationRate { get; set; }
     public double? AverageRating { get; set; }
     public string? StripeAccountId { get; set; }
-    public bool IsActive { get; set; }
     public Guid ServiceCategoryId { get; set; }
+    public string? RejectionReason { get; set; }
+    public DateTime? RejectedAt { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }

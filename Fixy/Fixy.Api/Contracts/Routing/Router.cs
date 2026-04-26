@@ -55,9 +55,11 @@ public static class Router
     {
         public const string prefix = Rule + "/Technician";
         public const string GetById = prefix + "/GetById" + SingleRoute;
+        public const string GetTechnicianProfileForCustomers = prefix + "/Get-Technician-Profile-For-Customers/{TechnicianId}";
         public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-Paginated";
         public const string ServiceRequestById = prefix + "/Service-Request-By-Id/{Id}";
         public const string Location = prefix + "/Location";
+        public const string UpdateTechnicianProfile = prefix + "/update-technician-profile";
         public const string TechnicianStripeStatus = prefix + "/technician-stripe-status";
     }
     public static class PriceOfferRouting
@@ -70,7 +72,9 @@ public static class Router
     {
         public const string prefix = Rule + "/Booking";
         public const string CustomerPaginatedList = prefix + "/Customer-PaginatedList";
-        public const string GetById = prefix + "/GetById" + SingleRoute;
+        public const string TechnicianPaginatedList = prefix + "/Technician-PaginatedList";
+        public const string GetByIdForCustomer = prefix + "/Get-By-Id-For-Customer" + SingleRoute;
+        public const string GetByIdForTechnician = prefix + "/Get-By-Id-For-Technician" + SingleRoute;
         public const string RequestPriceChange = prefix + "/request-price-change";
         public const string ApprovePriceChange = prefix + "/approve-price-change/{BookingId}";
         public const string RejectPriceChange = prefix + "/reject-price-change/{BookingId}";
@@ -93,6 +97,9 @@ public static class Router
     {
         public const string prefix = Rule + "/Admin";
         public const string ApproveTechnician = prefix + "/approve-technician/{TechnicianId}";
+        public const string RejectTechnician = prefix + "/reject-technician";
+        public const string GetDashboard = prefix + "/dashboard";
+        public const string GetTechnicians = prefix + "/get-technicians";
     }
     public static class NotificationsRouting
     {

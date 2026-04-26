@@ -22,6 +22,7 @@ public class FixyDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Gui
         _encryptionProvider = new GenerateEncryptionProvider("BC205508E3ED4C42ACE5E2FE4B1B2431");
     }
     public virtual DbSet<Technician> Technicians { get; set; }
+    public virtual DbSet<Customer> Customers { get; set; }
     public virtual DbSet<ServiceCategory> ServiceCategories { get; set; }
     public virtual DbSet<ServiceRequest> ServiceRequests { get; set; }
     public virtual DbSet<PriceOffer> PriceOffers { get; set; }

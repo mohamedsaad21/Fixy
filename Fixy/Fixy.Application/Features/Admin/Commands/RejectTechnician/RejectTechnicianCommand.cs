@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Admin.Commands.RejectTechnician;
 
-public sealed record RejectTechnicianCommand(Guid TechnicianId) : IRequest<Result>;
+public sealed record RejectTechnicianCommand(Guid TechnicianId, string Reason) : IRequest<Result>;

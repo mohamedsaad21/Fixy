@@ -56,4 +56,5 @@ public static class Errors
     public static Error ServiceAlreadyAccepted => new("ServiceAlreadyAccepted", ErrorType.BadRequest);
     public static Error CannotCancelAtThisStage => new("CannotCancelAtThisStage", ErrorType.BadRequest);
     public static Error AlreadyCancelled => new("AlreadyCancelled", ErrorType.BadRequest);
+    public static Error NationalIdUploadFailed => new("NationalIdUploadFailed", ErrorType.BadRequest);
 }

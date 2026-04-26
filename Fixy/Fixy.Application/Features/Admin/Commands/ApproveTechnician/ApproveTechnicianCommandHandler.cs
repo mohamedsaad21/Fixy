@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Bases;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,10 @@ public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork) : IRequestH
         if (technician == null)
             return Errors.TechnicianNotFound;
 
-        if (technician.IsActive)
+        if (technician.Status == TechnicianStatus.Approved)
             return Errors.TechnicianAlreadyApproved;
 
-        technician.IsActive = true;
+        technician.Status = TechnicianStatus.Approved;
 
         await unitOfWork.SaveChangesAsync();
         return Result.Success();

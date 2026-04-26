@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fixy.Application.Bases;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
-using Fixy.Application.Mapping.ServiceRequests.Queries;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

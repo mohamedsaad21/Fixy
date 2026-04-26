@@ -115,13 +115,13 @@ public class AuthenticationService : IAuthenticationService
         if (response == null)
             throw new InvalidOperationException("HTTP context is not available");
 
-        var refreshTokenCookieOptions = new CookieOptions
+        var tokenCookieOptions = new CookieOptions
         {
             HttpOnly = true,
             Expires = expires.ToLocalTime()
         };
-        response.Cookies.Append("token", token);
-        response.Cookies.Append("refreshToken", refreshToken, refreshTokenCookieOptions);
+        response.Cookies.Append("token", token, tokenCookieOptions);
+        response.Cookies.Append("refreshToken", refreshToken, tokenCookieOptions);
     }
 
     public async Task<AuthResponse> GetJwtToken(ApplicationUser user)
