@@ -378,4 +378,7 @@
   <data name="InvalidCancellationReason" xml:space="preserve">
     <value>The cancellation reason provided is invalid</value>
   </data>
+  <data name="NationalIdUploadFailed" xml:space="preserve">
+    <value>Failed to upload National ID image</value>
+  </data>
 </root>

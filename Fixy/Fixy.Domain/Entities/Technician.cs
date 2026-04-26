@@ -25,8 +25,9 @@ public class Technician : ApplicationUser
     public double? CancellationRate { get; set; }
     public double? AverageRating { get; set; }
     public string? StripeAccountId { get; set; }
-    public bool IsActive { get; set; }
     public Guid ServiceCategoryId { get; set; }
+    public string? RejectionReason { get; set; }
+    public DateTime? RejectedAt { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }

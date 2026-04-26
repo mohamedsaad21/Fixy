@@ -2,7 +2,8 @@
 
 public enum TechnicianStatus
 {
-    PendingVerification,
+    PendingVerification = 1,
     Approved,
-    Rejected
+    Rejected,
+    Banned
 }

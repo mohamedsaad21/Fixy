@@ -9,18 +9,20 @@ public class TechnicianLocation : BaseEntity
     public double Longitude { get; set; }
     public DateTime UpdatedAt { get; set; }
 
-    public TechnicianLocation(Guid technicianId, double latitude, double longitude)
+    public TechnicianLocation(Guid technicianId, double latitude, double longitude, string serviceArea)
     {
         TechnicianId = technicianId;
         Latitude = latitude;
         Longitude = longitude;
+        ServiceArea = serviceArea;
         UpdatedAt = DateTime.UtcNow;
     }
 
-    public void Update(double latitude, double longitude)
+    public void Update(double latitude, double longitude, string serviceArea)
     {
         Latitude = latitude;
         Longitude = longitude;
+        ServiceArea = serviceArea;
         UpdatedAt = DateTime.UtcNow;
     }
 }

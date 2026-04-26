@@ -58,6 +58,7 @@ public static class Router
         public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-Paginated";
         public const string ServiceRequestById = prefix + "/Service-Request-By-Id/{Id}";
         public const string Location = prefix + "/Location";
+        public const string UpdateTechnicianProfile = prefix + "/update-technician-profile";
         public const string TechnicianStripeStatus = prefix + "/technician-stripe-status";
     }
     public static class PriceOfferRouting
@@ -93,7 +94,9 @@ public static class Router
     {
         public const string prefix = Rule + "/Admin";
         public const string ApproveTechnician = prefix + "/approve-technician/{TechnicianId}";
+        public const string RejectTechnician = prefix + "/reject-technician";
         public const string GetDashboard = prefix + "/dashboard";
+        public const string GetTechnicians = prefix + "/get-technicians";
     }
     public static class NotificationsRouting
     {

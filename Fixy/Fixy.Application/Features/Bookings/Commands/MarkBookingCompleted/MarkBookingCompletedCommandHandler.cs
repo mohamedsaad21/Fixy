@@ -38,7 +38,7 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
             });
         }
 
-        booking.Status = ServiceBookingStatus.Completed;
+        booking.Status = ServiceBookingStatus.TechnicianCompleted;
         booking.CompletedAt = DateTime.UtcNow;
 
         await unitOfWork.SaveChangesAsync();

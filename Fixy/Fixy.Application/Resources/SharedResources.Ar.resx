@@ -378,4 +378,7 @@
   <data name="InvalidCancellationReason" xml:space="preserve">
     <value>سبب الإلغاء غير صحيح</value>
   </data>
+  <data name="NationalIdUploadFailed" xml:space="preserve">
+    <value>فشل في رفع صورة الهوية</value>
+  </data>
 </root>
