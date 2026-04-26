@@ -28,7 +28,7 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
         if (booking.Status == ServiceBookingStatus.Cancelled)
             return Errors.AlreadyCancelled;
 
-        if(booking.Status != ServiceBookingStatus.InProgress && booking.Status != ServiceBookingStatus.PriceChangePendingCustomerApproval)
+        if(booking.Status != ServiceBookingStatus.InProgress && booking.Status != ServiceBookingStatus.AwaitingPriceChangeApproval)
             return Errors.CannotCancelAtThisStage;
 
         booking.TechnicianCancellationReason = request.Reason;

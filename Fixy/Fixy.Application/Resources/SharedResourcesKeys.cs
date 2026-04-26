@@ -97,4 +97,6 @@ public class SharedResourcesKeys
     public const string AlreadyCancelled = "AlreadyCancelled";
     public const string InvalidCancellationReason = "InvalidCancellationReason";
     public const string NationalIdUploadFailed = "NationalIdUploadFailed";
+    public const string TechnicianAlreadyBlocked = "TechnicianAlreadyBlocked";
+    public const string TechnicianAlreadyRejected = "TechnicianAlreadyRejected";
 }

@@ -16,7 +16,7 @@ public class Technician : ApplicationUser
     }
     public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
-    public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingVerification;
+    public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingApproval;
     public string NationalIdCardImageUrl {  get; set; }
     public string NationalIdCardImagePublicId {  get; set; }
     public string? Bio {  get; set; }
@@ -29,6 +29,8 @@ public class Technician : ApplicationUser
     public Guid ServiceCategoryId { get; set; }
     public string? RejectionReason { get; set; }
     public DateTime? RejectedAt { get; set; }
+    public string? BlockReason { get; set; }
+    public DateTime? BlockedAt { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
     public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }

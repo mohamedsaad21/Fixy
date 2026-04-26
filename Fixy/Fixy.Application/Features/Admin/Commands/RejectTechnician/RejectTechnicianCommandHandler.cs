@@ -3,7 +3,6 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Admin.Commands.RejectTechnician;
@@ -16,6 +15,9 @@ public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, INoti
 
         if (technician == null)
             return Errors.TechnicianNotFound;
+
+        if (technician.Status == TechnicianStatus.Rejected)
+            return Errors.TechnicianAlreadyRejected;
 
         technician.Status = TechnicianStatus.Rejected;
         technician.RejectionReason = request.Reason;

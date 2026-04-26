@@ -32,6 +32,7 @@ public class BookingsController : AppControllerBase
     }
 
     //[RedisCache(60)]
+    [RequireActiveTechnician]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
@@ -52,6 +53,7 @@ public class BookingsController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetBookingByIdForCustomerQuery(Id)));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -62,6 +64,7 @@ public class BookingsController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetBookingByIdForTechnicianQuery(Id)));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -95,6 +98,7 @@ public class BookingsController : AppControllerBase
         return ToActionResult(await Mediator.Send(new RejectBookingPriceChangeCommand(BookingId)));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -128,6 +132,7 @@ public class BookingsController : AppControllerBase
         return ToActionResult(await Mediator.Send(command));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

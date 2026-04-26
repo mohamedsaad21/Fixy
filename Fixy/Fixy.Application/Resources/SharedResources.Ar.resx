@@ -381,4 +381,10 @@
   <data name="NationalIdUploadFailed" xml:space="preserve">
     <value>فشل في رفع صورة الهوية</value>
   </data>
+  <data name="TechnicianAlreadyBlocked" xml:space="preserve">
+    <value>الفني محظور بالفعل</value>
+  </data>
+  <data name="TechnicianAlreadyRejected" xml:space="preserve">
+    <value>لقد تم رفض الفني بالفعل</value>
+  </data>
 </root>

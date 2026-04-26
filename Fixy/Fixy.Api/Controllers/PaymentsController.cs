@@ -1,4 +1,5 @@
-﻿using Fixy.Api.Base;
+﻿using Fixy.Api.Attributes;
+using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Payments.Commands.ConfirmCashReceipt;
 using Fixy.Application.Features.Payments.Commands.CreatePayment;
@@ -43,6 +44,7 @@ public class PaymentsController : AppControllerBase
         }
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -54,6 +56,7 @@ public class PaymentsController : AppControllerBase
         return ToActionResult(await Mediator.Send(new ConfirmCashReceiptCommand(BookingId)));
     }
 
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [HttpPost(Router.PaymentRouting.PayCommissions)]
     public async Task<IActionResult> PayCommissions([FromBody] PayCommissionCommand command)

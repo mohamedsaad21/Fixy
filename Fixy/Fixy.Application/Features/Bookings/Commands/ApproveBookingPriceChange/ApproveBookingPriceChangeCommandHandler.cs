@@ -25,7 +25,7 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
         if (booking.ServiceRequest.Customer.Id != currentCustomer.Id)
             return Errors.Unauthorized;
 
-        if (booking.Status != ServiceBookingStatus.PriceChangePendingCustomerApproval)
+        if (booking.Status != ServiceBookingStatus.AwaitingPriceChangeApproval)
             return Errors.InvalidBookingState;
 
         if (booking.ProposedPrice == null)

@@ -1,4 +1,5 @@
-﻿using Fixy.Api.Base;
+﻿using Fixy.Api.Attributes;
+using Fixy.Api.Base;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.PriceOffers.Commands.AcceptPriceOffer;
 using Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
@@ -10,6 +11,7 @@ namespace Fixy.Api.Controllers;
 
 public class PriceOffersController : AppControllerBase
 {
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

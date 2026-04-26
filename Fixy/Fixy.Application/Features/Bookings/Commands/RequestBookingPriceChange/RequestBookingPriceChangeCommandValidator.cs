@@ -19,5 +19,6 @@ public class RequestBookingPriceChangeCommandValidator : AbstractValidator<Reque
         RuleFor(x => x.BookingId).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
         RuleFor(x => x.NewProposedPrice).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
             .GreaterThan(0).WithMessage(_stringLocalizer[SharedResourcesKeys.PriceMustBeGreaterThanZero]);
+        RuleFor(x => x.Notes).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
     }
 }

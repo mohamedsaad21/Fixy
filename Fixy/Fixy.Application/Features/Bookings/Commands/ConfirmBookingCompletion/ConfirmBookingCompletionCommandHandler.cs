@@ -22,7 +22,7 @@ public class ConfirmBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
         if (booking.ServiceRequest.Customer.Id != currentCustomer.Id)
             return Errors.Unauthorized;
 
-        if (booking.Status != ServiceBookingStatus.TechnicianCompleted)
+        if (booking.Status != ServiceBookingStatus.AwaitingCustomerConfirmationForCompletion)
             return Errors.InvalidBookingState;
 
         booking.Status = ServiceBookingStatus.AwaitingPayment;

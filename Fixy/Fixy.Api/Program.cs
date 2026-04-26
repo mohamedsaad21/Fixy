@@ -1,4 +1,5 @@
 using Fixy.Api.Extensions;
+using Fixy.Api.Filters;
 using Fixy.Application;
 using Fixy.Infrastructure;
 using Fixy.Infrastructure.Persistence;
@@ -51,6 +52,8 @@ builder.Services.AddCorsPolicy();
 
 // SignalR
 builder.Services.AddSignalR();
+
+builder.Services.AddScoped<TechnicianStatusFilter>();
 
 var app = builder.Build();
 
