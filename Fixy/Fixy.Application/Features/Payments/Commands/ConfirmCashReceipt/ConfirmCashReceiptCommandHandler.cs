@@ -31,7 +31,7 @@ public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashRecei
 
         // 2. Get booking with all related data
         var booking = await _unitOfWork.Bookings.GetTableAsTracking()
-            .Include(b => b.Payment)
+            .Include(b => b.Payment).Include(x => x.Technician).Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(b => b.Id == request.BookingId, cancellationToken);
 
         if (booking == null)
@@ -91,6 +91,8 @@ public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashRecei
 
         // 7. Update booking status
         booking.Status = ServiceBookingStatus.Completed;
+        booking.Technician.CompletedBookings += 1;
+        booking.ServiceRequest.Customer.CompletedBookings += 1;
 
         await _unitOfWork.SaveChangesAsync();
 

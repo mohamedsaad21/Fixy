@@ -3,6 +3,7 @@ using Fixy.Api.Contracts.Routing;
 using Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 using Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
 using Fixy.Application.Features.Admin.Commands.RejectTechnician;
+using Fixy.Application.Features.Admin.Queries.GetCustomers;
 using Fixy.Application.Features.Admin.Queries.GetDashboard;
 using Fixy.Application.Features.Admin.Queries.GetTechnicians;
 using Fixy.Domain.Constants;
@@ -26,6 +27,14 @@ public class AdminController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetTechnicians)]
     public async Task<IActionResult> GetTechnicians([FromQuery] GetTechniciansQuery query)
+    {
+        return ToActionResult(await Mediator.Send(query));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.AdminRouting.GetCustomers)]
+    public async Task<IActionResult> GetCustomers([FromQuery] GetCustomersQuery query)
     {
         return ToActionResult(await Mediator.Send(query));
     }

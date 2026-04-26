@@ -17,6 +17,7 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
             return Errors.Unauthorized;
 
         var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
+            .Include(X => X.Technician)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
@@ -33,6 +34,9 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
 
         booking.TechnicianCancellationReason = request.Reason;
         booking.CancellationNote = request.Notes;
+        booking.Technician.CancelledBookings += 1;
+        booking.Technician.CancellationRate =
+            (double)booking.Technician.CancelledBookings / booking.Technician.TotalBookings * 100;
         await bookingService.CancelBookingAsync(booking, technician.Id);
         // send notification to other user
         var customer = booking.ServiceRequest.Customer;

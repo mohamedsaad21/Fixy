@@ -77,14 +77,14 @@ public static class ServiceRegisteration
                 ClockSkew = TimeSpan.Zero,
             };
             // read token from cookie
-            o.Events = new JwtBearerEvents
-            {
-                OnMessageReceived = context =>
-                {
-                    context.Token = context.Request.Cookies["token"];
-                    return Task.CompletedTask;
-                }
-            };
+            //o.Events = new JwtBearerEvents
+            //{
+            //    OnMessageReceived = context =>
+            //    {
+            //        context.Token = context.Request.Cookies["token"];
+            //        return Task.CompletedTask;
+            //    }
+            //};
         });
 
         //Swagger Gn

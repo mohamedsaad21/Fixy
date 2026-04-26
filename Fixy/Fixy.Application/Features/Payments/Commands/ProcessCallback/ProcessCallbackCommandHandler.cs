@@ -101,7 +101,8 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
         }
 
         // Get booking
-        var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.Technician)
+        var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.Technician).Include(x => x.ServiceRequest)
+            .ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(b => b.Id == payment.ServiceBookingId.Value, cancellationToken);
 
         if (booking == null)
@@ -112,7 +113,8 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
 
         // Update booking status
         booking.Status = ServiceBookingStatus.Completed;
-        booking.Technician.TotalCompletedJobs+=1;
+        booking.Technician.CompletedBookings+=1;
+        booking.ServiceRequest.Customer.CompletedBookings += 1;
 
         Log.Information($"Booking {booking.Id} marked as Paid");
 

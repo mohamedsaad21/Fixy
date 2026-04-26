@@ -101,6 +101,7 @@ public static class Router
         public const string BlockTechnician = prefix + "/block-technician";
         public const string GetDashboard = prefix + "/dashboard";
         public const string GetTechnicians = prefix + "/get-technicians";
+        public const string GetCustomers = prefix + "/get-customers";
     }
     public static class NotificationsRouting
     {

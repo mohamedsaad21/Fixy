@@ -15,7 +15,7 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork) : IReques
         query = request.OrderBy switch
         {
             TechnicianOrdering.AverageRating => query.OrderBy(x => x.AverageRating),
-            TechnicianOrdering.TotalCompletedJobs => query.OrderBy(x => x.TotalCompletedJobs),
+            TechnicianOrdering.TotalCompletedJobs => query.OrderBy(x => x.CompletedBookings),
             TechnicianOrdering.CancellationRate => query.OrderBy(x => x.CancellationRate),
             _ => query
         };
@@ -34,7 +34,7 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork) : IReques
             UserName = x.UserName,
             Email = x.Email,
             Status = x.Status.ToString(),
-            TotalCompletedJobs = x.TotalCompletedJobs,
+            TotalCompletedJobs = x.CompletedBookings,
             CancellationRate = x.CancellationRate,
             AverageRating = x.AverageRating
         }).ToPaginatedListAsync(request.PageNumber, request.PageSize);
