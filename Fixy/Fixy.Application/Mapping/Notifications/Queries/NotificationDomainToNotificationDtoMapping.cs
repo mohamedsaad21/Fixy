@@ -5,9 +5,9 @@ namespace Fixy.Application.Mapping.Notifications.Queries;
 
 public static class NotificationDomainToNotificationDtoMapping
 {
-    public static GetNotificationsDto ToNotificationsDto(this Notification notification)
+    public static GetNotificationsResponse ToGetNotificationsResponse(this Notification notification)
     {
-        return new GetNotificationsDto
+        return new GetNotificationsResponse
         {
             Id = notification.Id,
             Type = notification.Type.ToString(),

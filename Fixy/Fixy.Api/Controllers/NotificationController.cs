@@ -15,10 +15,10 @@ public class NotificationController : AppControllerBase
     //[RedisCache(60)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpGet(Router.NotificationsRouting.List)]
-    public async Task<IActionResult> GetNotifications()
+    [HttpGet(Router.NotificationsRouting.PaginatedList)]
+    public async Task<IActionResult> GetNotifications([FromQuery] GetNotificationsQuery query)
     {
-        return ToActionResult(await Mediator.Send(new GetNotificationsQuery()));
+        return ToActionResult(await Mediator.Send(query));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -109,7 +109,7 @@ public static class Router
     public static class NotificationsRouting
     {
         public const string prefix = Rule + "/Notifications";
-        public const string List = prefix + "/List";
+        public const string PaginatedList = prefix + "/Paginated-List";
         public const string SendNotification = prefix + "/Send-Notification";
         public const string MarkAsRead = prefix + "/Mark-As-Read/{NotificationId}";
         public const string SaveFcmToken = prefix + "/Save-Fcm-Token";

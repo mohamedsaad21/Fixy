@@ -1,6 +1,6 @@
 ﻿namespace Fixy.Application.Features.Notifications.Queries.GetNotifications;
 
-public class GetNotificationsDto
+public class GetNotificationsResponse
 {
     public Guid Id { get; set; }
     public string Title { get; set; }
