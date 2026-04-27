@@ -17,7 +17,7 @@ public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurr
         if (currentUser is not Customer customer)
             return Errors.Unauthorized;
 
-        var booking = await unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest)
+        var booking = await unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest).Include(x => x.Technician)
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.ServiceRequest.CustomerId == customer.Id);
 
         if (booking == null)

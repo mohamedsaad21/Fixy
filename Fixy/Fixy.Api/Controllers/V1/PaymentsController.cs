@@ -29,7 +29,7 @@ public class PaymentsController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpPost(Router.PaymentRouting.Callback)]
-    public async Task<IActionResult> PaymobCallback()
+    public async Task<IActionResult> Callback()
     {
         try
         {

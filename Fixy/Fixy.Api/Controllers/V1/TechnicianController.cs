@@ -4,6 +4,7 @@ using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianProfile;
+using Fixy.Application.Features.Technicians.Queries.GetCustomerProfileForTechnicians;
 using Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
 using Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
 using Fixy.Application.Features.Technicians.Queries.GetTechnicianById;
@@ -36,6 +37,16 @@ public class TechnicianController : AppControllerBase
     public async Task<IActionResult> GetTechnicianProfileForCustomers([FromRoute] Guid TechnicianId)
     {
         return ToActionResult(await Mediator.Send(new GetTechnicianProfileForCustomersQuery(TechnicianId)));
+    }
+
+    [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.TechnicianRouting.GetCustomerProfileForTechnicians)]
+    public async Task<IActionResult> GetCustomerProfileForTechnicians([FromRoute] Guid CustomerId)
+    {
+        return ToActionResult(await Mediator.Send(new GetCustomerProfileForTechniciansQuery(CustomerId)));
     }
 
     [RequireActiveTechnician]
