@@ -1,4 +1,5 @@
-﻿using Fixy.Domain.Enums;
+﻿using Fixy.Domain.Constants;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -25,6 +26,12 @@ public class TechnicianStatusFilter : IAsyncActionFilter
             {
                 message = "Unauthorized"
             });
+            return;
+        }
+
+        if (context.HttpContext.User.IsInRole(Roles.Admin))
+        {
+            await next();
             return;
         }
 

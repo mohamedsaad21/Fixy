@@ -16,6 +16,7 @@ public class ServiceBooking : BaseEntity
     public decimal? ProposedPrice { get; set; }
     public DateTime? PriceChangeRequestedAt { get; set; }
     public string? PriceChangeNotes { get; set; }
+    public bool HasRequestedPriceChange { get; set; }
     public DateTime ScheduledDateTime { get; set; }
     public ServiceBookingStatus Status { get; set; } = ServiceBookingStatus.InProgress;
     public string? CompletionNotes { get; set; }
@@ -34,5 +35,5 @@ public class ServiceBooking : BaseEntity
     public CustomerFeedback CustomerFeedback { get; set; }
     public TechnicianFeedback TechnicianFeedback { get; set; }
     public Payout Payout { get; set; }
-    public virtual List<ServiceBookingImage> ServiceBookingImages { get; set; }
+    public List<ServiceBookingImage> ServiceBookingImages { get; set; }
 }

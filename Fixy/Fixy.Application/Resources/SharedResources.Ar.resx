@@ -393,4 +393,7 @@
   <data name="CustomerAlreadyBlocked" xml:space="preserve">
     <value>العميل محظور بالفعل</value>
   </data>
+  <data name="PriceChangeAlreadyRequested" xml:space="preserve">
+    <value>يمكنك طلب تغيير السعر مرة واحدة فقط لكل حجز.</value>
+  </data>
 </root>

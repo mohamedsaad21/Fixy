@@ -4,6 +4,8 @@ using Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 using Fixy.Application.Features.Admin.Commands.BlockCustomer;
 using Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
 using Fixy.Application.Features.Admin.Commands.RejectTechnician;
+using Fixy.Application.Features.Admin.Queries.GetBookingById;
+using Fixy.Application.Features.Admin.Queries.GetBookings;
 using Fixy.Application.Features.Admin.Queries.GetCustomers;
 using Fixy.Application.Features.Admin.Queries.GetDashboard;
 using Fixy.Application.Features.Admin.Queries.GetTechnicians;
@@ -78,5 +80,22 @@ public class AdminController : AppControllerBase
     public async Task<IActionResult> BlockCustomer([FromForm] BlockCustomerCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.AdminRouting.GetBookings)]
+    public async Task<IActionResult> GetBookings([FromQuery] GetBookingsQuery query)
+    {
+        return ToActionResult(await Mediator.Send(query));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.AdminRouting.GetBookingById)]
+    public async Task<IActionResult> GetBookings([FromRoute] Guid Id)
+    {
+        return ToActionResult(await Mediator.Send(new GetBookingByIdQuery(Id)));
     }
 }

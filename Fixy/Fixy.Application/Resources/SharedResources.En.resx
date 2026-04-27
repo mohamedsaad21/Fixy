@@ -393,4 +393,7 @@
   <data name="CustomerAlreadyBlocked" xml:space="preserve">
     <value>Customer is already blocked</value>
   </data>
+  <data name="PriceChangeAlreadyRequested" xml:space="preserve">
+    <value>You can only request a price change once per booking.</value>
+  </data>
 </root>

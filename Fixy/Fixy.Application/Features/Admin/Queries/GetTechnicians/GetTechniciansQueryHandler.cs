@@ -12,11 +12,14 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork) : IReques
     {
         var query = unitOfWork.Technicians.GetTableNoTracking();
 
-        query = request.OrderBy switch
+        query = (request.OrderBy, request.SortOrder) switch
         {
-            TechnicianOrdering.AverageRating => query.OrderBy(x => x.AverageRating),
-            TechnicianOrdering.TotalCompletedJobs => query.OrderBy(x => x.CompletedBookings),
-            TechnicianOrdering.CancellationRate => query.OrderBy(x => x.CancellationRate),
+            (TechnicianOrdering.AverageRating, SortOrderOptions.ASC) => query.OrderBy(x => x.AverageRating),
+            (TechnicianOrdering.AverageRating, SortOrderOptions.DESC) => query.OrderByDescending(x => x.AverageRating),
+            (TechnicianOrdering.TotalCompletedJobs, SortOrderOptions.ASC) => query.OrderBy(x => x.CompletedBookings),
+            (TechnicianOrdering.TotalCompletedJobs, SortOrderOptions.DESC) => query.OrderByDescending(x => x.CompletedBookings),
+            (TechnicianOrdering.CancellationRate, SortOrderOptions.ASC) => query.OrderBy(x => x.CancellationRate),
+            (TechnicianOrdering.CancellationRate, SortOrderOptions.DESC) => query.OrderByDescending(x => x.CancellationRate),
             _ => query
         };
 
