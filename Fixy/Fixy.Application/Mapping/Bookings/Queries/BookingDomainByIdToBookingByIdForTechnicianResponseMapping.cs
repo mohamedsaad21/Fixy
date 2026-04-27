@@ -13,6 +13,7 @@ public static class BookingDomainByIdToBookingByIdForTechnicianResponseMapping
             Status = booking.Status.ToString(),
             AgreedPrice = booking.AgreedPrice,
             CustomerId = booking.ServiceRequest.CustomerId,
+            CustomerName = booking.ServiceRequest.Customer.FirstName + " " + booking.ServiceRequest.Customer.LastName,
             CreatedAt = booking.CreatedAt
         };
     }

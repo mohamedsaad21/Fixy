@@ -56,6 +56,8 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<TechnicianStatusFilter>();
 builder.Services.AddScoped<CustomerStatusFilter>();
 
+builder.Services.AddVersioning();
+
 var app = builder.Build();
 
 await app.UseApiPipeline();

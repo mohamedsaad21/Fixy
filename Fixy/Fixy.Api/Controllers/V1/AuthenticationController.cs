@@ -1,5 +1,6 @@
-﻿using Fixy.Api.Base;
+﻿using Asp.Versioning;
 using Fixy.Api.Contracts.Routing;
+using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Authentication.Commands.ChangePassword;
 using Fixy.Application.Features.Authentication.Commands.ConfirmEmail;
 using Fixy.Application.Features.Authentication.Commands.DisableTwoFactor;
@@ -17,8 +18,9 @@ using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fixy.Api.Controllers;
+namespace Fixy.Api.Controllers.V1;
 
+[ApiVersion("1.0")]
 public class AuthenticationController : AppControllerBase
 {
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -3,7 +3,7 @@
 public static class Router
 {
     public const string root = "Api";
-    public const string version = "v1";
+    public const string version = "v{version:apiVersion}";
     public const string Rule = root + "/" + version;
 
     public const string SingleRoute = "/{Id}";

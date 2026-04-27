@@ -1,14 +1,16 @@
-﻿using Fixy.Api.Attributes;
-using Fixy.Api.Base;
+﻿using Asp.Versioning;
+using Fixy.Api.Attributes;
 using Fixy.Api.Contracts.Routing;
+using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.PriceOffers.Commands.AcceptPriceOffer;
 using Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fixy.Api.Controllers;
+namespace Fixy.Api.Controllers.V1;
 
+[ApiVersion("1.0")]
 public class PriceOffersController : AppControllerBase
 {
     [Authorize(Roles = Roles.Technician)]

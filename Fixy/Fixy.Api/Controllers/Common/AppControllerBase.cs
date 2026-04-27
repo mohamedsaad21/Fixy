@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Localization;
 using System.Net;
 
-namespace Fixy.Api.Base;
+namespace Fixy.Api.Controllers.Common;
 
 [ApiController]
 [EnableRateLimiting("sliding")]

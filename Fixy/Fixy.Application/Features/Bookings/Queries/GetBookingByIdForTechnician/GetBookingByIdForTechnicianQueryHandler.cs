@@ -17,7 +17,7 @@ public sealed class GetBookingByIdForTechnicianQueryHandler(IUnitOfWork unitOfWo
         if (currentUser is not Technician technician)
             return Errors.Unauthorized;
 
-        var booking = await unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest)
+        var booking = await unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == request.Id && x.TechnicianId == technician.Id);
 
         if (booking == null)

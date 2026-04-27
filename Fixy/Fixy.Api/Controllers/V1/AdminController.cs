@@ -1,5 +1,6 @@
-﻿using Fixy.Api.Base;
+﻿using Asp.Versioning;
 using Fixy.Api.Contracts.Routing;
+using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 using Fixy.Application.Features.Admin.Commands.BlockCustomer;
 using Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
@@ -13,8 +14,9 @@ using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Fixy.Api.Controllers;
+namespace Fixy.Api.Controllers.V1;
 
+[ApiVersion("1.0")]
 [Authorize(Roles = Roles.Admin)]
 public class AdminController : AppControllerBase
 {
