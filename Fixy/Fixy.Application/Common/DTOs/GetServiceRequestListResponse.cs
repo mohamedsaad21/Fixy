@@ -1,6 +1,4 @@
-﻿using Fixy.Domain.Enums;
-
-namespace Fixy.Application.Common.DTOs;
+﻿namespace Fixy.Application.Common.DTOs;
 
 public class GetServiceRequestListResponse
 {
@@ -10,5 +8,5 @@ public class GetServiceRequestListResponse
     public DateTime ScheduledDateTime { get; set; }
     public List<string> ServiceCategories { get; set; }
     public AddressDto Address { get; set; }
-    public ServiceRequestStatus Status { get; set; }
+    public string Status { get; set; }
 }

@@ -35,15 +35,20 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
         booking.ProposedPrice = null;
         booking.Status = ServiceBookingStatus.InProgress;
 
-        await unitOfWork.SaveChangesAsync();
-
         var technician = booking.Technician;
-        await notificationService.SendNotificationToUserAsync(technician.Id, new
+
+        var payload = new
         {
             type = "PRICE_CHANGE_APPROVED",
             message = $"The customer has approved the price change. The new agreed price is {booking.AgreedPrice}.",
             createdAt = DateTime.UtcNow
-        });
+        };
+
+        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+
+        await unitOfWork.SaveChangesAsync();
+
+        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
 
         if (!string.IsNullOrEmpty(technician.FcmToken))
         {

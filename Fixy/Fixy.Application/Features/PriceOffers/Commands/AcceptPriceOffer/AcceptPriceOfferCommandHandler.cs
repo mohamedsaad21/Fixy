@@ -36,15 +36,20 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
         serviceRequest.Customer.TotalBookings += 1;
         priceOffer.Technician.TotalBookings += 1;
         
-        await unitOfWork.SaveChangesAsync();
-
         var technician = priceOffer.Technician;
-        await notificationService.SendNotificationToUserAsync(technician.Id, new
+
+        var payload = new
         {
             type = "PRICE_OFFER_ACCEPTED",
             message = $"Your price offer of {priceOffer.Price} has been accepted! A booking has been created for {booking.ScheduledDateTime:f}.",
             createdAt = DateTime.UtcNow
-        });
+        };
+
+        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+
+        await unitOfWork.SaveChangesAsync();
+
+        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
 
         if (!string.IsNullOrEmpty(technician.FcmToken))
         {

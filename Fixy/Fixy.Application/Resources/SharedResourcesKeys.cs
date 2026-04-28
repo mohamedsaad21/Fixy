@@ -102,4 +102,25 @@ public class SharedResourcesKeys
     public const string CustomerNotFound = "CustomerNotFound";
     public const string CustomerAlreadyBlocked = "CustomerAlreadyBlocked";
     public const string PriceChangeAlreadyRequested = "PriceChangeAlreadyRequested";
+
+    // Enums
+    public const string ServiceRequestStatus_Pending = "ServiceRequestStatus_Pending";
+    public const string ServiceRequestStatus_Assigned = "ServiceRequestStatus_Assigned";
+    public const string ServiceRequestStatus_Cancelled = "ServiceRequestStatus_Cancelled";
+
+
+    public const string ServiceBookingStatus_InProgress = "ServiceBookingStatus_InProgress";
+    public const string ServiceBookingStatus_AwaitingPriceChangeApproval = "ServiceBookingStatus_AwaitingPriceChangeApproval";
+    public const string ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion = "ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion";
+    public const string ServiceBookingStatus_AwaitingPayment = "ServiceBookingStatus_AwaitingPayment";
+    public const string ServiceBookingStatus_Completed = "ServiceBookingStatus_Completed";
+    public const string ServiceBookingStatus_Cancelled = "ServiceBookingStatus_Cancelled";
+    public const string ServiceBookingStatus_Disputed = "ServiceBookingStatus_Disputed";
+
+
+    public const string TechnicianStatus_PendingApproval = "TechnicianStatus_PendingApproval";
+    public const string TechnicianStatus_Approved = "TechnicianStatus_Approved";
+    public const string TechnicianStatus_Rejected = "TechnicianStatus_Rejected";
+    public const string TechnicianStatus_Blocked = "TechnicianStatus_Blocked";
+
 }

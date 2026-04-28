@@ -396,4 +396,46 @@
   <data name="PriceChangeAlreadyRequested" xml:space="preserve">
     <value>يمكنك طلب تغيير السعر مرة واحدة فقط لكل حجز.</value>
   </data>
+	<data name="ServiceRequestStatus_Pending" xml:space="preserve">
+    <value>قيد الانتظار</value>
+  </data>
+	<data name="ServiceRequestStatus_Assigned" xml:space="preserve">
+    <value>تم تعيين فني للطلب</value>
+  </data>
+	<data name="ServiceRequestStatus_Cancelled" xml:space="preserve">
+    <value>ملغي</value>
+  </data>
+	<data name="ServiceBookingStatus_InProgress" xml:space="preserve">
+    <value>قيد التنفيذ</value>
+  </data>
+	<data name="ServiceBookingStatus_AwaitingPriceChangeApproval" xml:space="preserve">
+    <value>في انتظار الموافقة على تغيير السعر</value>
+  </data>
+	<data name="ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion" xml:space="preserve">
+    <value>في انتظار تأكيد العميل على الإكمال</value>
+  </data>
+	<data name="ServiceBookingStatus_AwaitingPayment" xml:space="preserve">
+    <value>في انتظار الدفع</value>
+  </data>
+	<data name="ServiceBookingStatus_Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+	<data name="ServiceBookingStatus_Cancelled" xml:space="preserve">
+    <value>ملغي</value>
+  </data>
+	<data name="ServiceBookingStatus_Disputed" xml:space="preserve">
+    <value>قيد النزاع</value>
+  </data>
+	<data name="TechnicianStatus_PendingApproval" xml:space="preserve">
+    <value>قيد المراجعة</value>
+  </data>
+	<data name="TechnicianStatus_Approved" xml:space="preserve">
+    <value>تمت الموافقة</value>
+  </data>
+	<data name="TechnicianStatus_Rejected" xml:space="preserve">
+    <value>مرفوض</value>
+  </data>
+	<data name="TechnicianStatus_Blocked" xml:space="preserve">
+    <value>محظور</value>
+  </data>
 </root>

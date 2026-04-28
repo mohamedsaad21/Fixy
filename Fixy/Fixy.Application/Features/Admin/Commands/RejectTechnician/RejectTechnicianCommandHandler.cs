@@ -23,15 +23,19 @@ public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, INoti
         technician.RejectionReason = request.Reason;
         technician.RejectedAt = DateTime.UtcNow;
 
-        await unitOfWork.SaveChangesAsync();
-
-        await notificationService.SendNotificationToUserAsync(technician.Id, new
+        var payload = new
         {
             type = "TECHNICIAN_REJECTED",
             message = "Application Rejected",
             Message = $"Reason: {request.Reason}",
             CreatedAt = DateTime.UtcNow
-        });
+        };
+
+        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+
+        await unitOfWork.SaveChangesAsync();
+
+        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
 
         if (!string.IsNullOrEmpty(technician.FcmToken))
         {

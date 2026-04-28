@@ -40,15 +40,21 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
         await bookingService.CancelBookingAsync(booking, technician.Id);
         // send notification to other user
         var customer = booking.ServiceRequest.Customer;
+
+        var payload = new
+        {
+            type = "BOOKING_CANCELLED",
+            Message = "Technician cancelled the booking",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
+
+        await unitOfWork.SaveChangesAsync();
         
         if(customer != null)
         {
-            await notificationService.SendNotificationToUserAsync(customer.Id, new
-            {
-                type = "BOOKING_CANCELLED",
-                Message = "Technician cancelled the booking",
-                CreatedAt = DateTime.UtcNow
-            });
+            await notificationService.SendNotificationToUserAsync(customer.Id, payload);
             if (!string.IsNullOrEmpty(customer.FcmToken))
             {
                 await notificationService.SendPushNotificationAsync(

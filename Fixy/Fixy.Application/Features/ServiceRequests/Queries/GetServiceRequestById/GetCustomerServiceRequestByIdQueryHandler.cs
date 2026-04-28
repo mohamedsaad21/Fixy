@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using Fixy.Application.Bases;
+using Fixy.Application.Common.Helpers;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
+using Fixy.Application.Resources;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 
-public sealed class GetCustomerServiceRequestByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetCustomerServiceRequestByIdQuery, Result<GetCustomerServiceRequestByIdResponse>>
+public sealed class GetCustomerServiceRequestByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetCustomerServiceRequestByIdQuery, Result<GetCustomerServiceRequestByIdResponse>>
 {
     public async Task<Result<GetCustomerServiceRequestByIdResponse>> Handle(GetCustomerServiceRequestByIdQuery request, CancellationToken cancellationToken)
     {
@@ -20,6 +23,7 @@ public sealed class GetCustomerServiceRequestByIdQueryHandler(IUnitOfWork unitOf
             return Errors.ServiceRequestNotFound;
 
         var serviceRequestDto = mapper.Map<GetCustomerServiceRequestByIdResponse>(serviceRequest);
+        serviceRequestDto.Status = EnumLocalizer.Localize(serviceRequest.Status, localizer);
         return serviceRequestDto;
     }
 }

@@ -21,7 +21,5 @@ public class BookingService(IUnitOfWork unitOfWork) : IBookingService
 
         if (conversation != null)
             conversation.IsClosed = true;
-
-        await unitOfWork.SaveChangesAsync();
     }
 }

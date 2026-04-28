@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -41,15 +42,20 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
         booking.Status = ServiceBookingStatus.AwaitingPriceChangeApproval;
         booking.HasRequestedPriceChange = true;
 
-        await unitOfWork.SaveChangesAsync();
-
         var customer = booking.ServiceRequest.Customer;
-        await notificationService.SendNotificationToUserAsync(customer.Id, new
+
+        var payload = new
         {
             type = "PRICE_CHANGE_REQUESTED",
             message = $"Your technician has requested a price change to {request.NewProposedPrice}. Please review and approve or reject the new price.",
             createdAt = DateTime.UtcNow
-        });
+        };
+
+        await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
+
+        await unitOfWork.SaveChangesAsync();
+
+        await notificationService.SendNotificationToUserAsync(customer.Id, payload);
 
         if (!string.IsNullOrEmpty(customer.FcmToken))
         {

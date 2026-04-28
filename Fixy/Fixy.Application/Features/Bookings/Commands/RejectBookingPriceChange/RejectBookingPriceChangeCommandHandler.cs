@@ -29,15 +29,20 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
         booking.ProposedPrice = null;
         booking.Status = ServiceBookingStatus.InProgress;
 
-        await unitOfWork.SaveChangesAsync();
-
         var technician = booking.Technician;
-        await notificationService.SendNotificationToUserAsync(technician.Id, new
+
+        var payload = new
         {
             type = "PRICE_CHANGE_REJECTED",
             message = $"The customer has rejected the price change. The original agreed price of {booking.AgreedPrice} remains.",
             createdAt = DateTime.UtcNow
-        });
+        };
+
+        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+
+        await unitOfWork.SaveChangesAsync();
+
+        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
 
         if (!string.IsNullOrEmpty(technician.FcmToken))
         {

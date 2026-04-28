@@ -1,5 +1,4 @@
 ﻿using Fixy.Application.Common.DTOs;
-using Fixy.Domain.Enums;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
 
@@ -11,5 +10,5 @@ public class GetTechnicianServiceRequestByIdResponse
     public DateTime ScheduledDateTime { get; set; }
     public List<string> ServiceCategories { get; set; }
     public AddressDto Address { get; set; }
-    public ServiceRequestStatus Status { get; set; }
+    public string Status { get; set; }
 }

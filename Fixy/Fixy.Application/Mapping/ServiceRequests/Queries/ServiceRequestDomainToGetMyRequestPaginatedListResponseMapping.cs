@@ -1,13 +1,15 @@
 ﻿using Fixy.Application.Common.DTOs;
+using Fixy.Application.Common.Helpers;
 using Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
-using Fixy.Domain.Enums;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Mapping.ServiceRequests.Queries;
 
 public static class ServiceRequestDomainToGetMyRequestPaginatedListResponseMapping
 {
-    public static GetMyRequestPaginatedListResponse ToGetMyRequestPaginatedListResponse(this ServiceRequest serviceRequest)
+    public static GetMyRequestPaginatedListResponse ToGetMyRequestPaginatedListResponse(this ServiceRequest serviceRequest, IStringLocalizer<SharedResources> localizer)
     {
         return new GetMyRequestPaginatedListResponse
         {
@@ -17,7 +19,7 @@ public static class ServiceRequestDomainToGetMyRequestPaginatedListResponseMappi
             ScheduledDateTime = serviceRequest.ScheduledDateTime,
             ServiceCategories = serviceRequest.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList(),
             Address = new AddressDto(serviceRequest.Address.Country, serviceRequest.Address.City, serviceRequest.Address.Area, serviceRequest.Address.Street, serviceRequest.Address.BuildingNumber, serviceRequest.Address.Latitude, serviceRequest.Address.Longitude),
-            Status = (ServiceRequestStatus)serviceRequest.Status
+            Status = EnumLocalizer.Localize(serviceRequest.Status, localizer)
         };
     }
 }

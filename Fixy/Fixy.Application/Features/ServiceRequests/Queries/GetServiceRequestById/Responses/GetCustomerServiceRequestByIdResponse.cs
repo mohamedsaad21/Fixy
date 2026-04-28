@@ -11,7 +11,7 @@ public class GetCustomerServiceRequestByIdResponse
     public DateTime ScheduledDateTime { get; set; }
     public List<string> ServiceCategories { get; set; }
     public AddressDto Address { get; set; }
-    public ServiceRequestStatus Status { get; set; }
+    public string Status { get; set; }
     public List<PriceOfferDto> PriceOffers { get; set; }
     public List<ImageDto> Images { get; set; }
 }

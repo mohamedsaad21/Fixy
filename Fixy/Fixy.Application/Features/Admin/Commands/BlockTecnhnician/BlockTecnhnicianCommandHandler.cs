@@ -29,18 +29,20 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
         technician.BlockedAt = DateTime.UtcNow;
         technician.BlockedBy = currentUser.Id;
 
+        var payload = new
+        {
+            type = "TECHNICIAN_BLOCKED",
+            Title = "Account Blocked",
+            Message = $"Reason: {request.Reason}",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+
         await unitOfWork.SaveChangesAsync();
 
         // Notify technician
-        await notificationService.SendNotificationToUserAsync(
-            technician.Id,
-            new
-            {
-                type = "TECHNICIAN_BLOCKED",
-                Title = "Account Blocked",
-                Message = $"Reason: {request.Reason}",
-                CreatedAt = DateTime.UtcNow
-            });
+        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
 
         if (!string.IsNullOrEmpty(technician.FcmToken))
         {

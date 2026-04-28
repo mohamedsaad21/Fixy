@@ -1,14 +1,16 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.Bookings.Queries;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Bookings.Queries.GetBookingByIdForCustomer;
 
-public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<GetBookingByIdForCustomerQuery, Result<GetBookingByIdForCustomerResponse>>
+public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetBookingByIdForCustomerQuery, Result<GetBookingByIdForCustomerResponse>>
 {
     public async Task<Result<GetBookingByIdForCustomerResponse>> Handle(GetBookingByIdForCustomerQuery request, CancellationToken cancellationToken)
     {
@@ -23,7 +25,7 @@ public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurr
         if (booking == null)
             return Errors.BookingNotFound;
 
-        var result = booking.ToGetBookingByIdForCustomerResponse();
+        var result = booking.ToGetBookingByIdForCustomerResponse(localizer);
         return result;
     }
 }

@@ -396,4 +396,46 @@
   <data name="PriceChangeAlreadyRequested" xml:space="preserve">
     <value>You can only request a price change once per booking.</value>
   </data>
+	<data name="ServiceRequestStatus_Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+	<data name="ServiceRequestStatus_Assigned" xml:space="preserve">
+    <value>Assigned</value>
+  </data>
+	<data name="ServiceRequestStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+	<data name="ServiceBookingStatus_InProgress" xml:space="preserve">
+    <value>In Progress</value>
+  </data>
+	<data name="ServiceBookingStatus_AwaitingPriceChangeApproval" xml:space="preserve">
+    <value>Awaiting Price Change Approval</value>
+  </data>
+	<data name="ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion" xml:space="preserve">
+    <value>Awaiting Customer Confirmation</value>
+  </data>
+	<data name="ServiceBookingStatus_AwaitingPayment" xml:space="preserve">
+    <value>Awaiting Payment</value>
+  </data>
+	<data name="ServiceBookingStatus_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+	<data name="ServiceBookingStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+	<data name="ServiceBookingStatus_Disputed" xml:space="preserve">
+    <value>Disputed</value>
+  </data>
+	<data name="TechnicianStatus_PendingApproval" xml:space="preserve">
+    <value>Pending Approval</value>
+  </data>
+	<data name="TechnicianStatus_Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+	<data name="TechnicianStatus_Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+	<data name="TechnicianStatus_Blocked" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
 </root>

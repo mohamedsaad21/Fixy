@@ -41,15 +41,20 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
         booking.Status = ServiceBookingStatus.AwaitingCustomerConfirmationForCompletion;
         booking.CompletedAt = DateTime.UtcNow;
 
-        await unitOfWork.SaveChangesAsync();
-
         var customer = booking.ServiceRequest.Customer;
-        await notificationService.SendNotificationToUserAsync(customer.Id, new
+
+        var payload = new
         {
             type = "BOOKING_COMPLETED",
             message = "Your booking has been completed. Please confirm that the work has been completed.",
             createdAt = DateTime.UtcNow
-        });
+        };
+
+        await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
+
+        await unitOfWork.SaveChangesAsync();
+
+        await notificationService.SendNotificationToUserAsync(customer.Id, payload);
 
         if (!string.IsNullOrEmpty(customer.FcmToken))
         {
