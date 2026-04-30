@@ -483,4 +483,73 @@
   <data name="TechnicianLocationNotSet" xml:space="preserve">
     <value>موقع الفني مش محدد. ياريت تحدث بياناتك.</value>
   </data>
+  <data name="NotificationPriceOfferAcceptedTitle" xml:space="preserve">
+    <value>تم قبول العرض!</value>
+  </data>
+  <data name="NotificationPriceOfferAcceptedBody" xml:space="preserve">
+    <value>لقد وافق العميل على عرض السعر الخاص بك. يمكنك الآن البدء في العمل.</value>
+  </data>
+  <data name="NotificationBookingCancelledByCustomerTitle" xml:space="preserve">
+    <value>تم إلغاء الحجز</value>
+  </data>
+  <data name="NotificationBookingCancelledByCustomerBody" xml:space="preserve">
+    <value>لقد قام العميل بإلغاء الحجز. هذا الطلب لم يعد نشطاً الآن.</value>
+  </data>
+  <data name="NotificationBookingCancelledByTechnicianTitle" xml:space="preserve">
+    <value>تم إلغاء الحجز</value>
+  </data>
+  <data name="NotificationBookingCancelledByTechnicianBody" xml:space="preserve">
+    <value>لقد قام الفني بإلغاء الحجز الخاص بك.</value>
+  </data>
+  <data name="NotificationPriceChangeRequestedTitle" xml:space="preserve">
+    <value>طلب تغيير السعر</value>
+  </data>
+  <data name="NotificationPriceChangeRequestedBody" xml:space="preserve">
+    <value>لقد طلب الفني تغيير سعر الحجز. يرجى مراجعة الطلب والرد عليه.</value>
+  </data>
+  <data name="NotificationPriceChangeApprovedTitle" xml:space="preserve">
+    <value>تمت الموافقة على تغيير السعر</value>
+  </data>
+  <data name="NotificationPriceChangeApprovedBody" xml:space="preserve">
+    <value>لقد وافق العميل على السعر الجديد. يمكنك الآن المتابعة في تقديم الخدمة.</value>
+  </data>
+  <data name="NotificationPriceChangeRejectedTitle" xml:space="preserve">
+    <value>تم رفض تغيير السعر</value>
+  </data>
+  <data name="NotificationPriceChangeRejectedBody" xml:space="preserve">
+    <value>لقد رفض العميل تغيير السعر. يرجى مراجعة تفاصيل الحجز للسعر الأصلي أو التواصل مع العميل.</value>
+  </data>
+  <data name="NotificationTechnicianCompletedTitle" xml:space="preserve">
+    <value>اكتملت الخدمة</value>
+  </data>
+  <data name="NotificationTechnicianCompletedBody" xml:space="preserve">
+    <value>لقد قام الفني بإنهاء العمل. يرجى تأكيد الإكمال لإغلاق الطلب نهائياً.</value>
+  </data>
+  <data name="NotificationBookingCompletedTitle" xml:space="preserve">
+    <value>اكتمل الحجز بنجاح</value>
+  </data>
+  <data name="NotificationBookingCompletedBody" xml:space="preserve">
+    <value>تم تأكيد الدفع بنجاح. الحجز مكتمل الآن وقد تمت إضافة المبلغ إلى رصيدك.</value>
+  </data>
+  <data name="NotificationTechnicianRejectedTitle" xml:space="preserve">
+    <value>لم تتم الموافقة على الحساب</value>
+  </data>
+  <data name="NotificationTechnicianRejectedBody" xml:space="preserve">
+    <value>للأسف، تم رفض طلب تفعيل حسابك. يرجى التواصل مع الدعم الفني لمزيد من التفاصيل أو لتحديث بياناتك.</value>
+  </data>
+  <data name="NotificationTechnicianBlockedTitle" xml:space="preserve">
+    <value>تم حظر الحساب</value>
+  </data>
+  <data name="NotificationTechnicianBlockedBody" xml:space="preserve">
+    <value>لقد تم حظر حسابك لمخالفة شروط الخدمة. يرجى التواصل مع الدعم الفني لمزيد من المعلومات.</value>
+  </data>
+  <data name="NotificationType_PriceOfferReceived" xml:space="preserve">
+    <value>تم استلام عرض سعر جديد</value>
+  </data>
+  <data name="NotificationPriceOfferReceivedTitle" xml:space="preserve">
+    <value>عرض سعر جديد</value>
+  </data>
+  <data name="NotificationPriceOfferReceivedBody" xml:space="preserve">
+    <value>لقد تلقيت عرض سعر جديد لطلب الخدمة الخاص بك. اضغط لمشاهدة التفاصيل.</value>
+  </data>
 </root>

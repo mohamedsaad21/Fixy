@@ -1,7 +1,9 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.PriceOffers.Commands;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -28,33 +30,16 @@ public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
         priceOffer.TechnicianId = technician.Id;
 
         serviceRequest.PriceOffers.Add(priceOffer);
-        await unitOfWork.SaveChangesAsync();
 
         var customer = serviceRequest.Customer;
-        await notificationService.SendNotificationToUserAsync(customer.Id, new
-        {
-            type = "PRICE_OFFER_RECEIVED",
-            message = $"You have received a new price offer of {priceOffer.Price} for your service request. Review and accept or reject it.",
-            createdAt = DateTime.UtcNow
-        });
 
-        if (!string.IsNullOrEmpty(customer.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: customer.FcmToken,
-                title: "New Price Offer Received",
-                body: $"You have received a new price offer of {priceOffer.Price} for your service request. Review and accept or reject it.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "PRICE_OFFER_RECEIVED" },
-                    { "priceOfferId", priceOffer.Id.ToString() },
-                    { "serviceRequestId", serviceRequest.Id.ToString() },
-                    { "price", priceOffer.Price.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
-
+        await notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.PriceOfferReceived,
+            SharedResourcesKeys.NotificationPriceOfferReceivedTitle,
+            SharedResourcesKeys.NotificationPriceOfferReceivedBody
+        );
+        await unitOfWork.SaveChangesAsync();
         return priceOffer.Id;
     }
 }

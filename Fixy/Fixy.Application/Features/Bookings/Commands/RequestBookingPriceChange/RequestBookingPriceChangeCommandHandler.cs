@@ -1,6 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
-using Fixy.Domain.Entities;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -44,34 +44,13 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         var customer = booking.ServiceRequest.Customer;
 
-        var payload = new
-        {
-            type = NotificationType.PriceChangeRequested,
-            message = $"Your technician has requested a price change to {request.NewProposedPrice}. Please review and approve or reject the new price.",
-            createdAt = DateTime.UtcNow
-        };
-
-        //await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
-
+        await notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.PriceChangeRequested,
+            SharedResourcesKeys.NotificationPriceChangeRequestedTitle,
+            SharedResourcesKeys.NotificationPriceChangeRequestedBody
+        );
         await unitOfWork.SaveChangesAsync();
-
-        await notificationService.SendNotificationToUserAsync(customer.Id, payload);
-
-        if (!string.IsNullOrEmpty(customer.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: customer.FcmToken,
-                title: "Price Change Requested",
-                body: $"Your technician has requested a price change to {request.NewProposedPrice}. Please review and approve or reject the new price.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "PRICE_CHANGE_REQUESTED" },
-                    { "bookingId", booking.Id.ToString() },
-                    { "newProposedPrice", request.NewProposedPrice.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
         return Result.Success();
     }
 }

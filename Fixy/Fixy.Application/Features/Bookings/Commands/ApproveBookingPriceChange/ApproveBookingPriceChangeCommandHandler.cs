@@ -1,6 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
-using Fixy.Application.Features.Bookings.Commands.MarkBookingCompleted;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -37,34 +37,14 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         var technician = booking.Technician;
 
-        var payload = new
-        {
-            type = NotificationType.PriceChangeApproved,
-            message = $"The customer has approved the price change. The new agreed price is {booking.AgreedPrice}.",
-            createdAt = DateTime.UtcNow
-        };
-
-        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
-
+        await notificationService.SendFullNotificationAsync(
+            technician,
+            NotificationType.PriceChangeApproved,
+            SharedResourcesKeys.NotificationPriceChangeApprovedTitle,
+            SharedResourcesKeys.NotificationPriceChangeApprovedBody
+        );
         await unitOfWork.SaveChangesAsync();
 
-        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
-
-        if (!string.IsNullOrEmpty(technician.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: technician.FcmToken,
-                title: "Price Change Approved",
-                body: $"The customer has approved the price change. The new agreed price is {booking.AgreedPrice}.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "PRICE_CHANGE_APPROVED" },
-                    { "bookingId", booking.Id.ToString() },
-                    { "agreedPrice", booking.AgreedPrice.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
         return Result.Success();
     }
 }

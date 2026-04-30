@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -31,34 +32,13 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
 
         var technician = booking.Technician;
 
-        var payload = new
-        {
-            type = NotificationType.PriceChangeRejected,
-            message = $"The customer has rejected the price change. The original agreed price of {booking.AgreedPrice} remains.",
-            createdAt = DateTime.UtcNow
-        };
-
-        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
-
+        await notificationService.SendFullNotificationAsync(
+            technician,
+            NotificationType.PriceChangeRejected,
+            SharedResourcesKeys.NotificationPriceChangeRejectedTitle,
+            SharedResourcesKeys.NotificationPriceChangeRejectedBody
+        );
         await unitOfWork.SaveChangesAsync();
-
-        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
-
-        if (!string.IsNullOrEmpty(technician.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: technician.FcmToken,
-                title: "Price Change Rejected",
-                body: $"The customer has rejected the price change. The original agreed price of {booking.AgreedPrice} remains.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "PRICE_CHANGE_REJECTED" },
-                    { "bookingId", booking.Id.ToString() },
-                    { "agreedPrice", booking.AgreedPrice.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
         return Result.Success();
     }
 }

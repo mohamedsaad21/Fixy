@@ -1,14 +1,17 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.PriceOffers.Commands.AcceptPriceOffer;
 
-public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<AcceptPriceOfferCommand, Result<Guid>>
+public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
+    INotificationService notificationService, IStringLocalizer<SharedResources> localizer) : IRequestHandler<AcceptPriceOfferCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(AcceptPriceOfferCommand request, CancellationToken cancellationToken)
     {
@@ -38,36 +41,13 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
         
         var technician = priceOffer.Technician;
 
-        var payload = new
-        {
-            type = NotificationType.PriceOfferAccepted,
-            message = $"Your price offer of {priceOffer.Price} has been accepted! A booking has been created for {booking.ScheduledDateTime:f}.",
-            createdAt = DateTime.UtcNow
-        };
-
-        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
-
+        await notificationService.SendFullNotificationAsync(
+            technician,
+            NotificationType.PriceOfferAccepted,
+            SharedResourcesKeys.NotificationPriceOfferAcceptedTitle,
+            SharedResourcesKeys.NotificationPriceOfferAcceptedBody
+        );
         await unitOfWork.SaveChangesAsync();
-
-        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
-
-        if (!string.IsNullOrEmpty(technician.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: technician.FcmToken,
-                title: "Price Offer Accepted",
-                body: $"Your price offer of {priceOffer.Price} has been accepted! A booking has been created for {booking.ScheduledDateTime:f}.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "PRICE_OFFER_ACCEPTED" },
-                    { "bookingId", booking.Id.ToString() },
-                    { "agreedPrice", priceOffer.Price.ToString() },
-                    { "scheduledDateTime", booking.ScheduledDateTime.ToString("O") },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
-
         return booking.Id;
     }
 }

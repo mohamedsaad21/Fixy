@@ -1,13 +1,16 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Bookings.Commands.CancelBookingByCustomer;
 
-public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBookingService bookingService, INotificationService notificationService) : IRequestHandler<CancelBookingByCustomerCommand, Result>
+public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
+    IBookingService bookingService, INotificationService notificationService, IStringLocalizer<SharedResources> localizer) : IRequestHandler<CancelBookingByCustomerCommand, Result>
 {
     public async Task<Result> Handle(CancelBookingByCustomerCommand request, CancellationToken cancellationToken)
     {
@@ -36,42 +39,24 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
         booking.CustomerCancellationReason = request.Reason;
         booking.CancellationNote = request.Note;
         booking.ServiceRequest.Customer.CancelledBookings += 1;
-        booking.ServiceRequest.Customer.CancellationRate =
-            (double)booking.ServiceRequest.Customer.CancelledBookings / booking.ServiceRequest.Customer.TotalBookings * 100;
+
+        if (customer.TotalBookings > 0)
+            customer.CancellationRate = (double)customer.CancelledBookings / customer.TotalBookings * 100;
+        else
+            customer.CancellationRate = 0;
+
         await bookingService.CancelBookingAsync(booking, customer.Id);
         
         // send notification to technician
-        var techniain = booking.Technician;
+        var technician = booking.Technician;
 
-        var payload = new
-        {
-            type = NotificationType.BookingCancelledByCustomer,
-            Message = "Customer cancelled the booking",
-            CreatedAt = DateTime.UtcNow
-        };
-
-        //await notificationService.SaveNotificationAsync(techniain.Id, payload.type, payload);
-
+        await notificationService.SendFullNotificationAsync(
+            technician,
+            NotificationType.BookingCancelledByCustomer,
+            SharedResourcesKeys.NotificationBookingCancelledByCustomerTitle,
+            SharedResourcesKeys.NotificationBookingCancelledByCustomerBody
+        );
         await unitOfWork.SaveChangesAsync();
-
-        if (techniain != null)
-        {
-            await notificationService.SendNotificationToUserAsync(techniain.Id, payload);
-            if (!string.IsNullOrEmpty(techniain.FcmToken))
-            {
-                await notificationService.SendPushNotificationAsync(
-                    fcmToken: techniain.FcmToken,
-                    title: "Booking Cancelled",
-                    body: "Customer cancelled the booking",
-                    data: new Dictionary<string, string>
-                    {
-                    { "type", "BOOKING_CANCELLED" },
-                    { "bookingId", booking.Id.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                    }
-                );
-            }
-        }        
         return Result.Success();
     }
 }

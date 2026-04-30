@@ -23,37 +23,13 @@ public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork, INotificati
 
         technician.Status = TechnicianStatus.Approved;
 
-        var payload = new
-        {
-            title = localizer[SharedResourcesKeys.NotificationTechnicianApprovedTitle],
-            message = localizer[SharedResourcesKeys.NotificationTechnicianApprovedBody],
-            type = NotificationType.TechnicianApproved.ToString(),
-            createdAt = DateTime.UtcNow
-        };
-
-        await notificationService.SaveNotificationAsync(technician.Id, NotificationType.TechnicianApproved,
+        await notificationService.SendFullNotificationAsync(
+            technician,
+            NotificationType.TechnicianApproved,
             SharedResourcesKeys.NotificationTechnicianApprovedTitle,
-            SharedResourcesKeys.NotificationTechnicianApprovedBody);
-
+            SharedResourcesKeys.NotificationTechnicianApprovedBody
+        );
         await unitOfWork.SaveChangesAsync();
-
-        await notificationService.SendNotificationToUserAsync(technician.Id, payload);
-
-        if (!string.IsNullOrEmpty(technician.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: technician.FcmToken,
-                title: "Account Approved",
-                body: "Congratulations! Your account has been approved. You can now start receiving service requests.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "TECHNICIAN_APPROVED" },
-                    { "technicianId", technician.Id.ToString() },
-                    { "approvedAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
-
         return Result.Success();
     }
 }

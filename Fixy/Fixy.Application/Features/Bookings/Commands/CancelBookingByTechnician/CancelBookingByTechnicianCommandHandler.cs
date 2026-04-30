@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -41,35 +42,14 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
         // send notification to other user
         var customer = booking.ServiceRequest.Customer;
 
-        var payload = new
-        {
-            type = NotificationType.BookingCancelledByTechnician,
-            Message = "Technician cancelled the booking",
-            CreatedAt = DateTime.UtcNow
-        };
-
-        //await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
-
+        await notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.BookingCancelledByTechnician,
+            SharedResourcesKeys.NotificationBookingCancelledByTechnicianTitle,
+            SharedResourcesKeys.NotificationBookingCancelledByTechnicianBody
+        );
         await unitOfWork.SaveChangesAsync();
-        
-        if(customer != null)
-        {
-            await notificationService.SendNotificationToUserAsync(customer.Id, payload);
-            if (!string.IsNullOrEmpty(customer.FcmToken))
-            {
-                await notificationService.SendPushNotificationAsync(
-                    fcmToken: customer.FcmToken,
-                    title: "Booking Cancelled",
-                    body: "Technician cancelled the booking",
-                    data: new Dictionary<string, string>
-                    {
-                    { "type", "BOOKING_CANCELLED" },
-                    { "bookingId", booking.Id.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                    }
-                );
-            }
-        }        
+
         return Result.Success();
     }
 }

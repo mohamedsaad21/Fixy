@@ -107,6 +107,28 @@ public class SharedResourcesKeys
     // Notifications
     public const string NotificationTechnicianApprovedTitle = "NotificationTechnicianApprovedTitle";
     public const string NotificationTechnicianApprovedBody = "NotificationTechnicianApprovedBody";
+    public const string NotificationPriceOfferAcceptedTitle = "NotificationPriceOfferAcceptedTitle";
+    public const string NotificationPriceOfferAcceptedBody = "NotificationPriceOfferAcceptedBody";
+    public const string NotificationBookingCancelledByCustomerTitle = "NotificationBookingCancelledByCustomerTitle";
+    public const string NotificationBookingCancelledByCustomerBody = "NotificationBookingCancelledByCustomerBody";
+    public const string NotificationBookingCancelledByTechnicianTitle = "NotificationBookingCancelledByTechnicianTitle";
+    public const string NotificationBookingCancelledByTechnicianBody = "NotificationBookingCancelledByTechnicianBody";
+    public const string NotificationPriceChangeRequestedTitle = "NotificationPriceChangeRequestedTitle";
+    public const string NotificationPriceChangeRequestedBody = "NotificationPriceChangeRequestedBody";
+    public const string NotificationPriceChangeApprovedTitle = "NotificationPriceChangeApprovedTitle";
+    public const string NotificationPriceChangeApprovedBody = "NotificationPriceChangeApprovedBody";
+    public const string NotificationPriceChangeRejectedTitle = "NotificationPriceChangeRejectedTitle";
+    public const string NotificationPriceChangeRejectedBody = "NotificationPriceChangeRejectedBody";
+    public const string NotificationTechnicianCompletedTitle = "NotificationTechnicianCompletedTitle";
+    public const string NotificationTechnicianCompletedBody = "NotificationTechnicianCompletedBody";
+    public const string NotificationBookingCompletedTitle = "NotificationBookingCompletedTitle";
+    public const string NotificationBookingCompletedBody = "NotificationBookingCompletedBody";
+    public const string NotificationTechnicianRejectedTitle = "NotificationTechnicianRejectedTitle";
+    public const string NotificationTechnicianRejectedBody = "NotificationTechnicianRejectedBody";
+    public const string NotificationTechnicianBlockedTitle = "NotificationTechnicianBlockedTitle";
+    public const string NotificationTechnicianBlockedBody = "NotificationTechnicianBlockedBody";
+    public const string NotificationPriceOfferReceivedTitle = "NotificationPriceOfferReceivedTitle";
+    public const string NotificationPriceOfferReceivedBody = "NotificationPriceOfferReceivedBody";
 
     
     // Enums
@@ -143,4 +165,5 @@ public class SharedResourcesKeys
     public const string NotificationType_TechnicianApproved = "NotificationType_TechnicianApproved";
     public const string NotificationType_TechnicianRejected = "NotificationType_TechnicianRejected";
     public const string NotificationType_TechnicianBlocked = "NotificationType_TechnicianBlocked";
+    public const string NotificationType_PriceOfferReceived = "NotificationType_PriceOfferReceived";
 }

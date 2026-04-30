@@ -2,7 +2,8 @@
 
 public enum NotificationType
 {
-    PriceOfferAccepted = 1,
+    PriceOfferReceived = 1,
+    PriceOfferAccepted,
     BookingCancelledByCustomer,
     BookingCancelledByTechnician,
     PriceChangeRequested,
@@ -11,7 +12,6 @@ public enum NotificationType
     TechnicianCompleted,
     BookingAwaitingPayment,
     BookingCompleted,
-
     TechnicianApproved,
     TechnicianRejected,
     TechnicianBlocked

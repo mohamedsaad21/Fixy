@@ -2,6 +2,7 @@
 using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Users.Commands.DeleteProfilePicture;
+using Fixy.Application.Features.Users.Commands.EditLanguage;
 using Fixy.Application.Features.Users.Queries.GetUserById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,5 +29,13 @@ public class UsersController : AppControllerBase
     public async Task<IActionResult> DeleteProfilePicture()
     {
         return ToActionResult(await Mediator.Send(new DeleteProfilePictureCommand()));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPut(Router.UsersRouting.EditLanguage)]
+    public async Task<IActionResult> EditLanguage([FromQuery] EditLanguageCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
     }
 }
