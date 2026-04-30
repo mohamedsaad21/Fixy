@@ -2,5 +2,6 @@
 
 public enum BookingOrdering
 {
-    ScheduledDateTime
+    ScheduledDateTime = 1,
+    CreatedAt
 }

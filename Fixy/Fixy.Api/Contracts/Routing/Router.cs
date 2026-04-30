@@ -3,7 +3,7 @@ namespace Fixy.Api.Contracts.Routing;
 public static class Router
 {
     public const string root = "Api";
-    public const string version = "v1";
+    public const string version = "v{version:apiVersion}";
     public const string Rule = root + "/" + version;
 
     public const string SingleRoute = "/{Id}";
@@ -56,6 +56,7 @@ public static class Router
         public const string prefix = Rule + "/Technician";
         public const string GetById = prefix + "/GetById" + SingleRoute;
         public const string GetTechnicianProfileForCustomers = prefix + "/Get-Technician-Profile-For-Customers/{TechnicianId}";
+        public const string GetCustomerProfileForTechnicians = prefix + "/Get-Customer-Profile-For-Technicians/{CustomerId}";
         public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-Paginated";
         public const string ServiceRequestById = prefix + "/Service-Request-By-Id/{Id}";
         public const string Location = prefix + "/Location";
@@ -96,18 +97,20 @@ public static class Router
     public static class AdminRouting
     {
         public const string prefix = Rule + "/Admin";
-        public const string ApproveTechnician = prefix + "/approve-technician/{TechnicianId}";
-        public const string RejectTechnician = prefix + "/reject-technician";
-        public const string BlockTechnician = prefix + "/block-technician";
-        public const string BlockCustomer = prefix + "/block-customer";
-        public const string GetDashboard = prefix + "/dashboard";
-        public const string GetTechnicians = prefix + "/get-technicians";
-        public const string GetCustomers = prefix + "/get-customers";
+        public const string ApproveTechnician = prefix + "/Approve-Technician/{TechnicianId}";
+        public const string RejectTechnician = prefix + "/Reject-Technician";
+        public const string BlockTechnician = prefix + "/Block-Technician";
+        public const string BlockCustomer = prefix + "/Block-Customer";
+        public const string GetDashboard = prefix + "/Dashboard";
+        public const string GetTechnicians = prefix + "/Get-Technicians";
+        public const string GetCustomers = prefix + "/Get-Customers";
+        public const string GetBookings = prefix + "/Get-Bookings";
+        public const string GetBookingById = prefix + "/Get-Booking-By-Id/{Id}";
     }
     public static class NotificationsRouting
     {
         public const string prefix = Rule + "/Notifications";
-        public const string List = prefix + "/List";
+        public const string PaginatedList = prefix + "/Paginated-List";
         public const string SendNotification = prefix + "/Send-Notification";
         public const string MarkAsRead = prefix + "/Mark-As-Read/{NotificationId}";
         public const string SaveFcmToken = prefix + "/Save-Fcm-Token";
@@ -126,6 +129,7 @@ public static class Router
         public const string prefix = Rule + "/Users";
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
         public const string GetUserById = prefix + "/Get-User-By-Id/{Id}";
+        public const string EditLanguage = prefix + "/Edit-Language";
     }
 
     public static class ChatRouting

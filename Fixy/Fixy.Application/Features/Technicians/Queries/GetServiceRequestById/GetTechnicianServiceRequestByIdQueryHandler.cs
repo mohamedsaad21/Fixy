@@ -1,12 +1,12 @@
-﻿using Fixy.Application.Bases;
-using Fixy.Application.Mapping.Technicians.Queries;
+﻿using AutoMapper;
+using Fixy.Application.Bases;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
 
-public sealed class GetTechnicianServiceRequestByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetTechnicianServiceRequestByIdQuery, Result<GetTechnicianServiceRequestByIdResponse>>
+public sealed class GetTechnicianServiceRequestByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetTechnicianServiceRequestByIdQuery, Result<GetTechnicianServiceRequestByIdResponse>>
 {
     public async Task<Result<GetTechnicianServiceRequestByIdResponse>> Handle(GetTechnicianServiceRequestByIdQuery request, CancellationToken cancellationToken)
     {
@@ -17,7 +17,7 @@ public sealed class GetTechnicianServiceRequestByIdQueryHandler(IUnitOfWork unit
         if (serviceRequest == null)
             return Errors.ServiceRequestNotFound;
 
-        var serviceRequestDto = serviceRequest.ToTechnicianServiceRequestByIdResponse();
-        return serviceRequestDto;
+        var serviceRequestResponse = mapper.Map<GetTechnicianServiceRequestByIdResponse>(serviceRequest);
+        return serviceRequestResponse;
     }
 }

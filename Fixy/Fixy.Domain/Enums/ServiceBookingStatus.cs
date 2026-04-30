@@ -2,7 +2,7 @@ namespace Fixy.Domain.Enums;
 
 public enum ServiceBookingStatus
 {
-    InProgress,
+    InProgress = 1,
     AwaitingPriceChangeApproval,
     AwaitingCustomerConfirmationForCompletion,
     AwaitingPayment,

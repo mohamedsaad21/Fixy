@@ -1,5 +1,6 @@
 using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -29,33 +30,13 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
         technician.BlockedAt = DateTime.UtcNow;
         technician.BlockedBy = currentUser.Id;
 
+        await notificationService.SendFullNotificationAsync(
+            technician,
+            NotificationType.TechnicianBlocked,
+            SharedResourcesKeys.NotificationTechnicianBlockedTitle,
+            SharedResourcesKeys.NotificationTechnicianBlockedBody
+        );
         await unitOfWork.SaveChangesAsync();
-
-        // Notify technician
-        await notificationService.SendNotificationToUserAsync(
-            technician.Id,
-            new
-            {
-                type = "TECHNICIAN_BLOCKED",
-                Title = "Account Blocked",
-                Message = $"Reason: {request.Reason}",
-                CreatedAt = DateTime.UtcNow
-            });
-
-        if (!string.IsNullOrEmpty(technician.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: technician.FcmToken,
-                title: "Account Blocked",
-                body: "Your account has been blocked. Contact support for more details.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "TECHNICIAN_BLOCKED" },
-                    { "reason", request.Reason },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
         return Result.Success();
     }
 }

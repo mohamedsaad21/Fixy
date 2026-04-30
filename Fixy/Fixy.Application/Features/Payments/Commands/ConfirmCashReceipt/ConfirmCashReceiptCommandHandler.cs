@@ -1,6 +1,7 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Payments.Commands.ConfirmCashReceipt.Responses;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
@@ -14,12 +15,14 @@ public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashRecei
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
+    private readonly INotificationService _notificationService;
     private const decimal PLATFORM_COMMISSION_RATE = 0.15m;
 
-    public ConfirmCashReceiptCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService)
+    public ConfirmCashReceiptCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
+        _notificationService = notificationService;
     }
 
     public async Task<Result<ConfirmCashReceiptResponse>> Handle(ConfirmCashReceiptCommand request, CancellationToken cancellationToken)
@@ -94,12 +97,17 @@ public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashRecei
         booking.Technician.CompletedBookings += 1;
         booking.ServiceRequest.Customer.CompletedBookings += 1;
 
-        await _unitOfWork.SaveChangesAsync();
-
         Log.Information($"Cash receipt confirmed for booking {request.BookingId}");
 
         // 8. Send notifications
-        //await SendNotificationsAsync(booking, payment, cancellationToken);
+        var customer = booking.ServiceRequest.Customer;
+        await _notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.BookingCompleted,
+            SharedResourcesKeys.NotificationBookingCompletedTitle,
+            SharedResourcesKeys.NotificationBookingCompletedBody
+        );
+        await _unitOfWork.SaveChangesAsync();
 
         // 9. Build response
         var response = new ConfirmCashReceiptResponse

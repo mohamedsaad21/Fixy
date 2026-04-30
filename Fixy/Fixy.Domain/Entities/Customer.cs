@@ -14,7 +14,7 @@ public class Customer : ApplicationUser
     }
     public string? StripeCustomerId { get; set; }
     public CustomerStatus Status { get; set; } = CustomerStatus.Active;
-    public virtual ICollection<ServiceRequest> ServiceRequests { get; set; }
-    public virtual ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }
-    public virtual ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
+    public ICollection<ServiceRequest> ServiceRequests { get; set; }
+    public ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }
+    public ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
 }

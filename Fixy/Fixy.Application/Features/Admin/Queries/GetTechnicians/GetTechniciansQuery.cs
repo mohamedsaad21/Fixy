@@ -10,5 +10,6 @@ public sealed record GetTechniciansQuery
         int PageNumber,
         int PageSize,
         TechnicianOrdering OrderBy,
+        SortOrderOptions SortOrder,
         string? Search
     ) : IRequest<Result<PaginatedResult<GetTechniciansResponse>>>;

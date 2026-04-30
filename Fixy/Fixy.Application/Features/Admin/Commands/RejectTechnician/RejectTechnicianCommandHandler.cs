@@ -1,5 +1,6 @@
 using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -23,31 +24,13 @@ public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, INoti
         technician.RejectionReason = request.Reason;
         technician.RejectedAt = DateTime.UtcNow;
 
+        await notificationService.SendFullNotificationAsync(
+            technician,
+            NotificationType.TechnicianRejected,
+            SharedResourcesKeys.NotificationTechnicianRejectedTitle,
+            SharedResourcesKeys.NotificationTechnicianRejectedBody
+        );
         await unitOfWork.SaveChangesAsync();
-
-        await notificationService.SendNotificationToUserAsync(technician.Id, new
-        {
-            type = "TECHNICIAN_REJECTED",
-            message = "Application Rejected",
-            Message = $"Reason: {request.Reason}",
-            CreatedAt = DateTime.UtcNow
-        });
-
-        if (!string.IsNullOrEmpty(technician.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: technician.FcmToken,
-                title: "Account Rejected",
-                body: "Your account has been rejected. Please review the reason and update your information.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "TECHNICIAN_REJECTED" },
-                    { "reason", technician.RejectionReason ?? "Not specified" },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
-
         return Result.Success();
     }
 }

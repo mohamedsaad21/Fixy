@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -32,36 +33,24 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
         if (request.NewProposedPrice == booking.AgreedPrice)
             return Errors.AlreadyAgreedPrice;
 
+        if (booking.HasRequestedPriceChange)
+            return Errors.PriceChangeAlreadyRequested;
+
         booking.ProposedPrice = request.NewProposedPrice;
         booking.PriceChangeRequestedAt = DateTime.UtcNow;
         booking.PriceChangeNotes = request.Notes;
         booking.Status = ServiceBookingStatus.AwaitingPriceChangeApproval;
-
-        await unitOfWork.SaveChangesAsync();
+        booking.HasRequestedPriceChange = true;
 
         var customer = booking.ServiceRequest.Customer;
-        await notificationService.SendNotificationToUserAsync(customer.Id, new
-        {
-            type = "PRICE_CHANGE_REQUESTED",
-            message = $"Your technician has requested a price change to {request.NewProposedPrice}. Please review and approve or reject the new price.",
-            createdAt = DateTime.UtcNow
-        });
 
-        if (!string.IsNullOrEmpty(customer.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: customer.FcmToken,
-                title: "Price Change Requested",
-                body: $"Your technician has requested a price change to {request.NewProposedPrice}. Please review and approve or reject the new price.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "PRICE_CHANGE_REQUESTED" },
-                    { "bookingId", booking.Id.ToString() },
-                    { "newProposedPrice", request.NewProposedPrice.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
+        await notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.PriceChangeRequested,
+            SharedResourcesKeys.NotificationPriceChangeRequestedTitle,
+            SharedResourcesKeys.NotificationPriceChangeRequestedBody
+        );
+        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

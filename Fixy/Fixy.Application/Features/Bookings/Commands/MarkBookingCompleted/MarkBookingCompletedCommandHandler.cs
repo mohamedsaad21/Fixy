@@ -1,6 +1,7 @@
 using Fixy.Application.Bases;
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
@@ -41,30 +42,16 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
         booking.Status = ServiceBookingStatus.AwaitingCustomerConfirmationForCompletion;
         booking.CompletedAt = DateTime.UtcNow;
 
+        var customer = booking.ServiceRequest.Customer;
+
+        await notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.TechnicianCompleted,
+            SharedResourcesKeys.NotificationTechnicianCompletedTitle,
+            SharedResourcesKeys.NotificationTechnicianCompletedBody
+        );
         await unitOfWork.SaveChangesAsync();
 
-        var customer = booking.ServiceRequest.Customer;
-        await notificationService.SendNotificationToUserAsync(customer.Id, new
-        {
-            type = "BOOKING_COMPLETED",
-            message = "Your booking has been completed. Please confirm that the work has been completed.",
-            createdAt = DateTime.UtcNow
-        });
-
-        if (!string.IsNullOrEmpty(customer.FcmToken))
-        {
-            await notificationService.SendPushNotificationAsync(
-                fcmToken: customer.FcmToken,
-                title: "Booking Completed",
-                body: "Your booking has been completed. Please confirm that the work has been completed.",
-                data: new Dictionary<string, string>
-                {
-                    { "type", "BOOKING_COMPLETED" },
-                    { "bookingId", customer.Id.ToString() },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
-                }
-            );
-        }
         return Result.Success();
     }
 }

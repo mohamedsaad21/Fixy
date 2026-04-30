@@ -1,6 +1,7 @@
 using Fixy.Application.Bases;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -10,7 +11,8 @@ using Serilog;
 
 namespace Fixy.Application.Features.Payments.Commands.ProcessCallback;
 
-public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService, IHttpContextAccessor httpContextAccessor) : IRequestHandler<ProcessCallbackCommand, Result<bool>>
+public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService, 
+    IHttpContextAccessor httpContextAccessor, INotificationService notificationService) : IRequestHandler<ProcessCallbackCommand, Result<bool>>
 {
     public async Task<Result<bool>> Handle(ProcessCallbackCommand request, CancellationToken cancellationToken)
     {
@@ -129,6 +131,15 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
         };
 
         await unitOfWork.Payouts.AddAsync(payout);
+
+        var customer = booking.ServiceRequest.Customer;
+
+        await notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.BookingCompleted,
+            SharedResourcesKeys.NotificationBookingCompletedTitle,
+            SharedResourcesKeys.NotificationBookingCompletedBody
+        );
 
         Log.Information($"Payout created: {payment.TechnicianAmount:C} for technician {booking.TechnicianId}");
     }

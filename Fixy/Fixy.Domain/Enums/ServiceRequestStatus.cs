@@ -2,7 +2,7 @@
 
 public enum ServiceRequestStatus
 {
-    Pending,
+    Pending = 1,
     Assigned,
     Cancelled
 }

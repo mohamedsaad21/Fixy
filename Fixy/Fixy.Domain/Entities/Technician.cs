@@ -29,10 +29,10 @@ public class Technician : ApplicationUser
     public DateTime? RejectedAt { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
-    public virtual ICollection<ServiceBooking> ServiceBookings { get; set; }
-    public virtual ICollection<PriceOffer> PriceOffers { get; set; }
-    public virtual ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }
-    public virtual ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
-    public virtual ICollection<Payout> Payouts { get; set; }
-    public virtual ICollection<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
+    public ICollection<ServiceBooking> ServiceBookings { get; set; }
+    public ICollection<PriceOffer> PriceOffers { get; set; }
+    public ICollection<CustomerFeedback> CustomerFeedbacks { get; set; }
+    public ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
+    public ICollection<Payout> Payouts { get; set; }
+    public ICollection<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
 }

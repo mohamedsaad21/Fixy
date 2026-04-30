@@ -8,5 +8,7 @@ public partial class TechnicianProfile : Profile
     {
         TechnicianDomainToGetTechnicianByIdResponseMapping();
         TechnicianDomainToGetTechnicianProfileForCustomersResponseMapping();
+        CustomerDomainToGetCustomerProfileForTechniciansResponseMapping();
+        GetTechnicianServiceRequestByIdResponse();
     }
 }

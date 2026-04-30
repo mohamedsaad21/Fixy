@@ -393,4 +393,163 @@
   <data name="CustomerAlreadyBlocked" xml:space="preserve">
     <value>Customer is already blocked</value>
   </data>
+  <data name="PriceChangeAlreadyRequested" xml:space="preserve">
+    <value>You can only request a price change once per booking.</value>
+  </data>
+  <data name="ServiceRequestStatus_Pending" xml:space="preserve">
+    <value>Pending</value>
+  </data>
+  <data name="ServiceRequestStatus_Assigned" xml:space="preserve">
+    <value>Assigned</value>
+  </data>
+  <data name="ServiceRequestStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="ServiceBookingStatus_InProgress" xml:space="preserve">
+    <value>In Progress</value>
+  </data>
+  <data name="ServiceBookingStatus_AwaitingPriceChangeApproval" xml:space="preserve">
+    <value>Awaiting Price Change Approval</value>
+  </data>
+  <data name="ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion" xml:space="preserve">
+    <value>Awaiting Customer Confirmation</value>
+  </data>
+  <data name="ServiceBookingStatus_AwaitingPayment" xml:space="preserve">
+    <value>Awaiting Payment</value>
+  </data>
+  <data name="ServiceBookingStatus_Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="ServiceBookingStatus_Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+  </data>
+  <data name="ServiceBookingStatus_Disputed" xml:space="preserve">
+    <value>Disputed</value>
+  </data>
+  <data name="TechnicianStatus_PendingApproval" xml:space="preserve">
+    <value>Pending Approval</value>
+  </data>
+  <data name="TechnicianStatus_Approved" xml:space="preserve">
+    <value>Approved</value>
+  </data>
+  <data name="TechnicianStatus_Rejected" xml:space="preserve">
+    <value>Rejected</value>
+  </data>
+  <data name="TechnicianStatus_Blocked" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="NotificationTechnicianApprovedBody" xml:space="preserve">
+    <value>Congratulations! Your account has been approved. You can now start receiving service requests.</value>
+  </data>
+  <data name="NotificationTechnicianApprovedTitle" xml:space="preserve">
+    <value>Account Approved!</value>
+  </data>
+  <data name="NotificationType_PriceOfferAccepted" xml:space="preserve">
+    <value>Price Offer Accepted</value>
+  </data>
+  <data name="NotificationType_BookingCancelledByCustomer" xml:space="preserve">
+    <value>Booking Cancelled by Customer</value>
+  </data>
+  <data name="NotificationType_BookingCancelledByTechnician" xml:space="preserve">
+    <value>Booking Cancelled by Technician</value>
+  </data>
+  <data name="NotificationType_PriceChangeRequested" xml:space="preserve">
+    <value>Price Change Requested</value>
+  </data>
+  <data name="NotificationType_PriceChangeApproved" xml:space="preserve">
+    <value>Price Change Approved</value>
+  </data>
+  <data name="NotificationType_PriceChangeRejected" xml:space="preserve">
+    <value>Price Change Rejected</value>
+  </data>
+  <data name="NotificationType_TechnicianCompleted" xml:space="preserve">
+    <value>Work Completed - Awaiting Confirmation</value>
+  </data>
+  <data name="NotificationType_BookingAwaitingPayment" xml:space="preserve">
+    <value>Awaiting Payment</value>
+  </data>
+  <data name="NotificationType_BookingCompleted" xml:space="preserve">
+    <value>Booking Completed</value>
+  </data>
+  <data name="NotificationType_TechnicianApproved" xml:space="preserve">
+    <value>Account Approved</value>
+  </data>
+  <data name="NotificationType_TechnicianRejected" xml:space="preserve">
+    <value>Account Rejected</value>
+  </data>
+  <data name="NotificationType_TechnicianBlocked" xml:space="preserve">
+    <value>Account Blocked</value>
+  </data>
+  <data name="TechnicianLocationNotSet" xml:space="preserve">
+    <value>Technician location is missing. Please update your profile.</value>
+  </data>
+  <data name="NotificationPriceOfferAcceptedTitle" xml:space="preserve">
+    <value>Offer Accepted!</value>
+  </data>
+  <data name="NotificationPriceOfferAcceptedBody" xml:space="preserve">
+    <value>The customer has accepted your price offer. You can now start the job.</value>
+  </data>
+  <data name="NotificationBookingCancelledByCustomerTitle" xml:space="preserve">
+    <value>Booking Cancelled</value>
+  </data>
+  <data name="NotificationBookingCancelledByCustomerBody" xml:space="preserve">
+    <value>The customer has cancelled the booking. This request is no longer active.</value>
+  </data>
+  <data name="NotificationBookingCancelledByTechnicianTitle" xml:space="preserve">
+    <value>Booking Cancelled</value>
+  </data>
+  <data name="NotificationBookingCancelledByTechnicianBody" xml:space="preserve">
+    <value>The technician has cancelled your booking.</value>
+  </data>
+  <data name="NotificationPriceChangeRequestedTitle" xml:space="preserve">
+    <value>Price Change Requested</value>
+  </data>
+  <data name="NotificationPriceChangeRequestedBody" xml:space="preserve">
+    <value>The technician has requested a change in the booking price. Please review and respond.</value>
+  </data>
+  <data name="NotificationPriceChangeApprovedTitle" xml:space="preserve">
+    <value>Price Change Approved</value>
+  </data>
+  <data name="NotificationPriceChangeApprovedBody" xml:space="preserve">
+    <value>The customer has approved the new price. You can now proceed with the service.</value>
+  </data>
+  <data name="NotificationPriceChangeRejectedTitle" xml:space="preserve">
+    <value>Price Change Rejected</value>
+  </data>
+  <data name="NotificationPriceChangeRejectedBody" xml:space="preserve">
+    <value>The customer has rejected the price change. Please check the booking details for the original price or contact the customer.</value>
+  </data>
+  <data name="NotificationTechnicianCompletedTitle" xml:space="preserve">
+    <value>Service Completed</value>
+  </data>
+  <data name="NotificationTechnicianCompletedBody" xml:space="preserve">
+    <value>The technician has marked the service as finished. Please confirm completion to finalize the booking.</value>
+  </data>
+  <data name="NotificationBookingCompletedTitle" xml:space="preserve">
+    <value>Booking Completed Successfully</value>
+  </data>
+  <data name="NotificationBookingCompletedBody" xml:space="preserve">
+    <value>Payment has been confirmed. The booking is now complete and the funds have been added to your balance.</value>
+  </data>
+  <data name="NotificationTechnicianRejectedTitle" xml:space="preserve">
+    <value>لم تتم الموافقة على الحساب</value>
+  </data>
+  <data name="NotificationTechnicianRejectedBody" xml:space="preserve">
+    <value>Unfortunately, your account application has been rejected. Please contact support for more details or to update your information.</value>
+  </data>
+  <data name="NotificationTechnicianBlockedTitle" xml:space="preserve">
+    <value>Account Blocked</value>
+  </data>
+  <data name="NotificationTechnicianBlockedBody" xml:space="preserve">
+    <value>Your account has been suspended due to a violation of our terms of service. Please contact support for further information.</value>
+  </data>
+  <data name="NotificationType_PriceOfferReceived" xml:space="preserve">
+    <value>New Price Offer Received</value>
+  </data>
+  <data name="NotificationPriceOfferReceivedTitle" xml:space="preserve">
+    <value>New Price Offer</value>
+  </data>
+  <data name="NotificationPriceOfferReceivedBody" xml:space="preserve">
+    <value>You have received a new price offer for your service request. Tap to view the details.</value>
+  </data>
 </root>
