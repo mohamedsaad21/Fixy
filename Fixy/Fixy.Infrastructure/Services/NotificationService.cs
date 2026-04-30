@@ -1,21 +1,22 @@
 ﻿using FirebaseAdmin.Messaging;
 using Fixy.Application.Contracts.Services;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
-using System.Text.Json;
 
 namespace Fixy.Infrastructure.Services;
 
 public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitOfWork unitOfWork) : INotificationService
 {
-    public async Task SaveNotificationAsync(Guid userId, string type, object data)
+    public async Task SaveNotificationAsync(Guid userId, NotificationType type, string titleKey, string bodyKey)
     {
         var notification = new Domain.Entities.Notification
         {
             UserId = userId,
             Type = type,
-            Data = JsonSerializer.Serialize(data),
+            TitleKey = titleKey,
+            BodyKey = bodyKey,
             IsRead = false,
             CreatedAt = DateTime.UtcNow
         };

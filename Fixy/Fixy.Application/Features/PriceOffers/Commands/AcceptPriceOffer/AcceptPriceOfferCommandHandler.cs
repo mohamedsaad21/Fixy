@@ -40,12 +40,12 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
 
         var payload = new
         {
-            type = "PRICE_OFFER_ACCEPTED",
+            type = NotificationType.PriceOfferAccepted,
             message = $"Your price offer of {priceOffer.Price} has been accepted! A booking has been created for {booking.ScheduledDateTime:f}.",
             createdAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

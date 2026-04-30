@@ -12,7 +12,7 @@ public partial class PriceOfferProfile
             .ForMember(dest => dest.TechnicianUserName, opt => opt.MapFrom(src => src.Technician.UserName))
             .ForMember(dest => dest.AverageRating, opt => opt.MapFrom(src => src.Technician.AverageRating))
             .ForMember(dest => dest.DistanceKm, opt => 
-            opt.MapFrom(src => GeoDistance.CalculateKm(src.Technician.TechnicianLocation.Latitude, 
+            opt.MapFrom(src => HaversineDistance.CalculateDistance(src.Technician.TechnicianLocation.Latitude, 
             src.Technician.TechnicianLocation.Longitude, src.ServiceRequest.Address.Latitude, src.ServiceRequest.Address.Longitude)));
     }
 }

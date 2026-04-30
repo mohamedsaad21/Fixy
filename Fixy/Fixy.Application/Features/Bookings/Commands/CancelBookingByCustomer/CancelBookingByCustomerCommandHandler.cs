@@ -45,12 +45,12 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
 
         var payload = new
         {
-            type = "BOOKING_CANCELLED",
+            type = NotificationType.BookingCancelledByCustomer,
             Message = "Customer cancelled the booking",
             CreatedAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(techniain.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(techniain.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

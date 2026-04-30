@@ -39,12 +39,12 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         var payload = new
         {
-            type = "PRICE_CHANGE_APPROVED",
+            type = NotificationType.PriceChangeApproved,
             message = $"The customer has approved the price change. The new agreed price is {booking.AgreedPrice}.",
             createdAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

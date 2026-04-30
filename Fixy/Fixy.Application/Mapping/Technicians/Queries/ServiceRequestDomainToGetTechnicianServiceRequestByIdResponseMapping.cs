@@ -1,5 +1,7 @@
 ﻿using Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Mapping.Technicians;
 

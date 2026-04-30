@@ -102,7 +102,13 @@ public class SharedResourcesKeys
     public const string CustomerNotFound = "CustomerNotFound";
     public const string CustomerAlreadyBlocked = "CustomerAlreadyBlocked";
     public const string PriceChangeAlreadyRequested = "PriceChangeAlreadyRequested";
+    public const string TechnicianLocationNotSet = "TechnicianLocationNotSet";
 
+    // Notifications
+    public const string NotificationTechnicianApprovedTitle = "NotificationTechnicianApprovedTitle";
+    public const string NotificationTechnicianApprovedBody = "NotificationTechnicianApprovedBody";
+
+    
     // Enums
     public const string ServiceRequestStatus_Pending = "ServiceRequestStatus_Pending";
     public const string ServiceRequestStatus_Assigned = "ServiceRequestStatus_Assigned";
@@ -123,4 +129,18 @@ public class SharedResourcesKeys
     public const string TechnicianStatus_Rejected = "TechnicianStatus_Rejected";
     public const string TechnicianStatus_Blocked = "TechnicianStatus_Blocked";
 
+
+
+    public const string NotificationType_PriceOfferAccepted = "NotificationType_PriceOfferAccepted";
+    public const string NotificationType_BookingCancelledByCustomer = "NotificationType_BookingCancelledByCustomer";
+    public const string NotificationType_BookingCancelledByTechnician = "NotificationType_BookingCancelledByTechnician";
+    public const string NotificationType_PriceChangeRequested = "NotificationType_PriceChangeRequested";
+    public const string NotificationType_PriceChangeApproved = "NotificationType_PriceChangeApproved";
+    public const string NotificationType_PriceChangeRejected = "NotificationType_PriceChangeRejected";
+    public const string NotificationType_TechnicianCompleted = "NotificationType_TechnicianCompleted";
+    public const string NotificationType_BookingAwaitingPayment = "NotificationType_BookingAwaitingPayment";
+    public const string NotificationType_BookingCompleted = "NotificationType_BookingCompleted";
+    public const string NotificationType_TechnicianApproved = "NotificationType_TechnicianApproved";
+    public const string NotificationType_TechnicianRejected = "NotificationType_TechnicianRejected";
+    public const string NotificationType_TechnicianBlocked = "NotificationType_TechnicianBlocked";
 }

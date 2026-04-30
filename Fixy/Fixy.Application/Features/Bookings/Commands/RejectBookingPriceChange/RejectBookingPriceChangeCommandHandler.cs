@@ -33,12 +33,12 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
 
         var payload = new
         {
-            type = "PRICE_CHANGE_REJECTED",
+            type = NotificationType.PriceChangeRejected,
             message = $"The customer has rejected the price change. The original agreed price of {booking.AgreedPrice} remains.",
             createdAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

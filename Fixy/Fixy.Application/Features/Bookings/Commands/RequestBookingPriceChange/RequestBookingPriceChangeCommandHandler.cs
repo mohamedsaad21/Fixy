@@ -46,12 +46,12 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         var payload = new
         {
-            type = "PRICE_CHANGE_REQUESTED",
+            type = NotificationType.PriceChangeRequested,
             message = $"Your technician has requested a price change to {request.NewProposedPrice}. Please review and approve or reject the new price.",
             createdAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

@@ -25,13 +25,13 @@ public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, INoti
 
         var payload = new
         {
-            type = "TECHNICIAN_REJECTED",
+            type = NotificationType.TechnicianRejected,
             message = "Application Rejected",
             Message = $"Reason: {request.Reason}",
             CreatedAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

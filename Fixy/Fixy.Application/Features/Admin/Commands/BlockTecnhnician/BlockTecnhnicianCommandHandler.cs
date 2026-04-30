@@ -31,13 +31,13 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
 
         var payload = new
         {
-            type = "TECHNICIAN_BLOCKED",
+            type = NotificationType.TechnicianBlocked,
             Title = "Account Blocked",
             Message = $"Reason: {request.Reason}",
             CreatedAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(technician.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

@@ -4,9 +4,9 @@ using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianLocation;
 using Fixy.Application.Features.Technicians.Commands.UpdateTechnicianProfile;
+using Fixy.Application.Features.Technicians.Queries.GetAvailableServiceRequestsForTechnician;
 using Fixy.Application.Features.Technicians.Queries.GetCustomerProfileForTechnicians;
 using Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
-using Fixy.Application.Features.Technicians.Queries.GetTechnicianAvailableRequests;
 using Fixy.Application.Features.Technicians.Queries.GetTechnicianById;
 using Fixy.Application.Features.Technicians.Queries.GetTechnicianProfileForCustomers;
 using Fixy.Domain.Constants;
@@ -55,7 +55,7 @@ public class TechnicianController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.TechnicianRouting.TechnicianServiceRequestsList)]
-    public async Task<IActionResult> GetTechnicianAvailableServiceRequests([FromQuery] GetTechnicianAvailableRequestsQuery query)
+    public async Task<IActionResult> GetTechnicianAvailableServiceRequests([FromQuery] GetAvailableServiceRequestsForTechnicianQuery query)
     {
         return ToActionResult(await Mediator.Send(query));
     }

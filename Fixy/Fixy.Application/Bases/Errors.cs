@@ -62,4 +62,5 @@ public static class Errors
     public static Error CustomerNotFound => new("CustomerNotFound", ErrorType.NotFound);
     public static Error CustomerAlreadyBlocked => new("CustomerAlreadyBlocked", ErrorType.BadRequest);
     public static Error PriceChangeAlreadyRequested => new("PriceChangeAlreadyRequested", ErrorType.BadRequest);
+    public static Error TechnicianLocationNotSet => new("TechnicianLocationNotSet", ErrorType.BadRequest);
 }

@@ -45,12 +45,12 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
 
         var payload = new
         {
-            type = "BOOKING_COMPLETED",
+            type = NotificationType.BookingCompleted,
             message = "Your booking has been completed. Please confirm that the work has been completed.",
             createdAt = DateTime.UtcNow
         };
 
-        await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
+        //await notificationService.SaveNotificationAsync(customer.Id, payload.type, payload);
 
         await unitOfWork.SaveChangesAsync();
 

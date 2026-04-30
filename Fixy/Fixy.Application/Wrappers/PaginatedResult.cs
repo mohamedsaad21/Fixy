@@ -17,7 +17,12 @@ public class PaginatedResult<T>
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         TotalCount = count;
     }
-
+    public static PaginatedResult<T> Create(List<T> data, int totalCount, int page, int pageSize)
+    {
+        page = page <= 0 ? 1 : page;
+        pageSize = pageSize <= 0 ? 10 : pageSize;
+        return new(true, data, null, totalCount, page, pageSize);
+    }
     public static PaginatedResult<T> Success(List<T> data, int count, int page, int pageSize)
     {
         return new(true, data, null, count, page, pageSize);
