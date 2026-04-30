@@ -1,4 +1,4 @@
-﻿namespace Fixy.Domain.Enums;
+namespace Fixy.Domain.Enums;
 
 public enum ServiceBookingStatus
 {

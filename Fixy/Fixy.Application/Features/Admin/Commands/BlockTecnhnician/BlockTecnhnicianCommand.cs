@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using MediatR;
 
 namespace Fixy.Application.Features.Admin.Commands.BlockTecnhnician;

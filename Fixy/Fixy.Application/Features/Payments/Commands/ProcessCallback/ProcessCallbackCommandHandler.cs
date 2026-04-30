@@ -1,8 +1,7 @@
 ﻿using Fixy.Application.Bases;
+using Fixy.Domain.Entities.Payments;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
-using Fixy.Domain.Entities;
-using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;

@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities;

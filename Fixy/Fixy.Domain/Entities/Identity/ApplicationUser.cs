@@ -18,7 +18,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public string? ProfilePicturePublicId { get; set; }
     public bool IsTwoFactorEmailEnabled { get; set; }
     public string? FcmToken { get; set; }
-    public string PreferredLanguage { get; set; } = "en";
+    public string PreferredLanguage { get; set; } = "en-US";
     public int? TotalBookings { get; set; }
     public int? CompletedBookings { get; set; }
     public int? CancelledBookings { get; set; }
