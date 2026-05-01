@@ -36,6 +36,7 @@ public sealed class GetAvailableServiceRequestsForTechnicianQueryHandler(IUnitOf
             .Where(sr =>
                 sr.Status == ServiceRequestStatus.Pending &&
                 sr.ServiceRequestCategories.Any(src => src.CategoryId == techCategoryId) &&
+                sr.BlockedServiceRequests.Any(bsr => bsr.TechnicianId == technician.Id && bsr.ServiceRequestId == sr.Id) &&
                 !sr.PriceOffers.Any(po => po.TechnicianId == technicianId))
             .Include(sr => sr.ServiceCategories)
             .Include(sr => sr.ServiceRequestImages)

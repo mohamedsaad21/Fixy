@@ -23,4 +23,5 @@ public class ServiceRequest : DatedEntity
     public ICollection<ServiceRequestImage> ServiceRequestImages { get; set; }
     public ICollection<ServiceBooking> ServiceBookings { get; set; }
     public ICollection<PriceOffer> PriceOffers { get; set; }
+    public ICollection<BlockedServiceRequest> BlockedServiceRequests { get; set; }
 }

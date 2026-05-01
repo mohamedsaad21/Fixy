@@ -11,6 +11,7 @@ public interface IUnitOfWork : IDisposable
 {
     IServiceCategoryRepository ServiceCategories { get; }
     IGenericRepository<ServiceRequest> ServiceRequests { get; }
+    IGenericRepository<BlockedServiceRequest> BlockedServiceRequests { get; }
     IGenericRepository<ServiceRequestImage> ServiceRequestImages { get; }
     IGenericRepository<PriceOffer> PriceOffers { get; }
     IGenericRepository<ServiceBooking> Bookings { get; }

@@ -1,11 +1,16 @@
+using Fixy.Application.Common.Helpers;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Authentication.DTOs;
+using Fixy.Application.Resources;
+using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -21,14 +26,18 @@ public class AuthenticationService : IAuthenticationService
     private readonly IEmailService _emailService;
     private readonly JWTSettings _jWTSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public AuthenticationService(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, IEmailService emailService, JWTSettings jWTSettings, IHttpContextAccessor httpContextAccessor)
+    public AuthenticationService(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, 
+        IEmailService emailService, JWTSettings jWTSettings, 
+        IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResources> localizer)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
         _emailService = emailService;
         _jWTSettings = jWTSettings;
         _httpContextAccessor = httpContextAccessor;
+        _localizer = localizer;
     }
     
     public async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
@@ -150,6 +159,12 @@ public class AuthenticationService : IAuthenticationService
         authResponse.UserName = user.UserName;
         authResponse.Email = user.Email;
         authResponse.ProfilePictureUrl = user.ProfilePictureUrl;
+        authResponse.Status = user switch
+        {
+            Customer customer => EnumLocalizer.Localize(customer.Status, _localizer),
+            Technician technician => EnumLocalizer.Localize(technician.Status, _localizer),
+            _ => _localizer[SharedResourcesKeys.AdminActiveStatus]
+        };
         authResponse.Role = roles.FirstOrDefault();
         authResponse.Token = accessToken;
         return authResponse;

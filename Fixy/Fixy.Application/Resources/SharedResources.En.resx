@@ -552,4 +552,19 @@
   <data name="NotificationPriceOfferReceivedBody" xml:space="preserve">
     <value>You have received a new price offer for your service request. Tap to view the details.</value>
   </data>
+  <data name="AdminActiveStatus" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="CustomerStatus_Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="CustomerStatus_Blocked" xml:space="preserve">
+    <value>Blocked</value>
+  </data>
+  <data name="ServiceRequestUnavailable" xml:space="preserve">
+    <value>This service is not available</value>
+  </data>
+  <data name="BlockedTechnicianOffer" xml:space="preserve">
+    <value>You cannot send an offer for this request due to a previous cancellation or restriction.</value>
+  </data>
 </root>

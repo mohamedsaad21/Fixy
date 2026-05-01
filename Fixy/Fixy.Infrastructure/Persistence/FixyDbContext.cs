@@ -25,6 +25,7 @@ public class FixyDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Gui
     public virtual DbSet<Customer> Customers { get; set; }
     public virtual DbSet<ServiceCategory> ServiceCategories { get; set; }
     public virtual DbSet<ServiceRequest> ServiceRequests { get; set; }
+    public virtual DbSet<BlockedServiceRequest> BlockedServiceRequests { get; set; }
     public virtual DbSet<PriceOffer> PriceOffers { get; set; }
     public virtual DbSet<ServiceRequestCategories> ServiceRequestCategories { get; set; }
     public virtual DbSet<ServiceBooking> ServiceBookings { get; set; }

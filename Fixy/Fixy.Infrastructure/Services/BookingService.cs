@@ -21,5 +21,27 @@ public class BookingService(IUnitOfWork unitOfWork) : IBookingService
 
         if (conversation != null)
             conversation.IsClosed = true;
+
+        await ReopenServiceRequest(booking.ServiceRequest, booking.Technician);
+    }
+
+    private async Task<bool> ReopenServiceRequest(ServiceRequest serviceRequest, Technician technician)
+    {
+        serviceRequest.Status = ServiceRequestStatus.Pending;
+        var blockedServiceRequest = new BlockedServiceRequest
+        {
+            TechnicianId = technician.Id,
+            ServiceRequestId = serviceRequest.Id
+        };
+        await unitOfWork.BlockedServiceRequests.AddAsync(blockedServiceRequest);
+        var priceOffer = await unitOfWork.PriceOffers.GetTableAsTracking()
+            .FirstOrDefaultAsync(x => x.ServiceRequestId == serviceRequest.Id && x.TechnicianId == technician.Id);
+
+        if (priceOffer == null)
+            return false;
+
+        priceOffer.IsDeleted = true;
+        priceOffer.DeletedAt = DateTime.UtcNow;
+        return true;
     }
 }
