@@ -567,4 +567,7 @@
   <data name="BlockedTechnicianOffer" xml:space="preserve">
     <value>You cannot send an offer for this request due to a previous cancellation or restriction.</value>
   </data>
+  <data name="CustomerAlreadyActive" xml:space="preserve">
+    <value>Customer is already in an active state.</value>
+  </data>
 </root>

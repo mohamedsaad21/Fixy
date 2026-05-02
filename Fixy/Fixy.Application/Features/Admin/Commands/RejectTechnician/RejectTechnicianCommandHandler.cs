@@ -8,10 +8,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Admin.Commands.RejectTechnician;
 
-public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, INotificationService notificationService) : IRequestHandler<RejectTechnicianCommand, Result>
+public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<RejectTechnicianCommand, Result>
 {
     public async Task<Result> Handle(RejectTechnicianCommand request, CancellationToken cancellationToken)
     {
+        var currentUser = await currentUserService.GetCurrentUserAsync();
+
+        if (currentUser == null)
+            return Errors.Unauthorized;
+
         var technician = await unitOfWork.Technicians.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == request.TechnicianId);
 
         if (technician == null)

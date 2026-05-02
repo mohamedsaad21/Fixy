@@ -3,8 +3,8 @@ using Fixy.Api.Attributes;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestImages;
+using Fixy.Application.Features.ServiceRequests.Commands.CancelServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
-using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
 using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
@@ -84,7 +84,7 @@ public class ServiceRequestController : AppControllerBase
     [HttpDelete(Router.ServiceRequestRouting.Delete)]
     public async Task<IActionResult> DeleteServiceRequest([FromRoute] Guid Id)
     {
-        return ToActionResult(await Mediator.Send(new DeleteServiceRequestCommand(Id)));
+        return ToActionResult(await Mediator.Send(new CancelServiceRequestCommand(Id)));
     }
 
     [Authorize(Roles = Roles.Customer)]

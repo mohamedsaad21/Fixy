@@ -26,7 +26,7 @@ public sealed class GetDashboardQueryHandler(IUnitOfWork unitOfWork, UserManager
             .CountAsync(x => x.Status == ServiceBookingStatus.InProgress, cancellationToken);
 
         var cancelledBookings = await bookingsQuery
-            .CountAsync(x => x.Status == ServiceBookingStatus.Cancelled, cancellationToken);
+            .CountAsync(x => x.Status == ServiceBookingStatus.CancelledByCustomer, cancellationToken);
 
         var completedBookings = await bookingsQuery
             .CountAsync(x => x.Status == ServiceBookingStatus.Completed, cancellationToken);

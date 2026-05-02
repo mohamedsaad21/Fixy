@@ -567,4 +567,7 @@
   <data name="BlockedTechnicianOffer" xml:space="preserve">
     <value>لا يمكنك تقديم عرض سعر لهذا الطلب بسبب إلغاء سابق أو تقييد على الخدمة.</value>
   </data>
+  <data name="CustomerAlreadyActive" xml:space="preserve">
+    <value>حالة العميل نشطة بالفعل</value>
+  </data>
 </root>

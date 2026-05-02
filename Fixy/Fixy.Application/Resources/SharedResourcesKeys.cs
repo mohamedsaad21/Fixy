@@ -104,6 +104,7 @@ public class SharedResourcesKeys
     public const string TechnicianAlreadyRejected = "TechnicianAlreadyRejected";
     public const string CustomerNotFound = "CustomerNotFound";
     public const string CustomerAlreadyBlocked = "CustomerAlreadyBlocked";
+    public const string CustomerAlreadyActive = "CustomerAlreadyActive";
     public const string PriceChangeAlreadyRequested = "PriceChangeAlreadyRequested";
     public const string TechnicianLocationNotSet = "TechnicianLocationNotSet";
     public const string AdminActiveStatus = "AdminActiveStatus";
