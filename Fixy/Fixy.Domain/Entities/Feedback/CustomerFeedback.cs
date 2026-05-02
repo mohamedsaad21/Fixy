@@ -15,7 +15,7 @@ public class CustomerFeedback : BaseEntity
     public int PunctualityRating { get; set; }
     public int ProfessionalismRating { get; set; }
     public int CommunicationRating { get; set; }
-    public int CleanlinessRating { get; set; }
+    public int HandlingQuality { get; set; }
     public int SatisfactionScore { get; set; }
     public int CostSatisfaction { get; set; }
     public WeatherCondition WeatherCondition { get; set; }

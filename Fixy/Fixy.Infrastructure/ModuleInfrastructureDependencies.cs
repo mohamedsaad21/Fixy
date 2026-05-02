@@ -23,10 +23,12 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IEmailService, EmailService>();
         services.AddTransient<IFileService, FileService>();
         services.AddTransient<ICurrentUserService, CurrentUserService>();
-        services.AddScoped<INotificationService, NotificationService>();
+        services.AddTransient<INotificationService, NotificationService>();
         services.AddTransient<IPaymentService, StripeService>();
         services.AddScoped<ICacheService, CacheService>();
-        services.AddScoped<IBookingService, BookingService>();
+        services.AddTransient<IBookingService, BookingService>();
+        services.AddTransient<IFeedbackService, FeedbackService>();
+        services.AddTransient<IRatingService, RatingService>();
         
         return services;
     }

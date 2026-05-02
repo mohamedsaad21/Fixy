@@ -8,10 +8,10 @@ public class TechnicianFeedback : BaseEntity
     public Customer Customer { get; set; }
     public Guid TechnicianId { get; set; }
     public Technician Technician { get; set; }
-    public double CustomerBehaviorRating { get; set; }
-    public double ClarityOfIssue { get; set; }
-    public double SafetyAndEnvironment { get; set; }
-    public double CustomerPunctuality { get; set; }
-    public double WorkerSatisfaction { get; set; }
+    public int CustomerBehaviorRating { get; set; }
+    public int ClarityOfIssue { get; set; }
+    public int SafetyAndEnvironment { get; set; }
+    public int CustomerPunctuality { get; set; }
+    public int WorkerSatisfaction { get; set; }
     public DateTime SubmittedAt { get; set; }
 }

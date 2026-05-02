@@ -1,9 +1,12 @@
-﻿using Fixy.Api.Middleware;
+﻿using Fixy.Api.Filters;
+using Fixy.Api.Middleware;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Hubs;
-using Fixy.Infrastructure.Seeder;
-using Microsoft.AspNetCore.Identity;
 using Fixy.Infrastructure.Persistence;
+using Fixy.Infrastructure.Seeder;
+using Hangfire;
+using Hangfire.Dashboard;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -61,5 +64,10 @@ public static class WebApplicationExtensions
 
         app.MapHub<NotificationHub>("/hubs/notification");
         app.MapHub<ChatHub>("/hubs/chat");
+
+        app.MapHangfireDashboard("/hangfire", new DashboardOptions()
+        {
+            DashboardTitle = "Fixy Service Dashboard"
+        });
     }
 }

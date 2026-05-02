@@ -570,4 +570,10 @@
   <data name="CustomerAlreadyActive" xml:space="preserve">
     <value>حالة العميل نشطة بالفعل</value>
   </data>
+  <data name="CustomerFeedbackNotFound" xml:space="preserve">
+    <value>لم يتم العثور على التقييم</value>
+  </data>
+  <data name="TechnicianFeedbackNotFound" xml:space="preserve">
+    <value>لا توجد تقييمات لهذا الفني بعد.</value>
+  </data>
 </root>
