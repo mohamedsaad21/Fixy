@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Feedbacks.Commands.SubmitCustomerFeedback;
 
-public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<SubmitCustomerFeedbackCommand, Result>
+public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IFeedbackService feedbackService) : IRequestHandler<SubmitCustomerFeedbackCommand, Result>
 {
     public async Task<Result> Handle(SubmitCustomerFeedbackCommand request, CancellationToken cancellationToken)
     {
@@ -30,6 +30,9 @@ public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurre
         var feedback = request.ToCustomerFeedbackDomain(currentCustomer.Id, booking.TechnicianId);
 
         await unitOfWork.CustomerFeedbacks.AddAsync(feedback);
+
+        await feedbackService.ProcessFeedbackCompletionAsync(booking);
+
         await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }

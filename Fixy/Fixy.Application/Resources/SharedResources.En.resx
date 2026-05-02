@@ -570,4 +570,10 @@
   <data name="CustomerAlreadyActive" xml:space="preserve">
     <value>Customer is already in an active state.</value>
   </data>
+  <data name="CustomerFeedbackNotFound" xml:space="preserve">
+    <value>This customer hasn't left any feedback yet.</value>
+  </data>
+  <data name="TechnicianFeedbackNotFound" xml:space="preserve">
+    <value>No reviews found for this technician yet.</value>
+  </data>
 </root>

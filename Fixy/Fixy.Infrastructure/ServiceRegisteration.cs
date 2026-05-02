@@ -37,6 +37,10 @@ public static class ServiceRegisteration
         cloudinary.Api.Secure = true;
         services.AddSingleton(cloudinary);
 
+        var flaskApiSettings = new FlaskApiSettings();
+        configuration.GetSection(nameof(flaskApiSettings)).Bind(flaskApiSettings);
+        services.AddSingleton(flaskApiSettings);
+
         var paymobSettings = new PaymobSettings();
         configuration.GetSection(nameof(paymobSettings)).Bind(paymobSettings);
         services.AddSingleton(paymobSettings);

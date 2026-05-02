@@ -6,8 +6,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace Fixy.Infrastructure.ExternalServices;
 
-public class FileService(Cloudinary cloudinary) : IFileService
+public class FileService : IFileService
 {
+    private readonly Cloudinary _cloudinary;
+    public FileService(Cloudinary cloudinary)
+    {
+        _cloudinary = cloudinary;
+    }
+
     public async Task<UploadResultModel> UploadAsync(string Location, IFormFile file)
     {
         if (file is null || file.Length == 0)
@@ -25,7 +31,7 @@ public class FileService(Cloudinary cloudinary) : IFileService
                 UniqueFilename = true
             };
 
-            var uploadResult = await cloudinary.UploadAsync(uploadParams);
+            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             return new UploadResultModel
             {
@@ -45,7 +51,7 @@ public class FileService(Cloudinary cloudinary) : IFileService
         {
             ResourceType = ResourceType.Image
         };        
-        var deletionResult = cloudinary.Destroy(deletionParams);
+        var deletionResult = _cloudinary.Destroy(deletionParams);
         return deletionResult.Result;
     }
 }

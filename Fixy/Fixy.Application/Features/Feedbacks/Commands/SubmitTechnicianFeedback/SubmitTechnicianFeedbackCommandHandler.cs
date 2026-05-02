@@ -1,7 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.Feedbacks.Commands;
-using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -9,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Feedbacks.Commands.SubmitTechnicianFeedback;
 
-public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<SubmitTechnicianFeedbackCommand, Result>
+public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IFeedbackService feedbackService) : IRequestHandler<SubmitTechnicianFeedbackCommand, Result>
 {
     public async Task<Result> Handle(SubmitTechnicianFeedbackCommand request, CancellationToken cancellationToken)
     {
@@ -23,7 +22,7 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
 
         var currentTechnician = await currentUserService.GetCurrentUserAsync();
 
-        var IsExists = await unitOfWork.CustomerFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == booking.Id);
+        var IsExists = await unitOfWork.TechnicianFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == booking.Id);
 
         if (IsExists)
             return Errors.FeebackAlreadySubmitted;
@@ -31,6 +30,9 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
         var feedback = request.ToTechnicianFeedbackDomain(booking.ServiceRequest.CustomerId, currentTechnician.Id);
 
         await unitOfWork.TechnicianFeedbacks.AddAsync(feedback);
+
+        await feedbackService.ProcessFeedbackCompletionAsync(booking);
+
         await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }

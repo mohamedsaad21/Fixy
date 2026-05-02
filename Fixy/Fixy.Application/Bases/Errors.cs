@@ -66,4 +66,6 @@ public static class Errors
     public static Error ServiceRequestUnavailable => new("ServiceRequestUnavailable", ErrorType.BadRequest);
     public static Error BlockedTechnicianOffer => new("BlockedTechnicianOffer", ErrorType.BadRequest);
     public static Error CustomerAlreadyActive => new("CustomerAlreadyActive", ErrorType.BadRequest);
+    public static Error CustomerFeedbackNotFound => new("CustomerFeedbackNotFound", ErrorType.NotFound);
+    public static Error TechnicianFeedbackNotFound => new("TechnicianFeedbackNotFound", ErrorType.NotFound);
 }

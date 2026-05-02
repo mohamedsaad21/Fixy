@@ -72,6 +72,8 @@ public class SharedResourcesKeys
     public const string CallbackProcessingFailed = "CallbackProcessingFailed";
     public const string BookingNotCompleted = "BookingNotCompleted";
     public const string FeebackAlreadySubmitted = "FeebackAlreadySubmitted";
+    public const string CustomerFeedbackNotFound = "CustomerFeedbackNotFound";
+    public const string TechnicianFeedbackNotFound = "TechnicianFeedbackNotFound";
     public const string NotificationSendFailed = "NotificationSendFailed";
     public const string NotificationNotFound = "NotificationNotFound";
     public const string PaymentAlreadyInitiated = "PaymentAlreadyInitiated";

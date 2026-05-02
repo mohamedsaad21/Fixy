@@ -3,6 +3,7 @@ using Fixy.Api.Filters;
 using Fixy.Application;
 using Fixy.Infrastructure;
 using Fixy.Infrastructure.Persistence;
+using Hangfire;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -55,6 +56,20 @@ builder.Services.AddSignalR();
 
 builder.Services.AddScoped<TechnicianStatusFilter>();
 builder.Services.AddScoped<CustomerStatusFilter>();
+
+// Hangfire Client
+builder.Services.AddHangfire(config =>
+{
+    config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+
+// Hangfire Server
+builder.Services.AddHangfireServer();
+
+builder.Services.AddHttpClient();
 
 builder.Services.AddVersioning();
 
