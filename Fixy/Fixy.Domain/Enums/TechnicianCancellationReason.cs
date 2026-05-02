@@ -2,9 +2,9 @@
 
 public enum TechnicianCancellationReason
 {
-    NotAvailable = 1,
-    Emergency = 2,
-    CustomerUnreachable = 3,
-    WrongBookingDetails = 4,
-    Other = 5
+    EmergencyPersonal = 1,
+    CustomerUnreachable,
+    WrongBookingDetails,
+    UnsafeWorkConditions,
+    Other
 }

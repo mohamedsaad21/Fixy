@@ -12,13 +12,15 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
 {
     public async Task<Result> Handle(CancelBookingByTechnicianCommand request, CancellationToken cancellationToken)
     {
-        var technician = await currentUserService.GetCurrentUserAsync();
+        var currentTechnicianId = currentUserService.GetCurrentUserId();
 
+        var technician = await unitOfWork.Technicians.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == currentTechnicianId);
+        
         if (technician == null)
             return Errors.Unauthorized;
 
         var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
-            .Include(X => X.Technician)
+            .Include(x => x.Technician)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
@@ -27,19 +29,16 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
         if (booking.TechnicianId != technician.Id)
             return Errors.Unauthorized;
 
-        if (booking.Status == ServiceBookingStatus.Cancelled)
-            return Errors.AlreadyCancelled;
-
-        if(booking.Status != ServiceBookingStatus.InProgress && booking.Status != ServiceBookingStatus.AwaitingPriceChangeApproval)
+        if(booking.Status != ServiceBookingStatus.InProgress)
             return Errors.CannotCancelAtThisStage;
 
+        technician.CancelledBookings += 1;
+        technician.CancellationRate = technician.TotalBookings > 0? (double)technician.CancelledBookings / technician.TotalBookings * 100 : 0;
         booking.TechnicianCancellationReason = request.Reason;
         booking.CancellationNote = request.Notes;
-        booking.Technician.CancelledBookings += 1;
-        booking.Technician.CancellationRate =
-            (double)booking.Technician.CancelledBookings / booking.Technician.TotalBookings * 100;
-        await bookingService.CancelBookingAsync(booking, technician.Id);
-        // send notification to other user
+
+        await bookingService.CancelBookingByTechnicianAsync(booking, technician);
+        
         var customer = booking.ServiceRequest.Customer;
 
         await notificationService.SendFullNotificationAsync(

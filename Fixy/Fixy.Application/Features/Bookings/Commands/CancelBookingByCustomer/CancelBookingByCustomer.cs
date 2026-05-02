@@ -8,5 +8,6 @@ public sealed record CancelBookingByCustomerCommand
     (
         Guid BookingId,
         CustomerCancellationReason Reason,
-        string? Note
+        string? Note,
+        bool ReopenServiceRequest
     ) : IRequest<Result>;

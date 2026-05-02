@@ -101,6 +101,7 @@ public static class Router
         public const string RejectTechnician = prefix + "/Reject-Technician";
         public const string BlockTechnician = prefix + "/Block-Technician";
         public const string BlockCustomer = prefix + "/Block-Customer";
+        public const string UnblockCustomer = prefix + "/Unblock-Customer/{CustomerId}";
         public const string GetDashboard = prefix + "/Dashboard";
         public const string GetTechnicians = prefix + "/Get-Technicians";
         public const string GetCustomers = prefix + "/Get-Customers";

@@ -552,4 +552,22 @@
   <data name="NotificationPriceOfferReceivedBody" xml:space="preserve">
     <value>لقد تلقيت عرض سعر جديد لطلب الخدمة الخاص بك. اضغط لمشاهدة التفاصيل.</value>
   </data>
+  <data name="AdminActiveStatus" xml:space="preserve">
+    <value>نشط</value>
+  </data>
+  <data name="CustomerStatus_Active" xml:space="preserve">
+    <value>نشط</value>
+  </data>
+  <data name="CustomerStatus_Blocked" xml:space="preserve">
+    <value>محظور</value>
+  </data>
+  <data name="ServiceRequestUnavailable" xml:space="preserve">
+    <value>هذه الخدمة غير متوفرة</value>
+  </data>
+  <data name="BlockedTechnicianOffer" xml:space="preserve">
+    <value>لا يمكنك تقديم عرض سعر لهذا الطلب بسبب إلغاء سابق أو تقييد على الخدمة.</value>
+  </data>
+  <data name="CustomerAlreadyActive" xml:space="preserve">
+    <value>حالة العميل نشطة بالفعل</value>
+  </data>
 </root>

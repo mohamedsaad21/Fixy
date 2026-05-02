@@ -18,9 +18,11 @@ public class ServiceRequest : DatedEntity
     public DateTime ScheduledDateTime { get; set; }
     public Address Address { get; set; }
     public ServiceRequestStatus Status { get; set; } = ServiceRequestStatus.Pending;
+    public bool HadPreviousCancellation { get; set; }
     public ICollection<ServiceRequestCategories> ServiceRequestCategories { get; set; }
     public ICollection<ServiceCategory> ServiceCategories { get; set; }
     public ICollection<ServiceRequestImage> ServiceRequestImages { get; set; }
     public ICollection<ServiceBooking> ServiceBookings { get; set; }
     public ICollection<PriceOffer> PriceOffers { get; set; }
+    public ICollection<BlockedServiceRequest> BlockedServiceRequests { get; set; }
 }

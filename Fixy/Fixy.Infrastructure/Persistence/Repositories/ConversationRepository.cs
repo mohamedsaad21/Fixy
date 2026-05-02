@@ -31,4 +31,12 @@ public class ConversationRepository : GenericRepository<Conversation>, IConversa
         await _conversations.AddAsync(conversation);
         return conversation;
     }
+
+    public async Task CloseConversationAsync(Guid bookingId)
+    {
+        var conversation = await _conversations.SingleOrDefaultAsync(x => x.ServiceBookingId == bookingId);
+
+        if (conversation != null)
+            conversation.IsClosed = true;
+    }
 }

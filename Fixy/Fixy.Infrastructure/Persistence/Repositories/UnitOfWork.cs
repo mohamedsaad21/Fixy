@@ -15,6 +15,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IServiceCategoryRepository ServiceCategories { get; private set; }
     public IGenericRepository<ServiceRequest> ServiceRequests { get; private set; }
+    public IGenericRepository<BlockedServiceRequest> BlockedServiceRequests { get; private set; }
     public IGenericRepository<ServiceRequestImage> ServiceRequestImages { get; private set; }
     public IGenericRepository<PriceOffer> PriceOffers { get; private set; }
     public IGenericRepository<ServiceBooking> Bookings { get; private set; }
@@ -38,6 +39,7 @@ public class UnitOfWork : IUnitOfWork
         _dbContext = dbContext;
         ServiceCategories = new ServiceCategoryRepository(dbContext);
         ServiceRequests = new GenericRepository<ServiceRequest>(dbContext);
+        BlockedServiceRequests = new GenericRepository<BlockedServiceRequest>(dbContext);
         ServiceRequestImages = new GenericRepository<ServiceRequestImage>(dbContext);
         PriceOffers = new GenericRepository<PriceOffer>(dbContext);
         Bookings = new GenericRepository<ServiceBooking>(dbContext);

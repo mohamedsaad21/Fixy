@@ -7,6 +7,7 @@ public enum ServiceBookingStatus
     AwaitingCustomerConfirmationForCompletion,
     AwaitingPayment,
     Completed,
-    Cancelled,
+    CancelledByTechnician,
+    CancelledByCustomer,
     Disputed
 }

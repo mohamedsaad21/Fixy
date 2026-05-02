@@ -21,7 +21,7 @@ public sealed class UpdateTechnicianLocationCommandHandler : IRequestHandler<Upd
     public async Task<Result> Handle(UpdateTechnicianLocationCommand request, CancellationToken cancellationToken)
     {
         var technicianId = _currentUserService.GetCurrentUserId();
-        var location = await _unitOfWork.TechnicianLocations.GetTableNoTracking().Where(x => x.TechnicianId == technicianId).FirstOrDefaultAsync();
+        var location = await _unitOfWork.TechnicianLocations.GetTableAsTracking().Where(x => x.TechnicianId == technicianId).FirstOrDefaultAsync();
 
         if (location == null)
         {

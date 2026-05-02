@@ -48,9 +48,11 @@ public class SharedResourcesKeys
     public const string RequestInsertionFailed = "RequestInsertionFailed";
     public const string LocationNotUpdated = "LocationNotUpdated";
     public const string ServiceRequestNotFound = "ServiceRequestNotFound";
+    public const string ServiceRequestUnavailable = "ServiceRequestUnavailable";
     public const string AlreadyCreatedPriceOffer = "AlreadyCreatedPriceOffer";
     public const string PriceOfferNotFound = "PriceOfferNotFound";
     public const string ServiceAlreadyAssigned = "ServiceAlreadyAssigned";
+    public const string BlockedTechnicianOffer = "BlockedTechnicianOffer";
     public const string BookingNotFound = "BookingNotFound";
     public const string BookingNotActive = "BookingNotActive";
     public const string PriceChangeAlreadyPending = "PriceChangeAlreadyPending";
@@ -102,8 +104,11 @@ public class SharedResourcesKeys
     public const string TechnicianAlreadyRejected = "TechnicianAlreadyRejected";
     public const string CustomerNotFound = "CustomerNotFound";
     public const string CustomerAlreadyBlocked = "CustomerAlreadyBlocked";
+    public const string CustomerAlreadyActive = "CustomerAlreadyActive";
     public const string PriceChangeAlreadyRequested = "PriceChangeAlreadyRequested";
     public const string TechnicianLocationNotSet = "TechnicianLocationNotSet";
+    public const string AdminActiveStatus = "AdminActiveStatus";
+
 
     // Notifications
     public const string NotificationTechnicianApprovedTitle = "NotificationTechnicianApprovedTitle";
@@ -151,6 +156,10 @@ public class SharedResourcesKeys
     public const string TechnicianStatus_Approved = "TechnicianStatus_Approved";
     public const string TechnicianStatus_Rejected = "TechnicianStatus_Rejected";
     public const string TechnicianStatus_Blocked = "TechnicianStatus_Blocked";
+
+
+    public const string CustomerStatus_Active = "CustomerStatus_Active";
+    public const string CustomerStatus_Blocked = "CustomerStatus_Blocked";
 
 
 

@@ -29,23 +29,15 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
         if (booking.ServiceRequest.CustomerId != customer.Id)
             return Errors.Unauthorized;
 
-        if (booking.Status == ServiceBookingStatus.Cancelled)
-            return Errors.AlreadyCancelled;
-
         if(booking.Status != ServiceBookingStatus.InProgress && booking.Status != ServiceBookingStatus.AwaitingPriceChangeApproval)
             return Errors.CannotCancelAtThisStage;
 
-
+        booking.ServiceRequest.Customer.CancelledBookings += 1;        
+        customer.CancellationRate = customer.TotalBookings > 0? (double)customer.CancelledBookings / customer.TotalBookings * 100 : 0;
         booking.CustomerCancellationReason = request.Reason;
         booking.CancellationNote = request.Note;
-        booking.ServiceRequest.Customer.CancelledBookings += 1;
 
-        if (customer.TotalBookings > 0)
-            customer.CancellationRate = (double)customer.CancelledBookings / customer.TotalBookings * 100;
-        else
-            customer.CancellationRate = 0;
-
-        await bookingService.CancelBookingAsync(booking, customer.Id);
+        await bookingService.CancelBookingByCustomerAsync(booking, customer.Id, request.ReopenServiceRequest);
         
         // send notification to technician
         var technician = booking.Technician;

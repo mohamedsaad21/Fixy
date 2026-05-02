@@ -2,7 +2,7 @@
 
 public enum PriceOfferStatus
 {
-    Submitted,
+    Submitted = 1,
     Accepted,
     Rejected
 }

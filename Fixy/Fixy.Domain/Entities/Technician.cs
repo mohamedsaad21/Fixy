@@ -35,4 +35,5 @@ public class Technician : ApplicationUser
     public ICollection<TechnicianFeedback> TechnicianFeedbacks { get; set; }
     public ICollection<Payout> Payouts { get; set; }
     public ICollection<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; set; }
+    public ICollection<BlockedServiceRequest> BlockedServiceRequests { get; set; }
 }

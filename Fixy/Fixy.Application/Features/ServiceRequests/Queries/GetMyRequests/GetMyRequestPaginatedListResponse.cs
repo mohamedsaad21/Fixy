@@ -1,5 +1,4 @@
 ﻿using Fixy.Application.Common.DTOs;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 
@@ -12,5 +11,4 @@ public class GetMyRequestPaginatedListResponse
     public List<string> ServiceCategories { get; set; }
     public AddressDto Address { get; set; }
     public string Status { get; set; }
-    public List<PriceOfferDto> PriceOffers { get; set; }
 }

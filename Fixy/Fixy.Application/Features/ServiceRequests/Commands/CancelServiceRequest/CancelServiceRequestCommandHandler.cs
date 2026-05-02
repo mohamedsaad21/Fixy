@@ -5,11 +5,11 @@ using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequest;
+namespace Fixy.Application.Features.ServiceRequests.Commands.CancelServiceRequest;
 
-public sealed class DeleteServiceRequestCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<DeleteServiceRequestCommand, Result>
+public sealed class CancelServiceRequestCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<CancelServiceRequestCommand, Result>
 {
-    public async Task<Result> Handle(DeleteServiceRequestCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CancelServiceRequestCommand request, CancellationToken cancellationToken)
     {
         var user = await currentUserService.GetCurrentUserAsync();
 
@@ -27,8 +27,6 @@ public sealed class DeleteServiceRequestCommandHandler(IUnitOfWork unitOfWork, I
             return Errors.ServiceAlreadyAccepted;
 
         serviceRequest.Status = ServiceRequestStatus.Cancelled;
-        serviceRequest.IsDeleted = true;
-        serviceRequest.DeletedAt = DateTime.UtcNow;
 
         await unitOfWork.SaveChangesAsync();
 

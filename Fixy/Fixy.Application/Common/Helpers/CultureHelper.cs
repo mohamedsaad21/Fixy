@@ -6,7 +6,7 @@ public static class CultureHelper
 {
     public static void SetCulture(string? lang)
     {
-        var culture = new CultureInfo(lang ?? "en-US");
+        var culture = new CultureInfo(lang ?? "ar-EG");
 
         CultureInfo.CurrentUICulture = culture;
         CultureInfo.CurrentCulture = culture;

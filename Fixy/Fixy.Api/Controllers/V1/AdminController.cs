@@ -5,6 +5,7 @@ using Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 using Fixy.Application.Features.Admin.Commands.BlockCustomer;
 using Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
 using Fixy.Application.Features.Admin.Commands.RejectTechnician;
+using Fixy.Application.Features.Admin.Commands.UnblockCustomer;
 using Fixy.Application.Features.Admin.Queries.GetBookingById;
 using Fixy.Application.Features.Admin.Queries.GetBookings;
 using Fixy.Application.Features.Admin.Queries.GetCustomers;
@@ -48,7 +49,7 @@ public class AdminController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpPost(Router.AdminRouting.ApproveTechnician)]
+    [HttpPut(Router.AdminRouting.ApproveTechnician)]
     public async Task<IActionResult> ApproveTechnician([FromRoute] Guid TechnicianId)
     {
         return ToActionResult(await Mediator.Send(new ApproveTechnicianCommand(TechnicianId)));
@@ -58,7 +59,7 @@ public class AdminController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpPost(Router.AdminRouting.RejectTechnician)]
+    [HttpPut(Router.AdminRouting.RejectTechnician)]
     public async Task<IActionResult> RejectTechnician([FromForm] RejectTechnicianCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
@@ -68,7 +69,7 @@ public class AdminController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpPost(Router.AdminRouting.BlockTechnician)]
+    [HttpPut(Router.AdminRouting.BlockTechnician)]
     public async Task<IActionResult> BlockTechnician([FromForm] BlockTecnhnicianCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
@@ -78,10 +79,20 @@ public class AdminController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpPost(Router.AdminRouting.BlockCustomer)]
+    [HttpPut(Router.AdminRouting.BlockCustomer)]
     public async Task<IActionResult> BlockCustomer([FromForm] BlockCustomerCommand command)
     {
         return ToActionResult(await Mediator.Send(command));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPut(Router.AdminRouting.UnblockCustomer)]
+    public async Task<IActionResult> UnblockCustomer([FromRoute] Guid CustomerId)
+    {
+        return ToActionResult(await Mediator.Send(new UnblockCustomerCommand(CustomerId)));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

@@ -2,13 +2,13 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequest;
+namespace Fixy.Application.Features.ServiceRequests.Commands.CancelServiceRequest;
 
-public class DeleteServiceRequestCommandValidator : AbstractValidator<DeleteServiceRequestCommand>
+public class CancelServiceRequestCommandValidator : AbstractValidator<CancelServiceRequestCommand>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
 
-    public DeleteServiceRequestCommandValidator(IStringLocalizer<SharedResources> stringLocalizer)
+    public CancelServiceRequestCommandValidator(IStringLocalizer<SharedResources> stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         ApplyValidationRules();
