@@ -12,8 +12,7 @@ public sealed record SubmitCustomerFeedbackCommand
         int PunctualityRating,
         int ProfessionalismRating,
         int CommunicationRating,
-        int CleanlinessRating,
-        int SatisfactionScore,
+        int HandlingQuality,
         int CostSatisfaction,
         WeatherCondition WeatherCondition,
         string? TextComplain

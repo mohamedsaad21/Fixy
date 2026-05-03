@@ -16,7 +16,6 @@ public static class SubmitTechnicianFeedbackCommandToTechnicianFeedbackDomainMap
             ClarityOfIssue = command.ClarityOfIssue,
             SafetyAndEnvironment = command.SafetyAndEnvironment,
             CustomerPunctuality = command.CustomerPunctuality,
-            WorkerSatisfaction = command.WorkerSatisfaction,
             SubmittedAt = DateTime.UtcNow,
         };
     }

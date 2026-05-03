@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Contracts.ExternalServices;
+using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
@@ -15,22 +15,21 @@ public class FeedbackService : IFeedbackService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task ProcessFeedbackCompletionAsync(ServiceBooking Booking)
+    public async Task ProcessFeedbackCompletionAsync(ServiceBooking booking)
     {
-        var CustomerFeedback = await _unitOfWork.CustomerFeedbacks
+        var hasCustomerFeedback = await _unitOfWork.CustomerFeedbacks
             .GetTableNoTracking()
-            .FirstOrDefaultAsync(x => x.ServiceBookingId == Booking.Id);
+            .AnyAsync(x => x.ServiceBookingId == booking.Id);
 
-        var TechnicianFeedback = await _unitOfWork.TechnicianFeedbacks
+        var hasTechnicianFeedback = await _unitOfWork.TechnicianFeedbacks
             .GetTableNoTracking()
-            .FirstOrDefaultAsync(x => x.ServiceBookingId == Booking.Id);
+            .AnyAsync(x => x.ServiceBookingId == booking.Id);
 
-        if (CustomerFeedback != null && TechnicianFeedback != null)
+        if (hasCustomerFeedback && hasTechnicianFeedback)
         {
-            if (Booking.IsEvaluated) return;
+            if (booking.IsEvaluated) return;
             // Fire and Forget
-            var jobId = BackgroundJob.Enqueue<IRatingService>
-                (x => x.UpdateTechnicianRatingAsync(Booking, CustomerFeedback, TechnicianFeedback));
+            BackgroundJob.Enqueue<IRatingService>(x => x.PredictTechnicianRatingAsync(booking.Id));
         }
-}
+    }
 }

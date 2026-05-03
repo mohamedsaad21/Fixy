@@ -10,6 +10,7 @@ public partial class TechnicianProfile
     public void GetTechnicianServiceRequestByIdResponse()
     {
         CreateMap<ServiceRequest, GetTechnicianServiceRequestByIdResponse>()
+            .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.Customer.Id))
             .ForMember(dest => dest.CustomerUserName, opt => opt.MapFrom(src => src.Customer.UserName))
             .ForMember(dest => dest.ServiceCategories, opt => opt.MapFrom(src => src.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList()));
     }

@@ -33,10 +33,7 @@ public class SubmitCustomerFeedbackCommandValidator : AbstractValidator<SubmitCu
         RuleFor(x => x.CommunicationRating).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
             .InclusiveBetween(1, 5).WithMessage(_stringLocalizer[SharedResourcesKeys.RatingMustBeBetweenOneandFive]);
 
-        RuleFor(x => x.CleanlinessRating).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
-            .InclusiveBetween(1, 5).WithMessage(_stringLocalizer[SharedResourcesKeys.RatingMustBeBetweenOneandFive]);
-
-        RuleFor(x => x.SatisfactionScore).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
+        RuleFor(x => x.HandlingQuality).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
             .InclusiveBetween(1, 5).WithMessage(_stringLocalizer[SharedResourcesKeys.RatingMustBeBetweenOneandFive]);
 
         RuleFor(x => x.CostSatisfaction).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])

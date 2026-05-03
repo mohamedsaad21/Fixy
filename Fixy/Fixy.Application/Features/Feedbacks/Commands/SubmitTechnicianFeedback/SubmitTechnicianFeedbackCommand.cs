@@ -9,6 +9,5 @@ public sealed record SubmitTechnicianFeedbackCommand
         int CustomerBehaviorRating,
         int ClarityOfIssue,
         int SafetyAndEnvironment,
-        int CustomerPunctuality,
-        int WorkerSatisfaction
+        int CustomerPunctuality
     ) : IRequest<Result>;

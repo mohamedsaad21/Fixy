@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.Feedbacks.Commands;
 using Fixy.Domain.Enums;
@@ -12,7 +12,8 @@ public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurre
 {
     public async Task<Result> Handle(SubmitCustomerFeedbackCommand request, CancellationToken cancellationToken)
     {
-        var booking = await unitOfWork.Bookings.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.BookingId);
+        var booking = await unitOfWork.Bookings.GetTableNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
             return Errors.BookingNotFound;
@@ -31,9 +32,10 @@ public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurre
 
         await unitOfWork.CustomerFeedbacks.AddAsync(feedback);
 
+        await unitOfWork.SaveChangesAsync();
+
         await feedbackService.ProcessFeedbackCompletionAsync(booking);
 
-        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

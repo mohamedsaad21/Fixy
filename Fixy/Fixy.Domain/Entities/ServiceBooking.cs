@@ -31,6 +31,7 @@ public class ServiceBooking : BaseEntity
     public string? CancellationNote { get; set; }
     public bool IsCustomerConfirmed { get; set; }
     public DateTime? CustomerConfirmedAt { get; set; }
+    public int? PredictedTechnicianRating { get; set; }
     public bool IsEvaluated { get; set; }
     public Payment Payment { get; set; }
     public CustomerFeedback CustomerFeedback { get; set; }
