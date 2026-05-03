@@ -84,7 +84,7 @@ public class ServiceRequestController : AppControllerBase
     [HttpDelete(Router.ServiceRequestRouting.Delete)]
     public async Task<IActionResult> DeleteServiceRequest([FromRoute] Guid Id)
     {
-        return ToActionResult(await Mediator.Send(new CancelServiceRequestCommand(Id)));
+        return ToActionResult(await Mediator.Send(new DeleteServiceRequestCommand(Id)));
     }
 
     [Authorize(Roles = Roles.Customer)]

@@ -2,7 +2,7 @@
 
 public enum WeatherCondition
 {
-    Sunny,
+    Sunny = 1,
     Cloud,
     Rainy,
     Stormy,

@@ -29,8 +29,5 @@ public class SubmitTechnicianFeedbackCommandValidator : AbstractValidator<Submit
 
         RuleFor(x => x.CustomerPunctuality).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
             .InclusiveBetween(1, 5).WithMessage(_stringLocalizer[SharedResourcesKeys.RatingMustBeBetweenOneandFive]);
-
-        RuleFor(x => x.WorkerSatisfaction).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
-            .InclusiveBetween(1, 5).WithMessage(_stringLocalizer[SharedResourcesKeys.RatingMustBeBetweenOneandFive]);
     }
 }

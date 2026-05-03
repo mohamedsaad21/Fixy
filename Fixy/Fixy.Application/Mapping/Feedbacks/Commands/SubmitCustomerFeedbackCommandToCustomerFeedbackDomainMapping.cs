@@ -17,8 +17,7 @@ public static class SubmitCustomerFeedbackCommandToCustomerFeedbackDomainMapping
             PunctualityRating = command.PunctualityRating,
             ProfessionalismRating = command.ProfessionalismRating,
             CommunicationRating = command.CommunicationRating,
-            HandlingQuality = command.CleanlinessRating,
-            SatisfactionScore = command.SatisfactionScore,
+            HandlingQuality = command.HandlingQuality,
             CostSatisfaction = command.CostSatisfaction,
             WeatherCondition = command.WeatherCondition,
             SubmittedAt = DateTime.UtcNow

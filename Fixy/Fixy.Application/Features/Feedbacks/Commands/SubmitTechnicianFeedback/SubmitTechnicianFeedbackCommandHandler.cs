@@ -12,7 +12,8 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
 {
     public async Task<Result> Handle(SubmitTechnicianFeedbackCommand request, CancellationToken cancellationToken)
     {
-        var booking = await unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest).FirstOrDefaultAsync(x => x.Id == request.BookingId);
+        var booking = await unitOfWork.Bookings
+            .GetTableAsTracking().Include(x => x.ServiceRequest).FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
             return Errors.BookingNotFound;
@@ -22,18 +23,19 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
 
         var currentTechnician = await currentUserService.GetCurrentUserAsync();
 
-        var IsExists = await unitOfWork.TechnicianFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == booking.Id);
+        var isExists = await unitOfWork.TechnicianFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == booking.Id);
 
-        if (IsExists)
+        if (isExists)
             return Errors.FeebackAlreadySubmitted;
 
         var feedback = request.ToTechnicianFeedbackDomain(booking.ServiceRequest.CustomerId, currentTechnician.Id);
 
         await unitOfWork.TechnicianFeedbacks.AddAsync(feedback);
 
+        await unitOfWork.SaveChangesAsync();
+
         await feedbackService.ProcessFeedbackCompletionAsync(booking);
 
-        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }

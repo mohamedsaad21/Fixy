@@ -1,8 +1,8 @@
-﻿using Fixy.Application.Common.DTOs;
+﻿using Fixy.Application.Common.DTOs.RatingPrediction;
 using Fixy.Application.Contracts.ExternalServices;
-using Fixy.Domain.Entities;
-using Fixy.Domain.Entities.Feedback;
+using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Text.Json;
 
@@ -12,14 +12,34 @@ public class RatingService : IRatingService
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly FlaskApiSettings _flaskApiSettings;
-    public RatingService(IHttpClientFactory httpClientFactory, FlaskApiSettings flaskApiSettings)
+    private readonly IUnitOfWork _unitOfWork;
+    public RatingService(IHttpClientFactory httpClientFactory, FlaskApiSettings flaskApiSettings, IUnitOfWork unitOfWork)
     {
         _httpClientFactory = httpClientFactory;
         _flaskApiSettings = flaskApiSettings;
+        _unitOfWork = unitOfWork;
     }
-    public async Task UpdateTechnicianRatingAsync(ServiceBooking booking, CustomerFeedback customerFeedback, TechnicianFeedback technicianFeedback)
+    public async Task PredictTechnicianRatingAsync(Guid bookingId)
     {
-        var requestBody = new UpdateRatingRequest
+        var booking = await _unitOfWork.Bookings
+            .GetTableAsTracking().Include(x => x.Technician).ThenInclude(x => x.ServiceCategory)
+            .FirstOrDefaultAsync(x => x.Id == bookingId);
+
+        if (booking == null)
+            throw new KeyNotFoundException($"Booking {bookingId} not found.");
+
+        var customerFeedback = await _unitOfWork.CustomerFeedbacks
+            .GetTableNoTracking()
+            .FirstOrDefaultAsync(x => x.ServiceBookingId == booking.Id);
+
+        var technicianFeedback = await _unitOfWork.TechnicianFeedbacks
+            .GetTableNoTracking()
+            .FirstOrDefaultAsync(x => x.ServiceBookingId == booking.Id);
+
+        if (customerFeedback == null || technicianFeedback == null)
+            throw new InvalidOperationException($"Feedback not complete for booking {bookingId}.");
+
+        var requestBody = new RatingPredictionRequest
         {
             ServiceType = booking.Technician.ServiceCategory.Localize(booking.Technician.ServiceCategory.NameAr, booking.Technician.ServiceCategory.NameEn),
             DayOfWeek = booking.ScheduledDateTime.DayOfWeek.ToString(),
@@ -55,10 +75,21 @@ public class RatingService : IRatingService
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        var responseDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+        var result = JsonSerializer.Deserialize<RatingPredictionResponse>(json);
 
-        //booking.Technician.Rating = newRating;
-        //booking.Technician.TotalReviews += 1;
-        //booking.IsReviewed = true;
+        if (result == null)
+            throw new HttpRequestException("No response from Flask API.");
+
+        if(!string.IsNullOrEmpty(result.Error))
+            throw new HttpRequestException(result.Error);
+
+        booking.PredictedTechnicianRating = result.PredictedRating;
+        booking.IsEvaluated = true;
+
+        var query = _unitOfWork.Bookings.GetTableNoTracking().Where(x => x.TechnicianId == booking.TechnicianId && x.IsEvaluated);
+        var totalSum = await query.SumAsync(x => x.PredictedTechnicianRating) + booking.PredictedTechnicianRating;
+        var totalCount = await query.CountAsync() + 1;
+        booking.Technician.AverageRating = totalSum / totalCount;
+        await _unitOfWork.SaveChangesAsync();
     }
 }

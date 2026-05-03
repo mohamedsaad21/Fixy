@@ -15,7 +15,7 @@ public static class HaversineDistance
 
         var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
 
-        return EarthRadiusKm * c;
+        return Math.Round(EarthRadiusKm * c, 2);
     }
     private static double ToRadians(double degrees) => degrees * (Math.PI / 180.0);
 }

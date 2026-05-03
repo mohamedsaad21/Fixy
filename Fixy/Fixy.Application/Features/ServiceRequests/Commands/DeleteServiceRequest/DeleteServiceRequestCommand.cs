@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.CancelServiceRequest;
 
-public sealed record CancelServiceRequestCommand(Guid Id) : IRequest<Result>;
+public sealed record DeleteServiceRequestCommand(Guid Id) : IRequest<Result>;

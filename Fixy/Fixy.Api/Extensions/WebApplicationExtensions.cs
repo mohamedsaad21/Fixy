@@ -1,5 +1,4 @@
-﻿using Fixy.Api.Filters;
-using Fixy.Api.Middleware;
+﻿using Fixy.Api.Middleware;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Hubs;
 using Fixy.Infrastructure.Persistence;

@@ -4,11 +4,11 @@ using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.CancelServiceRequest;
 
-public class CancelServiceRequestCommandValidator : AbstractValidator<CancelServiceRequestCommand>
+public class DeleteServiceRequestCommandValidator : AbstractValidator<DeleteServiceRequestCommand>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
 
-    public CancelServiceRequestCommandValidator(IStringLocalizer<SharedResources> stringLocalizer)
+    public DeleteServiceRequestCommandValidator(IStringLocalizer<SharedResources> stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         ApplyValidationRules();
