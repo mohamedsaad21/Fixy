@@ -1,4 +1,4 @@
-﻿using Fixy.Domain.Enums;
+using Fixy.Domain.Enums;
 
 namespace Fixy.Domain.Entities.Feedback;
 

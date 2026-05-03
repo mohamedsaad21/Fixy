@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Common.DTOs.RatingPrediction;
+using Fixy.Application.Common.DTOs.RatingPrediction;
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;

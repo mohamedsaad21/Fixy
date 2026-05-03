@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Contracts.ExternalServices;
+namespace Fixy.Application.Contracts.ExternalServices;
 
 public interface IRatingService
 {

@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Features.Feedbacks.Commands.SubmitCustomerFeedback;
+using Fixy.Application.Features.Feedbacks.Commands.SubmitCustomerFeedback;
 using Fixy.Domain.Entities.Feedback;
 
 namespace Fixy.Application.Mapping.Feedbacks.Commands;
