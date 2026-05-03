@@ -1,5 +1,5 @@
 ﻿using Fixy.Application.Bases;
-using Fixy.Application.Common.DTOs;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 using MediatR;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;

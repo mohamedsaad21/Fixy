@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Common.DTOs;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Features.Technicians.Queries.GetAvailableServiceRequestsForTechnician;
 using Fixy.Domain.Entities;
 

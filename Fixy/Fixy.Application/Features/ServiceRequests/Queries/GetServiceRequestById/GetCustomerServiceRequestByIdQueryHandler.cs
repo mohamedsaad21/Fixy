@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Fixy.Application.Bases;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
 using Fixy.Application.Resources;
 using Fixy.Domain.Interfaces;
 using MediatR;

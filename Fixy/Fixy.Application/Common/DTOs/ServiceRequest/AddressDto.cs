@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Common.DTOs;
+﻿namespace Fixy.Application.Common.DTOs.ServiceRequest;
 
 public record AddressDto
   (

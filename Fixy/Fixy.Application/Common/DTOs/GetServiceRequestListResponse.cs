@@ -1,4 +1,6 @@
-﻿namespace Fixy.Application.Common.DTOs;
+﻿using Fixy.Application.Common.DTOs.ServiceRequest;
+
+namespace Fixy.Application.Common.DTOs;
 
 public class GetServiceRequestListResponse
 {

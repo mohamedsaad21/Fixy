@@ -1,31 +1,32 @@
-﻿using Fixy.Application.Bases;
+﻿using AutoMapper;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
-using Fixy.Application.Mapping.Bookings.Queries;
-using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Bookings.Queries.GetBookingByIdForCustomer;
 
-public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetBookingByIdForCustomerQuery, Result<GetBookingByIdForCustomerResponse>>
+public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IMapper mapper) : IRequestHandler<GetBookingByIdForCustomerQuery, Result<GetBookingByIdForCustomerResponse>>
 {
     public async Task<Result<GetBookingByIdForCustomerResponse>> Handle(GetBookingByIdForCustomerQuery request, CancellationToken cancellationToken)
     {
-        var currentUser = await currentUserService.GetCurrentUserAsync();
+        var currentCustomerId = currentUserService.GetCurrentUserId();
 
-        if (currentUser is not Customer customer)
+        var customer = await unitOfWork.Customers.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == currentCustomerId);
+
+        if (customer == null)
             return Errors.Unauthorized;
 
-        var booking = await unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest).Include(x => x.Technician)
-            .FirstOrDefaultAsync(x => x.Id == request.Id && x.ServiceRequest.CustomerId == customer.Id);
+        var booking = await unitOfWork.Bookings.GetTableNoTracking()
+            .Include(x => x.ServiceRequest).ThenInclude(x => x.ServiceRequestImages).Include(x => x.Technician)
+            .FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (booking == null)
             return Errors.BookingNotFound;
 
-        var result = booking.ToGetBookingByIdForCustomerResponse(localizer);
+        var result = mapper.Map<GetBookingByIdForCustomerResponse>(booking);
         return result;
     }
 }

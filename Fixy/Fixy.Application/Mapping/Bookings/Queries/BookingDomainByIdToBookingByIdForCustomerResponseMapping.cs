@@ -1,23 +1,17 @@
-﻿using Fixy.Application.Common.Helpers;
+﻿using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Features.Bookings.Queries.GetBookingByIdForCustomer;
-using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
-using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Mapping.Bookings.Queries;
+namespace Fixy.Application.Mapping.Bookings;
 
-public static class BookingDomainByIdToBookingByIdForCustomerResponseMapping
+public partial class BookingProfile
 {
-    public static GetBookingByIdForCustomerResponse ToGetBookingByIdForCustomerResponse(this ServiceBooking booking, IStringLocalizer<SharedResources> localizer)
+    public void BookingDomainByIdToBookingByIdForCustomerResponseMapping()
     {
-        return new GetBookingByIdForCustomerResponse
-        {
-            Id = booking.Id,
-            Status = EnumLocalizer.Localize(booking.Status, localizer),
-            AgreedPrice = booking.AgreedPrice,
-            TechnicianId = booking.TechnicianId,
-            TechnicianName = booking.Technician.FirstName + " " + booking.Technician.LastName,
-            CreatedAt = booking.CreatedAt
-        };
+        CreateMap<ServiceBooking, GetBookingByIdForCustomerResponse>()
+            .ForMember(dest => dest.TechnicianName, opt => opt.MapFrom(src => src.Technician.FirstName + " " + src.Technician.LastName))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.ServiceRequest.Description))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new AddressDto(src.ServiceRequest.Address.Country, src.ServiceRequest.Address.City, src.ServiceRequest.Address.Area, src.ServiceRequest.Address.Street, src.ServiceRequest.Address.BuildingNumber, src.ServiceRequest.Address.Latitude, src.ServiceRequest.Address.Longitude)))
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ServiceRequest.ServiceRequestImages));
     }
 }

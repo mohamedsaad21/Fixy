@@ -1,7 +1,5 @@
 ﻿using Fixy.Application.Features.Technicians.Queries.GetServiceRequestById;
-using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
-using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Mapping.Technicians;
 
@@ -11,7 +9,9 @@ public partial class TechnicianProfile
     {
         CreateMap<ServiceRequest, GetTechnicianServiceRequestByIdResponse>()
             .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.Customer.Id))
+            .ForMember(dest => dest.CustomerFullName, opt => opt.MapFrom(src => src.Customer.FirstName + " " + src.Customer.LastName))
             .ForMember(dest => dest.CustomerUserName, opt => opt.MapFrom(src => src.Customer.UserName))
-            .ForMember(dest => dest.ServiceCategories, opt => opt.MapFrom(src => src.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList()));
+            .ForMember(dest => dest.ServiceCategories, opt => opt.MapFrom(src => src.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList()))
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ServiceRequestImages));
     }
 }
