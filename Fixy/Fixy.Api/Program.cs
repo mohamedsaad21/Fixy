@@ -54,8 +54,11 @@ builder.Services.AddCorsPolicy();
 // SignalR
 builder.Services.AddSignalR();
 
+// Filters
 builder.Services.AddScoped<TechnicianStatusFilter>();
 builder.Services.AddScoped<CustomerStatusFilter>();
+builder.Services.AddScoped<TechnicianFeedbackFilter>();
+builder.Services.AddScoped<CustomerFeedbackFilter>();
 
 // Hangfire Client
 builder.Services.AddHangfire(config =>

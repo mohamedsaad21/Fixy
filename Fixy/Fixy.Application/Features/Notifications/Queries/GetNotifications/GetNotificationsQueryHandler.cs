@@ -24,7 +24,7 @@ public sealed class GetNotificationsQueryHandler : IRequestHandler<GetNotificati
 
     public async Task<Result<PaginatedResult<GetNotificationsResponse>>> Handle(GetNotificationsQuery request, CancellationToken cancellationToken)
     {
-        var userId = _currentUserService.GetCurrentUserId();
+        var userId = await _currentUserService.GetCurrentUserId();
         var notifications = _unitOfWork.Notifications.GetTableNoTracking().Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).AsQueryable();
         var FilterQuery = await notifications.Select(x => x.ToGetNotificationsResponse(_localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);
         return FilterQuery;

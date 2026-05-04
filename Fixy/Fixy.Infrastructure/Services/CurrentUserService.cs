@@ -16,7 +16,7 @@ public class CurrentUserService : ICurrentUserService
         _userManager = userManager;
     }
 
-    public Guid GetCurrentUserId()
+    public async Task<Guid> GetCurrentUserId()
     {
         var userId = _httpContextAccessor.HttpContext.User.Claims.SingleOrDefault(claim => claim.Type == "uid").Value;
         if(userId == null)
@@ -28,8 +28,8 @@ public class CurrentUserService : ICurrentUserService
 
     public async Task<ApplicationUser> GetCurrentUserAsync()
     {
-        var userId = GetCurrentUserId().ToString();
-        var user = await _userManager.FindByIdAsync(userId);
+        var userId = await GetCurrentUserId();
+        var user = await _userManager.FindByIdAsync(userId.ToString());
         if(user == null)
         {
             throw new UnauthorizedAccessException();

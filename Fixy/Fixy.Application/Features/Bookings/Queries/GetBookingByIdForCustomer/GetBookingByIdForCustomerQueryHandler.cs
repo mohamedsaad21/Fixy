@@ -12,7 +12,7 @@ public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurr
 {
     public async Task<Result<GetBookingByIdForCustomerResponse>> Handle(GetBookingByIdForCustomerQuery request, CancellationToken cancellationToken)
     {
-        var currentCustomerId = currentUserService.GetCurrentUserId();
+        var currentCustomerId = await currentUserService.GetCurrentUserId();
 
         var customer = await unitOfWork.Customers.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == currentCustomerId);
 

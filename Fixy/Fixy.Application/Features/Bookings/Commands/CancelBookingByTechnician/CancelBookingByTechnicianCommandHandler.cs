@@ -12,7 +12,7 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
 {
     public async Task<Result> Handle(CancelBookingByTechnicianCommand request, CancellationToken cancellationToken)
     {
-        var currentTechnicianId = currentUserService.GetCurrentUserId();
+        var currentTechnicianId = await currentUserService.GetCurrentUserId();
 
         var technician = await unitOfWork.Technicians.GetTableAsTracking().FirstOrDefaultAsync(x => x.Id == currentTechnicianId);
         
