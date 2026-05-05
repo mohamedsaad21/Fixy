@@ -1,56 +1,52 @@
-name: Build and deploy .NET Core application to Web App FixyApi
+name: Build and deploy ASP.Net Core app to Azure Web App - FixyApi
+
 on:
   push:
     branches:
       - Urgent-Editions
-permissions:
-  id-token: write
-  contents: read
-env:
-  AZURE_WEBAPP_NAME: FixyApi
-  AZURE_WEBAPP_PACKAGE_PATH: Fixy/Fixy.Api/publish
-  CONFIGURATION: Release
-  DOTNET_CORE_VERSION: 10.0.x
-  WORKING_DIRECTORY: Fixy/Fixy.Api
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
     steps:
       - uses: actions/checkout@v4
-      - name: Setup .NET SDK
+
+      - name: Set up .NET Core
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_CORE_VERSION }}
-      - name: Restore
-        run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
-      - name: Build
-        run: dotnet build "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-restore
-      - name: Test
-        run: dotnet test "${{ env.WORKING_DIRECTORY }}" --no-build
-      - name: Publish
-        run: dotnet publish "${{ env.WORKING_DIRECTORY }}" --configuration ${{ env.CONFIGURATION }} --no-build --output "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-      - name: Publish Artifacts
+          dotnet-version: '10.x'
+
+      - name: Build with dotnet
+        run: dotnet build "Fixy/Fixy.Api/Fixy.Api.csproj" --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish "Fixy/Fixy.Api/Fixy.Api.csproj" -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: webapp
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: webapp
-          path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-      - name: Azure Login
-        uses: azure/login@v2
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
         with:
-          client-id: ${{ vars.FixyApi_CLIENT_ID_B88C }}
-          tenant-id: ${{ vars.FixyApi_TENANT_ID_8EAA }}
-          subscription-id: ${{ vars.FixyApi_SUBSCRIPTION_ID_8EAA }}
-      - name: Deploy to Azure WebApp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          app-name: 'FixyApi20260505182525'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: .
