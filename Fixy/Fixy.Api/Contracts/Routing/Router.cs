@@ -124,6 +124,8 @@ public static class Router
         public const string SubmitCustomerFeedback = prefix + "/Submit-Customer-Feedback";
         public const string SubmitTechnicianFeedback = prefix + "/Submit-Technician-Feedback";
         public const string GetBookingFeedbacks = prefix + "/Get-Booking-Feedbacks/{BookingId}";
+        public const string GetPendingCustomerFeedbackStatus = prefix + "/Get-Pending-Customer-Feedback-Status";
+        public const string GetPendingTechnicianFeedbackStatus = prefix + "/Get-Pending-Technician-Feedback-Status";
     }
 
     public static class UsersRouting

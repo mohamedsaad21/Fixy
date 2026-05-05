@@ -11,7 +11,7 @@ public sealed class GetTechnicianServiceRequestByIdQueryHandler(IUnitOfWork unit
     public async Task<Result<GetTechnicianServiceRequestByIdResponse>> Handle(GetTechnicianServiceRequestByIdQuery request, CancellationToken cancellationToken)
     {
         var serviceRequest = await unitOfWork.ServiceRequests.GetTableNoTracking().Include(x => x.Customer).Include(x => x.PriceOffers).ThenInclude(x => x.Technician)
-            .Include(x => x.ServiceCategories)
+            .Include(x => x.ServiceCategories).Include(x => x.ServiceRequestImages)
             .FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (serviceRequest == null)

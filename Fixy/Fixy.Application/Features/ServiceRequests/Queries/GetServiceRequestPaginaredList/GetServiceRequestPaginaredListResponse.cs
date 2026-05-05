@@ -1,5 +1,5 @@
-﻿using Fixy.Application.Common.DTOs;
-using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
+﻿using Fixy.Application.Common.DTOs.PriceOffer;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Domain.Enums;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestPaginaredList;

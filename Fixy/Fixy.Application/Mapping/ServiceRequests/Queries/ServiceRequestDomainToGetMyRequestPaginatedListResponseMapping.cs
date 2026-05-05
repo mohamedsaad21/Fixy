@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Common.DTOs;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Common.Helpers;
 using Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 using Fixy.Application.Resources;

@@ -1,23 +1,18 @@
-﻿using Fixy.Application.Common.Helpers;
+﻿using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Features.Bookings.Queries.GetBookingByIdForTechnician;
-using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
-using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Mapping.Bookings.Queries;
+namespace Fixy.Application.Mapping.Bookings;
 
-public static class BookingDomainByIdToBookingByIdForTechnicianResponseMapping
+public partial class BookingProfile
 {
-    public static GetBookingByIdForTechnicianResponse ToGetBookingByIdForTechnicianResponse(this ServiceBooking booking, IStringLocalizer<SharedResources> localizer)
+    public void BookingDomainByIdToBookingByIdForTechnicianResponseMapping()
     {
-        return new GetBookingByIdForTechnicianResponse
-        {
-            Id = booking.Id,
-            Status = EnumLocalizer.Localize(booking.Status, localizer),
-            AgreedPrice = booking.AgreedPrice,
-            CustomerId = booking.ServiceRequest.CustomerId,
-            CustomerName = booking.ServiceRequest.Customer.FirstName + " " + booking.ServiceRequest.Customer.LastName,
-            CreatedAt = booking.CreatedAt
-        };
+        CreateMap<ServiceBooking, GetBookingByIdForTechnicianResponse>()
+            .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.ServiceRequest.CustomerId))
+            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.ServiceRequest.Customer.FirstName + " " + src.ServiceRequest.Customer.LastName))
+            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.ServiceRequest.Description))
+            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new AddressDto(src.ServiceRequest.Address.Country, src.ServiceRequest.Address.City, src.ServiceRequest.Address.Area, src.ServiceRequest.Address.Street, src.ServiceRequest.Address.BuildingNumber, src.ServiceRequest.Address.Latitude, src.ServiceRequest.Address.Longitude)))
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ServiceRequest.ServiceRequestImages));
     }
 }

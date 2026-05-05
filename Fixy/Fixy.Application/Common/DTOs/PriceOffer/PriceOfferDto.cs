@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
+﻿namespace Fixy.Application.Common.DTOs.PriceOffer;
 
 public class PriceOfferDto
 {

@@ -14,7 +14,7 @@ public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
 {
     public async Task<Result<Guid>> Handle(CreatePriceOfferCommand request, CancellationToken cancellationToken)
     {
-        var currentTechnicianId = currentUserService.GetCurrentUserId();
+        var currentTechnicianId = await currentUserService.GetCurrentUserId();
 
         var technician = await unitOfWork.Technicians.GetTableNoTracking()
             .FirstOrDefaultAsync(x => x.Id == currentTechnicianId);

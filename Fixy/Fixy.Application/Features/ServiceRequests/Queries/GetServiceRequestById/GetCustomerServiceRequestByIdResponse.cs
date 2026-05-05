@@ -1,6 +1,7 @@
-﻿using Fixy.Application.Common.DTOs;
+﻿using Fixy.Application.Common.DTOs.PriceOffer;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 
-namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById.Responses;
+namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 
 public class GetCustomerServiceRequestByIdResponse
 {

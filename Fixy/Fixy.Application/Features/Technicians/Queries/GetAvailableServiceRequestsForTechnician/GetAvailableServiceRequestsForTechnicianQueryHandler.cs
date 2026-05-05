@@ -14,7 +14,7 @@ public sealed class GetAvailableServiceRequestsForTechnicianQueryHandler(IUnitOf
 {
     public async Task<Result<PaginatedResult<GetAvailableServiceRequestsForTechnicianResponse>>> Handle(GetAvailableServiceRequestsForTechnicianQuery request, CancellationToken cancellationToken)
     {
-        var technicianId = currentUserService.GetCurrentUserId();
+        var technicianId = await currentUserService.GetCurrentUserId();
 
         var technician = await unitOfWork.Technicians.GetTableNoTracking().Include(t => t.TechnicianLocation)
             .FirstOrDefaultAsync(x => x.Id == technicianId, cancellationToken);

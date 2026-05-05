@@ -41,7 +41,7 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
         {
             var serviceRequest = _mapper.Map<ServiceRequest>(request);
             // Assign customerId
-            serviceRequest.CustomerId = _currentUserService.GetCurrentUserId();
+            serviceRequest.CustomerId = await _currentUserService.GetCurrentUserId();
             // Assign service categories
             var categories = new List<ServiceCategory>();
             foreach (var categoryId in request.ServiceCategoriesIds)

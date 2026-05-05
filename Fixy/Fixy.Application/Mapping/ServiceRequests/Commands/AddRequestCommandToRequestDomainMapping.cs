@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Common.DTOs;
+﻿using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Commands.CreateServiceRequest;
 using Fixy.Domain.Entities;
 

@@ -32,4 +32,31 @@ public class FeedbackService : IFeedbackService
             BackgroundJob.Enqueue<IRatingService>(x => x.PredictTechnicianRatingAsync(booking.Id));
         }
     }
+
+    public async Task<Guid?> GetPendingCustomerFeedbackBookingIdAsync(Guid customerId)
+    {
+        var lastCompletedbooking = await _unitOfWork.Bookings.GetTableNoTracking()
+            .Include(x => x.ServiceRequest)
+            .Where(x => x.ServiceRequest.CustomerId == customerId && x.CompletedAt != null)            
+            .OrderByDescending(x => x.CompletedAt).FirstOrDefaultAsync();
+
+        if(lastCompletedbooking == null) return null;
+
+        var isFeedbackExists = await _unitOfWork.CustomerFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == lastCompletedbooking.Id);
+
+        return !isFeedbackExists ? lastCompletedbooking.Id : null;
+    }
+
+    public async Task<Guid?> GetPendingTechnicianFeedbackBookingIdAsync(Guid technicianId)
+    {
+        var lastCompletedbooking = await _unitOfWork.Bookings.GetTableNoTracking()
+            .Where(x => x.TechnicianId == technicianId && x.CompletedAt != null)
+            .OrderByDescending(x => x.CompletedAt).FirstOrDefaultAsync();
+
+        if (lastCompletedbooking == null) return null;
+
+        var isFeedbackExists = await _unitOfWork.TechnicianFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == lastCompletedbooking.Id);
+
+        return !isFeedbackExists ? lastCompletedbooking.Id : null;
+    }
 }
