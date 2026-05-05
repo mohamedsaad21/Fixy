@@ -52,7 +52,7 @@ public class TechnicianFeedbackFilter : IAsyncActionFilter
             {
                 StatusCode = 403,
                 Error = "FeedbackPending",
-                Message = "Please complete your feedback before sending new price offers.",
+                Message = "Please complete your feedback to be able to send new price offers.",
                 Data = new
                 {
                     PendingFeedbackBookingId = pendingBookingId,

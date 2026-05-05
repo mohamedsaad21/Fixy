@@ -1,6 +1,10 @@
 ﻿using Fixy.Domain.Entities.Chat;
+using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,12 +14,14 @@ namespace Fixy.Infrastructure.Hubs;
 public class ChatHub : Hub
 {
     private readonly IUnitOfWork _unitOfWork;
-    public ChatHub(IUnitOfWork unitOfWork)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public ChatHub(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
     {
         _unitOfWork = unitOfWork;
+        _userManager = userManager;
     }
 
-    public async Task SendMessage(Guid bookingId, string message)
+    public async Task SendMessage(Guid bookingId, string content, MessageType type)
     {
         // Get sender
         var senderIdStr = Context.User?.FindFirst("uid")?.Value;
@@ -48,6 +54,7 @@ public class ChatHub : Hub
         if (conversation.IsClosed)
             return;
 
+        var sender = await _userManager.FindByIdAsync(senderId.ToString());
         // Save message
         var msg = new ChatMessage
         {
@@ -55,7 +62,8 @@ public class ChatHub : Hub
             ConversationId = conversation.Id,
             SenderId = senderId,
             ReceiverId = receiverId,
-            Content = message,
+            Content = content,
+            Type = type,
             SentAt = DateTime.UtcNow,
             IsSeen = false
         };
@@ -70,8 +78,12 @@ public class ChatHub : Hub
                 msg.Id,
                 msg.ConversationId,
                 msg.SenderId,
+                SenderName = sender.FirstName + " " + sender.LastName,
+                SenderUserName = sender.UserName,
+                SenderProfilePicture = sender.ProfilePictureUrl,
                 msg.ReceiverId,
                 msg.Content,
+                msg.Type,
                 msg.SentAt
             });
 
