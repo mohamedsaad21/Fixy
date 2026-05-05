@@ -64,7 +64,8 @@ public static class WebApplicationExtensions
 
         app.MapHub<NotificationHub>("/hubs/notification");
         app.MapHub<ChatHub>("/hubs/chat");
-
+        
+        app.UseHangfireDashboard();
         app.MapHangfireDashboard("/hangfire", new DashboardOptions()
         {
             DashboardTitle = "Fixy Service Dashboard",
