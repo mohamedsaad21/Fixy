@@ -5,7 +5,6 @@ using Fixy.Infrastructure.Hubs;
 using Fixy.Infrastructure.Persistence;
 using Fixy.Infrastructure.Seeder;
 using Hangfire;
-using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
