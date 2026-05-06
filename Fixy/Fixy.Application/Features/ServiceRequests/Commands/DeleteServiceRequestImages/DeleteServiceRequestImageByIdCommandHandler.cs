@@ -10,9 +10,9 @@ namespace Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceReques
 public sealed class DeleteServiceRequestImageByIdCommandHandler : IRequestHandler<DeleteServiceRequestImageByIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IFileService _fileService;
+    private readonly IStorageService _fileService;
 
-    public DeleteServiceRequestImageByIdCommandHandler(IUnitOfWork unitOfWork, IFileService fileService)
+    public DeleteServiceRequestImageByIdCommandHandler(IUnitOfWork unitOfWork, IStorageService fileService)
     {
         _unitOfWork = unitOfWork;
         _fileService = fileService;
@@ -26,7 +26,7 @@ public sealed class DeleteServiceRequestImageByIdCommandHandler : IRequestHandle
             return Errors.ImageNotFound;
 
         await _unitOfWork.ServiceRequestImages.DeleteAsync(image);
-        await _fileService.DeleteAsync(image.ImagePublicId);
+        await _fileService.DeleteAsync(image.ImageUrl);
         await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }

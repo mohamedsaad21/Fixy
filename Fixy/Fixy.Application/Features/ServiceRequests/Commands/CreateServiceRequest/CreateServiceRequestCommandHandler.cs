@@ -13,11 +13,11 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUserService;
-    private readonly IFileService _fileService;
+    private readonly IStorageService _fileService;
     private readonly IMapper _mapper;
 
     public CreateServiceRequestCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, 
-        IFileService fileService, IMapper mapper)
+        IStorageService fileService, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _currentUserService = currentUserService;
@@ -28,12 +28,12 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
     public async Task<Result<Guid>> Handle(CreateServiceRequestCommand request, CancellationToken cancellationToken)
     {
         // Upload service request images
-        var UploadResults = new List<UploadResultModel>();
+        var UploadResults = new List<string>();
         if (request.Images != null && request.Images.Any())
         {
             foreach (var image in request.Images)
             {
-                var uploadResult = await _fileService.UploadAsync("ServiceRequest/temp", image);
+                var uploadResult = await _fileService.UploadAsync(image);
                 UploadResults.Add(uploadResult);
             }
         }
@@ -52,12 +52,11 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
             serviceRequest.ServiceCategories = categories;
             // Add Service Request
             await _unitOfWork.ServiceRequests.AddAsync(serviceRequest);
-            foreach (var uploadResult in UploadResults)
+            foreach (var url in UploadResults)
             {
                 serviceRequest.ServiceRequestImages.Add(new ServiceRequestImage
                 {
-                    ImageUrl = uploadResult.Url,
-                    ImagePublicId = uploadResult.PublicId
+                    ImageUrl = url,
                 });
             }
             await _unitOfWork.SaveChangesAsync();
@@ -89,9 +88,9 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
         }
         catch (Exception)
         {
-            foreach(var uploadResult in UploadResults)
+            foreach(var url in UploadResults)
             {
-                await _fileService.DeleteAsync(uploadResult.PublicId);
+                await _fileService.DeleteAsync(url);
             }
             return Errors.RequestInsertionFailed;
         }

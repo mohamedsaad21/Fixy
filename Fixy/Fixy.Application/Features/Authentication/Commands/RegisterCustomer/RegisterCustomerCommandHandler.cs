@@ -12,7 +12,7 @@ using System.Net.Mail;
 namespace Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
 
 public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> userManager, IMapper mapper,
-    IFileService fileService, IAuthenticationService authenticationService)
+    IStorageService fileService, IAuthenticationService authenticationService)
     : IRequestHandler<RegisterCustomerCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
@@ -24,20 +24,12 @@ public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> 
         customer.UserName = new MailAddress(request.Email).User;
 
         string? profilePicturePublicId = null;
-        string? nationalIdCardImagePublicId = null;
-
         try
         {
             if (request.ProfilePicture != null)
             {
-                var ProfileResult = await fileService.UploadAsync($"Customers/{customer.Id}/Profiles", request.ProfilePicture);
-
-                if (!ProfileResult.IsSuccess)
-                    throw new Exception("Profile Upload Failed");
-
-                customer.ProfilePictureUrl = ProfileResult.Url;
-                customer.ProfilePicturePublicId = ProfileResult.PublicId;
-                profilePicturePublicId = ProfileResult.PublicId;
+                var profilePictureUrl = await fileService.UploadAsync(request.ProfilePicture);
+                customer.ProfilePictureUrl = profilePictureUrl;
             }
 
             var createResult = await userManager.CreateAsync(customer, request.Password);
@@ -56,9 +48,6 @@ public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> 
         {
             if (!string.IsNullOrWhiteSpace(profilePicturePublicId))
                 await fileService.DeleteAsync(profilePicturePublicId);
-
-            if (!string.IsNullOrWhiteSpace(nationalIdCardImagePublicId))
-                await fileService.DeleteAsync(nationalIdCardImagePublicId);
 
             await userManager.DeleteAsync(customer);
 

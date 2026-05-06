@@ -141,5 +141,6 @@ public static class Router
         public const string prefix = Rule + "/Chat";
         public const string GetMessages = prefix + "/Get-Messages";
         public const string MarkMessagesAsRead = prefix + "/Mark-Messages-As-Read/{BookingId}";
+        public const string UploadAttachment = prefix + "/Upload-Attachment";
     }
 }

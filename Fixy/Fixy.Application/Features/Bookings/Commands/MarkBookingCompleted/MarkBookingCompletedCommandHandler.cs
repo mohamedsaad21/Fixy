@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Bookings.Commands.MarkBookingCompleted;
 
-public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IFileService fileService, INotificationService notificationService) : IRequestHandler<MarkBookingCompletedCommand, Result>
+public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStorageService fileService, INotificationService notificationService) : IRequestHandler<MarkBookingCompletedCommand, Result>
 {
     public async Task<Result> Handle(MarkBookingCompletedCommand request, CancellationToken cancellationToken)
     {
@@ -30,11 +30,10 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
 
         foreach(var image in request.CompletionImages)
         {
-            var UploadResult = await fileService.UploadAsync($"Bookings/{booking.Id}", image);
+            var url = await fileService.UploadAsync(image);
             await unitOfWork.ServiceBookingImages.AddAsync(new ServiceBookingImage
             {
-                ImageUrl = UploadResult.Url,
-                ImagePublicId = UploadResult.PublicId,
+                ImageUrl = url,
                 ServiceBookingId = booking.Id
             });
         }

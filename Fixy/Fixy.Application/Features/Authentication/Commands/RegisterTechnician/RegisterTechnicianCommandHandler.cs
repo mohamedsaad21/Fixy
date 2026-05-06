@@ -13,7 +13,7 @@ using System.Net.Mail;
 namespace Fixy.Application.Features.Authentication.Commands.RegisterTechnician;
 
 public sealed class RegisterTechnicianCommandHandler(UserManager<ApplicationUser> userManager, IUnitOfWork unitOfWork, 
-    IMapper mapper, IFileService fileService, IAuthenticationService authenticationService)
+    IMapper mapper, IStorageService fileService, IAuthenticationService authenticationService)
     : IRequestHandler<RegisterTechnicianCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(RegisterTechnicianCommand request, CancellationToken cancellationToken)
@@ -27,31 +27,17 @@ public sealed class RegisterTechnicianCommandHandler(UserManager<ApplicationUser
         var technician = mapper.Map<Technician>(request);
         technician.UserName = new MailAddress(request.Email).User;
 
-        string? profilePicturePublicId = null;
-        string? nationalIdCardImagePublicId = null;
-
         try
         {
             if (request.ProfilePicture != null)
             {
-                var ProfileResult = await fileService.UploadAsync($"Technicians/{technician.Id}/Profiles", request.ProfilePicture);
-
-                if (!ProfileResult.IsSuccess)
-                    throw new Exception("Profile Upload Failed");
-
-                technician.ProfilePictureUrl = ProfileResult.Url;
-                technician.ProfilePicturePublicId = ProfileResult.PublicId;
-                profilePicturePublicId = ProfileResult.PublicId;
+                var profilePictureUrl = await fileService.UploadAsync(request.ProfilePicture);
+                technician.ProfilePictureUrl = profilePictureUrl;
             }
 
-            var nationalIdResult = await fileService.UploadAsync($"Technicians/{technician.Id}/NationalIds", request.NationalIdCardImage);
+            var nationalIdPictureUrl = await fileService.UploadAsync(request.NationalIdCardImage);
 
-            if (!nationalIdResult.IsSuccess)
-                throw new Exception("NationalId Upload Failed");
-
-            technician.NationalIdCardImageUrl = nationalIdResult.Url;
-            technician.NationalIdCardImagePublicId = nationalIdResult.PublicId;
-            nationalIdCardImagePublicId = nationalIdResult.PublicId;
+            technician.NationalIdCardImageUrl = nationalIdPictureUrl;
 
             var createResult = await userManager.CreateAsync(technician, request.Password);
             if (!createResult.Succeeded)
@@ -66,12 +52,6 @@ public sealed class RegisterTechnicianCommandHandler(UserManager<ApplicationUser
         }
         catch (Exception)
         {
-            if (!string.IsNullOrWhiteSpace(profilePicturePublicId))
-                await fileService.DeleteAsync(profilePicturePublicId);
-
-            if (!string.IsNullOrWhiteSpace(nationalIdCardImagePublicId))
-                await fileService.DeleteAsync(nationalIdCardImagePublicId);
-
             await userManager.DeleteAsync(technician);
 
             return Errors.FileUploadFailed;

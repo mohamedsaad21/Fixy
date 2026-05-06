@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Fixy.Application.Features.Users.Commands.DeleteProfilePicture;
 
-public sealed class DeleteProfilePictureCommandHandler(ICurrentUserService currentUserService, IFileService fileService, UserManager<ApplicationUser> userManager) : IRequestHandler<DeleteProfilePictureCommand, Result>
+public sealed class DeleteProfilePictureCommandHandler(ICurrentUserService currentUserService, IStorageService fileService, UserManager<ApplicationUser> userManager) : IRequestHandler<DeleteProfilePictureCommand, Result>
 {
     public async Task<Result> Handle(DeleteProfilePictureCommand request, CancellationToken cancellationToken)
     {
@@ -16,9 +16,8 @@ public sealed class DeleteProfilePictureCommandHandler(ICurrentUserService curre
         if(user.ProfilePictureUrl == null)
             return Errors.AlreadyNoProfilePictureExists;
 
-        await fileService.DeleteAsync(user.ProfilePicturePublicId);
+        await fileService.DeleteAsync(user.ProfilePictureUrl);
         user.ProfilePictureUrl = null;
-        user.ProfilePicturePublicId = null;
         await userManager.UpdateAsync(user);
         return Result.Success();
     }

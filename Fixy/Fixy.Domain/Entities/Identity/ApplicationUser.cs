@@ -15,7 +15,6 @@ public class ApplicationUser : IdentityUser<Guid>
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string? ProfilePictureUrl { get; set; }
-    public string? ProfilePicturePublicId { get; set; }
     public bool IsTwoFactorEmailEnabled { get; set; }
     public string? FcmToken { get; set; }
     public string PreferredLanguage { get; set; } = "ar-EG";
