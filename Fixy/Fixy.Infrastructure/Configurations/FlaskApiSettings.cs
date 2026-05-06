@@ -2,6 +2,7 @@
 
 public class FlaskApiSettings
 {
-    public string BaseUrl { get; set; }
+    public string RatingModelUrl { get; set; }
+    public string AnomalyModelUrl { get; set; }
     public int Timeout { get; set; }
 }

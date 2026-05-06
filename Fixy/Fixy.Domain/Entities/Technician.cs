@@ -21,7 +21,7 @@ public class Technician : ApplicationUser
     public string? Bio {  get; set; }
     public int? ComplaintsCount { get; set; }
     public int? ResponseTime { get; set; }
-    public double? AverageRating { get; set; }
+    public double? AverageRating { get; set; } = 0;
     public string? StripeAccountId { get; set; }
     public Guid ServiceCategoryId { get; set; }
     public string? RejectionReason { get; set; }
