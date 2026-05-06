@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Fixy.Infrastructure.ExternalServices;
 
-public class FileService : IFileService
+public class FileService
 {
     private readonly Cloudinary _cloudinary;
     public FileService(Cloudinary cloudinary)

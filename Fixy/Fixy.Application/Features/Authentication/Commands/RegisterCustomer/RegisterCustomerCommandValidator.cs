@@ -28,5 +28,17 @@ public class RegisterCustomerCommandValidator : AbstractValidator<RegisterCustom
 
         RuleFor(x => x.ConfirmPassword).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty])
             .Equal(x => x.Password).WithMessage(_stringLocalizer[SharedResourcesKeys.PasswordNotMatchConfirmPassword]);
+        
+        RuleFor(x => x.ProfilePicture)
+            .Must(file => file.Length <= 10 * 1024 * 1024)
+            .WithMessage("File size must not exceed 10MB")
+            .Must(file =>
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                return allowedExtensions.Contains(extension);
+            })
+            .WithMessage("Only image files (.jpg, .jpeg, .png) are allowed")
+            .When(x => x.ProfilePicture != null);
     }
 }

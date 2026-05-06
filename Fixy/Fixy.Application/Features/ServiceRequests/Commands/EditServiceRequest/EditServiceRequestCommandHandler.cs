@@ -11,8 +11,8 @@ namespace Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 public sealed class EditServiceRequestCommandHandler : IRequestHandler<EditServiceRequestCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IFileService _fileService;
-    public EditServiceRequestCommandHandler(IUnitOfWork unitOfWork, IFileService fileService)
+    private readonly IStorageService _fileService;
+    public EditServiceRequestCommandHandler(IUnitOfWork unitOfWork, IStorageService fileService)
     {
         _unitOfWork = unitOfWork;
         _fileService = fileService;

@@ -1,6 +1,7 @@
 ﻿using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Interfaces;
+using Fixy.Infrastructure.Configurations;
 using Fixy.Infrastructure.ExternalServices;
 using Fixy.Infrastructure.Persistence.Repositories;
 using Fixy.Infrastructure.Services;
@@ -21,7 +22,6 @@ public static class ModuleInfrastructureDependencies
 
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<IEmailService, EmailService>();
-        services.AddTransient<IFileService, FileService>();
         services.AddTransient<ICurrentUserService, CurrentUserService>();
         services.AddTransient<INotificationService, NotificationService>();
         services.AddTransient<IPaymentService, StripeService>();
@@ -29,7 +29,9 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IBookingService, BookingService>();
         services.AddTransient<IFeedbackService, FeedbackService>();
         services.AddTransient<IRatingService, RatingService>();
-        
+
+        services.AddSingleton<IStorageService, BlobStorageService>();
+
         return services;
     }
 }

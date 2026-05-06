@@ -11,8 +11,8 @@ namespace Fixy.Application.Features.ServiceRequests.Commands.AddServiceRequestIm
 public sealed class AddServiceRequestImagesCommandHandler : IRequestHandler<AddServiceRequestImagesCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IFileService _fileService;
-    public AddServiceRequestImagesCommandHandler(IUnitOfWork unitOfWork, IFileService fileService)
+    private readonly IStorageService _fileService;
+    public AddServiceRequestImagesCommandHandler(IUnitOfWork unitOfWork, IStorageService fileService)
     {
         _unitOfWork = unitOfWork;
         _fileService = fileService;
@@ -26,26 +26,25 @@ public sealed class AddServiceRequestImagesCommandHandler : IRequestHandler<AddS
             return Errors.ServiceRequestNotFound;
 
         // Upload service request images
-        var UploadResults = new List<UploadResultModel>();
+        var UploadResults = new List<string>();
         try {
             foreach (var image in request.Images)
             {
-                var uploadResult = await _fileService.UploadAsync("ServiceRequest/temp", image);
+                var url = await _fileService.UploadAsync(image);
                 serviceRequest.ServiceRequestImages.Add(new ServiceRequestImage
                 {
-                    ImageUrl = uploadResult.Url,
-                    ImagePublicId = uploadResult.PublicId
+                    ImageUrl = url,
                 });
-                UploadResults.Add(uploadResult);
+                UploadResults.Add(url);
             }
             await _unitOfWork.SaveChangesAsync();
             return Result.Success();
         }
         catch (Exception)
         {
-            foreach (var uploadResult in UploadResults)
+            foreach (var url in UploadResults)
             {
-                await _fileService.DeleteAsync(uploadResult.PublicId);
+                await _fileService.DeleteAsync(url);
             }
             return Errors.RequestInsertionFailed;
         }

@@ -18,7 +18,6 @@ public class Technician : ApplicationUser
     public int YearsOfExperience { get; set; }
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingApproval;
     public string NationalIdCardImageUrl {  get; set; }
-    public string NationalIdCardImagePublicId {  get; set; }
     public string? Bio {  get; set; }
     public int? ComplaintsCount { get; set; }
     public int? ResponseTime { get; set; }

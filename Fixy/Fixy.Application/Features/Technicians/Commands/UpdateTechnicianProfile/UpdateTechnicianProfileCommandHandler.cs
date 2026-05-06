@@ -10,7 +10,7 @@ using Stripe;
 
 namespace Fixy.Application.Features.Technicians.Commands.UpdateTechnicianProfile;
 
-public sealed class UpdateTechnicianProfileCommandHandler(IUnitOfWork unitOfWork, IFileService fileService) : IRequestHandler<UpdateTechnicianProfileCommand, Result>
+public sealed class UpdateTechnicianProfileCommandHandler(IUnitOfWork unitOfWork, IStorageService fileService) : IRequestHandler<UpdateTechnicianProfileCommand, Result>
 {
     public async Task<Result> Handle(UpdateTechnicianProfileCommand request, CancellationToken cancellationToken)
     {
@@ -21,17 +21,12 @@ public sealed class UpdateTechnicianProfileCommandHandler(IUnitOfWork unitOfWork
 
         technician.NationalId = request.NationalId;
 
-        await fileService.DeleteAsync(technician.NationalIdCardImagePublicId);
+        //await fileService.DeleteAsync(technician.NationalIdCardImagePublicId);
         technician.NationalIdCardImageUrl = null;
-        technician.NationalIdCardImagePublicId = null;
 
-        var nationalIdResult = await fileService.UploadAsync($"Technicians/{technician.Id}/NationalIds", request.NationalIdCardImage);
+        var nationalIdPictureUrl = await fileService.UploadAsync(request.NationalIdCardImage);
 
-        if (!nationalIdResult.IsSuccess)
-            return Errors.NationalIdUploadFailed;
-
-        technician.NationalIdCardImageUrl = nationalIdResult.Url;
-        technician.NationalIdCardImagePublicId = nationalIdResult.PublicId;
+        technician.NationalIdCardImageUrl = nationalIdPictureUrl;
 
         if (technician.Status == TechnicianStatus.Rejected)
         {

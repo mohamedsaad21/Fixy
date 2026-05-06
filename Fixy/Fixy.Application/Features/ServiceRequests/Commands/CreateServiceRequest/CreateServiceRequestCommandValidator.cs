@@ -25,5 +25,7 @@ public class CreateServiceRequestCommandValidator : AbstractValidator<CreateServ
         RuleFor(x => x.Address.Area).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]).MaximumLength(100);
         RuleFor(x => x.Address.Street).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]).MaximumLength(100);
         RuleFor(x => x.Address.BuildingNumber).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]).MaximumLength(100);
+    
+        
     }
 }
