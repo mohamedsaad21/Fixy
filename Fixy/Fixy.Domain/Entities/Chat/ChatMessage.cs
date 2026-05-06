@@ -1,5 +1,4 @@
 ﻿using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Enums;
 
 namespace Fixy.Domain.Entities.Chat;
 
@@ -11,8 +10,8 @@ public class ChatMessage : BaseEntity
     public ApplicationUser Sender { get; set; }
     public Guid ReceiverId { get; set; }
     public ApplicationUser Receiver { get; set; }
-    public string Content { get; set; }
-    public MessageType Type { get; set; }
+    public string? Content { get; set; }
+    public string? Attachment { get; set; }
     public bool IsSeen { get; set; }
     public DateTime SentAt { get; set; }
     public DateTime? SeenAt { get; set; }

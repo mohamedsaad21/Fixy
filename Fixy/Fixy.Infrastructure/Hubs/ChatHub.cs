@@ -1,9 +1,8 @@
-﻿using Fixy.Domain.Entities.Chat;
+﻿using Fixy.Application.Common.DTOs.Chat;
+using Fixy.Domain.Entities.Chat;
 using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,7 @@ public class ChatHub : Hub
         _userManager = userManager;
     }
 
-    public async Task SendMessage(Guid bookingId, string content, MessageType type)
+    public async Task SendMessage(Guid bookingId, MessageContent messageContent)
     {
         // Get sender
         var senderIdStr = Context.User?.FindFirst("uid")?.Value;
@@ -62,8 +61,8 @@ public class ChatHub : Hub
             ConversationId = conversation.Id,
             SenderId = senderId,
             ReceiverId = receiverId,
-            Content = content,
-            Type = type,
+            Content = messageContent.Content,
+            Attachment = messageContent.Attachment,
             SentAt = DateTime.UtcNow,
             IsSeen = false
         };
@@ -83,8 +82,9 @@ public class ChatHub : Hub
                 SenderProfilePicture = sender.ProfilePictureUrl,
                 msg.ReceiverId,
                 msg.Content,
-                msg.Type,
-                msg.SentAt
+                msg.Attachment,
+                msg.SentAt,
+                msg.IsSeen
             });
 
         // Echo back to sender
