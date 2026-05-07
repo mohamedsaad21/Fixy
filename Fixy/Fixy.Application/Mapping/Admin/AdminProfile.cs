@@ -7,5 +7,6 @@ public partial class AdminProfile : Profile
     public AdminProfile()
     {
         BookingDomainByIdToGetBookingByIdResponseMapping();
+        UserDomainToGetUserInfoByIdQueryMapping();
     }
 }

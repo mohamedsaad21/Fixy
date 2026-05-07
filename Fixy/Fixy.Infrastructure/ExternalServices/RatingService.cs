@@ -93,7 +93,7 @@ public class RatingService : IRatingService
         var query = _unitOfWork.Bookings.GetTableNoTracking().Where(x => x.TechnicianId == booking.TechnicianId && x.IsEvaluated);
         var totalSum = await query.SumAsync(x => x.PredictedTechnicianRating) + booking.PredictedTechnicianRating;
         var totalCount = await query.CountAsync() + 1;
-        booking.Technician.AverageRating = totalSum / totalCount;
+        booking.Technician.AverageRating = (double)totalSum / totalCount;
         await _unitOfWork.SaveChangesAsync();
     }
 

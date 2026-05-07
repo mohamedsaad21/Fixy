@@ -1,4 +1,3 @@
-using Fixy.Application.Common.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace Fixy.Application.Contracts.ExternalServices;

@@ -14,14 +14,14 @@ public class Technician : ApplicationUser
         CustomerFeedbacks = new HashSet<CustomerFeedback>();
         TechnicianFeedbacks = new HashSet<TechnicianFeedback>();
     }
-    public string NationalId { get; set; }
     public int YearsOfExperience { get; set; }
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingApproval;
+    public string NationalId { get; set; }
     public string NationalIdCardImageUrl {  get; set; }
     public string? Bio {  get; set; }
     public int? ComplaintsCount { get; set; }
     public int? ResponseTime { get; set; }
-    public double? AverageRating { get; set; } = 0;
+    public double AverageRating { get; set; } = 0;
     public string? StripeAccountId { get; set; }
     public Guid ServiceCategoryId { get; set; }
     public string? RejectionReason { get; set; }

@@ -12,6 +12,7 @@ public class Customer : ApplicationUser
         CustomerFeedbacks = new HashSet<CustomerFeedback>();
         TechnicianFeedbacks = new HashSet<TechnicianFeedback>();
     }
+    public string NationalId { get; set; }
     public string? StripeCustomerId { get; set; }
     public CustomerStatus Status { get; set; } = CustomerStatus.Active;
     public ICollection<ServiceRequest> ServiceRequests { get; set; }

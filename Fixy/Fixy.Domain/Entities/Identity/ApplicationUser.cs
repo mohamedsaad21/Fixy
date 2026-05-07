@@ -16,6 +16,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public string LastName { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public bool IsTwoFactorEmailEnabled { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string? FcmToken { get; set; }
     public string PreferredLanguage { get; set; } = "ar-EG";
     public int? TotalBookings { get; set; }

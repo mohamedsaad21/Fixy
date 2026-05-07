@@ -13,5 +13,6 @@ public class ServiceBookingConfigurations : IEntityTypeConfiguration<ServiceBook
         builder.HasOne(x => x.Payment).WithOne(x => x.ServiceBooking).HasForeignKey<Payment>(x => x.ServiceBookingId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.CustomerFeedback).WithOne(x => x.ServiceBooking).HasForeignKey<CustomerFeedback>(x => x.ServiceBookingId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(x => x.TechnicianFeedback).WithOne(x => x.ServiceBooking).HasForeignKey<TechnicianFeedback>(x => x.ServiceBookingId).OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.Status).HasConversion<string>();
     }
 }
