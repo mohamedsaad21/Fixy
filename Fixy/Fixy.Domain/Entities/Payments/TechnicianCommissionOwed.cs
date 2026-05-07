@@ -8,6 +8,6 @@ public class TechnicianCommissionOwed : BaseEntity
     public ServiceBooking Booking { get; set; }
     public decimal AmountOwed { get; set; }
     public bool IsPaid { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? PaidAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? PaidAt { get; set; }
 }

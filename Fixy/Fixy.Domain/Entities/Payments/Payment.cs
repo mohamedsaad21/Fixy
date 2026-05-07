@@ -22,6 +22,6 @@ public class Payment : BaseEntity
     public PaymentStatus Status { get; set; }
     public PaymentMethod Method { get; set; }
     // Timestamps
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? PaidAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? PaidAt { get; set; }
 }

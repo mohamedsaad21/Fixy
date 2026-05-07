@@ -11,5 +11,5 @@ public interface IAuthenticationService
     Task<AuthResponse> GetJwtToken(ApplicationUser user);
     Task SendOtpAsync(ApplicationUser user, string actionText, string reason);
     Task<bool> VerifyOtpAsync(Guid userId, string code);
-    Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires);
+    Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTimeOffset expires);
 }

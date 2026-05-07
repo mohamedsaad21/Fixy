@@ -15,7 +15,7 @@ public class ServiceRequest : DatedEntity
     public Guid CustomerId { get; set; }
     public Customer Customer { get; set; }
     public string Description { get; set; }
-    public DateTime ScheduledDateTime { get; set; }
+    public DateTimeOffset ScheduledDateTime { get; set; }
     public Address Address { get; set; }
     public ServiceRequestStatus Status { get; set; } = ServiceRequestStatus.Pending;
     public bool HadPreviousCancellation { get; set; }

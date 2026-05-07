@@ -12,7 +12,7 @@ public class Payout : BaseEntity
     public PayoutStatus Status { get; set; }
     public string? Method { get; set; }  // VodafoneCash, OrangeCash, etc.
     public string? RecipientInfo { get; set; }  // Wallet number or bank account
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? ProcessedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? ProcessedAt { get; set; }
     public string? PaymobPayoutId { get; set; }
 }

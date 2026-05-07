@@ -81,8 +81,8 @@ public class AuthenticationService : IAuthenticationService
         return new RefreshToken
         {
             Token = Convert.ToBase64String(randomNumber),
-            CreatedOn = DateTime.UtcNow,
-            ExpiresOn = DateTime.UtcNow.AddDays(30)
+            CreatedOn = DateTimeOffset.UtcNow,
+            ExpiresOn = DateTimeOffset.UtcNow.AddDays(30)
         };
     }
     public async Task SendOtpAsync(ApplicationUser user, string actionText, string reason)
@@ -93,7 +93,7 @@ public class AuthenticationService : IAuthenticationService
         {
             ApplicationUserId = user.Id,
             Code = code,
-            ExpiresAt = DateTime.UtcNow.AddMinutes(5)
+            ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(5)
         };
         await _unitOfWork.OtpCodes.AddAsync(otp);
         await _unitOfWork.SaveChangesAsync();
@@ -109,7 +109,7 @@ public class AuthenticationService : IAuthenticationService
             .OrderByDescending(o => o.ExpiresAt)
             .FirstOrDefaultAsync();
 
-        if (otp == null || otp.ExpiresAt < DateTime.UtcNow)
+        if (otp == null || otp.ExpiresAt < DateTimeOffset.UtcNow)
             return false;
 
         otp.IsUsed = true; // mark as used so it can't be reused
@@ -117,7 +117,7 @@ public class AuthenticationService : IAuthenticationService
         return true;
     }
 
-    public async Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTime expires)
+    public async Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTimeOffset expires)
     {
         var response = _httpContextAccessor.HttpContext?.Response;
 

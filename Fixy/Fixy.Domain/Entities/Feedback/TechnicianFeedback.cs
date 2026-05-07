@@ -13,5 +13,5 @@ public class TechnicianFeedback : BaseEntity
     public int SafetyAndEnvironment { get; set; }
     public int CustomerPunctuality { get; set; }
     public int WorkerSatisfaction { get; set; }
-    public DateTime SubmittedAt { get; set; }
+    public DateTimeOffset SubmittedAt { get; set; }
 }

@@ -8,6 +8,6 @@ public class OtpCode : BaseEntity
     public ApplicationUser ApplicationUser { get; set; }
     [EncryptColumn]
     public string Code { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public DateTimeOffset ExpiresAt { get; set; }
     public bool IsUsed { get; set; }
 }

@@ -25,7 +25,7 @@ public class Technician : ApplicationUser
     public string? StripeAccountId { get; set; }
     public Guid ServiceCategoryId { get; set; }
     public string? RejectionReason { get; set; }
-    public DateTime? RejectedAt { get; set; }
+    public DateTimeOffset? RejectedAt { get; set; }
     public ServiceCategory ServiceCategory { get; set; }
     public TechnicianLocation TechnicianLocation { get; set; }
     public ICollection<ServiceBooking> ServiceBookings { get; set; }

@@ -25,7 +25,7 @@ public class ConversationRepository : GenericRepository<Conversation>, IConversa
             ServiceBookingId = bookingId,
             CustomerId = senderId,
             TechnicianId = receiverId,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTimeOffset.UtcNow
         };
 
         await _conversations.AddAsync(conversation);

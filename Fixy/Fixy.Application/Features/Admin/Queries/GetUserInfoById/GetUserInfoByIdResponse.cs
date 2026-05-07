@@ -8,7 +8,7 @@ public class GetUserInfoByIdResponse
     public string Role { get; set; }
     public string ProfilePictureUrl { get; set; }
     public double CancellationRate { get; set; }
-    public DateTime JoinDate { get; set; }
+    public DateTimeOffset JoinDate { get; set; }
     public string NationalId { get; set; }
     // For Tech
     public string NationalIdCardImageUrl { get; set; }

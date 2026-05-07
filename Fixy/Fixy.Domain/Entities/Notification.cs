@@ -11,6 +11,6 @@ public class Notification : BaseEntity
     public string TitleKey { get; set; }
     public string BodyKey { get; set; }
     public bool IsRead { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? ReadAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? ReadAt { get; set; }
 }
