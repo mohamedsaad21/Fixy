@@ -7,7 +7,7 @@ public class TechnicianLocation : BaseEntity
     public string ServiceArea { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
-    public DateTime UpdatedAt { get; set; }
+    public DateTimeOffset UpdatedAt { get; set; }
 
     public TechnicianLocation(Guid technicianId, double latitude, double longitude, string serviceArea)
     {
@@ -15,7 +15,7 @@ public class TechnicianLocation : BaseEntity
         Latitude = latitude;
         Longitude = longitude;
         ServiceArea = serviceArea;
-        UpdatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 
     public void Update(double latitude, double longitude, string serviceArea)
@@ -23,6 +23,6 @@ public class TechnicianLocation : BaseEntity
         Latitude = latitude;
         Longitude = longitude;
         ServiceArea = serviceArea;
-        UpdatedAt = DateTime.UtcNow;
+        UpdatedAt = DateTimeOffset.UtcNow;
     }
 }

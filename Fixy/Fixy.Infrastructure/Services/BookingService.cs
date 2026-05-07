@@ -11,7 +11,7 @@ public class BookingService(IUnitOfWork unitOfWork) : IBookingService
     public async Task CancelBookingByTechnicianAsync(ServiceBooking booking, Technician technician)
     {
         booking.Status = ServiceBookingStatus.CancelledByTechnician;
-        booking.CancelledAt = DateTime.UtcNow;
+        booking.CancelledAt = DateTimeOffset.UtcNow;
         booking.CancelledById = technician.Id;
 
         // close chat
@@ -23,7 +23,7 @@ public class BookingService(IUnitOfWork unitOfWork) : IBookingService
     public async Task CancelBookingByCustomerAsync(ServiceBooking booking, Guid customerId, bool reopenServiceRequest)
     {
         booking.Status = ServiceBookingStatus.CancelledByCustomer;
-        booking.CancelledAt = DateTime.UtcNow;
+        booking.CancelledAt = DateTimeOffset.UtcNow;
         booking.CancelledById = customerId;
 
         // close chat
@@ -39,7 +39,7 @@ public class BookingService(IUnitOfWork unitOfWork) : IBookingService
     {
         serviceRequest.Status = ServiceRequestStatus.Pending;
         serviceRequest.HadPreviousCancellation = true;
-        serviceRequest.UpdatedAt = DateTime.UtcNow;
+        serviceRequest.UpdatedAt = DateTimeOffset.UtcNow;
 
         var blockedServiceRequest = new BlockedServiceRequest
         {
@@ -54,20 +54,20 @@ public class BookingService(IUnitOfWork unitOfWork) : IBookingService
         if (priceOffer != null)
         {
             priceOffer.IsDeleted = true;
-            priceOffer.DeletedAt = DateTime.UtcNow;
+            priceOffer.DeletedAt = DateTimeOffset.UtcNow;
         }
         await ExpireStaleOffers(serviceRequest);
     }
 
     private async Task ExpireStaleOffers(ServiceRequest serviceRequest)
     {
-        if (serviceRequest.ScheduledDateTime >= DateTime.UtcNow)
+        if (serviceRequest.ScheduledDateTime >= DateTimeOffset.UtcNow)
             return;
 
         foreach (var offer in serviceRequest.PriceOffers)
         {
             offer.IsDeleted = true;
-            offer.DeletedAt = DateTime.UtcNow;
+            offer.DeletedAt = DateTimeOffset.UtcNow;
         }
     }
 }

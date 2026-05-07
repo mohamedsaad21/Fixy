@@ -14,6 +14,6 @@ public class GetBookingByIdResponse
     public decimal Price { get; set; }
     public string Status { get; set; }
     public string? CancellationNote { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? CompletedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? CompletedAt { get; set; }
 }

@@ -14,8 +14,8 @@ public class Dispute : BaseEntity
     public string DesiredResolution { get; set; }
     public string Status { get; set; }
     public string ResolutionOutcome { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime ResolvedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset ResolvedAt { get; set; }
     public string StripeDisputeId { get; set; }
     public Guid ResolverId { get; set; }
     public ApplicationUser Resolver { get; set; }

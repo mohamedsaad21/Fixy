@@ -2,6 +2,7 @@
 using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Features.Technicians.Queries.GetAvailableServiceRequestsForTechnician;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Helpers;
 
 namespace Fixy.Application.Mapping.Technicians.Queries;
 
@@ -13,7 +14,7 @@ public static class ServiceRequestDomainToGetAvailableServiceRequestsForTechnici
         {
             Id = serviceRequest.Id,
             Description = serviceRequest.Description,
-            ScheduledDateTime = serviceRequest.ScheduledDateTime,
+            ScheduledDateTime = serviceRequest.ScheduledDateTime.ToEgyptTime(),
             Address = new AddressDto(
                 serviceRequest.Address.Country, 
                 serviceRequest.Address.City, 

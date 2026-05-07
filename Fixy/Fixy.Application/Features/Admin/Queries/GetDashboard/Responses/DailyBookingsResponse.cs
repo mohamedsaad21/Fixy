@@ -2,6 +2,6 @@
 
 public class DailyBookingsResponse
 {
-    public DateTime Date { get; set; }
+    public DateTimeOffset Date { get; set; }
     public int Count { get; set; }
 }

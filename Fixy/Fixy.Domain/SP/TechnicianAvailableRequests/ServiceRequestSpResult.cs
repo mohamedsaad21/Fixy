@@ -5,7 +5,7 @@ public class ServiceRequestSpResult
     public Guid Id { get; set; }
     public string UserName { get; set; }
     public string Description { get; set; }
-    public DateTime ScheduledDateTime { get; set; }
+    public DateTimeOffset ScheduledDateTime { get; set; }
     public int Status { get; set; }
     public string Country { get; set; }
     public string City { get; set; }

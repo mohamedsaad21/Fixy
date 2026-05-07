@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Features.Admin.Queries.GetBookingById;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Helpers;
 
 namespace Fixy.Application.Mapping.Admin;
 
@@ -14,6 +15,7 @@ public partial class AdminProfile
             .ForMember(dest => dest.CustomerUserName, opt => opt.MapFrom(src => src.ServiceRequest.Customer.UserName))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.ServiceRequest.Description))
             .ForMember(dest => dest.ServiceCategory, opt => opt.MapFrom(src => src.Technician.ServiceCategory.Localize(src.Technician.ServiceCategory.NameAr, src.Technician.ServiceCategory.NameEn)))
-            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.AgreedPrice));
+            .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.AgreedPrice))
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt.ToEgyptTime()));
     }
 }

@@ -6,9 +6,9 @@ namespace Fixy.Domain.Entities.Identity;
 public class RefreshToken
 {
     public string Token {  get; set; }
-    public DateTime ExpiresOn { get; set; }
-    public bool IsExpired => DateTime.UtcNow >= ExpiresOn;
-    public DateTime CreatedOn { get; set; }
-    public DateTime? RevokedOn { get; set; }
+    public DateTimeOffset ExpiresOn { get; set; }
+    public bool IsExpired => DateTimeOffset.UtcNow >= ExpiresOn;
+    public DateTimeOffset CreatedOn { get; set; }
+    public DateTimeOffset? RevokedOn { get; set; }
     public bool IsActive => RevokedOn == null && !IsExpired;
 }

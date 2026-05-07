@@ -18,6 +18,6 @@ public class CustomerFeedback : BaseEntity
     public int HandlingQuality { get; set; }
     public int CostSatisfaction { get; set; }
     public WeatherCondition WeatherCondition { get; set; }
-    public DateTime SubmittedAt { get; set; }
+    public DateTimeOffset SubmittedAt { get; set; }
     public string? TextComplain { get; set; }
 }

@@ -26,7 +26,7 @@ public class NotificationRepository : GenericRepository<Notification>, INotifica
         if (notification != null && !notification.IsRead)
         {
             notification.IsRead = true;
-            notification.ReadAt = DateTime.UtcNow;
+            notification.ReadAt = DateTimeOffset.UtcNow;
         }
         return notification;
     }
@@ -40,7 +40,7 @@ public class NotificationRepository : GenericRepository<Notification>, INotifica
         foreach (var notification in unreadNotifications)
         {
             notification.IsRead = true;
-            notification.ReadAt = DateTime.UtcNow;
+            notification.ReadAt = DateTimeOffset.UtcNow;
         }
     }
 

@@ -2,6 +2,7 @@
 using Fixy.Application.Features.Admin.Queries.GetDashboard.Responses;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Enums;
+using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -38,7 +39,7 @@ public sealed class GetDashboardQueryHandler(IUnitOfWork unitOfWork, UserManager
 
         var bookingsPerDay = await bookingsQuery
             .Where(x => x.CreatedAt >= fromDate)
-            .GroupBy(x => x.CreatedAt.Date)
+            .GroupBy(x => x.CreatedAt.ToEgyptTime().Date)
             .Select(g => new DailyBookingsResponse
             {
                 Date = g.Key,

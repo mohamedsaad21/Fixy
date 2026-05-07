@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Features.Chat.Queries.GetChatMessages;
 using Fixy.Domain.Entities.Chat;
+using Fixy.Domain.Helpers;
 
 namespace Fixy.Application.Mapping.Chat.Queries;
 
@@ -12,7 +13,7 @@ public static class ChatMessageDomainToGetChatMessageResponseMapping
             Id = chatMessage.Id,
             SenderId = chatMessage.SenderId,
             Content = chatMessage.Content,
-            SentAt = chatMessage.SentAt
+            SentAt = chatMessage.SentAt.ToEgyptTime()
         };
     }
 }

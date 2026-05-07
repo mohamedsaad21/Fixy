@@ -14,23 +14,23 @@ public class ServiceBooking : BaseEntity
     public PriceOffer PriceOffer { get; set; }
     public decimal AgreedPrice { get; set; }
     public decimal? ProposedPrice { get; set; }
-    public DateTime? PriceChangeRequestedAt { get; set; }
+    public DateTimeOffset? PriceChangeRequestedAt { get; set; }
     public string? PriceChangeNotes { get; set; }
     public bool HasRequestedPriceChange { get; set; }
-    public DateTime ScheduledDateTime { get; set; }
+    public DateTimeOffset ScheduledDateTime { get; set; }
     public ServiceBookingStatus Status { get; set; } = ServiceBookingStatus.InProgress;
     public string? CompletionNotes { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime? StartedAt { get; set; }
-    public DateTime? CompletedAt { get; set; }
-    public DateTime? CancelledAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset? StartedAt { get; set; }
+    public DateTimeOffset? CompletedAt { get; set; }
+    public DateTimeOffset? CancelledAt { get; set; }
     public Guid? CancelledById { get; set; }
     public ApplicationUser CancelledBy { get; set; }
     public CustomerCancellationReason? CustomerCancellationReason { get; set; }
     public TechnicianCancellationReason? TechnicianCancellationReason { get; set; }
     public string? CancellationNote { get; set; }
     public bool IsCustomerConfirmed { get; set; }
-    public DateTime? CustomerConfirmedAt { get; set; }
+    public DateTimeOffset? CustomerConfirmedAt { get; set; }
     public int? PredictedTechnicianRating { get; set; }
     public bool IsEvaluated { get; set; }
     public Payment Payment { get; set; }

@@ -28,7 +28,7 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
             title,
             message,
             type = EnumLocalizer.Localize(type, localizer),
-            createdAt = DateTime.UtcNow
+            createdAt = DateTimeOffset.UtcNow
         };
 
         await SendNotificationToUserAsync(user, payload);
@@ -42,7 +42,7 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
                 data: new Dictionary<string, string>
                 {
                     { "type", EnumLocalizer.Localize(type, localizer) },
-                    { "createdAt", DateTime.UtcNow.ToString("O") }
+                    { "createdAt", DateTimeOffset.UtcNow.ToString("O") }
                 }
             );
         }

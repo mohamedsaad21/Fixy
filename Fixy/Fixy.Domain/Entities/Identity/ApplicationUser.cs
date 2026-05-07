@@ -16,7 +16,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public string LastName { get; set; }
     public string? ProfilePictureUrl { get; set; }
     public bool IsTwoFactorEmailEnabled { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public string? FcmToken { get; set; }
     public string PreferredLanguage { get; set; } = "ar-EG";
     public int? TotalBookings { get; set; }
@@ -24,7 +24,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public int? CancelledBookings { get; set; }
     public double? CancellationRate { get; set; }
     public string? BlockReason { get; set; }
-    public DateTime? BlockedAt { get; set; }
+    public DateTimeOffset? BlockedAt { get; set; }
     public Guid? BlockedBy { get; set; }
     public ApplicationUser BlockedByUser { get; set; }
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; }

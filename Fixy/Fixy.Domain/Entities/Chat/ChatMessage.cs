@@ -13,6 +13,6 @@ public class ChatMessage : BaseEntity
     public string? Content { get; set; }
     public string? Attachment { get; set; }
     public bool IsSeen { get; set; }
-    public DateTime SentAt { get; set; }
-    public DateTime? SeenAt { get; set; }
+    public DateTimeOffset SentAt { get; set; }
+    public DateTimeOffset? SeenAt { get; set; }
 }

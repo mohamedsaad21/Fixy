@@ -11,6 +11,6 @@ public class GetBookingsResponse
     public string TechnicianUserName { get; set; }
     public decimal Price { get; set; }
     public string Status { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public DateTime? CompletedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset? CompletedAt { get; set; }
 }

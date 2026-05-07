@@ -63,7 +63,7 @@ public class ChatHub : Hub
             ReceiverId = receiverId,
             Content = messageContent.Content,
             Attachment = messageContent.Attachment,
-            SentAt = DateTime.UtcNow,
+            SentAt = DateTimeOffset.UtcNow,
             IsSeen = false
         };
 

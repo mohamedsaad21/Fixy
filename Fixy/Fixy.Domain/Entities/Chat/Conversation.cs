@@ -8,8 +8,8 @@ public class Conversation : BaseEntity
     public ApplicationUser Customer { get; set; }
     public Guid TechnicianId { get; set; }
     public ApplicationUser Technician { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime LastMessageAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTimeOffset LastMessageAt { get; set; }
     public bool IsClosed { get; set; }
     public Guid ServiceBookingId { get; set; }
     public ServiceBooking ServiceBooking { get; set; }

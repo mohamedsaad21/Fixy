@@ -5,5 +5,5 @@ public class GetBookingsForTechnicianResponse
     public Guid Id { get; set; }
     public string Status { get; set; }
     public decimal AgreedPrice { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 }

@@ -17,7 +17,7 @@ public class AuthResponse
     [JsonIgnore]
     public string RefreshToken { get; set; }
     [JsonIgnore]
-    public DateTime RefreshTokenExpiration { get; set; }
+    public DateTimeOffset RefreshTokenExpiration { get; set; }
     [JsonIgnore]
     public DateTime ExpiresOn { get; set; }
 }

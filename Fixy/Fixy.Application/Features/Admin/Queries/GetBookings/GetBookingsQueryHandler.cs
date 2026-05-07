@@ -1,6 +1,7 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Enums;
+using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -51,7 +52,7 @@ public sealed class GetBookingsQueryHandler(IUnitOfWork unitOfWork) : IRequestHa
                 TechnicianUserName = x.Technician.UserName,
                 Price = x.AgreedPrice,
                 Status = x.Status.ToString(),
-                CreatedAt = x.CreatedAt,
+                CreatedAt = x.CreatedAt.ToEgyptTime(),
                 CompletedAt = x.CompletedAt
             })
             .ToPaginatedListAsync(request.PageNumber, request.PageSize);
