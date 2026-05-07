@@ -1,5 +1,4 @@
-﻿using CloudinaryDotNet;
-using FirebaseAdmin;
+﻿using FirebaseAdmin;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
 using Fixy.Infrastructure.Persistence;
@@ -9,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Stripe;
 using System.Text;
 
@@ -28,14 +27,6 @@ public static class ServiceRegisteration
         var emailSettings = new EmailSettings();
         configuration.GetSection(nameof(emailSettings)).Bind(emailSettings);
         services.AddSingleton(emailSettings);
-
-        var cloudinarySettings = new CloudinarySettings();
-        configuration.GetSection(nameof(cloudinarySettings)).Bind(cloudinarySettings);
-        services.AddSingleton(cloudinarySettings);
-
-        var cloudinary = new Cloudinary(cloudinarySettings.Url);
-        cloudinary.Api.Secure = true;
-        services.AddSingleton(cloudinary);
 
         var flaskApiSettings = new FlaskApiSettings();
         configuration.GetSection(nameof(flaskApiSettings)).Bind(flaskApiSettings);
@@ -122,22 +113,23 @@ public static class ServiceRegisteration
                 In = ParameterLocation.Header,
                 Description = "Enter your api key"
             });
-            options.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Name = "Bearer",
-                            In = ParameterLocation.Header
-                        },
-                        new List<string>()
-                    }
-                });
+            //options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            //    {
+            //        {
+            //            new OpenApiSecurityScheme
+            //            {
+            //                Reference = new OpenApiReference
+            //                {
+            //                    Type = ReferenceType.SecurityScheme,
+            //                    Id = "Bearer"
+            //                },
+            //                Name = "Bearer",
+            //                In = ParameterLocation.Header
+            //            },
+            //            new List<string>()
+            //        }
+            //    }
+            //);
         });
 
         return services;

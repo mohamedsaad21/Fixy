@@ -420,9 +420,6 @@
   <data name="ServiceBookingStatus_Completed" xml:space="preserve">
     <value>Completed</value>
   </data>
-  <data name="ServiceBookingStatus_Cancelled" xml:space="preserve">
-    <value>Cancelled</value>
-  </data>
   <data name="ServiceBookingStatus_Disputed" xml:space="preserve">
     <value>Disputed</value>
   </data>
@@ -575,5 +572,11 @@
   </data>
   <data name="TechnicianFeedbackNotFound" xml:space="preserve">
     <value>No reviews found for this technician yet.</value>
+  </data>
+  <data name="ServiceBookingStatus_CancelledByTechnician" xml:space="preserve">
+    <value>The technician has cancelled this booking.</value>
+  </data>
+  <data name="ServiceBookingStatus_CancelledByCustomer" xml:space="preserve">
+    <value>The customer has cancelled this booking.</value>
   </data>
 </root>

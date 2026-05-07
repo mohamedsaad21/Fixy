@@ -420,9 +420,6 @@
   <data name="ServiceBookingStatus_Completed" xml:space="preserve">
     <value>مكتمل</value>
   </data>
-  <data name="ServiceBookingStatus_Cancelled" xml:space="preserve">
-    <value>ملغي</value>
-  </data>
   <data name="ServiceBookingStatus_Disputed" xml:space="preserve">
     <value>قيد النزاع</value>
   </data>
@@ -575,5 +572,11 @@
   </data>
   <data name="TechnicianFeedbackNotFound" xml:space="preserve">
     <value>لا توجد تقييمات لهذا الفني بعد.</value>
+  </data>
+  <data name="ServiceBookingStatus_CancelledByTechnician" xml:space="preserve">
+    <value>قام الفني بإلغاء هذا الحجز.</value>
+  </data>
+  <data name="ServiceBookingStatus_CancelledByCustomer" xml:space="preserve">
+    <value>قام العميل بإلغاء هذا الحجز.</value>
   </data>
 </root>
