@@ -9,16 +9,16 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Features.Users.Queries.GetUserById;
+namespace Fixy.Application.Features.Users.Queries.GetUserProfileById;
 
-public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, Result<GetUserByIdResponse>>
+public sealed class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProfileByIdQuery, Result<GetUserProfileByIdResponse>>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IMapper _mapper;
     private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public GetUserByIdQueryHandler(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager,
+    public GetUserProfileByIdQueryHandler(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager,
         IMapper mapper, IStringLocalizer<SharedResources> localizer)
     {
         _unitOfWork = unitOfWork;
@@ -27,13 +27,13 @@ public sealed class GetUserByIdQueryHandler : IRequestHandler<GetUserByIdQuery, 
         _localizer = localizer;
     }
 
-    public async Task<Result<GetUserByIdResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetUserProfileByIdResponse>> Handle(GetUserProfileByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(request.Id.ToString());
         if (user == null)
             return Errors.UserNotFound;
 
-        var response = _mapper.Map<GetUserByIdResponse>(user);
+        var response = _mapper.Map<GetUserProfileByIdResponse>(user);
         response.Status = user switch
         {
             Customer customer => EnumLocalizer.Localize(customer.Status, _localizer),

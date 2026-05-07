@@ -36,5 +36,6 @@ public class ServiceRequestConfigurations : IEntityTypeConfiguration<ServiceRequ
         builder.HasMany(x => x.PriceOffers).WithOne(x => x.ServiceRequest).HasForeignKey(x => x.ServiceRequestId);
         builder.HasMany(x => x.ServiceBookings).WithOne(x => x.ServiceRequest).HasForeignKey(x => x.ServiceRequestId).OnDelete(DeleteBehavior.Restrict);
         builder.HasQueryFilter(x => !x.IsDeleted);
+        builder.Property(x => x.Status).HasConversion<string>();
     }
 }

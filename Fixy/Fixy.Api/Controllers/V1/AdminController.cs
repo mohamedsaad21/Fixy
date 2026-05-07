@@ -11,6 +11,7 @@ using Fixy.Application.Features.Admin.Queries.GetBookings;
 using Fixy.Application.Features.Admin.Queries.GetCustomers;
 using Fixy.Application.Features.Admin.Queries.GetDashboard;
 using Fixy.Application.Features.Admin.Queries.GetTechnicians;
+using Fixy.Application.Features.Admin.Queries.GetUserInfoById;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -110,5 +111,14 @@ public class AdminController : AppControllerBase
     public async Task<IActionResult> GetBookings([FromRoute] Guid Id)
     {
         return ToActionResult(await Mediator.Send(new GetBookingByIdQuery(Id)));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.AdminRouting.GetUserInfoById)]
+    public async Task<IActionResult> GetUserInfoById([FromRoute] Guid UserId)
+    {
+        return ToActionResult(await Mediator.Send(new GetUserInfoByIdQuery(UserId)));
     }
 }

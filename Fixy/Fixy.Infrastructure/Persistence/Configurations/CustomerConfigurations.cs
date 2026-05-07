@@ -10,5 +10,6 @@ public class CustomerConfigurations : IEntityTypeConfiguration<Customer>
     {
         builder.HasMany(x => x.CustomerFeedbacks).WithOne(x => x.Customer).HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.Restrict);
         builder.HasMany(x => x.TechnicianFeedbacks).WithOne(x => x.Customer).HasForeignKey(x => x.CustomerId).OnDelete(DeleteBehavior.Restrict);
+        builder.Property(x => x.Status).HasConversion<string>();
     }
 }

@@ -107,6 +107,7 @@ public static class Router
         public const string GetCustomers = prefix + "/Get-Customers";
         public const string GetBookings = prefix + "/Get-Bookings";
         public const string GetBookingById = prefix + "/Get-Booking-By-Id/{Id}";
+        public const string GetUserInfoById = prefix + "/Get-User-Info-By-Id/{UserId}";
     }
     public static class NotificationsRouting
     {
@@ -132,7 +133,7 @@ public static class Router
     {
         public const string prefix = Rule + "/Users";
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
-        public const string GetUserById = prefix + "/Get-User-By-Id/{Id}";
+        public const string GetUserProfileById = prefix + "/Get-User-Profile-By-Id/{Id}";
         public const string EditLanguage = prefix + "/Edit-Language";
     }
 
