@@ -7,6 +7,7 @@ using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Users.Queries.GetUserProfileById;
@@ -34,12 +35,26 @@ public sealed class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProf
             return Errors.UserNotFound;
 
         var response = _mapper.Map<GetUserProfileByIdResponse>(user);
-        response.Status = user switch
+
+        if (user is Technician technician)
         {
-            Customer customer => EnumLocalizer.Localize(customer.Status, _localizer),
-            Technician technician => EnumLocalizer.Localize(technician.Status, _localizer),
-            _ => _localizer[SharedResourcesKeys.AdminActiveStatus]
-        };
+            response.NationalId = technician.NationalId;
+            response.Status = EnumLocalizer.Localize(technician.Status, _localizer);
+            // Get Service Category Of Technician
+            var serviceCategory = await _unitOfWork.ServiceCategories.GetTableNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == technician.ServiceCategoryId);
+
+            if (serviceCategory == null)
+                return Errors.ServiceCategoryNotFound;
+
+            response.ServiceCategory = serviceCategory.Localize(serviceCategory.NameAr, serviceCategory.NameEn);
+
+        }
+        else if (user is Customer customer)
+        {
+            response.NationalId = customer.NationalId;
+            response.Status = EnumLocalizer.Localize(customer.Status, _localizer);
+        }
         var roles = await _userManager.GetRolesAsync(user);
         response.Role = roles.FirstOrDefault()!;
         return response;

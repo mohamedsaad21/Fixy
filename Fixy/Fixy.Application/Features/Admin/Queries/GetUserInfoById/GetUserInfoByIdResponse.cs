@@ -10,9 +10,10 @@ public class GetUserInfoByIdResponse
     public double CancellationRate { get; set; }
     public DateTimeOffset JoinDate { get; set; }
     public string NationalId { get; set; }
+    public string Status { get; set; }
     // For Tech
     public string NationalIdCardImageUrl { get; set; }
     public double AverageRating { get; set; }
     public int CompletedBookings { get; set; }
-
+    public string ServiceCategory { get; set; }
 }
