@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
-using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

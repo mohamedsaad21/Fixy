@@ -150,7 +150,8 @@ public class SharedResourcesKeys
     public const string ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion = "ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion";
     public const string ServiceBookingStatus_AwaitingPayment = "ServiceBookingStatus_AwaitingPayment";
     public const string ServiceBookingStatus_Completed = "ServiceBookingStatus_Completed";
-    public const string ServiceBookingStatus_Cancelled = "ServiceBookingStatus_Cancelled";
+    public const string ServiceBookingStatus_CancelledByTechnician = "ServiceBookingStatus_CancelledByTechnician";
+    public const string ServiceBookingStatus_CancelledByCustomer = "ServiceBookingStatus_CancelledByCustomer";
     public const string ServiceBookingStatus_Disputed = "ServiceBookingStatus_Disputed";
 
 

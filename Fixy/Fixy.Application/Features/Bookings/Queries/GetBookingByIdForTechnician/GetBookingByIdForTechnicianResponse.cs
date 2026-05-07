@@ -10,6 +10,7 @@ public class GetBookingByIdForTechnicianResponse
     public DateTime CreatedAt { get; set; }
     public Guid CustomerId { get; set; }
     public string CustomerName { get; set; }
+    public string CustomerProfilePicture { get; set; }
     public string Description { get; set; }
     public AddressDto Address { get; set; }
     public List<ImageDto> Images { get; set; }
