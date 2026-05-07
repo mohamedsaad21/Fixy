@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Globalization;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
