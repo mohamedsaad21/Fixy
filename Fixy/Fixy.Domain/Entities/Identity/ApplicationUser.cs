@@ -15,6 +15,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string? ProfilePictureUrl { get; set; }
+    public string? Bio { get; set; }
     public bool IsTwoFactorEmailEnabled { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public string? FcmToken { get; set; }

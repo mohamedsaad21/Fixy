@@ -4,7 +4,6 @@ using Fixy.Application.Resources;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 
