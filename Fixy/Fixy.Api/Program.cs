@@ -52,9 +52,6 @@ builder.Services.AddSerilog();
 // CORS
 builder.Services.AddCorsPolicy();
 
-// SignalR
-builder.Services.AddSignalR();
-
 // Filters
 builder.Services.AddScoped<TechnicianStatusFilter>();
 builder.Services.AddScoped<CustomerStatusFilter>();

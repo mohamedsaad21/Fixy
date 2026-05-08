@@ -1,11 +1,12 @@
-﻿using Fixy.Application.Common.DTOs.ServiceRequest;
+﻿using AutoMapper;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Helpers;
 
 namespace Fixy.Application.Mapping.ServiceRequests;
 
-public partial class ServiceRequestProfile
+public partial class ServiceRequestProfile : Profile
 {
     public void ServiceRequestDomainToGetCustomerServiceRequestByIdResponseMapping()
     {

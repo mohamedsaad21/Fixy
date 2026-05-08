@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Fixy.Application.Bases;
-using Fixy.Application.Resources;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +11,8 @@ public sealed class GetCustomerServiceRequestByIdQueryHandler(IUnitOfWork unitOf
     public async Task<Result<GetCustomerServiceRequestByIdResponse>> Handle(GetCustomerServiceRequestByIdQuery request, CancellationToken cancellationToken)
     {
         var serviceRequest = await unitOfWork.ServiceRequests.GetTableNoTracking()
-            .Include(x => x.Customer).Include(x => x.ServiceRequestImages).Include(x => x.PriceOffers).ThenInclude(x => x.Technician).ThenInclude(x => x.TechnicianLocation)
+            .Include(x => x.Customer).Include(x => x.ServiceRequestImages)
+            .Include(x => x.PriceOffers).ThenInclude(x => x.Technician).ThenInclude(x => x.TechnicianLocation)
             .Include(x => x.ServiceCategories)
             .FirstOrDefaultAsync(x => x.Id == request.Id);
 

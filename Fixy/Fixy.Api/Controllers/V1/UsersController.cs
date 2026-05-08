@@ -2,7 +2,6 @@
 using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Users.Commands.DeleteProfilePicture;
-using Fixy.Application.Features.Users.Commands.EditLanguage;
 using Fixy.Application.Features.Users.Commands.EditUserProfile;
 using Fixy.Application.Features.Users.Queries.GetUserProfileById;
 using Microsoft.AspNetCore.Authorization;
