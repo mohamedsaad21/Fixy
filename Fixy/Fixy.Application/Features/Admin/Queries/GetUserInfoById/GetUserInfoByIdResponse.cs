@@ -7,6 +7,7 @@ public class GetUserInfoByIdResponse
     public string UserName { get; set; }
     public string Role { get; set; }
     public string ProfilePictureUrl { get; set; }
+    public string? Bio { get; set; }
     public double CancellationRate { get; set; }
     public DateTimeOffset JoinDate { get; set; }
     public string NationalId { get; set; }

@@ -18,7 +18,6 @@ public class Technician : ApplicationUser
     public TechnicianStatus Status { get; set; } = TechnicianStatus.PendingApproval;
     public string NationalId { get; set; }
     public string NationalIdCardImageUrl {  get; set; }
-    public string? Bio {  get; set; }
     public int? ComplaintsCount { get; set; }
     public int? ResponseTime { get; set; }
     public double AverageRating { get; set; } = 0;
