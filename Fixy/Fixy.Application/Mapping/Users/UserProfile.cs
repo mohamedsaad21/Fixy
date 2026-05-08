@@ -7,5 +7,6 @@ public partial class UserProfile : Profile
     public UserProfile()
     {
         UserDomainToGetUserByIdResponseMapping();
+        EditUserProfileCommandToUserDomainMapping();
     }
 }

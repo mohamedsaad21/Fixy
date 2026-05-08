@@ -24,7 +24,7 @@ public sealed class GetUserInfoByIdQueryHandler(UserManager<ApplicationUser> use
 
         var result = mapper.Map<GetUserInfoByIdResponse>(user);
         var roles = await userManager.GetRolesAsync(user);
-        result.Role = roles.FirstOrDefault()!;
+        result.Role = localizer[roles.FirstOrDefault()!];
         if(user is Technician technician)
         {
             result.NationalId = technician.NationalId;

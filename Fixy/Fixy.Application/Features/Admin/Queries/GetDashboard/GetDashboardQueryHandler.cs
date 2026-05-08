@@ -35,11 +35,11 @@ public sealed class GetDashboardQueryHandler(IUnitOfWork unitOfWork, UserManager
         var totalBookings = await bookingsQuery.CountAsync(cancellationToken);
 
         // 📈 Bookings per day (last 7 days)
-        var fromDate = DateTime.UtcNow.AddDays(-7);
+        var fromDate = DateTimeOffset.UtcNow.AddDays(-7);
 
         var bookingsPerDay = await bookingsQuery
             .Where(x => x.CreatedAt >= fromDate)
-            .GroupBy(x => x.CreatedAt.ToEgyptTime().Date)
+            .GroupBy(x => x.CreatedAt)
             .Select(g => new DailyBookingsResponse
             {
                 Date = g.Key,

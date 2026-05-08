@@ -56,7 +56,7 @@ public sealed class GetUserProfileByIdQueryHandler : IRequestHandler<GetUserProf
             response.Status = EnumLocalizer.Localize(customer.Status, _localizer);
         }
         var roles = await _userManager.GetRolesAsync(user);
-        response.Role = roles.FirstOrDefault()!;
+        response.Role = _localizer[roles.FirstOrDefault()!];
         return response;
     }
 }

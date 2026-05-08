@@ -579,4 +579,13 @@
   <data name="ServiceBookingStatus_CancelledByCustomer" xml:space="preserve">
     <value>The customer has cancelled this booking.</value>
   </data>
+  <data name="Technician" xml:space="preserve">
+    <value>Technician</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Customer</value>
+  </data>
+  <data name="Admin" xml:space="preserve">
+    <value>Admin</value>
+  </data>
 </root>

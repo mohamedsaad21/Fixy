@@ -134,7 +134,7 @@ public static class Router
         public const string prefix = Rule + "/Users";
         public const string DeleteProfilePicture = prefix + "/Delete-Profile-Picture";
         public const string GetUserProfileById = prefix + "/Get-User-Profile-By-Id/{Id}";
-        public const string EditLanguage = prefix + "/Edit-Language";
+        public const string EditUserProfile = prefix + "/Edit-User-Profile";
     }
 
     public static class ChatRouting

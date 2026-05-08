@@ -138,6 +138,10 @@ public class SharedResourcesKeys
     public const string NotificationPriceOfferReceivedTitle = "NotificationPriceOfferReceivedTitle";
     public const string NotificationPriceOfferReceivedBody = "NotificationPriceOfferReceivedBody";
 
+    // Roles
+    public const string Technician = "Technician";
+    public const string Customer = "Customer";
+    public const string Admin = "Admin";
     
     // Enums
     public const string ServiceRequestStatus_Pending = "ServiceRequestStatus_Pending";
