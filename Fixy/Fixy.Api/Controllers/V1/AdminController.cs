@@ -9,7 +9,6 @@ using Fixy.Application.Features.Admin.Commands.UnblockCustomer;
 using Fixy.Application.Features.Admin.Queries.GetBookingById;
 using Fixy.Application.Features.Admin.Queries.GetBookings;
 using Fixy.Application.Features.Admin.Queries.GetCustomers;
-using Fixy.Application.Features.Admin.Queries.GetDashboard;
 using Fixy.Application.Features.Admin.Queries.GetTechnicians;
 using Fixy.Application.Features.Admin.Queries.GetUserInfoById;
 using Fixy.Domain.Constants;
@@ -22,14 +21,6 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize(Roles = Roles.Admin)]
 public class AdminController : AppControllerBase
 {
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpGet(Router.AdminRouting.GetDashboard)]
-    public async Task<IActionResult> GetDashboard()
-    {
-        return ToActionResult(await Mediator.Send(new GetDashboardQuery()));
-    }
-
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetTechnicians)]

@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Features.Admin.Queries.GetDashboard.Responses;
+﻿namespace Fixy.Application.Features.Dashboards.Queries.GetAdminDashboard.Responses;
 
 public class TopTechniciansResponse
 {

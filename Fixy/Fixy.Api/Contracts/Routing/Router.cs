@@ -102,7 +102,6 @@ public static class Router
         public const string BlockTechnician = prefix + "/Block-Technician";
         public const string BlockCustomer = prefix + "/Block-Customer";
         public const string UnblockCustomer = prefix + "/Unblock-Customer/{CustomerId}";
-        public const string GetDashboard = prefix + "/Dashboard";
         public const string GetTechnicians = prefix + "/Get-Technicians";
         public const string GetCustomers = prefix + "/Get-Customers";
         public const string GetBookings = prefix + "/Get-Bookings";
@@ -143,5 +142,12 @@ public static class Router
         public const string GetMessages = prefix + "/Get-Messages";
         public const string MarkMessagesAsRead = prefix + "/Mark-Messages-As-Read/{BookingId}";
         public const string UploadAttachment = prefix + "/Upload-Attachment";
+    }
+    public static class DashboardRouting
+    {
+        public const string prefix = Rule + "/Dashboard";
+        public const string GetAdminDashboard = prefix + "/Get-Admin-Dashboard";
+        public const string GetTechnicianDashboard = prefix + "/Get-Technician-Dashboard";
+        public const string GetCustomerDashboard = prefix + "/Get-Customer-Dashboard";
     }
 }

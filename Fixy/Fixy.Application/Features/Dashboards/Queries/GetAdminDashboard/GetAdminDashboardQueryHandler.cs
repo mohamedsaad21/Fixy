@@ -1,18 +1,17 @@
 ﻿using Fixy.Application.Bases;
-using Fixy.Application.Features.Admin.Queries.GetDashboard.Responses;
+using Fixy.Application.Features.Dashboards.Queries.GetAdminDashboard.Responses;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Enums;
-using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Fixy.Application.Features.Admin.Queries.GetDashboard;
+namespace Fixy.Application.Features.Dashboards.Queries.GetAdminDashboard;
 
-public sealed class GetDashboardQueryHandler(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager) : IRequestHandler<GetDashboardQuery, Result<GetDashboardResponse>>
+public sealed class GetAdminDashboardQueryHandler(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager) : IRequestHandler<GetAdminDashboardQuery, Result<GetDashboardResponse>>
 {
-    public async Task<Result<GetDashboardResponse>> Handle(GetDashboardQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetDashboardResponse>> Handle(GetAdminDashboardQuery request, CancellationToken cancellationToken)
     {
         // 🔢 KPIs
         var totalUsers = await userManager.Users.CountAsync(cancellationToken);
