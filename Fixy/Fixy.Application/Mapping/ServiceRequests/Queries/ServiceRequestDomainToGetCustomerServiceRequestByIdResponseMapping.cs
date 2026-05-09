@@ -1,22 +1,29 @@
-﻿using AutoMapper;
-using Fixy.Application.Common.DTOs.ServiceRequest;
+﻿using Fixy.Application.Common.DTOs.ServiceRequest;
+using Fixy.Application.Common.Helpers;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
+using Fixy.Application.Mapping.PriceOffers.Queries;
+using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
-using Fixy.Domain.Helpers;
+using Microsoft.Extensions.Localization;
 
-namespace Fixy.Application.Mapping.ServiceRequests;
+namespace Fixy.Application.Mapping.ServiceRequests.Queries;
 
-public partial class ServiceRequestProfile : Profile
+public static class ServiceRequestDomainToGetServiceRequestByIdResponseMapping
 {
-    public void ServiceRequestDomainToGetCustomerServiceRequestByIdResponseMapping()
+    public static GetCustomerServiceRequestByIdResponse ToServiceRequestByIdResponse(this ServiceRequest serviceRequest, IStringLocalizer<SharedResources> localizer)
     {
-        CreateMap<ServiceRequest, GetCustomerServiceRequestByIdResponse>()
-            .ForMember(dest => dest.CustomerUserName, opt => opt.MapFrom(src => src.Customer.UserName))
-            .ForMember(dest => dest.ServiceCategories, opt => opt.MapFrom(src => src.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList()))
-            .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new AddressDto(src.Address.Country, src.Address.City, src.Address.Area, src.Address.Street, src.Address.BuildingNumber, src.Address.Latitude, src.Address.Longitude)))
-            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.ServiceRequestImages))
-            .ForMember(dest => dest.PriceOffers, opt => opt.MapFrom(src => src.PriceOffers))
-            .ForMember(dest => dest.ScheduledDateTime, opt => opt.MapFrom(src => src.ScheduledDateTime.ToEgyptTime()));
-
+        return new GetCustomerServiceRequestByIdResponse
+        {
+            Id = serviceRequest.Id,
+            CustomerUserName = serviceRequest.Customer.UserName,
+            Description = serviceRequest.Description,
+            ScheduledDateTime = serviceRequest.ScheduledDateTime,
+            ServiceCategories = serviceRequest.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList(),
+            Address = new AddressDto(serviceRequest.Address.Country, serviceRequest.Address.City, serviceRequest.Address.Area, serviceRequest.Address.Street, serviceRequest.Address.BuildingNumber, serviceRequest.Address.Latitude, serviceRequest.Address.Longitude),
+            Status = EnumLocalizer.Localize(serviceRequest.Status, localizer),
+            PriceOffers = serviceRequest.PriceOffers
+            .Select(x => x.ToPriceOfferDto(serviceRequest)).OrderByDescending(x => x.AverageRating).ThenBy(x => x.DistanceKm)
+            .ThenBy(x => x.Price).ToList()
+        };
     }
 }

@@ -6,6 +6,5 @@ public partial class PriceOfferProfile : Profile
 {
     public PriceOfferProfile()
     {
-        PriceOfferDomainToPriceOfferDtoMapping();
     }
 }
