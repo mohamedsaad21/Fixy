@@ -1,4 +1,4 @@
-﻿namespace Fixy.Api.Extensions;
+namespace Fixy.Api.Extensions;
 
 public static class CorsExtensions
 {
