@@ -7,7 +7,6 @@ public partial class ServiceRequestProfile : Profile
     public ServiceRequestProfile()
     {
         AddRequestCommandToRequestDomainMapping();
-        ServiceRequestDomainToGetCustomerServiceRequestByIdResponseMapping();
         ServiceRequestImageToImageDtoMapping();
     }
 }

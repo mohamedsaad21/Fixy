@@ -9,5 +9,5 @@ public class PriceOfferDto
     public double? AverageRating { get; set; }
     public decimal Price { get; set; }
     public double DistanceKm { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 }
