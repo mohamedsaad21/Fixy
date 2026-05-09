@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Fixy.Api.Attributes;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Dashboards.Queries.GetAdminDashboard;
@@ -14,6 +15,7 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize]
 public class DashboardsController : AppControllerBase
 {
+    [RedisCache(1)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.DashboardRouting.GetAdminDashboard)]
@@ -22,6 +24,7 @@ public class DashboardsController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetAdminDashboardQuery()));
     }
 
+    [RedisCache(1)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -32,6 +35,7 @@ public class DashboardsController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetTechnicianDashboardQuery()));
     }
 
+    [RedisCache(1)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

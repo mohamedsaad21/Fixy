@@ -1,0 +1,35 @@
+{
+  "dependencies": {
+    "mssql2": {
+      "ignored": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DefaultConnection"
+    },
+    "mssql3": {
+      "secretStore": "AzureAppSettings",
+      "type": "mssql.onprem",
+      "connectionId": "ConnectionStrings:DatabaseConnection"
+    },
+    "storage1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.Web/sites/FixyApi/providers/Microsoft.ServiceLinker/linkers/AzureStorageConnectionString_9333702ACF, /subscriptions/3ddd8dbd-2d6c-4168-8538-a040b412852d/resourceGroups/fixy-rg/providers/Microsoft.Web/sites/FixyApi/providers/Microsoft.ServiceLinker/linkers/AzureStorageConnectionString_2EF37A4726",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/fixyapistorage",
+      "type": "storage.azure",
+      "connectionId": "AzureStorage:ConnectionString"
+    },
+    "signalr1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.Web/sites/FixyApi/providers/Microsoft.ServiceLinker/linkers/AzureSignalRConnectionString_F29CF4DC7B",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.SignalRService/SignalR/fixy-signalR",
+      "type": "signalr.azure",
+      "connectionId": "Azure:SignalR:ConnectionString"
+    },
+    "redis1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.Web/sites/FixyApi/providers/Microsoft.ServiceLinker/linkers/AzureRedisConnectionString_1CAD5051AF",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Cache/Redis/FixyApicache",
+      "type": "redis.azure",
+      "connectionId": "Azure:Redis:ConnectionString"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Contracts.ExternalServices;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -7,9 +8,11 @@ namespace Fixy.Infrastructure.ExternalServices;
 public class CacheService : ICacheService
 {
     private IDatabase _cacheDb;
-    public CacheService()
+    private readonly IConfiguration _configuration;
+    public CacheService(IConfiguration configuration)
     {
-        var redis =  ConnectionMultiplexer.Connect("localhost:6379");
+        _configuration = configuration;
+        var redis = ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]);
         _cacheDb = redis.GetDatabase();
     }
     public async Task<T> GetData<T>(string key)
@@ -21,10 +24,9 @@ public class CacheService : ICacheService
         return default;
     }
 
-    public async Task<bool> SetData<T>(string key, T value, DateTimeOffset expirationTime)
+    public async Task<bool> SetData<T>(string key, T value, TimeSpan expirationTime)
     {
-        var expiryTime = expirationTime.DateTime.Subtract(DateTime.Now);
-        return _cacheDb.StringSet(key, JsonSerializer.Serialize(value), expiryTime);
+        return _cacheDb.StringSet(key, JsonSerializer.Serialize(value), expirationTime);
     }
 
     public async Task<object> RemoveData(string key)

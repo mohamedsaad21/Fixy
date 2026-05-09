@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Fixy.Api.Attributes;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Admin.Commands.ApproveTechnician;
@@ -21,6 +22,7 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize(Roles = Roles.Admin)]
 public class AdminController : AppControllerBase
 {
+    [RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetTechnicians)]
@@ -29,6 +31,7 @@ public class AdminController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetCustomers)]
@@ -87,6 +90,7 @@ public class AdminController : AppControllerBase
         return ToActionResult(await Mediator.Send(new UnblockCustomerCommand(CustomerId)));
     }
 
+    [RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetBookings)]
@@ -95,15 +99,17 @@ public class AdminController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
+    [RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetBookingById)]
-    public async Task<IActionResult> GetBookings([FromRoute] Guid Id)
+    public async Task<IActionResult> GetBookingsById([FromRoute] Guid Id)
     {
         return ToActionResult(await Mediator.Send(new GetBookingByIdQuery(Id)));
     }
 
+    [RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]

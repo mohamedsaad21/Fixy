@@ -1,8 +1,6 @@
 ﻿using Fixy.Application.Contracts.ExternalServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Serilog;
-using StackExchange.Redis;
 using System.Text;
 
 namespace Fixy.Api.Attributes;
@@ -17,56 +15,20 @@ public class RedisCacheAttribute : Attribute, IAsyncActionFilter
     }
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        var cacheService = context.HttpContext.RequestServices
-            .GetRequiredService<ICacheService>();
-
+        var cacheService = context.HttpContext.RequestServices.GetRequiredService<ICacheService>();
         var cacheKey = GenerateCacheKey(context.HttpContext.Request);
+        var cachedValue = await cacheService.GetData<object>(cacheKey);
 
-        try
+        if (cachedValue != null)
         {
-            var cachedValue = await cacheService.GetData<object>(cacheKey);
-            if (cachedValue != null)
-            {
-                context.Result = new OkObjectResult(cachedValue);
-                return;
-            }
-        }
-        catch (RedisConnectionException ex)
-        {
-            Log.Warning(ex, "Redis unavailable, bypassing cache for {Key}", cacheKey);
+            context.Result = new OkObjectResult(cachedValue);
+            return;
         }
 
         var executedContext = await next();
-
-        try
-        {
-            if (executedContext.Result is OkObjectResult okObjectResult)
-                await cacheService.SetData(cacheKey, okObjectResult.Value,
-                    DateTimeOffset.Now.AddMinutes(_timeInMinutes));
-        }
-        catch (RedisConnectionException ex)
-        {
-            var logger = context.HttpContext.RequestServices
-                .GetRequiredService<ILogger<RedisCacheAttribute>>();
-            logger.LogWarning(ex, "Redis unavailable, could not store cache for {Key}", cacheKey);
-        }
+        if (executedContext.Result is OkObjectResult okObjectResult)
+            await cacheService.SetData(cacheKey, okObjectResult.Value, TimeSpan.FromMinutes(_timeInMinutes));
     }
-    //public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-    //{
-    //    var cacheService = context.HttpContext.RequestServices.GetRequiredService<ICacheService>();
-    //    var cacheKey = GenerateCacheKey(context.HttpContext.Request);
-    //    var cachedValue = await cacheService.GetData<object>(cacheKey);
-
-    //    if (cachedValue != null)
-    //    {
-    //        context.Result = new OkObjectResult(cachedValue);
-    //        return;
-    //    }
-
-    //    var executedContext = await next();
-    //    if (executedContext.Result is OkObjectResult okObjectResult)
-    //        await cacheService.SetData(cacheKey, okObjectResult.Value, DateTimeOffset.Now.AddMinutes(_timeInMinutes));
-    //}
 
     private string GenerateCacheKey(HttpRequest request)
     {

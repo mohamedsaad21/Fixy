@@ -1,9 +1,29 @@
 {
   "dependencies": {
+    "apis1": {
+      "type": "apis"
+    },
     "mssql1": {
+      "ignored": "true",
       "type": "mssql",
       "connectionId": "DefaultConnection",
       "dynamicId": null
+    },
+    "mssql3": {
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DatabaseConnection"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "AzureStorage:ConnectionString"
+    },
+    "signalr1": {
+      "type": "signalr",
+      "connectionId": "Azure:SignalR:ConnectionString"
+    },
+    "redis1": {
+      "type": "redis",
+      "connectionId": "Azure:Redis:ConnectionString"
     }
   }
 }

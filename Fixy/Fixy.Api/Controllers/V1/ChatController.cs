@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Fixy.Api.Attributes;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Chat.Commands.MarkMessagesAsRead;
@@ -13,6 +14,7 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize]
 public class ChatController : AppControllerBase
 {
+    [RedisCache(3)]
     [HttpGet(Router.ChatRouting.GetMessages)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
