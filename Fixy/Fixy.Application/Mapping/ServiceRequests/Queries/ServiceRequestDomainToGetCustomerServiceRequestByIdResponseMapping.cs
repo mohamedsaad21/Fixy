@@ -21,6 +21,7 @@ public static class ServiceRequestDomainToGetServiceRequestByIdResponseMapping
             ServiceCategories = serviceRequest.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList(),
             Address = new AddressDto(serviceRequest.Address.Country, serviceRequest.Address.City, serviceRequest.Address.Area, serviceRequest.Address.Street, serviceRequest.Address.BuildingNumber, serviceRequest.Address.Latitude, serviceRequest.Address.Longitude),
             Status = EnumLocalizer.Localize(serviceRequest.Status, localizer),
+            Images = serviceRequest.ServiceRequestImages.Select(x => new ImageDto {Id = x.Id, ImageUrl = x.ImageUrl }).ToList(),
             PriceOffers = serviceRequest.PriceOffers
             .Select(x => x.ToPriceOfferDto(serviceRequest)).OrderByDescending(x => x.AverageRating).ThenBy(x => x.DistanceKm)
             .ThenBy(x => x.Price).ToList()
