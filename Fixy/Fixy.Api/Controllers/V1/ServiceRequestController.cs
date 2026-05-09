@@ -20,7 +20,7 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize]
 public class ServiceRequestController : AppControllerBase
 {
-    //[RedisCache(60)]
+    [RedisCache(3)]
     [Authorize(Roles = Roles.Admin)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -30,7 +30,7 @@ public class ServiceRequestController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-    //[RedisCache(60)]
+    [RedisCache(3)]
     [Authorize(Roles = $"{Roles.Customer},{Roles.Admin}")]
     [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -41,7 +41,7 @@ public class ServiceRequestController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-    //[RedisCache(60)]
+    [RedisCache(3)]
     [Authorize(Roles = $"{Roles.Customer},{Roles.Admin}")]
     [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]

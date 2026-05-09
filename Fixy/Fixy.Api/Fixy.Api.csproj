@@ -4,13 +4,22 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>eb0827ca-9a14-4605-b766-6fa2dda9a9d7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Azure.Data.Tables" Version="12.11.0" />
+	<PackageReference Include="Azure.Identity" Version="1.17.1" />
+	<PackageReference Include="Azure.Storage.Blobs" Version="12.27.0" />
+	<PackageReference Include="Azure.Storage.Files.Shares" Version="12.25.0" />
+	<PackageReference Include="Azure.Storage.Queues" Version="12.25.0" />
 	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
     <PackageReference Include="Asp.Versioning.Mvc" Version="10.0.0" />
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0" />
     <PackageReference Include="AutoMapper" Version="16.1.1" />
+    <PackageReference Include="Microsoft.Azure.SignalR" Version="1.32.0" />
+    <PackageReference Include="Microsoft.Azure.StackExchangeRedis" Version="3.3.1" />
+    <PackageReference Include="Microsoft.Extensions.Azure" Version="1.13.1" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.14.11" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">

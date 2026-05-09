@@ -39,13 +39,14 @@ public static class ServiceRegisteration
         var stripeSettings = new StripeSettings();
         configuration.GetSection(nameof(stripeSettings)).Bind(stripeSettings);
         services.AddSingleton(stripeSettings);
+        
         StripeConfiguration.ApiKey = stripeSettings.Secretkey;
 
         // SignalR
-        services.AddSignalR().AddAzureSignalR(configuration["SignalR:ConnectionString"]);
+        services.AddSignalR().AddAzureSignalR(configuration["Azure:SignalR:ConnectionString"]);
 
         // Firebase
-        var path = Path.Combine(AppContext.BaseDirectory,configuration["Firebase:ServiceAccountPath"]!);
+        var path = Path.Combine(AppContext.BaseDirectory, configuration["Firebase:ServiceAccountPath"]!);
 
         using var stream = System.IO.File.OpenRead(path);
 
