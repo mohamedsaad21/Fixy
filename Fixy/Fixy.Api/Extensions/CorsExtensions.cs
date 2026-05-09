@@ -1,4 +1,4 @@
-﻿namespace Fixy.Api.Extensions;
+namespace Fixy.Api.Extensions;
 
 public static class CorsExtensions
 {
@@ -9,7 +9,8 @@ public static class CorsExtensions
             options.AddPolicy("DevelopmentPolicy", policy =>
             {
                 policy.WithOrigins(
-                        "http://localhost:4200"
+                        "http://localhost:4200",
+                        "http://127.0.0.1:5500"
                     )
                     .AllowAnyMethod()
                     .AllowAnyHeader()
