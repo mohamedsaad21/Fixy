@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Common.DTOs.ServiceRequest;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Common.Helpers;
 using Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestById;
 using Fixy.Application.Mapping.PriceOffers.Queries;
