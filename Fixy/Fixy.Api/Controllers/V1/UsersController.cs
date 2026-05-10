@@ -15,7 +15,6 @@ namespace Fixy.Api.Controllers.V1;
 public class UsersController : AppControllerBase
 {
     //[RedisCache(3)]
-    // Remove cache
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
