@@ -14,7 +14,7 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize]
 public class ChatController : AppControllerBase
 {
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [HttpGet(Router.ChatRouting.GetMessages)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -16,7 +16,7 @@ namespace Fixy.Api.Controllers.V1;
 [ApiVersion("1.0")]
 public class ServiceCategoriesController : AppControllerBase
 {
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [HttpGet(Router.CategoryRouting.List)]
     public async Task<IActionResult> GetCategories()
@@ -24,7 +24,7 @@ public class ServiceCategoriesController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetCategoriesListQuery()));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet(Router.CategoryRouting.GetById)]

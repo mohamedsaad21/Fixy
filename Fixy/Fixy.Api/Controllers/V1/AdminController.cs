@@ -22,7 +22,7 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize(Roles = Roles.Admin)]
 public class AdminController : AppControllerBase
 {
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetTechnicians)]
@@ -31,7 +31,7 @@ public class AdminController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetCustomers)]
@@ -90,7 +90,7 @@ public class AdminController : AppControllerBase
         return ToActionResult(await Mediator.Send(new UnblockCustomerCommand(CustomerId)));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.AdminRouting.GetBookings)]
@@ -99,7 +99,7 @@ public class AdminController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -109,7 +109,7 @@ public class AdminController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetBookingByIdQuery(Id)));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
