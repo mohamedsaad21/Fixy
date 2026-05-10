@@ -10,6 +10,7 @@ public static class PriceOfferDomainToPriceOfferDtoMapping
         return new PriceOfferDto
         {
             Id = priceOffer.Id,
+            TechnicianId = priceOffer.Technician.Id,
             TechnicianUserName = priceOffer.Technician.UserName,
             AverageRating = priceOffer.Technician.AverageRating,
             Price = priceOffer.Price,
