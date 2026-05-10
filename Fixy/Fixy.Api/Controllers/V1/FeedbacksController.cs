@@ -39,7 +39,7 @@ public class FeedbacksController : AppControllerBase
         return ToActionResult(await Mediator.Send(command));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [Authorize(Roles = Roles.Customer)]
     [RequireActiveCustomer]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -50,7 +50,7 @@ public class FeedbacksController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetPendingCustomerFeedbackStatusQuery()));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [Authorize(Roles = Roles.Technician)]
     [RequireActiveTechnician]
     [ProducesResponseType(StatusCodes.Status200OK)]

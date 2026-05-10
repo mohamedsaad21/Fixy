@@ -19,7 +19,7 @@ namespace Fixy.Api.Controllers.V1;
 [Authorize]
 public class TechnicianController : AppControllerBase
 {
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -30,7 +30,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetTechnicianByIdQuery(Id)));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [Authorize(Roles = $"{Roles.Customer},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -41,7 +41,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetTechnicianProfileForCustomersQuery(TechnicianId)));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -53,7 +53,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(new GetCustomerProfileForTechniciansQuery(CustomerId)));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -65,7 +65,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-    [RedisCache(3)]
+    //[RedisCache(3)]
     [RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
