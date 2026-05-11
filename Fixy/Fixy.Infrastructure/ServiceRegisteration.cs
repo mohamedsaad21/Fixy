@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using StackExchange.Redis;
 using Stripe;
 using System.Text;
 
@@ -55,6 +56,8 @@ public static class ServiceRegisteration
             Credential = GoogleCredential.FromStream(stream),
             ProjectId = configuration["Firebase:ProjectId"]
         });
+        // Redis
+        services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]!));
 
         services.AddAuthentication(options =>
         {
