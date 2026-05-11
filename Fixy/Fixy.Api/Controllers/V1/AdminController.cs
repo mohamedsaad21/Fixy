@@ -7,6 +7,7 @@ using Fixy.Application.Features.Admin.Commands.BlockCustomer;
 using Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
 using Fixy.Application.Features.Admin.Commands.RejectTechnician;
 using Fixy.Application.Features.Admin.Commands.UnblockCustomer;
+using Fixy.Application.Features.Admin.Commands.UnblockTechnician;
 using Fixy.Application.Features.Admin.Queries.GetBookingById;
 using Fixy.Application.Features.Admin.Queries.GetBookings;
 using Fixy.Application.Features.Admin.Queries.GetCustomers;
@@ -88,6 +89,16 @@ public class AdminController : AppControllerBase
     public async Task<IActionResult> UnblockCustomer([FromRoute] Guid CustomerId)
     {
         return ToActionResult(await Mediator.Send(new UnblockCustomerCommand(CustomerId)));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPut(Router.AdminRouting.UnblockTechnician)]
+    public async Task<IActionResult> UnblockTechnician([FromRoute] Guid TechnicianId)
+    {
+        return ToActionResult(await Mediator.Send(new UnblockTechnicianCommand(TechnicianId)));
     }
 
     //[RedisCache(3)]
