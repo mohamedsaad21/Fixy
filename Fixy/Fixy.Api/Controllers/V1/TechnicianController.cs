@@ -42,7 +42,7 @@ public class TechnicianController : AppControllerBase
     }
 
     //[RedisCache(3)]
-    [RequireActiveTechnician]
+    //[RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -54,7 +54,7 @@ public class TechnicianController : AppControllerBase
     }
 
     //[RedisCache(3)]
-    [RequireActiveTechnician]
+    //[RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -66,7 +66,7 @@ public class TechnicianController : AppControllerBase
     }
 
     //[RedisCache(3)]
-    [RequireActiveTechnician]
+    //[RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -77,7 +77,7 @@ public class TechnicianController : AppControllerBase
         return ToActionResult(await Mediator.Send(query));
     }
 
-    [RequireActiveTechnician]
+    //[RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
