@@ -33,19 +33,19 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
 
         await SendNotificationToUserAsync(user, payload);
 
-        if (!string.IsNullOrEmpty(user.FcmToken))
-        {
-            await SendPushNotificationAsync(
-                fcmToken: user.FcmToken,
-                title: title,
-                body: message,
-                data: new Dictionary<string, string>
-                {
-                    { "type", EnumLocalizer.Localize(type, localizer) },
-                    { "createdAt", DateTimeOffset.UtcNow.ToString("O") }
-                }
-            );
-        }
+        //if (!string.IsNullOrEmpty(user.FcmToken))
+        //{
+        //    await SendPushNotificationAsync(
+        //        fcmToken: user.FcmToken,
+        //        title: title,
+        //        body: message,
+        //        data: new Dictionary<string, string>
+        //        {
+        //            { "type", EnumLocalizer.Localize(type, localizer) },
+        //            { "createdAt", DateTimeOffset.UtcNow.ToString("O") }
+        //        }
+        //    );
+        //}
     }
 
     private async Task SaveNotificationAsync(Guid userId, NotificationType type, string titleKey, string bodyKey)
