@@ -4,6 +4,7 @@ using Fixy.Application.Mapping.Bookings.Queries;
 using Fixy.Application.Resources;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Localization;
@@ -20,7 +21,7 @@ public sealed class GetBookingsForTechnicianQueryHandler(IUnitOfWork unitOfWork,
             return Errors.Unauthorized;
 
         var bookings = unitOfWork.Bookings.GetTableNoTracking()
-            .Where(x => x.TechnicianId == technician.Id).AsQueryable();
+            .Where(x => x.TechnicianId == technician.Id && x.Status != ServiceBookingStatus.CancelledByCustomer).AsQueryable();
 
         var FilterQuery = await bookings.Select(x => x.ToGetBookingsForTechnicianResponse(localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);
         return FilterQuery;

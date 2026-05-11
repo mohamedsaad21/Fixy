@@ -4,6 +4,7 @@ using Fixy.Application.Mapping.Bookings.Queries;
 using Fixy.Application.Resources;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,8 @@ public sealed class GetBookingsForCustomerQueryHandler(IUnitOfWork unitOfWork, I
             return Errors.Unauthorized;
 
         var bookings = unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest)
-            .Where(x => x.ServiceRequest.CustomerId == customer.Id).AsQueryable();
+            .Where(x => x.ServiceRequest.CustomerId == customer.Id
+            && x.Status != ServiceBookingStatus.CancelledByTechnician).AsQueryable();
 
         var FilterQuery = await bookings.Select(x => x.ToGetBookingsForCustomerResponse(localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);
         return FilterQuery;
