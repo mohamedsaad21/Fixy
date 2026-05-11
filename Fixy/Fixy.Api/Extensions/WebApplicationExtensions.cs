@@ -61,7 +61,7 @@ public static class WebApplicationExtensions
             await UserSeeder.SeedAsync(userManager);
         }
 
-        app.UseMiddleware<ErrorHandlerMiddleware>();
+        //app.UseMiddleware<ErrorHandlerMiddleware>();
 
         app.MapHub<NotificationHub>("/hubs/notification");
         app.MapHub<ChatHub>("/hubs/chat");
