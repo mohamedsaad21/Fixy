@@ -14,7 +14,7 @@ namespace Fixy.Api.Controllers.V1;
 public class PriceOffersController : AppControllerBase
 {
     [Authorize(Roles = Roles.Technician)]
-    //[RequireActiveTechnician]
+    [RequireActiveTechnician]
     //[RequireTechnicianFeedback]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
