@@ -5,5 +5,6 @@ public class GetChatMessagesResponse
     public Guid Id { get; set; }
     public Guid SenderId { get; set; }
     public string Content { get; set; }
+    public string Attachment { get; set; }
     public DateTimeOffset SentAt { get; set; }
 }
