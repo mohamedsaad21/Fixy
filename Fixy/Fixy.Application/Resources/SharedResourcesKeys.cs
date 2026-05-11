@@ -137,6 +137,12 @@ public class SharedResourcesKeys
     public const string NotificationTechnicianBlockedBody = "NotificationTechnicianBlockedBody";
     public const string NotificationPriceOfferReceivedTitle = "NotificationPriceOfferReceivedTitle";
     public const string NotificationPriceOfferReceivedBody = "NotificationPriceOfferReceivedBody";
+    public const string NotificationCustomerBlockedTitle = "NotificationCustomerBlockedTitle";
+    public const string NotificationCustomerBlockedBody = "NotificationCustomerBlockedBody";
+    public const string NotificationCustomerUnblockedTitle = "NotificationCustomerUnblockedTitle";
+    public const string NotificationCustomerUnblockedBody = "NotificationCustomerUnblockedBody";
+    public const string NotificationTechnicianUnblockedTitle = "NotificationTechnicianUnblockedTitle";
+    public const string NotificationTechnicianUnblockedBody = "NotificationTechnicianUnblockedBody";
 
     // Roles
     public const string Technician = "Technician";

@@ -588,4 +588,23 @@
   <data name="Admin" xml:space="preserve">
     <value>أدمن</value>
   </data>
+  <data name="NotificationCustomerBlockedTitle" xml:space="preserve">
+    <value>تم حظر الحساب</value>
+  </data>
+  <data name="NotificationCustomerBlockedBody" xml:space="preserve">
+    <value>حسابك اتقفل. ياريت تتواصل مع الدعم الفني عشان تعرف التفاصيل.</value>
+  </data>
+  <data name="NotificationCustomerUnblockedTitle" xml:space="preserve">
+    <value>تم فك الحظر عن الحساب</value>
+  </data>
+  <data name="NotificationCustomerUnblockedBody" xml:space="preserve">
+    <value>حسابك اتفعل مرة تانية. تقدر دلوقتي تطلب الخدمات اللي محتاجها.</value>
+  </data>
+  <data name="NotificationTechnicianUnblockedTitle" xml:space="preserve">
+    <value>تم فك الحظر عن الحساب</value>
+  </data>
+  <data name="NotificationTechnicianUnblockedBody" xml:space="preserve">
+    <value>تم تفعيل حسابك. يمكنك الآن البدء في تقديم عروض أسعار جديدة.
+</value>
+  </data>
 </root>

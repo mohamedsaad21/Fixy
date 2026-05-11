@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
+using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Fixy.Application.Features.Admin.Commands.UnblockCustomer;
 
-public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService) : IRequestHandler<UnblockCustomerCommand, Result>
+public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<UnblockCustomerCommand, Result>
 {
     public async Task<Result> Handle(UnblockCustomerCommand request, CancellationToken cancellationToken)
     {
@@ -29,8 +30,14 @@ public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurre
         customer.BlockedAt = null;
         customer.BlockedBy = null;
 
-        await unitOfWork.SaveChangesAsync();
+        await notificationService.SendFullNotificationAsync(
+            customer,
+            NotificationType.TechnicianApproved,
+            SharedResourcesKeys.NotificationCustomerUnblockedTitle,
+            SharedResourcesKeys.NotificationCustomerUnblockedBody
+        );
 
+        await unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
 }
