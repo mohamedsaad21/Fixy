@@ -1,4 +1,5 @@
 ﻿using Fixy.Application.Common.DTOs.Chat;
+using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities.Chat;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
@@ -14,10 +15,15 @@ public class ChatHub : Hub
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly UserManager<ApplicationUser> _userManager;
-    public ChatHub(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
+    private readonly IPresenceService _presenceService;
+    private readonly IHubContext<NotificationHub> _notificationHub;
+    public ChatHub(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, 
+        IPresenceService presenceService, IHubContext<NotificationHub> notificationHub)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
+        _presenceService = presenceService;
+        _notificationHub = notificationHub;
     }
 
     public async Task SendMessage(Guid bookingId, MessageContent messageContent)
@@ -70,22 +76,55 @@ public class ChatHub : Hub
         await _unitOfWork.ChatMessages.AddAsync(msg);
         await _unitOfWork.SaveChangesAsync();
 
-        // Send to receiver (group per user)
-        await Clients.Group($"user_{receiverId}")
-            .SendAsync("ReceiveMessage", new
-            {
-                msg.Id,
+        var isReceiverOnline = await _presenceService.IsOnlineAsync(receiverId);
+        var isReceiverInConvo = await _presenceService.IsInConversationAsync(
+            receiverId, conversation.Id
+        );
+
+        if (isReceiverInConvo)
+        {
+            // Send to receiver (group per user)
+            await Clients.Group($"user_{receiverId}")
+                .SendAsync("ReceiveMessage", new
+                {
+                    msg.Id,
+                    msg.ConversationId,
+                    msg.SenderId,
+                    SenderName = sender.FirstName + " " + sender.LastName,
+                    SenderUserName = sender.UserName,
+                    SenderProfilePicture = sender.ProfilePictureUrl,
+                    msg.ReceiverId,
+                    msg.Content,
+                    msg.Attachment,
+                    msg.SentAt,
+                    msg.IsSeen
+                });
+        }
+        else if (isReceiverOnline)
+        {
+            // User is in the app but on a different page — send notification only
+            await _notificationHub.Clients.Group($"user_{receiverId}")
+            .SendAsync("NewMessageNotification", new {
                 msg.ConversationId,
                 msg.SenderId,
                 SenderName = sender.FirstName + " " + sender.LastName,
-                SenderUserName = sender.UserName,
                 SenderProfilePicture = sender.ProfilePictureUrl,
-                msg.ReceiverId,
-                msg.Content,
-                msg.Attachment,
-                msg.SentAt,
-                msg.IsSeen
+                Preview = msg.Content?[..Math.Min(60, msg.Content.Length)],
+                msg.SentAt
             });
+        }
+        else
+        {
+            // User is fully offline — send push notification (FCM / APNs)
+            //await _pushNotificationService.SendAsync(receiverId, new PushPayload
+            //{
+            //    Title = sender.FirstName + " " + sender.LastName,
+            //    Body = msg.Content?[..Math.Min(60, msg.Content.Length)],
+            //    Data = new { conversationId = msg.ConversationId }
+            //});
+        }
+
+
 
         // Echo back to sender
         await Clients.Caller.SendAsync("MessageSent", new
@@ -116,12 +155,37 @@ public class ChatHub : Hub
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         var userId = Context.User?.FindFirst("uid")?.Value;
-
         if (!string.IsNullOrEmpty(userId))
         {
+
+            var userGuid = Guid.Parse(userId);
+
+            // Clean up any active conversation tracking
+            await _presenceService.LeaveConversationAsync(userGuid);
+
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"user_{userId}");
         }
 
         await base.OnDisconnectedAsync(exception);
+    }
+
+    public async Task JoinConversation(Guid conversationId)
+    {
+        var userIdStr = Context.User?.FindFirst("uid")?.Value;
+        if (string.IsNullOrEmpty(userIdStr)) return;
+
+        var userId = Guid.Parse(userIdStr);
+        await Groups.AddToGroupAsync(Context.ConnectionId, $"conv_{conversationId}");
+        await _presenceService.JoinConversationAsync(userId, conversationId);
+    }
+
+    public async Task LeaveConversation(Guid conversationId)
+    {
+        var userIdStr = Context.User?.FindFirst("uid")?.Value;
+        if (string.IsNullOrEmpty(userIdStr)) return;
+
+        var userId = Guid.Parse(userIdStr);
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"conv_{conversationId}");
+        await _presenceService.LeaveConversationAsync(userId);
     }
 }

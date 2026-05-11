@@ -25,12 +25,13 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<ICurrentUserService, CurrentUserService>();
         services.AddTransient<INotificationService, NotificationService>();
         services.AddTransient<IPaymentService, StripeService>();
-        services.AddScoped<ICacheService, CacheService>();
         services.AddTransient<IBookingService, BookingService>();
         services.AddTransient<IFeedbackService, FeedbackService>();
         services.AddTransient<IRatingService, RatingService>();
 
         services.AddSingleton<IStorageService, BlobStorageService>();
+        services.AddSingleton<ICacheService, CacheService>();
+        services.AddSingleton<IPresenceService, PresenceService>();
 
         return services;
     }
