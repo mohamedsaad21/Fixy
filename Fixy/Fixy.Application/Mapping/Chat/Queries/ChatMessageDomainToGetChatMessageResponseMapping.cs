@@ -13,6 +13,7 @@ public static class ChatMessageDomainToGetChatMessageResponseMapping
             Id = chatMessage.Id,
             SenderId = chatMessage.SenderId,
             Content = chatMessage.Content,
+            Attachment = chatMessage.Attachment,
             SentAt = chatMessage.SentAt.ToEgyptTime()
         };
     }
