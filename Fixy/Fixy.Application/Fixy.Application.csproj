@@ -31,8 +31,4 @@
     <PackageReference Include="Stripe.net" Version="47.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Admin\Commands\UnblockTechnician\" />
-  </ItemGroup>
-
 </Project>

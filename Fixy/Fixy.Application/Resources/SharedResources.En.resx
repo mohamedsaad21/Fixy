@@ -588,4 +588,22 @@
   <data name="Admin" xml:space="preserve">
     <value>Admin</value>
   </data>
+  <data name="NotificationCustomerBlockedTitle" xml:space="preserve">
+    <value>Account Blocked</value>
+  </data>
+  <data name="NotificationCustomerBlockedBody" xml:space="preserve">
+    <value>Your account has been blocked. Please contact support for more information.</value>
+  </data>
+  <data name="NotificationCustomerUnblockedTitle" xml:space="preserve">
+    <value>Account Unblocked</value>
+  </data>
+  <data name="NotificationCustomerUnblockedBody" xml:space="preserve">
+    <value>Great news! Your account has been re-activated. You can now start requesting services again.</value>
+  </data>
+  <data name="NotificationTechnicianUnblockedTitle" xml:space="preserve">
+    <value>Account Unblocked</value>
+  </data>
+  <data name="NotificationTechnicianUnblockedBody" xml:space="preserve">
+    <value>Your account has been re-activated. You can now start giving new price offers.</value>
+  </data>
 </root>
