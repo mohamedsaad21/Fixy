@@ -95,6 +95,7 @@ public class ChatHub : Hub
             msg.SenderId,
             msg.ReceiverId,
             msg.Content,
+            msg.Attachment,
             msg.SentAt
         });
     }
