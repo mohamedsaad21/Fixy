@@ -6,6 +6,7 @@ public class PriceOfferDto
     public Guid TechnicianId { get; set; }
     public string TechnicianFullName { get; set; }
     public string TechnicianUserName { get; set; }
+    public string TechnicianCategory { get; set; }
     public double? AverageRating { get; set; }
     public decimal Price { get; set; }
     public double DistanceKm { get; set; }

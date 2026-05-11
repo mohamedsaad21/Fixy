@@ -15,7 +15,7 @@ public sealed class GetCustomerServiceRequestByIdQueryHandler(IUnitOfWork unitOf
     {
         var serviceRequest = await unitOfWork.ServiceRequests.GetTableNoTracking()
             .Include(x => x.Customer).Include(x => x.ServiceRequestImages)
-            .Include(x => x.PriceOffers).ThenInclude(x => x.Technician)
+            .Include(x => x.PriceOffers).ThenInclude(x => x.Technician).ThenInclude(x => x.ServiceCategory)
             .Include(x => x.ServiceCategories)
             .FirstOrDefaultAsync(x => x.Id == request.Id);
 

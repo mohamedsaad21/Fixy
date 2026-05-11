@@ -12,6 +12,7 @@ public static class PriceOfferDomainToPriceOfferDtoMapping
             Id = priceOffer.Id,
             TechnicianId = priceOffer.Technician.Id,
             TechnicianUserName = priceOffer.Technician.UserName,
+            TechnicianCategory = priceOffer.Technician.ServiceCategory.Localize(priceOffer.Technician.ServiceCategory.NameAr, priceOffer.Technician.ServiceCategory.NameEn),
             AverageRating = priceOffer.Technician.AverageRating,
             Price = priceOffer.Price,
             //DistanceKm = HaversineDistance.CalculateDistance(priceOffer.Technician.TechnicianLocation.Latitude, priceOffer.Technician.TechnicianLocation.Longitude, serviceRequest.Address.Latitude, serviceRequest.Address.Longitude),
