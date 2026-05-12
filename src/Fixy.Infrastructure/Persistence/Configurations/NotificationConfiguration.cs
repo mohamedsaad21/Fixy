@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
+public sealed class NotificationConfiguration : IEntityTypeConfiguration<Notification>
 {
     public void Configure(EntityTypeBuilder<Notification> builder)
     {

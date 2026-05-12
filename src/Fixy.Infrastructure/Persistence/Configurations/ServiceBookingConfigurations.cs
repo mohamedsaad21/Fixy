@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class ServiceBookingConfigurations : IEntityTypeConfiguration<ServiceBooking>
+public sealed class ServiceBookingConfigurations : IEntityTypeConfiguration<ServiceBooking>
 {
     public void Configure(EntityTypeBuilder<ServiceBooking> builder)
     {

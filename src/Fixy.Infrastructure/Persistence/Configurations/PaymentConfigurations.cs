@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class PaymentConfigurations : IEntityTypeConfiguration<Payment>
+public sealed class PaymentConfigurations : IEntityTypeConfiguration<Payment>
 {
     public void Configure(EntityTypeBuilder<Payment> builder)
     {

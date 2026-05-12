@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCategory>
+public sealed class ServiceCategoryConfigurations : IEntityTypeConfiguration<ServiceCategory>
 {
     public void Configure(EntityTypeBuilder<ServiceCategory> builder)
     {

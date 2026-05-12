@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class ServiceRequestConfigurations : IEntityTypeConfiguration<ServiceRequest>
+public sealed class ServiceRequestConfigurations : IEntityTypeConfiguration<ServiceRequest>
 {
     public void Configure(EntityTypeBuilder<ServiceRequest> builder)
     {

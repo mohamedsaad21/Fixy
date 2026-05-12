@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class PriceOfferConfiguration : IEntityTypeConfiguration<PriceOffer>
+public sealed class PriceOfferConfiguration : IEntityTypeConfiguration<PriceOffer>
 {
     public void Configure(EntityTypeBuilder<PriceOffer> builder)
     {

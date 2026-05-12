@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class BlockedServiceRequestsConfiguration : IEntityTypeConfiguration<BlockedServiceRequest>
+public sealed class BlockedServiceRequestsConfiguration : IEntityTypeConfiguration<BlockedServiceRequest>
 {
     public void Configure(EntityTypeBuilder<BlockedServiceRequest> builder)
     {

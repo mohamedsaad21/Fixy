@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Fixy.Infrastructure.Persistence.Configurations;
 
-public class TechniciansConfigurations : IEntityTypeConfiguration<Technician>
+public sealed class TechniciansConfigurations : IEntityTypeConfiguration<Technician>
 {
     public void Configure(EntityTypeBuilder<Technician> builder)
     {
