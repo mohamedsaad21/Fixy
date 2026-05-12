@@ -1,11 +1,14 @@
 ﻿using Fixy.Application.Bases;
+using Fixy.Application.Common.Helpers;
+using Fixy.Application.Resources;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Admin.Queries.GetCustomers;
 
-public sealed class GetCustomersQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetCustomersQuery, Result<PaginatedResult<GetCustomersResponse>>>
+public sealed class GetCustomersQueryHandler(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetCustomersQuery, Result<PaginatedResult<GetCustomersResponse>>>
 {
     public async Task<Result<PaginatedResult<GetCustomersResponse>>> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
     {
@@ -29,7 +32,7 @@ public sealed class GetCustomersQueryHandler(IUnitOfWork unitOfWork) : IRequestH
             FullName = x.FirstName + " " + x.LastName,
             UserName = x.UserName,
             Email = x.Email,
-            Status = x.Status.ToString(),
+            Status = EnumLocalizer.Localize(x.Status, localizer),
             TotalBookings = x.TotalBookings,
             CompletedBookings = x.CompletedBookings,
             CancelledBookings = x.CancelledBookings,

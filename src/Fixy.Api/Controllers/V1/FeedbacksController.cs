@@ -28,7 +28,7 @@ public class FeedbacksController : AppControllerBase
     }
 
     [Authorize(Roles = Roles.Technician)]
-    //[RequireActiveTechnician]
+    [RequireActiveTechnician]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -52,7 +52,7 @@ public class FeedbacksController : AppControllerBase
 
     //[RedisCache(3)]
     [Authorize(Roles = Roles.Technician)]
-    //[RequireActiveTechnician]
+    [RequireActiveTechnician]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.FeedbackRouting.GetPendingTechnicianFeedbackStatus)]

@@ -1,12 +1,15 @@
 using Fixy.Application.Bases;
+using Fixy.Application.Common.Helpers;
+using Fixy.Application.Resources;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Admin.Queries.GetTechnicians;
 
-public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetTechniciansQuery, Result<PaginatedResult<GetTechniciansResponse>>>
+public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetTechniciansQuery, Result<PaginatedResult<GetTechniciansResponse>>>
 {
     public async Task<Result<PaginatedResult<GetTechniciansResponse>>> Handle(GetTechniciansQuery request, CancellationToken cancellationToken)
     {
@@ -36,7 +39,7 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork) : IReques
             FullName = x.FirstName + " " + x.LastName,
             UserName = x.UserName,
             Email = x.Email,
-            Status = x.Status.ToString(),
+            Status = EnumLocalizer.Localize(x.Status, localizer),
             TotalCompletedJobs = x.CompletedBookings,
             CancellationRate = x.CancellationRate,
             AverageRating = x.AverageRating

@@ -1,14 +1,18 @@
 ﻿using Fixy.Application.Bases;
+using Fixy.Application.Common.Helpers;
+using Fixy.Application.Resources;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using System.Security.Cryptography.Pkcs;
 
 namespace Fixy.Application.Features.Admin.Queries.GetBookings;
 
-public sealed class GetBookingsQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetBookingsQuery, Result<PaginatedResult<GetBookingsResponse>>>
+public sealed class GetBookingsQueryHandler(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetBookingsQuery, Result<PaginatedResult<GetBookingsResponse>>>
 {
     public async Task<Result<PaginatedResult<GetBookingsResponse>>> Handle(GetBookingsQuery request, CancellationToken cancellationToken)
     {
@@ -51,7 +55,7 @@ public sealed class GetBookingsQueryHandler(IUnitOfWork unitOfWork) : IRequestHa
                 CustomerUserName = x.Technician.UserName,
                 TechnicianUserName = x.Technician.UserName,
                 Price = x.AgreedPrice,
-                Status = x.Status.ToString(),
+                Status = EnumLocalizer.Localize(x.Status, localizer),
                 CreatedAt = x.CreatedAt.ToEgyptTime(),
                 CompletedAt = x.CompletedAt
             })
