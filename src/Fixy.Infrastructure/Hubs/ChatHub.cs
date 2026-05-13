@@ -104,7 +104,7 @@ public class ChatHub : Hub
         {
             // User is in the app but on a different page — send notification only
             await _notificationHub.Clients.Group($"user_{receiverId}")
-            .SendAsync("NewMessageNotification", new {
+            .SendAsync("ReceiveNotification", new {
                 msg.ConversationId,
                 msg.SenderId,
                 SenderName = sender.FirstName + " " + sender.LastName,
