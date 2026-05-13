@@ -26,6 +26,11 @@ public class GetBookingByIdForCustomerQueryHandler(IUnitOfWork unitOfWork, ICurr
             return Errors.BookingNotFound;
 
         var result = mapper.Map<GetBookingByIdForCustomerResponse>(booking);
+        var conversation = await unitOfWork.Conversations.GetTableNoTracking().FirstOrDefaultAsync(x => x.ServiceBookingId == booking.Id && x.TechnicianId == booking.TechnicianId);
+        if (conversation != null)
+        {
+            result.ConversationId = conversation.Id;
+        }
         return result;
     }
 }

@@ -12,6 +12,7 @@ public class GetBookingByIdForTechnicianResponse
     public string CustomerName { get; set; }
     public string CustomerProfilePicture { get; set; }
     public string Description { get; set; }
+    public Guid ConversationId { get; set; }
     public AddressDto Address { get; set; }
     public List<ImageDto> Images { get; set; }
 }

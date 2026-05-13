@@ -26,6 +26,11 @@ public sealed class GetBookingByIdForTechnicianQueryHandler(IUnitOfWork unitOfWo
             return Errors.BookingNotFound;
 
         var result = mapper.Map<GetBookingByIdForTechnicianResponse>(booking);
+        var conversation = await unitOfWork.Conversations.GetTableNoTracking().FirstOrDefaultAsync(x => x.ServiceBookingId == booking.Id && x.TechnicianId == booking.TechnicianId);
+        if (conversation != null)
+        {
+            result.ConversationId = conversation.Id;
+        }
         return result;
     }
 }
