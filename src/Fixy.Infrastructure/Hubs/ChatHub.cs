@@ -177,6 +177,8 @@ public class ChatHub : Hub
         var userId = Guid.Parse(userIdStr);
         await Groups.AddToGroupAsync(Context.ConnectionId, $"conv_{conversationId}");
         await _presenceService.JoinConversationAsync(userId, conversationId);
+
+        await MarkMessagesSeen(conversationId);
     }
 
     public async Task LeaveConversation(Guid conversationId)
@@ -187,5 +189,72 @@ public class ChatHub : Hub
         var userId = Guid.Parse(userIdStr);
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"conv_{conversationId}");
         await _presenceService.LeaveConversationAsync(userId);
+    }
+
+    public async Task SendTypingIndicator(Guid conversationId, bool isTyping)
+    {
+        var userIdStr = Context.User?.FindFirst("uid")?.Value;
+        if (string.IsNullOrEmpty(userIdStr)) return;
+
+        var senderId = Guid.Parse(userIdStr);
+
+        // Get the conversation to find the other user
+        var conversation = await _unitOfWork.Conversations
+            .GetTableNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == conversationId);
+
+        if (conversation == null) return;
+
+        // Determine the other user
+        var otherUserId = conversation.CustomerId == senderId
+            ? conversation.TechnicianId
+            : conversation.CustomerId;
+
+        // Only relay if the other user is in the conversation screen
+        var isOtherInConvo = await _presenceService.IsInConversationAsync(otherUserId, conversationId);
+        if (!isOtherInConvo) return;
+
+        await Clients.Group($"user_{otherUserId}")
+            .SendAsync("UserTyping", new
+            {
+                ConversationId = conversationId,
+                UserId = senderId,
+                IsTyping = isTyping
+            });
+    }
+
+    public async Task MarkMessagesSeen(Guid conversationId)
+    {
+        var userIdStr = Context.User?.FindFirst("uid")?.Value;
+        if (string.IsNullOrEmpty(userIdStr)) return;
+
+        var userId = Guid.Parse(userIdStr);
+
+        // Get all unseen messages sent TO this user in this conversation
+        var unseenMessages = await _unitOfWork.ChatMessages
+            .GetTableAsTracking()
+            .Where(m => m.ConversationId == conversationId
+                     && m.ReceiverId == userId
+                     && !m.IsSeen)
+            .ToListAsync();
+
+        if (!unseenMessages.Any()) return;
+
+        // Mark all as seen
+        foreach (var m in unseenMessages)
+            m.IsSeen = true;
+
+        await _unitOfWork.SaveChangesAsync();
+
+        // Tell the sender their messages were read
+        var senderId = unseenMessages.First().SenderId;
+
+        await Clients.Group($"user_{senderId}")
+            .SendAsync("MessagesSeen", new
+            {
+                ConversationId = conversationId,
+                SeenBy = userId,
+                SeenAt = DateTimeOffset.UtcNow
+            });
     }
 }
