@@ -10,5 +10,8 @@ public sealed class PriceOfferConfiguration : IEntityTypeConfiguration<PriceOffe
     {
         builder.HasQueryFilter(x => !x.IsDeleted);
         builder.Property(x => x.Status).HasConversion<string>();
+        builder.HasIndex(x => x.ServiceRequestId);
+        builder.HasIndex(x => x.Status);
+        builder.HasIndex(x => x.TechnicianId);
     }
 }
