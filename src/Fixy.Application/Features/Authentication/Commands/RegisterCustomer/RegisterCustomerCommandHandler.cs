@@ -5,6 +5,7 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Constants;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Net.Mail;
@@ -40,8 +41,7 @@ public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> 
             if (!roleResult.Succeeded)
                 return Errors.IdentityAddRoleFailed;
 
-            //await _userManager.UpdateAsync(technician);
-            await authenticationService.SendOtpAsync(customer, "confirm your account", "Confirm Account");
+            BackgroundJob.Enqueue<IAuthenticationService>(x => x.SendOtpAsync(customer, "confirm your account", "Confirm Account"));
             return customer.Id;
         }
         catch (Exception)

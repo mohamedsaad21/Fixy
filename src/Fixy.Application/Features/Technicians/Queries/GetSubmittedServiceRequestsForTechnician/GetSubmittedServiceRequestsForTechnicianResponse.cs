@@ -1,0 +1,5 @@
+﻿namespace Fixy.Application.Features.Technicians.Queries.GetSubmittedServiceRequestsForTechnician;
+
+public class GetSubmittedServiceRequestsForTechnicianResponse
+{
+}

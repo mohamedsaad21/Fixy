@@ -6,6 +6,7 @@ using Fixy.Domain.Constants;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Net.Mail;
@@ -47,7 +48,7 @@ public sealed class RegisterTechnicianCommandHandler(UserManager<ApplicationUser
             if (!roleResult.Succeeded)
                 return Errors.IdentityAddRoleFailed;
 
-            await authenticationService.SendOtpAsync(technician, "confirm your account", "Confirm Account");
+            BackgroundJob.Enqueue<IAuthenticationService>(x => x.SendOtpAsync(technician, "confirm your account", "Confirm Account"));
             return technician.Id;
         }
         catch (Exception)

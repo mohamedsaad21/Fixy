@@ -1,7 +1,6 @@
 ﻿using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Interfaces;
-using Fixy.Infrastructure.Configurations;
 using Fixy.Infrastructure.ExternalServices;
 using Fixy.Infrastructure.Persistence.Repositories;
 using Fixy.Infrastructure.Services;

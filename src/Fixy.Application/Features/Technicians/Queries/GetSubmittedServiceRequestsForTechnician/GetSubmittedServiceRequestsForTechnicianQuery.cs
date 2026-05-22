@@ -1,0 +1,3 @@
+﻿namespace Fixy.Application.Features.Technicians.Queries.GetSubmittedServiceRequestsForTechnician;
+
+public sealed record GetSubmittedServiceRequestsForTechnicianQuery();
