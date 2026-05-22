@@ -27,6 +27,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Dispute> Disputes { get; private set; }
     public IGenericRepository<CustomerFeedback> CustomerFeedbacks { get; private set; }
     public IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; private set; }
+    public IGenericRepository<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; private set; }
     public IGenericRepository<Payout> Payouts { get; private set; }
     public IGenericRepository<OtpCode> OtpCodes { get; private set; }
     public IConversationRepository Conversations { get; private set; }
@@ -51,6 +52,7 @@ public class UnitOfWork : IUnitOfWork
         Disputes = new GenericRepository<Dispute>(dbContext);
         CustomerFeedbacks = new GenericRepository<CustomerFeedback>(dbContext);
         TechnicianFeedbacks = new GenericRepository<TechnicianFeedback>(dbContext);
+        TechnicianCommissionsOwed = new GenericRepository<TechnicianCommissionOwed>(dbContext);
         Payouts = new GenericRepository<Payout>(dbContext);
         OtpCodes = new GenericRepository<OtpCode>(dbContext);
         Conversations = new ConversationRepository(dbContext);

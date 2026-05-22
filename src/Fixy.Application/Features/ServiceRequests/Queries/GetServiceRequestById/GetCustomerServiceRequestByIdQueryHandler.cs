@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Common.DTOs.PriceOffer;
 using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Common.Helpers;
@@ -38,7 +38,8 @@ public sealed class GetCustomerServiceRequestByIdQueryHandler(
                                      x.Address.Country, x.Address.City, x.Address.Area,
                                      x.Address.Street, x.Address.BuildingNumber,
                                      x.Address.Latitude, x.Address.Longitude),
-                Images = x.ServiceRequestImages
+                Images = x.ServiceRequestImages == null? new List<ImageDto>() :
+                                     x.ServiceRequestImages
                                      .Select(i => new ImageDto { Id = i.Id, ImageUrl = i.ImageUrl })
                                      .ToList(),
                 PriceOffers = x.Status == ServiceRequestStatus.Assigned

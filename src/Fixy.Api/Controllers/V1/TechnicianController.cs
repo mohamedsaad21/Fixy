@@ -12,6 +12,7 @@ using Fixy.Application.Features.Technicians.Queries.GetTechnicianProfileForCusto
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Fixy.Application.Features.Technicians.Queries.GetSubmittedServiceRequestsForTechnician;
 
 namespace Fixy.Api.Controllers.V1;
 
@@ -61,6 +62,18 @@ public class TechnicianController : AppControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.TechnicianRouting.TechnicianServiceRequestsList)]
     public async Task<IActionResult> GetTechnicianAvailableServiceRequests([FromQuery] GetAvailableServiceRequestsForTechnicianQuery query)
+    {
+        return ToActionResult(await Mediator.Send(query));
+    }
+
+    //[RedisCache(3)]
+    //[RequireActiveTechnician]
+    [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.TechnicianRouting.TechnicianSubmittedServiceRequestsList)]
+    public async Task<IActionResult> GetSubmittedServiceRequestsForTechnician([FromQuery] GetSubmittedServiceRequestsForTechnicianQuery query)
     {
         return ToActionResult(await Mediator.Send(query));
     }

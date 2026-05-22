@@ -23,6 +23,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<Dispute> Disputes { get; }
     IGenericRepository<CustomerFeedback> CustomerFeedbacks { get; }
     IGenericRepository<TechnicianFeedback> TechnicianFeedbacks { get; }
+    IGenericRepository<TechnicianCommissionOwed> TechnicianCommissionsOwed { get; }
     IGenericRepository<Payout> Payouts { get; }
     IGenericRepository<OtpCode> OtpCodes { get; }
     IConversationRepository Conversations { get; }
