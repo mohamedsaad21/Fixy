@@ -82,18 +82,6 @@ public class TechnicianController : AppControllerBase
     [RequireActiveTechnician]
     [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [HttpGet(Router.TechnicianRouting.TechnicianSubmittedServiceRequestsList)]
-    public async Task<IActionResult> GetSubmittedServiceRequestsForTechnician([FromQuery] GetSubmittedServiceRequestsForTechnicianQuery query)
-    {
-        return ToActionResult(await Mediator.Send(query));
-    }
-
-    //[RedisCache(3)]
-    //[RequireActiveTechnician]
-    [Authorize(Roles = $"{Roles.Technician},{Roles.Admin}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpGet(Router.TechnicianRouting.ServiceRequestById)]
