@@ -27,8 +27,8 @@ public class RegisterTechnicianCommandValidator : AbstractValidator<RegisterTech
         RuleFor(x => x.NationalId).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]).Matches(@"^\d{14}$");
 
         RuleFor(x => x.NationalIdCardImage).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .Must(file => file.Length <= 10 * 1024 * 1024)
-            .WithMessage("File size must not exceed 10MB")
+            .Must(file => file.Length <= 100 * 1024 * 1024)
+            .WithMessage("File size must not exceed 100MB")
             .Must(file =>
             {
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
@@ -38,8 +38,8 @@ public class RegisterTechnicianCommandValidator : AbstractValidator<RegisterTech
             .WithMessage("Only image files (.jpg, .jpeg, .png) are allowed");
 
         RuleFor(x => x.ProfilePicture)
-            .Must(file => file.Length <= 10 * 1024 * 1024)
-            .WithMessage("File size must not exceed 10MB")
+            .Must(file => file.Length <= 100 * 1024 * 1024)
+            .WithMessage("File size must not exceed 100MB")
             .Must(file =>
             {
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };

@@ -58,6 +58,7 @@ public static class Router
         public const string GetTechnicianProfileForCustomers = prefix + "/Get-Technician-Profile-For-Customers/{TechnicianId}";
         public const string GetCustomerProfileForTechnicians = prefix + "/Get-Customer-Profile-For-Technicians/{CustomerId}";
         public const string TechnicianServiceRequestsList = prefix + "/Technician-Service-Requests-Paginated";
+        public const string TechnicianSubmittedServiceRequestsList = prefix + "/Technician-Submitted-Service-Requests-Paginated";
         public const string ServiceRequestById = prefix + "/Service-Request-By-Id/{Id}";
         public const string Location = prefix + "/Location";
         public const string UpdateTechnicianProfile = prefix + "/update-technician-profile";

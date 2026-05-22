@@ -1,3 +1,14 @@
-﻿namespace Fixy.Application.Features.Technicians.Queries.GetSubmittedServiceRequestsForTechnician;
+﻿using Fixy.Application.Bases;
+using Fixy.Application.Wrappers;
+using Fixy.Domain.Enums;
+using MediatR;
 
-public sealed record GetSubmittedServiceRequestsForTechnicianQuery();
+namespace Fixy.Application.Features.Technicians.Queries.GetSubmittedServiceRequestsForTechnician;
+
+public sealed record GetSubmittedServiceRequestsForTechnicianQuery
+    (
+        int PageNumber,
+        int PageSize,
+        BookingOrdering OrderBy,
+        string? Search
+    ) : IRequest<Result<PaginatedResult<GetSubmittedServiceRequestsForTechnicianResponse>>>;

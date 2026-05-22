@@ -30,8 +30,8 @@ public class RegisterCustomerCommandValidator : AbstractValidator<RegisterCustom
             .Equal(x => x.Password).WithMessage(_stringLocalizer[SharedResourcesKeys.PasswordNotMatchConfirmPassword]);
         
         RuleFor(x => x.ProfilePicture)
-            .Must(file => file.Length <= 10 * 1024 * 1024)
-            .WithMessage("File size must not exceed 10MB")
+            .Must(file => file.Length <= 100 * 1024 * 1024)
+            .WithMessage("File size must not exceed 100MB")
             .Must(file =>
             {
                 var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
