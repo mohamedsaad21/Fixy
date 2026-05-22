@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Wrappers;
 using Fixy.Domain.Enums;
 using MediatR;

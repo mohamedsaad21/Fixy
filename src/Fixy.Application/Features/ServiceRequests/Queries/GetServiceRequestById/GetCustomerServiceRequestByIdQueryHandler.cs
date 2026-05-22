@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Common.DTOs.PriceOffer;
 using Fixy.Application.Common.DTOs.ServiceRequest;
 using Fixy.Application.Common.Helpers;

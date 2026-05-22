@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Common.DTOs.ServiceRequest;
+using Fixy.Application.Common.DTOs.ServiceRequest;
 
 namespace Fixy.Application.Features.Technicians.Queries.GetSubmittedServiceRequestsForTechnician;
 
