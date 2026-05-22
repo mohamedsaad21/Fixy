@@ -16,6 +16,7 @@ public static class BookingsDomainToGetBookingsForTechnicianResponseMapping
             Id = booking.Id,
             Status = EnumLocalizer.Localize(booking.Status, localizer),
             AgreedPrice = booking.AgreedPrice,
+            ScheduledDateTime = booking.ScheduledDateTime,
             CreatedAt = booking.CreatedAt.ToEgyptTime()
         };
     }

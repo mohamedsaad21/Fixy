@@ -2,6 +2,7 @@
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities.Chat;
 using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -69,7 +70,7 @@ public class ChatHub : Hub
             ReceiverId = receiverId,
             Content = messageContent.Content,
             Attachment = messageContent.Attachment,
-            SentAt = DateTimeOffset.UtcNow,
+            SentAt = DateTimeOffset.UtcNow.ToEgyptTime(),
             IsSeen = false
         };
 
@@ -254,7 +255,7 @@ public class ChatHub : Hub
             {
                 ConversationId = conversationId,
                 SeenBy = userId,
-                SeenAt = DateTimeOffset.UtcNow
+                SeenAt = DateTimeOffset.UtcNow.ToEgyptTime()
             });
     }
 }

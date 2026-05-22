@@ -32,7 +32,7 @@ public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurre
 
         await notificationService.SendFullNotificationAsync(
             customer,
-            NotificationType.TechnicianApproved,
+            NotificationType.CustomerUnblocked,
             SharedResourcesKeys.NotificationCustomerUnblockedTitle,
             SharedResourcesKeys.NotificationCustomerUnblockedBody
         );
