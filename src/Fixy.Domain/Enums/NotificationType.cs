@@ -14,5 +14,8 @@ public enum NotificationType
     BookingCompleted,
     TechnicianApproved,
     TechnicianRejected,
-    TechnicianBlocked
+    TechnicianBlocked,
+    TechnicianUnblocked,
+    CustomerBlocked,
+    CustomerUnblocked
 }

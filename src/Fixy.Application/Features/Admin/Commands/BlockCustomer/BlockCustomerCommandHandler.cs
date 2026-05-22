@@ -32,7 +32,7 @@ public sealed class BlockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrent
 
         await notificationService.SendFullNotificationAsync(
             customer,
-            NotificationType.TechnicianApproved,
+            NotificationType.CustomerBlocked,
             SharedResourcesKeys.NotificationCustomerBlockedTitle,
             SharedResourcesKeys.NotificationCustomerBlockedBody
         );

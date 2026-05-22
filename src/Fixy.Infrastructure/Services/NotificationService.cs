@@ -4,6 +4,7 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Enums;
+using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
@@ -28,7 +29,7 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
             title,
             message,
             type = EnumLocalizer.Localize(type, localizer),
-            createdAt = DateTimeOffset.UtcNow
+            createdAt = DateTimeOffset.UtcNow.ToEgyptTime()
         };
 
         await SendNotificationToUserAsync(user, payload);

@@ -32,7 +32,7 @@ public sealed class UnblockTechnicianCommandHandler(ICurrentUserService currentU
 
         await notificationService.SendFullNotificationAsync(
             technician,
-            NotificationType.TechnicianApproved,
+            NotificationType.TechnicianUnblocked,
             SharedResourcesKeys.NotificationTechnicianUnblockedTitle,
             SharedResourcesKeys.NotificationTechnicianUnblockedBody
         );

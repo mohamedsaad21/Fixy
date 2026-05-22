@@ -9,6 +9,7 @@ public partial class TechnicianProfile
     {
         CreateMap<Technician, GetTechnicianProfileForCustomersResponse>()
             .ForMember(dest => dest.ServiceCategoryName, opt => opt.MapFrom(src => src.ServiceCategory.Localize(src.ServiceCategory.NameAr, src.ServiceCategory.NameEn)))
-            .ForMember(dest => dest.TotalCompletedJobs, opt => opt.MapFrom(src => src.CompletedBookings));
+            .ForMember(dest => dest.TotalCompletedJobs, opt => opt.MapFrom(src => src.CompletedBookings))
+            .ForMember(dest => dest.ServiceArea, opt => opt.MapFrom(src => src.TechnicianLocation.ServiceArea));
     }
 }
