@@ -1,4 +1,4 @@
-﻿using FirebaseAdmin;
+using FirebaseAdmin;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
 using Fixy.Infrastructure.Persistence;
