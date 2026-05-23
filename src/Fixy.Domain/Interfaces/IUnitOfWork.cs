@@ -1,5 +1,6 @@
 ﻿using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Chat;
+using Fixy.Domain.Entities.Chatbot;
 using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
@@ -30,5 +31,6 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<ChatMessage> ChatMessages { get; }
     INotificationRepository Notifications { get; }
     IServiceRequestReadRepository ServiceRequestReadRepository { get; }
+    IGenericRepository<Prompt> Prompts { get; }
     Task<int> SaveChangesAsync();
 }

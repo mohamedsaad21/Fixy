@@ -3,6 +3,7 @@ using EntityFrameworkCore.EncryptColumn.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Util;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Chat;
+using Fixy.Domain.Entities.Chatbot;
 using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
@@ -40,6 +41,7 @@ public class FixyDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Gui
     public virtual DbSet<Conversation> Conversations { get; set; }
     public virtual DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<ServiceRequestSpResult> ServiceRequestSpResults { get; set; }
+    public DbSet<Prompt> Prompts { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

@@ -1,5 +1,6 @@
 ﻿using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Chat;
+using Fixy.Domain.Entities.Chatbot;
 using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
@@ -34,6 +35,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<ChatMessage> ChatMessages { get; private set; }
     public INotificationRepository Notifications { get; private set; }
     public IServiceRequestReadRepository ServiceRequestReadRepository { get; private set; }
+    public IGenericRepository<Prompt> Prompts { get; private set; }
 
     public UnitOfWork(FixyDbContext dbContext)
     {
@@ -59,6 +61,7 @@ public class UnitOfWork : IUnitOfWork
         ChatMessages = new GenericRepository<ChatMessage>(dbContext);
         Notifications = new NotificationRepository(dbContext);
         ServiceRequestReadRepository = new ServiceRequestReadRepository(dbContext);
+        Prompts = new GenericRepository<Prompt>(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();
     public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();

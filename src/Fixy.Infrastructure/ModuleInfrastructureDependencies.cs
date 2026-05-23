@@ -27,6 +27,7 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IBookingService, BookingService>();
         services.AddTransient<IFeedbackService, FeedbackService>();
         services.AddTransient<IRatingService, RatingService>();
+        services.AddTransient<IChatbotService, ChatbotService>();
 
         services.AddSingleton<IStorageService, BlobStorageService>();
         services.AddSingleton<ICacheService, CacheService>();
