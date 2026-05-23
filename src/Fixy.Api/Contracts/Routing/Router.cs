@@ -152,4 +152,10 @@ public static class Router
         public const string GetTechnicianDashboard = prefix + "/Get-Technician-Dashboard";
         public const string GetCustomerDashboard = prefix + "/Get-Customer-Dashboard";
     }
+
+    public static class ChatbotRouting
+    {
+        public const string prefix = Rule + "/Chatbot";
+        public const string SendPrompt = prefix + "/Send-Prompt";
+    }
 }

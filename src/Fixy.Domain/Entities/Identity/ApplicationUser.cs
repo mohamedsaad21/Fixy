@@ -1,4 +1,5 @@
 using Fixy.Domain.Entities.Chat;
+using Fixy.Domain.Entities.Chatbot;
 using Microsoft.AspNetCore.Identity;
 
 namespace Fixy.Domain.Entities.Identity;
@@ -28,8 +29,9 @@ public class ApplicationUser : IdentityUser<Guid>
     public DateTimeOffset? BlockedAt { get; set; }
     public Guid? BlockedBy { get; set; }
     public ApplicationUser BlockedByUser { get; set; }
-    public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
-    public virtual ICollection<Notification> Notifications { get; set; }
-    public virtual ICollection<Conversation> CustomerConversations { get; set; }
-    public virtual ICollection<Conversation> TechnicianConversations { get; set; }
+    public ICollection<RefreshToken> RefreshTokens { get; set; }
+    public ICollection<Notification> Notifications { get; set; }
+    public ICollection<Conversation> CustomerConversations { get; set; }
+    public ICollection<Conversation> TechnicianConversations { get; set; }
+    public ICollection<Prompt> Prompts { get; set; }
 }
