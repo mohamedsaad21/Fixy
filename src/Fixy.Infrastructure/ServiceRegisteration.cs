@@ -1,4 +1,4 @@
-﻿using FirebaseAdmin;
+using FirebaseAdmin;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Infrastructure.Configurations;
 using Fixy.Infrastructure.Persistence;
@@ -81,11 +81,11 @@ public static class ServiceRegisteration
             // read token from cookie
             o.Events = new JwtBearerEvents
             {
-               OnMessageReceived = context =>
-               {
-                   context.Token = context.Request.Cookies["token"];
-                   return Task.CompletedTask;
-               }
+                OnMessageReceived = context =>
+                {
+                    context.Token = context.Request.Cookies["token"];
+                    return Task.CompletedTask;
+                }
             };
         });
 
