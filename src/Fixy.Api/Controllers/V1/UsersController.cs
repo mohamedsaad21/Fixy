@@ -4,6 +4,7 @@ using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Users.Commands.DeleteProfilePicture;
 using Fixy.Application.Features.Users.Commands.EditUserProfile;
+using Fixy.Application.Features.Users.Queries.GetCurrentUser;
 using Fixy.Application.Features.Users.Queries.GetUserProfileById;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,15 @@ public class UsersController : AppControllerBase
     public async Task<IActionResult> GetUserById([FromRoute] Guid Id)
     {
         return ToActionResult(await Mediator.Send(new GetUserProfileByIdQuery(Id)));
+    }
+
+    //[RedisCache(3)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.UsersRouting.Me)]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        return ToActionResult(await Mediator.Send(new GetCurrentUserQuery()));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]

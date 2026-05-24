@@ -7,6 +7,7 @@ public class GetCustomerProfileForTechniciansResponse
     public string UserName { get; set; }
     public string Email { get; set; }
     public string? ProfilePictureUrl { get; set; }
+    public string Bio { get; set; }
     public int? TotalBookings { get; set; }
     public int? CompletedBookings { get; set; }
     public int? CancelledBookings { get; set; }
