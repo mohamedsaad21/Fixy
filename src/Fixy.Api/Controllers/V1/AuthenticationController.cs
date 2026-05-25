@@ -13,6 +13,7 @@ using Fixy.Application.Features.Authentication.Commands.RevokeToken;
 using Fixy.Application.Features.Authentication.Commands.SendConfirmEmail;
 using Fixy.Application.Features.Authentication.Commands.SendResetPassword;
 using Fixy.Application.Features.Authentication.Commands.SignIn;
+using Fixy.Application.Features.Authentication.Commands.SignInWithGoogle;
 using Fixy.Application.Features.Authentication.Commands.VerifyOTP;
 using Fixy.Application.Features.Authentication.Queries.ConfirmResetPassword;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,14 @@ public class AuthenticationController : AppControllerBase
     [HttpPost(Router.AuthenticationRouting.SignIn)]
     public async Task<IActionResult> SignInAsync([FromForm] SignInCommand command)
     {       
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [HttpPost(Router.AuthenticationRouting.SignInWithGoogleAsync)]
+    public async Task<IActionResult> SignInWithGoogleAsync([FromBody] SignInWithGoogleCommand command)
+    {
         return ToActionResult(await Mediator.Send(command));
     }
 
