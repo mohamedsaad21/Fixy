@@ -1,7 +1,6 @@
 ﻿using Fixy.Application.Bases;
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Mapping.ServiceRequests.Commands;
-using Fixy.Domain.Entities;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +25,13 @@ public sealed class EditServiceRequestCommandHandler : IRequestHandler<EditServi
         if (serviceRequest == null)
             return Errors.ServiceRequestNotFound;
 
-        serviceRequest = request.ToServiceRequestDomain(serviceRequest);
+        // Load only the categories that were submitted
+        var newCategories = await _unitOfWork.ServiceCategories
+            .GetTableAsTracking()
+            .Where(c => request.ServiceCategories.Contains(c.Id))
+            .ToListAsync(cancellationToken);
+
+        serviceRequest = request.ToServiceRequestDomain(serviceRequest, newCategories);
         await _unitOfWork.SaveChangesAsync();
         return Result.Success();
     }
