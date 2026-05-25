@@ -21,7 +21,8 @@ public sealed class EditUserProfileCommandHandler(UserManager<ApplicationUser> u
         if (request.ProfilePicture != null)
         {
             // Delete old profile picture
-            await storageService.DeleteAsync(user.ProfilePictureUrl!);
+            if (user.ProfilePictureUrl != null)
+                await storageService.DeleteAsync(user.ProfilePictureUrl!);
             // Set new profile picture
             user.ProfilePictureUrl = await storageService.UploadAsync(request.ProfilePicture);
         }

@@ -12,4 +12,5 @@ public interface IAuthenticationService
     Task SendOtpAsync(ApplicationUser user, string actionText, string reason);
     Task<bool> VerifyOtpAsync(Guid userId, string code);
     Task SetTokenAndRefreshTokenInCookie(string token, string refreshToken, DateTimeOffset expires);
+    Task<AuthResponse> AuthenticateWithGoogleAsync(string accessToken, string idToken);
 }

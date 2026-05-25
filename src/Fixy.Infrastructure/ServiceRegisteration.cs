@@ -33,10 +33,6 @@ public static class ServiceRegisteration
         configuration.GetSection(nameof(flaskApiSettings)).Bind(flaskApiSettings);
         services.AddSingleton(flaskApiSettings);
 
-        var paymobSettings = new PaymobSettings();
-        configuration.GetSection(nameof(paymobSettings)).Bind(paymobSettings);
-        services.AddSingleton(paymobSettings);
-
         var stripeSettings = new StripeSettings();
         configuration.GetSection(nameof(stripeSettings)).Bind(stripeSettings);
         services.AddSingleton(stripeSettings);
@@ -58,6 +54,8 @@ public static class ServiceRegisteration
         });
         // Redis
         services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]!));
+        // Google External Login
+        var google = configuration.GetSection("Authentication:Google");
 
         services.AddAuthentication(options =>
         {
@@ -87,6 +85,11 @@ public static class ServiceRegisteration
                     return Task.CompletedTask;
                 }
             };
+        }).AddGoogle(options =>
+        {
+            options.ClientId = google["ClientId"];
+            options.ClientSecret = google["ClientSecret"];
+            options.CallbackPath = "/signin-google";
         });
 
         //Swagger Gn
