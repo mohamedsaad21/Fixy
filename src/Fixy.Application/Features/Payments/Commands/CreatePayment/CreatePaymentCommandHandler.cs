@@ -26,7 +26,7 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
     {
         try
         {
-            Log.Information($"Creating payment for booking {request.BookingId}");
+            Log.Information("Creating payment for booking {BookingId}", request.BookingId);
 
             // 1. Get booking details
             var booking = await _unitOfWork.Bookings.GetTableAsTracking()
@@ -34,16 +34,17 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
 
             if (booking == null)
             {
-                Log.Warning($"Booking {request.BookingId} not found");
+                Log.Warning("Booking {BookingId} not found", request.BookingId);
                 return Errors.BookingNotFound;
             }
 
             // 2. Validate booking status
             if (booking.Status != ServiceBookingStatus.AwaitingPayment)
             {
-                Log.Warning($"Booking {request.BookingId} is not in WaitingPayment status");
+                Log.Warning("Booking {BookingId} is not in AwaitingPayment status", request.BookingId);
                 return Errors.BookingNotReadyForPayment;
             }
+
             // 3. Check if payment already exists
             var existingPayment = await _unitOfWork.Payments.GetTableNoTracking()
                 .FirstOrDefaultAsync(p => p.ServiceBookingId == request.BookingId
@@ -64,54 +65,70 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
                 ServiceBookingId = request.BookingId,
                 UserId = request.CustomerId,
                 TotalAmount = totalAmount,
-                TechnicianAmount = totalAmount * 0.85m,
-                PlatformCommission = totalAmount * 0.15m,
+                TechnicianAmount = technicianAmount,
+                PlatformCommission = platformCommission,
                 Method = (PaymentMethod)request.PaymentMethod,
                 Status = PaymentStatus.Pending,
             };
 
-            // 6. Handle based on payment method
+            // 6. Build response
             var response = new CreatePaymentResponse
             {
                 PaymentMethod = (PaymentMethod)request.PaymentMethod,
                 Amount = totalAmount,
             };
 
+            // 7. Handle based on payment method
             if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Card)
             {
-                // Create stripe payment URL
-                var paymentUrlResult = await _paymentService.CreatePaymentUrlAsync(
-                    totalAmount,
-                    request.BookingId,
-                    request.CustomerName,
-                    request.CustomerEmail,
-                    request.CustomerPhone
+                // Create Stripe PaymentIntent → returns ClientSecret for Angular Elements
+                var paymentResult = await _paymentService.CreatePaymentUrlAsync(
+                    amount: totalAmount,
+                    referenceId: request.BookingId,
+                    customerName: request.CustomerName,
+                    customerEmail: request.CustomerEmail,
+                    customerPhone: request.CustomerPhone,
+                    orderPrefix: "BK"
                 );
-                response.PaymentUrl = paymentUrlResult.PaymentUrl;
-                payment.MerchantOrderId = paymentUrlResult.MerchantOrderId;
 
+                if (!paymentResult.Success)
+                {
+                    Log.Error("Failed to create Stripe PaymentIntent for booking {BookingId}: {Error}",
+                        request.BookingId, paymentResult.ErrorMessage);
+                    return Errors.PaymentCreationFailed;
+                }
+
+                // Store Stripe references on the payment record
+                payment.MerchantOrderId = paymentResult.MerchantOrderId;
+                payment.PaymentIntentId = paymentResult.PaymentIntentId;
+
+                // Return ClientSecret to Angular — no redirect URL needed
+                response.ClientSecret = paymentResult.ClientSecret;
+                response.PaymentIntentId = paymentResult.PaymentIntentId;
+                response.OrderReference = paymentResult.MerchantOrderId;
             }
             else if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Cash)
             {
-                response.PaymentUrl = null;
+                // Cash payments don't need Stripe — just assign a reference
+                payment.MerchantOrderId = $"BK-{request.BookingId.ToString().ToUpper()}";
+                response.ClientSecret = null;
+                response.OrderReference = payment.MerchantOrderId;
             }
 
-            // 7. Save payment
+            // 8. Save payment
             await _unitOfWork.Payments.AddAsync(payment);
             response.PaymentId = payment.Id;
 
             await _unitOfWork.SaveChangesAsync();
 
-            // 8. Send notifications
-            //await SendNotificationsAsync(request.PaymentMethod, booking, payment, cancellationToken);
-
-            Log.Information($"Payment {payment.Id} created successfully for booking {request.BookingId}");
+            Log.Information("Payment {PaymentId} created successfully for booking {BookingId}",
+                payment.Id, request.BookingId);
 
             return response;
         }
         catch (Exception ex)
         {
-            Log.Error(ex, $"Error creating payment for booking {request.BookingId}");
+            Log.Error(ex, "Error creating payment for booking {BookingId}", request.BookingId);
             return Errors.PaymentCreationFailed;
         }
     }

@@ -85,11 +85,6 @@ public static class ServiceRegisteration
                     return Task.CompletedTask;
                 }
             };
-        }).AddGoogle(options =>
-        {
-            options.ClientId = google["ClientId"];
-            options.ClientSecret = google["ClientSecret"];
-            options.CallbackPath = "/signin-google";
         });
 
         //Swagger Gn

@@ -31,20 +31,11 @@ public class PaymentsController : AppControllerBase
     [HttpPost(Router.PaymentRouting.Callback)]
     public async Task<IActionResult> Callback()
     {
-        try
-        {
-            var result = await Mediator.Send(new ProcessCallbackCommand());
+        var result = await Mediator.Send(new ProcessCallbackCommand());
 
-            if (!result.IsSuccess)
-                return BadRequest(result);
-
-            return Redirect("https://drive.google.com/drive/folders/1XATpVuqb4YR6FWURsu15zOOPZqAdVcEw");
-        }
-        catch (Exception ex)
-        {
-            //return Redirect($"https://your-frontend.com/payment/failed?error={ex.Message}");
-            return Redirect("https://www.google.com/");
-        }
+        if (!result.IsSuccess)
+            return BadRequest(result);
+        return Ok();
     }
 
     //[RequireActiveTechnician]

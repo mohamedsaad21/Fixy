@@ -11,8 +11,10 @@ using Serilog;
 
 namespace Fixy.Application.Features.Payments.Commands.ProcessCallback;
 
-public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService, 
-    IHttpContextAccessor httpContextAccessor, INotificationService notificationService) : IRequestHandler<ProcessCallbackCommand, Result<bool>>
+public sealed class ProcessCallbackCommandHandler(
+    IUnitOfWork unitOfWork,
+    IPaymentService paymentService,
+    INotificationService notificationService) : IRequestHandler<ProcessCallbackCommand, Result<bool>>
 {
     public async Task<Result<bool>> Handle(ProcessCallbackCommand request, CancellationToken cancellationToken)
     {
@@ -25,35 +27,33 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
             if (callbackResult == null)
                 return true; // Stripe expects 200 OK for unhandled events
 
-            // 3. Find the payment record
+            // 3. Find the payment record using OrderReference (mapped from Stripe metadata)
             var payment = await unitOfWork.Payments.GetTableAsTracking()
-                .FirstOrDefaultAsync(p => p.MerchantOrderId == callbackResult.MerchantOrderId, cancellationToken);
+                .FirstOrDefaultAsync(p => p.MerchantOrderId == callbackResult.OrderReference, cancellationToken);
 
             if (payment == null)
             {
-                // For failures, missing payment is non-critical — still return OK to Stripe
                 if (!callbackResult.Success)
                 {
-                    Log.Warning("Payment not found for failed/expired order: {OrderId}", callbackResult.MerchantOrderId);
-                    return true;
+                    Log.Warning("Payment not found for failed order: {OrderRef}", callbackResult.OrderReference);
+                    return true; // Non-critical, return OK to Stripe
                 }
 
-                Log.Warning("Payment not found for successful order: {OrderId}", callbackResult.MerchantOrderId);
+                Log.Warning("Payment not found for successful order: {OrderRef}", callbackResult.OrderReference);
                 return Errors.PaymentNotFound;
             }
 
             // 4. Idempotency guard — Stripe can deliver webhooks more than once
             if (payment.Status == PaymentStatus.Success && callbackResult.Success)
             {
-                Log.Information("Payment already processed: {OrderId}", callbackResult.MerchantOrderId);
+                Log.Information("Payment already processed: {OrderRef}", callbackResult.OrderReference);
                 return true;
             }
 
             // 5. Update payment record
             if (callbackResult.Success)
             {
-                payment.StripeSessionId = callbackResult.Metadata?.GetValueOrDefault("session_id")?.ToString();
-                payment.PaymentIntentId = callbackResult.TransactionId;
+                payment.PaymentIntentId = callbackResult.PaymentIntentId;
                 payment.Status = PaymentStatus.Success;
                 payment.PaidAt = DateTime.UtcNow;
             }
@@ -66,17 +66,17 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
             // 6. Run domain side-effects only on success
             if (callbackResult.Success)
             {
-                if (callbackResult.MerchantOrderId.StartsWith("BK-"))
+                if (callbackResult.OrderReference.StartsWith("BK-"))
                     await HandleBookingPaymentSuccessAsync(payment, cancellationToken);
 
-                else if (callbackResult.MerchantOrderId.StartsWith("COMM-"))
+                else if (callbackResult.OrderReference.StartsWith("COMM-"))
                     await HandleCommissionPaymentSuccessAsync(payment, cancellationToken);
             }
 
             await unitOfWork.SaveChangesAsync();
 
-            Log.Information("Callback processed: {OrderId} → {Status}",
-                callbackResult.MerchantOrderId, callbackResult.Status);
+            Log.Information("Callback processed: {OrderRef} → {Status}",
+                callbackResult.OrderReference, callbackResult.Status);
 
             return true;
         }
@@ -90,38 +90,39 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
             return Errors.CallbackProcessingFailed;
         }
     }
-    
+
+    // ---------------------------------------------------------------
+    // Booking Payment Success
+    // ---------------------------------------------------------------
     private async Task HandleBookingPaymentSuccessAsync(Payment payment, CancellationToken cancellationToken)
     {
-        Log.Information($"Processing successful booking payment: {payment.MerchantOrderId}");
+        Log.Information("Processing successful booking payment: {OrderRef}", payment.MerchantOrderId);
 
-        // Check if payment has a booking
         if (!payment.ServiceBookingId.HasValue)
         {
-            Log.Warning($"Booking payment has no ServiceBookingId: {payment.Id}");
+            Log.Warning("Booking payment has no ServiceBookingId: {PaymentId}", payment.Id);
             return;
         }
 
-        // Get booking
-        var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.Technician).Include(x => x.ServiceRequest)
-            .ThenInclude(x => x.Customer)
+        var booking = await unitOfWork.Bookings.GetTableAsTracking()
+            .Include(x => x.Technician)
+            .Include(x => x.ServiceRequest)
+                .ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(b => b.Id == payment.ServiceBookingId.Value, cancellationToken);
 
         if (booking == null)
         {
-            Log.Warning($"Booking not found: {payment.ServiceBookingId}");
+            Log.Warning("Booking not found: {BookingId}", payment.ServiceBookingId);
             return;
         }
 
-        // Update booking status
+        // Update booking & counters
         booking.Status = ServiceBookingStatus.Completed;
-        booking.Technician.CompletedBookings+=1;
+        booking.Technician.CompletedBookings += 1;
         booking.ServiceRequest.Customer.CompletedBookings += 1;
 
-        Log.Information($"Booking {booking.Id} marked as Paid");
-
         // Create payout for technician
-        var payout = new Domain.Entities.Payments.Payout
+        var payout = new Payout
         {
             TechnicianId = booking.TechnicianId,
             BookingId = booking.Id,
@@ -132,43 +133,45 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
 
         await unitOfWork.Payouts.AddAsync(payout);
 
-        var customer = booking.ServiceRequest.Customer;
-
+        // Notify customer
         await notificationService.SendFullNotificationAsync(
-            customer,
+            booking.ServiceRequest.Customer,
             NotificationType.BookingCompleted,
             SharedResourcesKeys.NotificationBookingCompletedTitle,
             SharedResourcesKeys.NotificationBookingCompletedBody
         );
 
-        Log.Information($"Payout created: {payment.TechnicianAmount:C} for technician {booking.TechnicianId}");
+        Log.Information("Payout created: {Amount:C} for technician {TechnicianId}",
+            payment.TechnicianAmount, booking.TechnicianId);
     }
 
+    // ---------------------------------------------------------------
+    // Commission Payment Success
+    // ---------------------------------------------------------------
     private async Task HandleCommissionPaymentSuccessAsync(Payment payment, CancellationToken cancellationToken)
     {
-        Log.Information($"Processing successful commission payment: {payment.MerchantOrderId}");
+        Log.Information("Processing successful commission payment: {OrderRef}", payment.MerchantOrderId);
 
-        // Extract technician ID from merchant order (COMM-{technicianId}-{random})
-        // Format: COMM-guid-randomchars
-        // Guid format: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (5 parts)
+        // Format: COMM-{guid}-{randomchars}
+        // GUID has 5 parts: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
         var parts = payment.MerchantOrderId.Split('-');
 
         if (parts.Length < 6)
         {
-            Log.Error($"Invalid merchant order ID format: {payment.MerchantOrderId}");
+            Log.Error("Invalid merchant order ID format: {OrderRef}", payment.MerchantOrderId);
             return;
         }
 
-        // Reconstruct GUID from parts 1-5
+        // Reconstruct GUID from parts 1–5
         var technicianIdString = $"{parts[1]}-{parts[2]}-{parts[3]}-{parts[4]}-{parts[5]}";
 
         if (!Guid.TryParse(technicianIdString, out var technicianId))
         {
-            Log.Error($"Cannot extract technician ID from: {payment.MerchantOrderId}");
+            Log.Error("Cannot extract technician ID from: {OrderRef}", payment.MerchantOrderId);
             return;
         }
 
-        Log.Information($"Extracted technician ID: {technicianId}");
+        Log.Information("Extracted technician ID: {TechnicianId}", technicianId);
 
         // Get all unpaid commissions for this technician
         var commissions = await unitOfWork.TechnicianCommissionsOwed.GetTableAsTracking()
@@ -177,17 +180,17 @@ public sealed class ProcessCallbackCommandHandler(IUnitOfWork unitOfWork, IPayme
 
         if (!commissions.Any())
         {
-            Log.Warning($"No unpaid commissions found for technician {technicianId}");
+            Log.Warning("No unpaid commissions found for technician {TechnicianId}", technicianId);
             return;
         }
 
-        // Mark all as paid
         foreach (var commission in commissions)
         {
             commission.IsPaid = true;
             commission.PaidAt = DateTime.UtcNow;
         }
 
-        Log.Information($"Marked {commissions.Count} commissions as paid for technician {technicianId}");
+        Log.Information("Marked {Count} commissions as paid for technician {TechnicianId}",
+            commissions.Count, technicianId);
     }
 }

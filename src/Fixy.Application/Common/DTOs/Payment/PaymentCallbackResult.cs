@@ -3,10 +3,10 @@
 public class PaymentCallbackResult
 {
     public bool Success { get; set; }
-    public string TransactionId { get; set; }
-    public string MerchantOrderId { get; set; }
+    public string PaymentIntentId { get; set; }
+    public string OrderReference { get; set; }
+    public string Status { get; set; }            // succeeded, failed, pending
     public decimal Amount { get; set; }
-    public string Provider { get; set; }
-    public string Status { get; set; }
-    public Dictionary<string, object> Metadata { get; set; }
+    public string CustomerEmail { get; set; }
+    public string ErrorMessage { get; set; }
 }
