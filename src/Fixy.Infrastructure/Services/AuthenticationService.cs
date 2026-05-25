@@ -4,14 +4,16 @@ using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Identity;
-using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -27,10 +29,11 @@ public class AuthenticationService : IAuthenticationService
     private readonly JWTSettings _jWTSettings;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IStringLocalizer<SharedResources> _localizer;
+    private readonly IConfiguration _configuration;
 
     public AuthenticationService(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, 
         IEmailService emailService, JWTSettings jWTSettings, 
-        IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResources> localizer)
+        IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResources> localizer, IConfiguration configuration)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
@@ -38,6 +41,7 @@ public class AuthenticationService : IAuthenticationService
         _jWTSettings = jWTSettings;
         _httpContextAccessor = httpContextAccessor;
         _localizer = localizer;
+        _configuration = configuration;
     }
     
     public async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
@@ -168,5 +172,51 @@ public class AuthenticationService : IAuthenticationService
         authResponse.Role = roles.FirstOrDefault();
         authResponse.Token = accessToken;
         return authResponse;
+    }
+
+    public async Task<AuthResponse> AuthenticateWithGoogleAsync(string accessToken, string idToken)
+    {
+        // Validate the ID token and retrieve the payload
+        var payload = await ValidateGoogleTokenAsync(idToken);
+
+        // Fetch additional user profile information using the access token
+        var userProfile = await GetGoogleUserProfileAsync(accessToken);
+
+        // Check if the user already exists in the database
+        var user = await _userManager.FindByEmailAsync(payload.Email);
+
+        // If user doesn't exist, create a new user
+        if (user == null)
+            Console.WriteLine();
+
+        // Use the login service to issue a token
+        var authResponse = await GetJwtToken(user);
+        await SetTokenAndRefreshTokenInCookie(authResponse.Token, authResponse.RefreshToken, authResponse.RefreshTokenExpiration);
+
+        return authResponse;
+    }
+
+    private static async Task<GoogleJsonWebSignature.Payload> ValidateGoogleTokenAsync(string idToken)
+    {
+        var payload = await GoogleJsonWebSignature.ValidateAsync(idToken);
+
+        if (payload == null || string.IsNullOrEmpty(payload.Email))
+            throw new UnauthorizedAccessException("Invalid Google Token");
+
+        return payload;
+    }
+    private async Task<GoogleUserProfile> GetGoogleUserProfileAsync(string accessToken)
+    {
+        using var httpClient = new HttpClient();
+
+        // Send GET request to Google UserInfo API
+        var response = await httpClient.GetAsync($"{_configuration["Authentication:Google:UserInfoUrl"]}?access_token={accessToken}");
+        response.EnsureSuccessStatusCode();
+
+        // Parse the JSON response
+        var content = await response.Content.ReadAsStringAsync();
+        var userProfile = JsonConvert.DeserializeObject<GoogleUserProfile>(content);
+
+        return userProfile!;
     }
 }
