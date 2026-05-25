@@ -16,10 +16,8 @@ public class SignInCommandValidator : AbstractValidator<SignInCommand>
 
     public void ApplyValidationRules()
     {
-        RuleFor(x => x.Email).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.Email).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
 
-        RuleFor(x => x.Password).NotNull().WithMessage(_stringLocalizer[SharedResourcesKeys.Required])
-            .NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.Password).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
     }
 }

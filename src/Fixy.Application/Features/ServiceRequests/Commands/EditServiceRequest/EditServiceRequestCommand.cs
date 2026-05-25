@@ -8,5 +8,6 @@ public sealed record EditServiceRequestCommand(
         Guid Id,
         string Description,
         DateTime ScheduledDateTime,
-        AddressDto Address
+        AddressDto Address,
+        List<Guid> ServiceCategories
     ) : IRequest<Result>;
