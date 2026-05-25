@@ -54,8 +54,6 @@ public static class ServiceRegisteration
         });
         // Redis
         services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]!));
-        // Google External Login
-        var google = configuration.GetSection("Authentication:Google");
 
         services.AddAuthentication(options =>
         {
@@ -85,11 +83,6 @@ public static class ServiceRegisteration
                     return Task.CompletedTask;
                 }
             };
-        }).AddGoogle(options =>
-        {
-            options.ClientId = google["ClientId"];
-            options.ClientSecret = google["ClientSecret"];
-            options.CallbackPath = "/signin-google";
         });
 
         //Swagger Gn

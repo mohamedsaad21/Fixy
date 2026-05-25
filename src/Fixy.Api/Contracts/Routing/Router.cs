@@ -26,6 +26,7 @@ public static class Router
         public const string ConfirmResetPassword = prefix + "/Confirm-Reset-Password";
         public const string ResetPassword = prefix + "/Reset-Password";
         public const string ChangePassword = prefix + "/Change-Password";
+        public const string SignInWithGoogleAsync = prefix + "/Google-SignIn";
     }
 
     public static class CategoryRouting

@@ -7,6 +7,7 @@ using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
 using Google.Apis.Auth;
+using Google.Apis.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -33,7 +35,8 @@ public class AuthenticationService : IAuthenticationService
 
     public AuthenticationService(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, 
         IEmailService emailService, JWTSettings jWTSettings, 
-        IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResources> localizer, IConfiguration configuration)
+        IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResources> localizer,
+        IConfiguration configuration)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
@@ -171,52 +174,40 @@ public class AuthenticationService : IAuthenticationService
         };
         authResponse.Role = roles.FirstOrDefault();
         authResponse.Token = accessToken;
+        authResponse.IsAuthenticated = true;
         return authResponse;
     }
 
-    public async Task<AuthResponse> AuthenticateWithGoogleAsync(string accessToken, string idToken)
+    public async Task<AuthResponse> AuthenticateWithGoogleAsync(string idToken)
     {
         // Validate the ID token and retrieve the payload
         var payload = await ValidateGoogleTokenAsync(idToken);
 
-        // Fetch additional user profile information using the access token
-        var userProfile = await GetGoogleUserProfileAsync(accessToken);
-
         // Check if the user already exists in the database
         var user = await _userManager.FindByEmailAsync(payload.Email);
 
-        // If user doesn't exist, create a new user
+        // If user doesn't exist, throw UnauthorizedAccessException
         if (user == null)
-            Console.WriteLine();
+            throw new UnauthorizedAccessException("User not registered.");
 
-        // Use the login service to issue a token
+        // Get a token
         var authResponse = await GetJwtToken(user);
         await SetTokenAndRefreshTokenInCookie(authResponse.Token, authResponse.RefreshToken, authResponse.RefreshTokenExpiration);
 
         return authResponse;
     }
 
-    private static async Task<GoogleJsonWebSignature.Payload> ValidateGoogleTokenAsync(string idToken)
+    private async Task<GoogleJsonWebSignature.Payload> ValidateGoogleTokenAsync(string idToken)
     {
-        var payload = await GoogleJsonWebSignature.ValidateAsync(idToken);
+        var settings = new GoogleJsonWebSignature.ValidationSettings
+        {
+            Audience = new[] { _configuration["Authentication:Google:ClientId"] }
+        };
+        var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
 
         if (payload == null || string.IsNullOrEmpty(payload.Email))
             throw new UnauthorizedAccessException("Invalid Google Token");
 
         return payload;
-    }
-    private async Task<GoogleUserProfile> GetGoogleUserProfileAsync(string accessToken)
-    {
-        using var httpClient = new HttpClient();
-
-        // Send GET request to Google UserInfo API
-        var response = await httpClient.GetAsync($"{_configuration["Authentication:Google:UserInfoUrl"]}?access_token={accessToken}");
-        response.EnsureSuccessStatusCode();
-
-        // Parse the JSON response
-        var content = await response.Content.ReadAsStringAsync();
-        var userProfile = JsonConvert.DeserializeObject<GoogleUserProfile>(content);
-
-        return userProfile!;
     }
 }
