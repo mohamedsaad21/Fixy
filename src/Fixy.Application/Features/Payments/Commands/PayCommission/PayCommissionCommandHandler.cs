@@ -10,77 +10,95 @@ using Serilog;
 
 namespace Fixy.Application.Features.Payments.Commands.PayCommission;
 
-public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IPaymentService paymobService) : IRequestHandler<PayCommissionCommand, Result<PayCommissionResponse>>
+public class PayCommissionCommandHandler(
+    IUnitOfWork unitOfWork,
+    ICurrentUserService currentUserService,
+    IPaymentService stripeService) : IRequestHandler<PayCommissionCommand, Result<PayCommissionResponse>>
 {
     public async Task<Result<PayCommissionResponse>> Handle(PayCommissionCommand request, CancellationToken cancellationToken)
     {
-        // Get current user (technician)
-        var technician = await currentUserService.GetCurrentUserAsync();
-
-        // Get  commissions
-        var commissions = await unitOfWork.TechnicianCommissionsOwed.GetTableNoTracking()
-            .Where(c => c.TechnicianId == technician.Id && !c.IsPaid)
-            .Include(c => c.Booking)
-            .ToListAsync(cancellationToken);
-
-        if (!commissions.Any())
+        try
         {
-            Log.Warning($"No unpaid commissions found for technician {technician.Id}");
-            return Errors.CommissionNoneFound;
+            // 1. Get current user (technician)
+            var technician = await currentUserService.GetCurrentUserAsync();
+
+            // 2. Get unpaid commissions
+            var commissions = await unitOfWork.TechnicianCommissionsOwed.GetTableNoTracking()
+                .Where(c => c.TechnicianId == technician.Id && !c.IsPaid)
+                .Include(c => c.Booking)
+                .ToListAsync(cancellationToken);
+
+            if (!commissions.Any())
+            {
+                Log.Warning("No unpaid commissions found for technician {TechnicianId}", technician.Id);
+                return Errors.CommissionNoneFound;
+            }
+
+            // 3. Calculate total amount
+            var totalAmount = commissions.Sum(c => c.AmountOwed);
+
+            Log.Information("Total commission amount: {Amount:C} for {Count} commissions",
+                totalAmount, commissions.Count);
+
+            // 4. Create Stripe PaymentIntent → returns ClientSecret for Angular Elements
+            var paymentResult = await stripeService.CreatePaymentUrlAsync(
+                amount: totalAmount,
+                referenceId: technician.Id,
+                customerName: request.TechnicianName,
+                customerEmail: request.TechnicianEmail,
+                customerPhone: request.TechnicianPhone,
+                orderPrefix: "COMM"
+            );
+
+            if (!paymentResult.Success)
+            {
+                Log.Error("Failed to create Stripe PaymentIntent for technician {TechnicianId}: {Error}",
+                    technician.Id, paymentResult.ErrorMessage);
+                return Errors.PaymentCreationFailed;
+            }
+
+            // 5. Create Payment record to track this commission payment
+            var commissionPayment = new Payment
+            {
+                UserId = technician.Id,
+                TotalAmount = totalAmount,
+                TechnicianAmount = 0,                         // Commission paid TO platform
+                PlatformCommission = totalAmount,
+                Method = PaymentMethod.Card,
+                Status = PaymentStatus.Pending,
+                MerchantOrderId = paymentResult.MerchantOrderId,
+                PaymentIntentId = paymentResult.PaymentIntentId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await unitOfWork.Payments.AddAsync(commissionPayment);
+
+            // 6. Log included commissions (marked as paid in callback after success)
+            foreach (var commission in commissions)
+            {
+                Log.Information("Commission {CommissionId} included in payment {OrderRef}",
+                    commission.Id, paymentResult.MerchantOrderId);
+            }
+
+            await unitOfWork.SaveChangesAsync();
+
+            Log.Information("Commission payment initiated — Order: {OrderRef}, Amount: {Amount:C}",
+                paymentResult.MerchantOrderId, totalAmount);
+
+            // 7. Return ClientSecret to Angular — no redirect URL needed
+            return new PayCommissionResponse
+            {
+                ClientSecret = paymentResult.ClientSecret,
+                PaymentIntentId = paymentResult.PaymentIntentId,
+                OrderReference = paymentResult.MerchantOrderId,
+                TotalAmount = totalAmount,
+                CommissionCount = commissions.Count,
+            };
         }
-
-        // Calculate total amount
-        var totalAmount = commissions.Sum(c => c.AmountOwed);
-
-        Log.Information($"Total commission amount: {totalAmount:C} for {commissions.Count} commissions");
-
-        // Create payment URL for commission
-        var paymentUrlResult = await paymobService.CreatePaymentUrlAsync(
-            totalAmount,
-            technician.Id,
-            request.TechnicianName,
-            request.TechnicianEmail,
-            request.TechnicianPhone,
-            "COMM"
-        );
-
-        // Create a Payment record to track this commission payment
-        var commissionPayment = new Payment
+        catch (Exception ex)
         {
-            UserId = technician.Id,
-            TotalAmount = totalAmount,
-            TechnicianAmount = 0,
-            PlatformCommission = totalAmount,
-            //PaymobOrderId = paymentUrlResult.PaymobOrderId.ToString(),
-            Method = PaymentMethod.Card,
-            Status = PaymentStatus.Pending,
-            MerchantOrderId = paymentUrlResult.MerchantOrderId,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        await unitOfWork.Payments.AddAsync(commissionPayment);
-
-        // 7. Store commission IDs in a tracking table or use a different approach
-        // For now, we'll store the merchant order ID in each commission for reference
-        foreach (var commission in commissions)
-        {
-            // We'll mark them as paid in the callback after successful payment
-            Log.Information($"Commission {commission.Id} included in payment {paymentUrlResult.MerchantOrderId}");
+            Log.Error(ex, "Error creating commission payment for technician");
+            return Errors.PaymentCreationFailed;
         }
-
-        await unitOfWork.SaveChangesAsync();
-
-        Log.Information($"Commission payment initiated - Merchant Order: {paymentUrlResult.MerchantOrderId}, Amount: {totalAmount:C}");
-
-        // 8. Build response
-        var response = new PayCommissionResponse
-        {
-            PaymentUrl = paymentUrlResult.PaymentUrl,
-            TotalAmount = totalAmount,
-            CommissionCount = commissions.Count,
-            MerchantOrderId = paymentUrlResult.MerchantOrderId
-        };
-
-        return response;
     }
 }

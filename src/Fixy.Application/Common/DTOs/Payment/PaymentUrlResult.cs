@@ -2,9 +2,9 @@
 
 public class PaymentUrlResult
 {
-    public string PaymentUrl { get; set; }
-    public string StripeSessionId { get; set; } 
+    public bool Success { get; set; }
+    public string ClientSecret { get; set; } 
+    public string PaymentIntentId { get; set; }
     public string MerchantOrderId { get; set; }
-    public int PaymobOrderId { get; set; }
-    public string Provider {  get; set; }
+    public string ErrorMessage { get; set; }
 }
