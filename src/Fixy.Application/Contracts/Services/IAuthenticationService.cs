@@ -1,4 +1,4 @@
-﻿using Fixy.Domain.Entities.Identity;
+using Fixy.Domain.Entities.Identity;
 ﻿using Fixy.Application.Features.Authentication.DTOs;
 using System.IdentityModel.Tokens.Jwt;
 
