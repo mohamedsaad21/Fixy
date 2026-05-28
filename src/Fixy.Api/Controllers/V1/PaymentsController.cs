@@ -38,7 +38,7 @@ public class PaymentsController : AppControllerBase
         return Ok();
     }
 
-    //[RequireActiveTechnician]
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -50,7 +50,7 @@ public class PaymentsController : AppControllerBase
         return ToActionResult(await Mediator.Send(new ConfirmCashReceiptCommand(BookingId)));
     }
 
-    //[RequireActiveTechnician]
+    [RequireActiveTechnician]
     [Authorize(Roles = Roles.Technician)]
     [HttpPost(Router.PaymentRouting.PayCommissions)]
     public async Task<IActionResult> PayCommissions([FromBody] PayCommissionCommand command)
