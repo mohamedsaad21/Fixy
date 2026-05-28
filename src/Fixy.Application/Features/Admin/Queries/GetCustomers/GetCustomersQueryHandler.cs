@@ -5,6 +5,7 @@ using Fixy.Application.Wrappers;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 
 namespace Fixy.Application.Features.Admin.Queries.GetCustomers;
 
@@ -12,6 +13,9 @@ public sealed class GetCustomersQueryHandler(IUnitOfWork unitOfWork, IStringLoca
 {
     public async Task<Result<PaginatedResult<GetCustomersResponse>>> Handle(GetCustomersQuery request, CancellationToken cancellationToken)
     {
+        Log.Information("Admin fetching customers list. Page: {PageNumber}, PageSize: {PageSize}, Search: {Search}, OrderBy: {OrderBy}",
+            request.PageNumber, request.PageSize, request.Search, request.OrderBy);
+
         var query = unitOfWork.Customers.GetTableNoTracking().AsQueryable();
 
         query = request.OrderBy switch
@@ -26,7 +30,7 @@ public sealed class GetCustomersQueryHandler(IUnitOfWork unitOfWork, IStringLoca
         }
 
 
-        var technicians = await query.Select(x => new GetCustomersResponse
+        var customers = await query.Select(x => new GetCustomersResponse
         {
             Id = x.Id,
             FullName = x.FirstName + " " + x.LastName,
@@ -38,6 +42,8 @@ public sealed class GetCustomersQueryHandler(IUnitOfWork unitOfWork, IStringLoca
             CancelledBookings = x.CancelledBookings,
             CancellationRate = x.CancellationRate,
         }).ToPaginatedListAsync(request.PageNumber, request.PageSize);
-        return technicians;
+
+        Log.Information("Customers list fetched successfully. TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", customers.TotalCount, customers.CurrentPage, customers.PageSize);
+        return customers;
     }
 }

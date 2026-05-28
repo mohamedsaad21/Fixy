@@ -6,6 +6,7 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Serilog;
 
 namespace Fixy.Application.Features.Admin.Queries.GetTechnicians;
 
@@ -13,6 +14,9 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork, IStringLo
 {
     public async Task<Result<PaginatedResult<GetTechniciansResponse>>> Handle(GetTechniciansQuery request, CancellationToken cancellationToken)
     {
+        Log.Information("Admin fetching technicians list. Page: {PageNumber}, PageSize: {PageSize}, Search: {Search}, OrderBy: {OrderBy}, SortOrder: {SortOrder}",
+            request.PageNumber, request.PageSize, request.Search, request.OrderBy, request.SortOrder);
+
         var query = unitOfWork.Technicians.GetTableNoTracking();
 
         query = (request.OrderBy, request.SortOrder) switch
@@ -32,7 +36,6 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork, IStringLo
             || x.UserName.Contains(request.Search) || x.Email.Contains(request.Search));
         }
 
-
         var technicians = await query.Select(x => new GetTechniciansResponse
         {
             Id = x.Id,
@@ -44,6 +47,9 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork, IStringLo
             CancellationRate = x.CancellationRate,
             AverageRating = x.AverageRating
         }).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+
+        Log.Information("Technicians list fetched successfully. TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", technicians.TotalCount, technicians.CurrentPage, technicians.PageSize);
+
         return technicians;
     }
 }
