@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Common.DTOs.Payment;
+using Fixy.Application.Common.DTOs.Payment;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Entities.Payments;
