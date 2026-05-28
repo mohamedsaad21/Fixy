@@ -18,8 +18,8 @@ public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurre
         if (booking == null)
             return Errors.BookingNotFound;
 
-        //if (booking.Status != ServiceBookingStatus.Completed)
-        //    return Errors.BookingNotCompleted;
+        if (booking.Status != ServiceBookingStatus.Completed)
+            return Errors.BookingNotCompleted;
 
         var currentCustomer = await currentUserService.GetCurrentUserAsync();
 
