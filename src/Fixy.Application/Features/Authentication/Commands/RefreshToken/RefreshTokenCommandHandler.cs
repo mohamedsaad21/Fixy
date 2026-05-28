@@ -1,4 +1,5 @@
-﻿using Fixy.Application.Bases;
+﻿using System.IdentityModel.Tokens.Jwt;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Authentication.DTOs;
 using Fixy.Domain.Entities.Identity;
@@ -6,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.IdentityModel.Tokens.Jwt;
+using Serilog;
 
 namespace Fixy.Application.Features.Authentication.Commands.RefreshToken;
 
@@ -16,16 +17,24 @@ public sealed class RefreshTokenCommandHandler(UserManager<ApplicationUser> user
 {
     public async Task<Result<AuthResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
+        Log.Information("Token refresh attempt initiated.");
+
         var token = httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
         var user = await userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
 
         if (user == null)
+        {
+            Log.Warning("Token refresh failed — no user matched the provided refresh token.");
             return Errors.InvalidToken;
+        }
 
         var refreshToken = user.RefreshTokens.Single(t => t.Token == token);
 
         if (!refreshToken.IsActive)
+        {
+            Log.Warning("Token refresh failed — refresh token is inactive. UserId: {UserId}, TokenExpiry: {TokenExpiry}", user.Id, refreshToken.ExpiresOn);
             return Errors.InactiveToken;
+        }
 
         refreshToken.RevokedOn = DateTime.UtcNow;
 
@@ -37,6 +46,9 @@ public sealed class RefreshTokenCommandHandler(UserManager<ApplicationUser> user
 
         await authenticationService.SetTokenAndRefreshTokenInCookie(accessToken, newRefreshToken.Token, newRefreshToken.ExpiresOn);
         var roles = await userManager.GetRolesAsync(user);
+
+        Log.Information("Token refreshed successfully. UserId: {UserId}, NewTokenExpiry: {NewTokenExpiry}", user.Id, newRefreshToken.ExpiresOn);
+
         return new AuthResponse
         {
             UserId = user.Id,
