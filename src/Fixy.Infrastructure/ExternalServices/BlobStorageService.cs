@@ -12,8 +12,8 @@ public class BlobStorageService : IStorageService
 
     public BlobStorageService(IConfiguration configuration)
     {
-        var connectionString = configuration["AzureStorage:ConnectionString"];
-        var containerName = configuration["AzureStorage:ContainerName"];
+        var connectionString = configuration["Azure:Storage:ConnectionString"];
+        var containerName = configuration["Azure:Storage:ContainerName"];
 
         if (string.IsNullOrEmpty(connectionString))
             throw new ArgumentNullException(nameof(connectionString), "Azure Storage connection string is not configured");

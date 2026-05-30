@@ -31,11 +31,12 @@ public class PaymentsController : AppControllerBase
     [HttpPost(Router.PaymentRouting.Callback)]
     public async Task<IActionResult> Callback()
     {
-        var result = await Mediator.Send(new ProcessCallbackCommand());
+        string payload;
+        using (var reader = new StreamReader(HttpContext.Request.Body))
+            payload = await reader.ReadToEndAsync();
 
-        if (!result.IsSuccess)
-            return BadRequest(result);
-        return Ok();
+        var signature = Request.Headers["Stripe-Signature"];
+        return ToActionResult(await Mediator.Send(new ProcessCallbackCommand(payload, signature)));
     }
 
     [RequireActiveTechnician]

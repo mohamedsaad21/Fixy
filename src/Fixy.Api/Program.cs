@@ -1,17 +1,23 @@
+using DotNetEnv;
 using Fixy.Api.Extensions;
 using Fixy.Api.Filters;
 using Fixy.Application;
 using Fixy.Infrastructure;
 using Fixy.Infrastructure.Persistence;
 using Hangfire;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Serilog;
 using System.Globalization;
+
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 
 builder.Services.AddControllersConfiguration().AddHealthCheck().AddCustomRateLimiter();
 
@@ -20,7 +26,7 @@ builder.Services.AddOpenApi();
 // 
 builder.Services.AddDbContext<FixyDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration["Azure:DatabaseConnection:ConnectionString"]).ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)); ;
 });
 
 // Dependency Injection
@@ -43,16 +49,14 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 });
-////jghghf
-//builder.Services.AddStackExchangeRedisCache(options =>
-//{
-//    options.Configuration = builder.Configuration["Azure:Redis:ConnectionString"];
-//    options.InstanceName = "FixyApi_";
-//});
 
 // Serilog
 Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
 builder.Services.AddSerilog();
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
 
 // CORS
 builder.Services.AddCorsPolicy();
@@ -69,7 +73,7 @@ builder.Services.AddHangfire(config =>
     config.SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
-    .UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"));
+    .UseSqlServerStorage(builder.Configuration["Azure:DatabaseConnection:ConnectionString"]);
 });
 
 // Hangfire Server
