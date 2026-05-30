@@ -29,7 +29,7 @@ public static class WebApplicationExtensions
             options.RoutePrefix = "swagger";
         });
         //}
-
+        app.UseHttpLogging();
         app.UseRateLimiter();
 
         // Localization Middleware
