@@ -16,7 +16,8 @@ public sealed class GetMyRequestPaginatedListQueryHandler(IUnitOfWork unitOfWork
     public async Task<Result<PaginatedResult<GetMyRequestPaginatedListResponse>>> Handle(GetMyRequestPaginatedListQuery request, CancellationToken cancellationToken)
     {
         var currentCustomerId = await currentUserService.GetCurrentUserId(); 
-        var myServiceRequests = unitOfWork.ServiceRequests.GetTableNoTracking().Where(x => x.CustomerId == currentCustomerId)
+        var myServiceRequests = unitOfWork.ServiceRequests.GetTableNoTracking()
+            .Where(x => x.CustomerId == currentCustomerId && x.Status == ServiceRequestStatus.Pending)
             .Include(x => x.Customer)
             .Include(x => x.ServiceCategories).AsQueryable();
 

@@ -417,7 +417,13 @@
   <data name="ServiceBookingStatus_AwaitingPayment" xml:space="preserve">
     <value>Awaiting Payment</value>
   </data>
-  <data name="ServiceBookingStatus_Completed" xml:space="preserve">
+  <data name="ServiceBookingStatus_TechnicianCompleted" xml:space="preserve">
+    <value>TechnicianCompleted</value>
+  </data>
+  <data name="ServiceBookingStatus_CustomerCompleted" xml:space="preserve">
+    <value>CustomerCompleted</value>
+  </data>
+  <data name="ServiceBookingStatus_FullCompleted" xml:space="preserve">
     <value>Completed</value>
   </data>
   <data name="ServiceBookingStatus_Disputed" xml:space="preserve">
@@ -605,5 +611,20 @@
   </data>
   <data name="NotificationTechnicianUnblockedBody" xml:space="preserve">
     <value>Your account has been re-activated. You can now start giving new price offers.</value>
+  </data>
+  <data name="NotificationBookingPaymentSucceededTitle" xml:space="preserve">
+    <value>Payment Successful</value>
+  </data>
+  <data name="NotificationBookingPaymentSucceededBody" xml:space="preserve">
+    <value>We've received your payment! Your booking is confirmed, and the technician has been notified.</value>
+  </data>
+  <data name="NotificationBookingPaymentReceivedTitle" xml:space="preserve">
+    <value>Payment Confirmed!</value>
+  </data>
+  <data name="NotificationBookingPaymentReceivedBody" xml:space="preserve">
+    <value>The customer has successfully paid for the job.</value>
+  </data>
+  <data name="CannotEditWithActiveOffers" xml:space="preserve">
+    <value>This request cannot be modified because you have already received price offers from technicians.</value>
   </data>
 </root>

@@ -24,7 +24,7 @@ public sealed class GetTechnicianDashboardQueryHandler(ICurrentUserService curre
             await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.InProgress);
 
         var completedBookingsCount =
-            await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.Completed);
+            await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.TechnicianCompleted);
 
         var cancelledBookingsCount =
             await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.CancelledByTechnician);

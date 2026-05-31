@@ -1,6 +1,7 @@
 using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Entities;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
@@ -35,28 +36,17 @@ public class FeedbackService : IFeedbackService
 
     public async Task<Guid?> GetPendingCustomerFeedbackBookingIdAsync(Guid customerId)
     {
-        var lastCompletedbooking = await _unitOfWork.Bookings.GetTableNoTracking()
-            .Include(x => x.ServiceRequest)
-            .Where(x => x.ServiceRequest.CustomerId == customerId && x.CompletedAt != null)            
-            .OrderByDescending(x => x.CompletedAt).FirstOrDefaultAsync();
+        var lastUnCompletedBooking = await _unitOfWork.Bookings.GetTableNoTracking()
+            .SingleOrDefaultAsync(x => x.ServiceRequest.CustomerId == customerId && (x.Status == ServiceBookingStatus.TechnicianCompleted || x.Status == ServiceBookingStatus.AwaitingFeedback));
 
-        if(lastCompletedbooking == null) return null;
-
-        var isFeedbackExists = await _unitOfWork.CustomerFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == lastCompletedbooking.Id);
-
-        return !isFeedbackExists ? lastCompletedbooking.Id : null;
+        return lastUnCompletedBooking != null? lastUnCompletedBooking.Id : null;
     }
 
     public async Task<Guid?> GetPendingTechnicianFeedbackBookingIdAsync(Guid technicianId)
     {
-        var lastCompletedbooking = await _unitOfWork.Bookings.GetTableNoTracking()
-            .Where(x => x.TechnicianId == technicianId && x.CompletedAt != null)
-            .OrderByDescending(x => x.CompletedAt).FirstOrDefaultAsync();
+        var lastUnCompletedBooking = await _unitOfWork.Bookings.GetTableNoTracking()
+            .SingleOrDefaultAsync(x => x.TechnicianId == technicianId && (x.Status == ServiceBookingStatus.CustomerCompleted || x.Status == ServiceBookingStatus.AwaitingFeedback));
 
-        if (lastCompletedbooking == null) return null;
-
-        var isFeedbackExists = await _unitOfWork.TechnicianFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == lastCompletedbooking.Id);
-
-        return !isFeedbackExists ? lastCompletedbooking.Id : null;
+        return lastUnCompletedBooking != null ? lastUnCompletedBooking.Id : null;
     }
 }

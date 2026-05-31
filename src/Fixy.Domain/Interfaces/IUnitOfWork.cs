@@ -5,6 +5,7 @@ using Fixy.Domain.Entities.Feedback;
 using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.SP.TechnicianAvailableRequests;
+using Fixy.Domain.SP.TechnicianCashCommissionsOwed;
 
 namespace Fixy.Domain.Interfaces;
 
@@ -31,6 +32,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<ChatMessage> ChatMessages { get; }
     INotificationRepository Notifications { get; }
     IServiceRequestReadRepository ServiceRequestReadRepository { get; }
+    ITechnicianCommissionOwedReadRepository TechnicianCommissionOwedReadRepository { get; }
     IGenericRepository<Prompt> Prompts { get; }
     Task<int> SaveChangesAsync();
 }

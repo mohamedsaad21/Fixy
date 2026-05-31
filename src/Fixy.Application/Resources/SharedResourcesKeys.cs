@@ -48,6 +48,7 @@ public class SharedResourcesKeys
     public const string RequestInsertionFailed = "RequestInsertionFailed";
     public const string LocationNotUpdated = "LocationNotUpdated";
     public const string ServiceRequestNotFound = "ServiceRequestNotFound";
+    public const string CannotEditWithActiveOffers = "CannotEditWithActiveOffers";
     public const string ServiceRequestUnavailable = "ServiceRequestUnavailable";
     public const string AlreadyCreatedPriceOffer = "AlreadyCreatedPriceOffer";
     public const string PriceOfferNotFound = "PriceOfferNotFound";
@@ -143,6 +144,11 @@ public class SharedResourcesKeys
     public const string NotificationCustomerUnblockedBody = "NotificationCustomerUnblockedBody";
     public const string NotificationTechnicianUnblockedTitle = "NotificationTechnicianUnblockedTitle";
     public const string NotificationTechnicianUnblockedBody = "NotificationTechnicianUnblockedBody";
+    public const string NotificationBookingPaymentSucceededTitle = "NotificationBookingPaymentSucceededTitle";
+    public const string NotificationBookingPaymentSucceededBody = "NotificationBookingPaymentSucceededBody";
+    public const string NotificationBookingPaymentReceivedTitle = "NotificationBookingPaymentReceivedTitle";
+    public const string NotificationBookingPaymentReceivedBody = "NotificationBookingPaymentReceivedBody";
+
 
     // Roles
     public const string Technician = "Technician";
@@ -159,9 +165,11 @@ public class SharedResourcesKeys
     public const string ServiceBookingStatus_AwaitingPriceChangeApproval = "ServiceBookingStatus_AwaitingPriceChangeApproval";
     public const string ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion = "ServiceBookingStatus_AwaitingCustomerConfirmationForCompletion";
     public const string ServiceBookingStatus_AwaitingPayment = "ServiceBookingStatus_AwaitingPayment";
-    public const string ServiceBookingStatus_Completed = "ServiceBookingStatus_Completed";
+    public const string ServiceBookingStatus_FullCompleted = "ServiceBookingStatus_FullCompleted";
     public const string ServiceBookingStatus_CancelledByTechnician = "ServiceBookingStatus_CancelledByTechnician";
     public const string ServiceBookingStatus_CancelledByCustomer = "ServiceBookingStatus_CancelledByCustomer";
+    public const string ServiceBookingStatus_CustomerCompleted = "ServiceBookingStatus_CustomerCompleted";
+    public const string ServiceBookingStatus_TechnicianCompleted = "ServiceBookingStatus_TechnicianCompleted";
     public const string ServiceBookingStatus_Disputed = "ServiceBookingStatus_Disputed";
 
 

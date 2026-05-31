@@ -18,8 +18,8 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
         if (booking == null)
             return Errors.BookingNotFound;
 
-        if (booking.Status != ServiceBookingStatus.Completed)
-            return Errors.BookingNotCompleted;
+        if (booking.Status != ServiceBookingStatus.AwaitingFeedback && booking.Status != ServiceBookingStatus.CustomerCompleted)
+            return Errors.InvalidBookingStatus;
 
         var currentTechnician = await currentUserService.GetCurrentUserAsync();
 
@@ -31,6 +31,7 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
         var feedback = request.ToTechnicianFeedbackDomain(booking.ServiceRequest.CustomerId, currentTechnician.Id);
 
         await unitOfWork.TechnicianFeedbacks.AddAsync(feedback);
+        booking.Status = ServiceBookingStatus.TechnicianCompleted;
 
         await unitOfWork.SaveChangesAsync();
 

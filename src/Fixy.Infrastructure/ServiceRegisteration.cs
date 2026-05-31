@@ -53,7 +53,8 @@ public static class ServiceRegisteration
             ProjectId = configuration["Firebase:ProjectId"]
         });
         // Redis
-        services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]!));
+        services.AddMemoryCache();
+        //services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]!));
         // Google External Login
         var google = configuration.GetSection("Authentication:Google");
 

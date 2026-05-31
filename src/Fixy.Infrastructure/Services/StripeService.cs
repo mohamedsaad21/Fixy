@@ -84,8 +84,7 @@ public class StripeService : IPaymentService
     {
         try
         {
-            var stripeEvent = EventUtility.ConstructEvent(
-                payload, signature, _stripeSettings.WebhookSecret);
+            var stripeEvent = EventUtility.ConstructEvent(payload, signature, _stripeSettings.WebhookSecret, throwOnApiVersionMismatch: false);
 
             Log.Information("Webhook received: {Type}", stripeEvent.Type);
 
@@ -146,7 +145,7 @@ public class StripeService : IPaymentService
 
         payment.PaymentIntentId = intent.Id;
         payment.Status = PaymentStatus.Success;
-        payment.PaidAt = DateTime.UtcNow;
+        payment.PaidAt = DateTimeOffset.UtcNow;
 
         if (orderReference.StartsWith("BK-"))
             await HandleBookingPaymentSuccessAsync(payment);
@@ -224,7 +223,7 @@ public class StripeService : IPaymentService
             return;
         }
 
-        booking.Status = ServiceBookingStatus.Completed;
+        booking.Status = ServiceBookingStatus.AwaitingFeedback;
         booking.Technician.CompletedBookings += 1;
         booking.ServiceRequest.Customer.CompletedBookings += 1;
 
@@ -239,13 +238,19 @@ public class StripeService : IPaymentService
 
         await _notificationService.SendFullNotificationAsync(
             booking.ServiceRequest.Customer,
-            NotificationType.BookingCompleted,
-            SharedResourcesKeys.NotificationBookingCompletedTitle,
-            SharedResourcesKeys.NotificationBookingCompletedBody
+            NotificationType.BookingPaymentSucceeded,
+            SharedResourcesKeys.NotificationBookingPaymentSucceededTitle,
+            SharedResourcesKeys.NotificationBookingPaymentSucceededBody
         );
 
-        Log.Information("Payout created: {Amount:C} for technician {TechnicianId}",
-            payment.TechnicianAmount, booking.TechnicianId);
+        await _notificationService.SendFullNotificationAsync(
+            booking.Technician,
+            NotificationType.BookingPaymentReceived,
+            SharedResourcesKeys.NotificationBookingPaymentReceivedTitle,
+            SharedResourcesKeys.NotificationBookingPaymentReceivedBody
+        );
+
+        Log.Information("Payout created: {Amount:C} for technician {TechnicianId}", payment.TechnicianAmount, booking.TechnicianId);
     }
 
     private async Task HandleCommissionPaymentSuccessAsync(Payment payment)

@@ -1,5 +1,6 @@
 using Fixy.Application.Common.DTOs.RatingPrediction;
 using Fixy.Application.Contracts.ExternalServices;
+using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
@@ -94,6 +95,7 @@ public class RatingService : IRatingService
         var totalSum = await query.SumAsync(x => x.PredictedTechnicianRating) + booking.PredictedTechnicianRating;
         var totalCount = await query.CountAsync() + 1;
         booking.Technician.AverageRating = (double)totalSum / totalCount;
+        booking.Status = ServiceBookingStatus.FullCompleted;
         await _unitOfWork.SaveChangesAsync();
     }
 

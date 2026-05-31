@@ -70,7 +70,8 @@ public class NotificationHub : Hub
             .Where(x => (x.TechnicianId == userId || x.ServiceRequest.CustomerId == userId)
             && x.Status != ServiceBookingStatus.CancelledByCustomer
             && x.Status != ServiceBookingStatus.CancelledByTechnician
-            && x.Status != ServiceBookingStatus.Completed)
+            && x.Status != ServiceBookingStatus.CustomerCompleted
+            && x.Status != ServiceBookingStatus.TechnicianCompleted)
             .Select(x => x.TechnicianId == userId
                 ? x.ServiceRequest.CustomerId
                 : x.TechnicianId)
