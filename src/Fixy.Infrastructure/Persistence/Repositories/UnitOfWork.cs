@@ -6,7 +6,9 @@ using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Interfaces;
 using Fixy.Domain.SP.TechnicianAvailableRequests;
+using Fixy.Domain.SP.TechnicianCashCommissionsOwed;
 using Fixy.Infrastructure.Persistence.SP.TechnicianAvailableRequests;
+using Fixy.Infrastructure.Persistence.SP.TechnicianCashCommissionsOwed;
 
 namespace Fixy.Infrastructure.Persistence.Repositories;
 
@@ -35,6 +37,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<ChatMessage> ChatMessages { get; private set; }
     public INotificationRepository Notifications { get; private set; }
     public IServiceRequestReadRepository ServiceRequestReadRepository { get; private set; }
+    public ITechnicianCommissionOwedReadRepository TechnicianCommissionOwedReadRepository { get; private set; }
     public IGenericRepository<Prompt> Prompts { get; private set; }
 
     public UnitOfWork(FixyDbContext dbContext)
@@ -61,6 +64,7 @@ public class UnitOfWork : IUnitOfWork
         ChatMessages = new GenericRepository<ChatMessage>(dbContext);
         Notifications = new NotificationRepository(dbContext);
         ServiceRequestReadRepository = new ServiceRequestReadRepository(dbContext);
+        TechnicianCommissionOwedReadRepository = new TechnicianCommissionOwedReadRepository(dbContext);
         Prompts = new GenericRepository<Prompt>(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();

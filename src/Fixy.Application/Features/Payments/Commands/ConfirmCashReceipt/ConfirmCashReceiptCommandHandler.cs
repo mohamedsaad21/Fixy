@@ -93,7 +93,7 @@ public class ConfirmCashReceiptCommandHandler : IRequestHandler<ConfirmCashRecei
         Log.Information($"Cash payment created - Commission owed: {platformCommission}");
 
         // 7. Update booking status
-        booking.Status = ServiceBookingStatus.Completed;
+        booking.Status = ServiceBookingStatus.AwaitingFeedback;
         booking.Technician.CompletedBookings += 1;
         booking.ServiceRequest.Customer.CompletedBookings += 1;
 

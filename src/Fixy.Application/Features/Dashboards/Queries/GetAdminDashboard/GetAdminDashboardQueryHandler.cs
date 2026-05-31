@@ -29,7 +29,7 @@ public sealed class GetAdminDashboardQueryHandler(IUnitOfWork unitOfWork, UserMa
             .CountAsync(x => x.Status == ServiceBookingStatus.CancelledByCustomer, cancellationToken);
 
         var completedBookings = await bookingsQuery
-            .CountAsync(x => x.Status == ServiceBookingStatus.Completed, cancellationToken);
+            .CountAsync(x => x.Status == ServiceBookingStatus.FullCompleted, cancellationToken);
 
         var totalBookings = await bookingsQuery.CountAsync(cancellationToken);
 
@@ -54,7 +54,7 @@ public sealed class GetAdminDashboardQueryHandler(IUnitOfWork unitOfWork, UserMa
 
         // 🧑‍🔧 Top Technicians
         var topTechniciansRaw = await bookingsQuery
-            .Where(x => x.Status == ServiceBookingStatus.Completed)
+            .Where(x => x.Status == ServiceBookingStatus.FullCompleted)
             .GroupBy(x => x.TechnicianId)
             .Select(g => new
             {

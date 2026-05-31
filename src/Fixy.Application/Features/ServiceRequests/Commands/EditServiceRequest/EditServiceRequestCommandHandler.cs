@@ -20,10 +20,13 @@ public sealed class EditServiceRequestCommandHandler : IRequestHandler<EditServi
     public async Task<Result> Handle(EditServiceRequestCommand request, CancellationToken cancellationToken)
     {
         var serviceRequest = await _unitOfWork.ServiceRequests.GetTableAsTracking()
-            .Include(x => x.ServiceCategories).FirstOrDefaultAsync(x => x.Id == request.Id);
+            .Include(x => x.ServiceCategories).Include(x => x.PriceOffers).FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (serviceRequest == null)
             return Errors.ServiceRequestNotFound;
+
+        if (serviceRequest.PriceOffers.Any())
+            return Errors.CannotEditWithActiveOffers;
 
         // Load only the categories that were submitted
         var newCategories = await _unitOfWork.ServiceCategories

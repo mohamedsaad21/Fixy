@@ -5,6 +5,7 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Fixy.Application.Features.Bookings.Commands.ApproveBookingPriceChange;
 
@@ -12,25 +13,39 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 {
     public async Task<Result> Handle(ApproveBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
+        Log.Information("Customer attempting to approve price change. BookingId: {BookingId}", request.BookingId);
+        
         var booking = await unitOfWork.Bookings.GetTableAsTracking()
             .Include(x => x.Technician)
             .Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
+        {
+            Log.Warning("Price change approval failed — booking not found. BookingId: {BookingId}", request.BookingId);            
             return Errors.BookingNotFound;
+        }
 
         var currentCustomer = await currentUserService.GetCurrentUserAsync();
 
         if (booking.ServiceRequest.Customer.Id != currentCustomer.Id)
+        {
+            Log.Warning("Price change approval failed — unauthorized customer. BookingId: {BookingId}, BookingCustomerId: {BookingCustomerId}, RequestingUserId: {RequestingUserId}", request.BookingId, booking.ServiceRequest.Customer.Id, currentCustomer.Id);
             return Errors.Unauthorized;
+        }
 
         if (booking.Status != ServiceBookingStatus.AwaitingPriceChangeApproval)
+        {
+            Log.Warning("Price change approval failed — invalid booking state. BookingId: {BookingId}, CurrentStatus: {CurrentStatus}", request.BookingId, booking.Status);
             return Errors.InvalidBookingState;
+        }
 
         if (booking.ProposedPrice == null)
+        {
+            Log.Warning("Price change approval failed — no proposed price found. BookingId: {BookingId}", request.BookingId);
             return Errors.NoPriceChangeToApprove;
-
+        }
+        var previousPrice = booking.AgreedPrice;
         booking.AgreedPrice = booking.ProposedPrice.Value;
         booking.ProposedPrice = null;
         booking.Status = ServiceBookingStatus.InProgress;
@@ -44,7 +59,7 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
             SharedResourcesKeys.NotificationPriceChangeApprovedBody
         );
         await unitOfWork.SaveChangesAsync();
-
+        Log.Information("Price change approved successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, PreviousPrice: {PreviousPrice}, ApprovedPrice: {ApprovedPrice}", request.BookingId, currentCustomer.Id, booking.Technician.Id, previousPrice, booking.AgreedPrice);
         return Result.Success();
     }
 }

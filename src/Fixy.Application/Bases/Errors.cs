@@ -68,5 +68,6 @@ public static class Errors
     public static Error CustomerAlreadyActive => new("CustomerAlreadyActive", ErrorType.BadRequest);
     public static Error CustomerFeedbackNotFound => new("CustomerFeedbackNotFound", ErrorType.NotFound);
     public static Error TechnicianFeedbackNotFound => new("TechnicianFeedbackNotFound", ErrorType.NotFound);
-    public static Error CommissionNoneFound => new("CommissionNoneFound", ErrorType.BadRequest, "No unpaid commissions found");
+    public static Error CommissionNoneFound => new("CommissionNoneFound", ErrorType.BadRequest);
+    public static Error CannotEditWithActiveOffers => new("CannotEditWithActiveOffers", ErrorType.BadRequest);
 }

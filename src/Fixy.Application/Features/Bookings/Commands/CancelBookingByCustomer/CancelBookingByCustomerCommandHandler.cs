@@ -6,6 +6,7 @@ using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Serilog;
 
 namespace Fixy.Application.Features.Bookings.Commands.CancelBookingByCustomer;
 
@@ -14,24 +15,38 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
 {
     public async Task<Result> Handle(CancelBookingByCustomerCommand request, CancellationToken cancellationToken)
     {
+        Log.Information("Customer attempting to cancel booking. BookingId: {BookingId}", request.BookingId);
+        
         var customer = await currentUserService.GetCurrentUserAsync();
 
         if (customer == null)
+        {
+            Log.Warning("Booking cancellation failed — unauthorized, no current user resolved. BookingId: {BookingId}", request.BookingId);
             return Errors.Unauthorized;
+        }
 
         var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest)
             .ThenInclude(x => x.Customer).Include(x => x.Technician)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
+        {
+            Log.Warning("Booking cancellation failed — booking not found. BookingId: {BookingId}, CustomerId: {CustomerId}", request.BookingId, customer.Id);
             return Errors.BookingNotFound;
+        }
 
         if (booking.ServiceRequest.CustomerId != customer.Id)
+        {
+            Log.Warning("Booking cancellation failed — unauthorized customer. BookingId: {BookingId}, BookingCustomerId: {BookingCustomerId}, RequestingCustomerId: {RequestingCustomerId}", request.BookingId, booking.ServiceRequest.CustomerId, customer.Id);
             return Errors.Unauthorized;
+        }
 
         if(booking.Status != ServiceBookingStatus.InProgress && booking.Status != ServiceBookingStatus.AwaitingPriceChangeApproval)
+        {
+            Log.Warning("Booking cancellation failed — invalid booking state. BookingId: {BookingId}, CurrentStatus: {CurrentStatus}", request.BookingId, booking.Status);
             return Errors.CannotCancelAtThisStage;
-
+        }
+        var previousCancellationRate = booking.CustomerCancellationReason;
         booking.ServiceRequest.Customer.CancelledBookings += 1;        
         customer.CancellationRate = customer.TotalBookings > 0? (double)customer.CancelledBookings / customer.TotalBookings * 100 : 0;
         booking.CustomerCancellationReason = request.Reason;
@@ -49,6 +64,9 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
             SharedResourcesKeys.NotificationBookingCancelledByCustomerBody
         );
         await unitOfWork.SaveChangesAsync();
+        Log.Information("Booking cancelled by customer successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, Reason: {Reason}, ReopenServiceRequest: {ReopenServiceRequest}, PreviousCancellationRate: {PreviousCancellationRate}, NewCancellationRate: {NewCancellationRate}",
+            request.BookingId, customer.Id, booking.Technician.Id, request.Reason, request.ReopenServiceRequest,
+            previousCancellationRate, customer.CancellationRate);
         return Result.Success();
     }
 }

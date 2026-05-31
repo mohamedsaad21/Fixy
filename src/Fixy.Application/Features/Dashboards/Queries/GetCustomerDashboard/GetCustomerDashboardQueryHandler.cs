@@ -31,7 +31,7 @@ public sealed class GetCustomerDashboardQueryHandler(ICurrentUserService current
             await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.InProgress);
 
         var completedBookingsCount =
-            await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.Completed);
+            await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.CustomerCompleted);
 
         var cancelledBookingsCount =
             await bookingsQuery.CountAsync(x => x.Status == ServiceBookingStatus.CancelledByCustomer);

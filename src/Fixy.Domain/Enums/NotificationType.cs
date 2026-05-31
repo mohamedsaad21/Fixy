@@ -11,6 +11,8 @@ public enum NotificationType
     PriceChangeRejected,
     TechnicianCompleted,
     BookingAwaitingPayment,
+    BookingPaymentSucceeded,
+    BookingPaymentReceived,
     BookingCompleted,
     TechnicianApproved,
     TechnicianRejected,

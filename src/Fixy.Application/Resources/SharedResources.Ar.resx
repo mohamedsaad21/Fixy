@@ -417,7 +417,13 @@
   <data name="ServiceBookingStatus_AwaitingPayment" xml:space="preserve">
     <value>في انتظار الدفع</value>
   </data>
-  <data name="ServiceBookingStatus_Completed" xml:space="preserve">
+  <data name="ServiceBookingStatus_TechnicianCompleted" xml:space="preserve">
+    <value>مكتمل من الفني</value>
+  </data>
+  <data name="ServiceBookingStatus_CustomerCompleted" xml:space="preserve">
+    <value>مكتمل من العميل</value>
+  </data>
+  <data name="ServiceBookingStatus_FullCompleted" xml:space="preserve">
     <value>مكتمل</value>
   </data>
   <data name="ServiceBookingStatus_Disputed" xml:space="preserve">
@@ -606,5 +612,20 @@
   <data name="NotificationTechnicianUnblockedBody" xml:space="preserve">
     <value>تم تفعيل حسابك. يمكنك الآن البدء في تقديم عروض أسعار جديدة.
 </value>
+  </data>
+  <data name="NotificationBookingPaymentSucceededTitle" xml:space="preserve">
+    <value>تم دفع المبلغ بنجاح</value>
+  </data>
+  <data name="NotificationBookingPaymentSucceededBody" xml:space="preserve">
+    <value>استلمنا دفعتك بنجاح! حجزك اتأكد وخلاص بلغنا الفني.</value>
+  </data>
+  <data name="NotificationBookingPaymentReceivedTitle" xml:space="preserve">
+    <value>تم تأكيد الدفع!</value>
+  </data>
+  <data name="NotificationBookingPaymentReceivedBody" xml:space="preserve">
+    <value>العميل دفع تكلفة الخدمة بنجاح.</value>
+  </data>
+  <data name="CannotEditWithActiveOffers" xml:space="preserve">
+    <value>مش هينفع تعدل الطلب عشان جالك عليه عروض أسعار بالفعل من الفنيين.</value>
   </data>
 </root>
