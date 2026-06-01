@@ -36,8 +36,8 @@ public class ChatController : AppControllerBase
     [HttpPost(Router.ChatRouting.UploadAttachment)]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> UploadAttachment([FromForm] IFormFile Attchment)
+    public async Task<IActionResult> UploadAttachment([FromForm] UploadAttachmentCommand command)
     {
-        return ToActionResult(await Mediator.Send(new UploadAttachmentCommand(Attchment)));
+        return ToActionResult(await Mediator.Send(command));
     }
 }

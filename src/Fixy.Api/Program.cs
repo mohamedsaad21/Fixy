@@ -1,4 +1,3 @@
-using DotNetEnv;
 using Fixy.Api.Extensions;
 using Fixy.Api.Filters;
 using Fixy.Application;
@@ -12,13 +11,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Serilog;
 using System.Globalization;
 
-Env.Load();
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-
 builder.Services.AddControllersConfiguration().AddHealthCheck().AddCustomRateLimiter();
 
 builder.Services.AddOpenApi();
