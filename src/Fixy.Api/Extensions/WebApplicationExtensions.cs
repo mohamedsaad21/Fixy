@@ -8,7 +8,6 @@ using Hangfire;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Scalar.AspNetCore;
 
 namespace Fixy.Api.Extensions;
 
@@ -20,7 +19,6 @@ public static class WebApplicationExtensions
         //if (app.Environment.IsDevelopment())
         //{
         app.MapOpenApi();
-        app.MapScalarApiReference();
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
