@@ -224,8 +224,6 @@ public class StripeService : IPaymentService
         }
 
         booking.Status = ServiceBookingStatus.AwaitingFeedback;
-        booking.Technician.CompletedBookings += 1;
-        booking.ServiceRequest.Customer.CompletedBookings += 1;
 
         await _unitOfWork.Payouts.AddAsync(new Fixy.Domain.Entities.Payments.Payout
         {

@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Fixy.Application.Features.Notifications.Commands.SaveFcmToken;
 
-public sealed record SaveFcmTokenCommand(string Token) : IRequest<Result<bool>>;
+public sealed record SaveFcmTokenCommand(string? Token) : IRequest<Result<bool>>;

@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
@@ -6,22 +6,22 @@ using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.CancelBookingByCustomer;
 
 public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
-    IBookingService bookingService, INotificationService notificationService, IStringLocalizer<SharedResources> localizer) : IRequestHandler<CancelBookingByCustomerCommand, Result>
+    IBookingService bookingService, INotificationService notificationService, IStringLocalizer<SharedResources> localizer, ILogger<CancelBookingByCustomerCommandHandler>logger) : IRequestHandler<CancelBookingByCustomerCommand, Result>
 {
     public async Task<Result> Handle(CancelBookingByCustomerCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Customer attempting to cancel booking. BookingId: {BookingId}", request.BookingId);
+        logger.LogInformation("Customer attempting to cancel booking. BookingId: {BookingId}", request.BookingId);
         
         var customer = await currentUserService.GetCurrentUserAsync();
 
         if (customer == null)
         {
-            Log.Warning("Booking cancellation failed — unauthorized, no current user resolved. BookingId: {BookingId}", request.BookingId);
+            logger.LogWarning("Booking cancellation failed — unauthorized, no current user resolved. BookingId: {BookingId}", request.BookingId);
             return Errors.Unauthorized;
         }
 
@@ -31,19 +31,19 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
 
         if (booking == null)
         {
-            Log.Warning("Booking cancellation failed — booking not found. BookingId: {BookingId}, CustomerId: {CustomerId}", request.BookingId, customer.Id);
+            logger.LogWarning("Booking cancellation failed — booking not found. BookingId: {BookingId}, CustomerId: {CustomerId}", request.BookingId, customer.Id);
             return Errors.BookingNotFound;
         }
 
         if (booking.ServiceRequest.CustomerId != customer.Id)
         {
-            Log.Warning("Booking cancellation failed — unauthorized customer. BookingId: {BookingId}, BookingCustomerId: {BookingCustomerId}, RequestingCustomerId: {RequestingCustomerId}", request.BookingId, booking.ServiceRequest.CustomerId, customer.Id);
+            logger.LogWarning("Booking cancellation failed — unauthorized customer. BookingId: {BookingId}, BookingCustomerId: {BookingCustomerId}, RequestingCustomerId: {RequestingCustomerId}", request.BookingId, booking.ServiceRequest.CustomerId, customer.Id);
             return Errors.Unauthorized;
         }
 
         if(booking.Status != ServiceBookingStatus.InProgress && booking.Status != ServiceBookingStatus.AwaitingPriceChangeApproval)
         {
-            Log.Warning("Booking cancellation failed — invalid booking state. BookingId: {BookingId}, CurrentStatus: {CurrentStatus}", request.BookingId, booking.Status);
+            logger.LogWarning("Booking cancellation failed — invalid booking state. BookingId: {BookingId}, CurrentStatus: {CurrentStatus}", request.BookingId, booking.Status);
             return Errors.CannotCancelAtThisStage;
         }
         var previousCancellationRate = booking.CustomerCancellationReason;
@@ -64,7 +64,7 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
             SharedResourcesKeys.NotificationBookingCancelledByCustomerBody
         );
         await unitOfWork.SaveChangesAsync();
-        Log.Information("Booking cancelled by customer successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, Reason: {Reason}, ReopenServiceRequest: {ReopenServiceRequest}, PreviousCancellationRate: {PreviousCancellationRate}, NewCancellationRate: {NewCancellationRate}",
+        logger.LogInformation("Booking cancelled by customer successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, Reason: {Reason}, ReopenServiceRequest: {ReopenServiceRequest}, PreviousCancellationRate: {PreviousCancellationRate}, NewCancellationRate: {NewCancellationRate}",
             request.BookingId, customer.Id, booking.Technician.Id, request.Reason, request.ReopenServiceRequest,
             previousCancellationRate, customer.CancellationRate);
         return Result.Success();

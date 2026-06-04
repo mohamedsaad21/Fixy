@@ -20,7 +20,7 @@ public static class ServiceRequestDomainToGetMyRequestPaginatedListResponseMappi
             Description = serviceRequest.Description,
             ScheduledDateTime = serviceRequest.ScheduledDateTime.ToEgyptTime(),
             ServiceCategories = serviceRequest.ServiceCategories.Select(x => x.Localize(x.NameAr, x.NameEn)).ToList(),
-            Address = new AddressDto(serviceRequest.Address.Country, serviceRequest.Address.City, serviceRequest.Address.Area, serviceRequest.Address.Street, serviceRequest.Address.BuildingNumber, serviceRequest.Address.Latitude, serviceRequest.Address.Longitude),
+            Address = new AddressDto(serviceRequest.Address.Country, serviceRequest.Address.City, serviceRequest.Address.Area, serviceRequest.Address.Street, serviceRequest.Address.BuildingNumber, serviceRequest.Address.Latitude.ToString(), serviceRequest.Address.Longitude.ToString()),
             Status = EnumLocalizer.Localize(serviceRequest.Status, localizer)
         };
     }

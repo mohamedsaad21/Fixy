@@ -15,6 +15,9 @@ public sealed class SaveFcmTokenCommandHandler(ICurrentUserService currentUserSe
         if (currentUser == null)
             return Errors.Unauthorized;
 
+        if (string.IsNullOrWhiteSpace(request.Token))
+            return false;
+
         currentUser.FcmToken = request.Token;
         await userManager.UpdateAsync(currentUser);
         return true;

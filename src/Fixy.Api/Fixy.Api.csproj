@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -20,6 +20,11 @@
     <PackageReference Include="Microsoft.Azure.SignalR" Version="1.32.0" />
     <PackageReference Include="Microsoft.Azure.StackExchangeRedis" Version="3.3.1" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.13.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="10.0.1-dev-02351" />
+    <PackageReference Include="Serilog.Sinks.ApplicationInsights" Version="5.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.2">
       <PrivateAssets>all</PrivateAssets>
@@ -32,8 +37,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="10.0.2" />
     <PackageReference Include="MimeKit" Version="4.16.0" />
-    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="9.0.3-dev-00153" />
   </ItemGroup>
 
   <ItemGroup>

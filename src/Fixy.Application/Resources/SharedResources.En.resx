@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -418,10 +418,10 @@
     <value>Awaiting Payment</value>
   </data>
   <data name="ServiceBookingStatus_TechnicianCompleted" xml:space="preserve">
-    <value>TechnicianCompleted</value>
+    <value>Technician Completed</value>
   </data>
   <data name="ServiceBookingStatus_CustomerCompleted" xml:space="preserve">
-    <value>CustomerCompleted</value>
+    <value>Customer Completed</value>
   </data>
   <data name="ServiceBookingStatus_FullCompleted" xml:space="preserve">
     <value>Completed</value>
@@ -626,5 +626,8 @@
   </data>
   <data name="CannotEditWithActiveOffers" xml:space="preserve">
     <value>This request cannot be modified because you have already received price offers from technicians.</value>
+  </data>
+  <data name="ServiceBookingStatus_AwaitingFeedback" xml:space="preserve">
+    <value>Awaiting Feedback</value>
   </data>
 </root>

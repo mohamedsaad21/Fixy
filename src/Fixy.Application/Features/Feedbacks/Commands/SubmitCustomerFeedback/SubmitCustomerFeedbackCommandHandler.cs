@@ -13,6 +13,7 @@ public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurre
     public async Task<Result> Handle(SubmitCustomerFeedbackCommand request, CancellationToken cancellationToken)
     {
         var booking = await unitOfWork.Bookings.GetTableAsTracking()
+            .Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
@@ -32,7 +33,7 @@ public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurre
 
         await unitOfWork.CustomerFeedbacks.AddAsync(feedback);
         booking.Status = ServiceBookingStatus.CustomerCompleted;
-
+        booking.ServiceRequest.Customer.CompletedBookings += 1;
         await unitOfWork.SaveChangesAsync();
 
         await feedbackService.ProcessFeedbackCompletionAsync(booking);

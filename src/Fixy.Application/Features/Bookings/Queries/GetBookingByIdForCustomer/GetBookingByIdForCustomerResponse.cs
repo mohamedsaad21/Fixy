@@ -7,6 +7,8 @@ public class GetBookingByIdForCustomerResponse
     public Guid Id { get; set; }
     public string Status { get; set; }
     public decimal AgreedPrice { get; set; }
+    public decimal ProposedPrice { get; set; }
+    public string PriceChangeNotes { get; set; }
     public DateTimeOffset ScheduledDateTime { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public Guid TechnicianId { get; set; }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Serilog;
+using Serilog.Events;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,12 +33,14 @@ builder.Services.AddLocalization(opt => opt.ResourcesPath = "");
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
+    var arEG = new CultureInfo("ar-EG");
+    arEG.NumberFormat.NumberDecimalSeparator = ".";
+    arEG.NumberFormat.CurrencyDecimalSeparator = ".";
+
     List<CultureInfo> supportedCultures = new List<CultureInfo>
     {
             new CultureInfo("en-US"),
-            new CultureInfo("de-DE"),
-            new CultureInfo("fr-FR"),
-            new CultureInfo("ar-EG")
+            arEG
     };
 
     options.DefaultRequestCulture = new RequestCulture("en-US");
@@ -46,13 +49,24 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 });
 
 // Serilog
-Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
-builder.Services.AddSerilog();
-builder.Services.AddHttpLogging(options =>
+//builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, LoggerConfiguration loggerConfiguration) =>
+//{
+//    loggerConfiguration.ReadFrom.Configuration(context.Configuration).ReadFrom.Services(services);
+//});
+builder.Host.UseSerilog((context, services, config) =>
 {
-    options.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
+    config
+        .MinimumLevel.Information()
+        .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+        .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
+        .Enrich.FromLogContext()
+        .WriteTo.Console()
+        .WriteTo.ApplicationInsights(
+            context.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"],
+            TelemetryConverter.Traces
+        );
 });
-
+builder.Services.AddHttpLogging();
 // CORS
 builder.Services.AddCorsPolicy();
 

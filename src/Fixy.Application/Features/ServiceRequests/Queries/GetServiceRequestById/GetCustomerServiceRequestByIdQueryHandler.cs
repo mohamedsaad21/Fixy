@@ -37,7 +37,7 @@ public sealed class GetCustomerServiceRequestByIdQueryHandler(
                 Address = new AddressDto(
                                      x.Address.Country, x.Address.City, x.Address.Area,
                                      x.Address.Street, x.Address.BuildingNumber,
-                                     x.Address.Latitude, x.Address.Longitude),
+                                     x.Address.Latitude.ToString(), x.Address.Longitude.ToString()),
                 Images = x.ServiceRequestImages == null? new List<ImageDto>() :
                                      x.ServiceRequestImages
                                      .Select(i => new ImageDto { Id = i.Id, ImageUrl = i.ImageUrl })

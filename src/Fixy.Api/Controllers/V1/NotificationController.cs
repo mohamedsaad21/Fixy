@@ -5,6 +5,7 @@ using Fixy.Api.Controllers.Common;
 using Fixy.Application.Features.Notifications.Commands.MarkAsRead;
 using Fixy.Application.Features.Notifications.Commands.SaveFcmToken;
 using Fixy.Application.Features.Notifications.Queries.GetNotifications;
+using Fixy.Application.Features.Notifications.Queries.GetUnreadNotificationsCount;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 namespace Fixy.Api.Controllers.V1;
@@ -21,6 +22,14 @@ public class NotificationController : AppControllerBase
     public async Task<IActionResult> GetNotifications([FromQuery] GetNotificationsQuery query)
     {
         return ToActionResult(await Mediator.Send(query));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.NotificationsRouting.UnreadNotificationsCount)]
+    public async Task<IActionResult> GetUnreadNotificationsCount()
+    {
+        return ToActionResult(await Mediator.Send(new GetUnreadNotificationsCountQuery()));
     }
 
     [ProducesResponseType(StatusCodes.Status200OK)]
