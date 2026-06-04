@@ -1,5 +1,6 @@
 ﻿using Fixy.Application.Features.ServiceRequests.Commands.EditServiceRequest;
 using Fixy.Domain.Entities;
+using System.Globalization;
 
 namespace Fixy.Application.Mapping.ServiceRequests.Commands;
 
@@ -15,8 +16,8 @@ public static class EditRequestCommandToRequestDomainMapping
         serviceRequest.Address.Area = command.Address.Area;
         serviceRequest.Address.Street = command.Address.Street;
         serviceRequest.Address.BuildingNumber = command.Address.BuildingNumber;
-        serviceRequest.Address.Latitude = command.Address.Latitude;
-        serviceRequest.Address.Longitude = command.Address.Longitude;
+        serviceRequest.Address.Latitude = double.Parse(command.Address.Latitude, CultureInfo.InvariantCulture);
+        serviceRequest.Address.Longitude = double.Parse(command.Address.Longitude, CultureInfo.InvariantCulture);
         // Remove categories that are no longer selected
         var toRemove = serviceRequest.ServiceCategories
             .Where(c => !command.ServiceCategories.Contains(c.Id))

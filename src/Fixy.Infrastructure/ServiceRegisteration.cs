@@ -95,7 +95,7 @@ public static class ServiceRegisteration
             {
                 Version = "v1",
                 Title = "Fixy",
-                Description = "",
+                Description = "The Smart Home Repair Platform",
                 TermsOfService = new Uri("https://www.linkedin.com/in/mohamedsaad14/"),
                 Contact = new OpenApiContact
                 {

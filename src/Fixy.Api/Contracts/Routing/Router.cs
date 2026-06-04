@@ -119,7 +119,7 @@ public static class Router
         public const string SendNotification = prefix + "/Send-Notification";
         public const string MarkAsRead = prefix + "/Mark-As-Read/{NotificationId}";
         public const string SaveFcmToken = prefix + "/Save-Fcm-Token";
-        public const string Test = prefix + "/Test";
+        public const string UnreadNotificationsCount = prefix + "/Unread-Count";
     }
 
     public static class FeedbackRouting

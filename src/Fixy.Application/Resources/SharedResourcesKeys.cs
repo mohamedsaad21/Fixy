@@ -171,6 +171,7 @@ public class SharedResourcesKeys
     public const string ServiceBookingStatus_CustomerCompleted = "ServiceBookingStatus_CustomerCompleted";
     public const string ServiceBookingStatus_TechnicianCompleted = "ServiceBookingStatus_TechnicianCompleted";
     public const string ServiceBookingStatus_Disputed = "ServiceBookingStatus_Disputed";
+    public const string ServiceBookingStatus_AwaitingFeedback = "ServiceBookingStatus_AwaitingFeedback";
 
 
     public const string TechnicianStatus_PendingApproval = "TechnicianStatus_PendingApproval";

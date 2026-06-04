@@ -20,8 +20,8 @@ public static class ServiceRequestDomainToGetSubmittedServiceRequestsForTechnici
                 serviceRequest.Address.Area,
                 serviceRequest.Address.Street,
                 serviceRequest.Address.BuildingNumber,
-                serviceRequest.Address.Latitude,
-                serviceRequest.Address.Longitude
+                serviceRequest.Address.Latitude.ToString(),
+                serviceRequest.Address.Longitude.ToString()
             ),
             Status = serviceRequest.Status.ToString(),
             ServiceCategories = serviceRequest.ServiceCategories.Select(c => c.Localize(c.NameAr, c.NameEn)).ToList(),

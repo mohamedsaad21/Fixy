@@ -3,17 +3,18 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire.Logging;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.CancelBookingByTechnician;
 
-public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBookingService bookingService, INotificationService notificationService) : IRequestHandler<CancelBookingByTechnicianCommand, Result>
+public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IBookingService bookingService, INotificationService notificationService, ILogger<CancelBookingByTechnicianCommandHandler>logger) : IRequestHandler<CancelBookingByTechnicianCommand, Result>
 {
     public async Task<Result> Handle(CancelBookingByTechnicianCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Technician attempting to cancel booking. BookingId: {BookingId}", request.BookingId);
+        logger.LogInformation("Technician attempting to cancel booking. BookingId: {BookingId}", request.BookingId);
 
         var currentTechnicianId = await currentUserService.GetCurrentUserId();
 
@@ -21,7 +22,7 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
 
         if (technician == null)
         {
-            Log.Warning("Booking cancellation failed — technician not found. TechnicianId: {TechnicianId}", currentTechnicianId);
+            logger.LogWarning("Booking cancellation failed — technician not found. TechnicianId: {TechnicianId}", currentTechnicianId);
             return Errors.Unauthorized;
         }
 
@@ -31,19 +32,19 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
 
         if (booking == null)
         {
-            Log.Warning("Booking cancellation failed — booking not found. BookingId: {BookingId}, TechnicianId: {TechnicianId}", request.BookingId, technician.Id);
+            logger.LogWarning("Booking cancellation failed — booking not found. BookingId: {BookingId}, TechnicianId: {TechnicianId}", request.BookingId, technician.Id);
             return Errors.BookingNotFound;
         }
 
         if (booking.TechnicianId != technician.Id)
         {
-            Log.Warning("Booking cancellation failed — technician not assigned to this booking. BookingId: {BookingId}, BookingTechnicianId: {BookingTechnicianId}, RequestingTechnicianId: {RequestingTechnicianId}", request.BookingId, booking.TechnicianId, technician.Id);
+            logger.LogWarning("Booking cancellation failed — technician not assigned to this booking. BookingId: {BookingId}, BookingTechnicianId: {BookingTechnicianId}, RequestingTechnicianId: {RequestingTechnicianId}", request.BookingId, booking.TechnicianId, technician.Id);
             return Errors.Unauthorized;
         }
 
         if (booking.Status != ServiceBookingStatus.InProgress)
         {
-            Log.Warning("Booking cancellation failed — invalid booking state. BookingId: {BookingId}, CurrentStatus: {CurrentStatus}", request.BookingId, booking.Status);
+            logger.LogWarning("Booking cancellation failed — invalid booking state. BookingId: {BookingId}, CurrentStatus: {CurrentStatus}", request.BookingId, booking.Status);
             return Errors.CannotCancelAtThisStage;
         }
         var previousCancellationRate = booking.TechnicianCancellationReason;
@@ -64,7 +65,7 @@ public sealed class CancelBookingByTechnicianCommandHandler(IUnitOfWork unitOfWo
         );
         await unitOfWork.SaveChangesAsync();
 
-        Log.Information("Booking cancelled by technician successfully. BookingId: {BookingId}, TechnicianId: {TechnicianId}, CustomerId: {CustomerId}, Reason: {Reason}, PreviousCancellationRate: {PreviousCancellationRate}, NewCancellationRate: {NewCancellationRate}",
+        logger.LogInformation("Booking cancelled by technician successfully. BookingId: {BookingId}, TechnicianId: {TechnicianId}, CustomerId: {CustomerId}, Reason: {Reason}, PreviousCancellationRate: {PreviousCancellationRate}, NewCancellationRate: {NewCancellationRate}",
             request.BookingId, technician.Id, booking.ServiceRequest.Customer.Id, request.Reason,
             previousCancellationRate, technician.CancellationRate);
 

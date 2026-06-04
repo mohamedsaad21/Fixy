@@ -628,4 +628,7 @@
   <data name="CannotEditWithActiveOffers" xml:space="preserve">
     <value>مش هينفع تعدل الطلب عشان جالك عليه عروض أسعار بالفعل من الفنيين.</value>
   </data>
+  <data name="ServiceBookingStatus_AwaitingFeedback" xml:space="preserve">
+    <value>في انتظار التقييم</value>
+  </data>
 </root>

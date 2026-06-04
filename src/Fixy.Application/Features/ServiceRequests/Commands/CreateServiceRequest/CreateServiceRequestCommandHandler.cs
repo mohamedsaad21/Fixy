@@ -59,30 +59,6 @@ public class CreateServiceRequestCommandHandler : IRequestHandler<CreateServiceR
                 });
             }
             await _unitOfWork.SaveChangesAsync();
-            // Notify nearby technicians in same category
-            //foreach(var category in serviceRequest.ServiceCategories)
-            //{
-            //    var technicians = await _unitOfWork.Technicians.GetTableNoTracking().Where(x => x.ServiceCategoryId == category.Id && x.IsActive).Include(x => x.TechnicianLocation).ToListAsync();
-            //    var nearbyTechnicians = technicians.Select(x => new
-            //    {
-            //        Technician = x,
-            //        Distance = GeoDistance.CalculateKm(x.TechnicianLocation.Latitude, x.TechnicianLocation.Longitude, request.Address.Latitude, request.Address.Longitude)
-            //    })
-            //        .Where(x => x.Distance <= 25)
-            //        .OrderBy(x => x.Distance)
-            //        .ThenByDescending(x => x.Technician.AverageRating).ThenByDescending(x => x.Technician.TotalCompletedJobs);
-            //    foreach (var technician in nearbyTechnicians.Take(10))
-            //    {
-            //        await _notificationService.NotifyNewServiceRequestAsync(technician.Technician.Id, new
-            //        {
-            //            serviceRequestId = serviceRequest.Id,
-            //            title = serviceRequest.Description,
-            //            distance = technician.Distance,
-            //            categoryName = category.Name,
-            //            createdAt = serviceRequest.CreatedAt
-            //        });
-            //    }
-            //}
             return serviceRequest.Id;
         }
         catch (Exception)

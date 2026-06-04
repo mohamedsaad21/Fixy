@@ -13,7 +13,8 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
     public async Task<Result> Handle(SubmitTechnicianFeedbackCommand request, CancellationToken cancellationToken)
     {
         var booking = await unitOfWork.Bookings
-            .GetTableAsTracking().Include(x => x.ServiceRequest).FirstOrDefaultAsync(x => x.Id == request.BookingId);
+            .GetTableAsTracking().Include(x => x.Technician)
+            .Include(x => x.ServiceRequest).FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
             return Errors.BookingNotFound;
@@ -32,7 +33,7 @@ public class SubmitTechnicianFeedbackCommandHandler(IUnitOfWork unitOfWork, ICur
 
         await unitOfWork.TechnicianFeedbacks.AddAsync(feedback);
         booking.Status = ServiceBookingStatus.TechnicianCompleted;
-
+        booking.Technician.CompletedBookings += 1;
         await unitOfWork.SaveChangesAsync();
 
         await feedbackService.ProcessFeedbackCompletionAsync(booking);

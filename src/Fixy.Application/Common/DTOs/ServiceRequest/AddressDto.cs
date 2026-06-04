@@ -2,11 +2,11 @@
 
 public record AddressDto
   (
-        string Country, 
+        string Country,
         string City, 
         string Area, 
         string Street, 
         string BuildingNumber, 
-        double Latitude, 
-        double Longitude
+        string Latitude, 
+        string Longitude
   );
