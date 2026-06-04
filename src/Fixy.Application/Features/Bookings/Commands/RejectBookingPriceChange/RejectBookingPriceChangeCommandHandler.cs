@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.Bookings.Queries;
 using Fixy.Application.Resources;
