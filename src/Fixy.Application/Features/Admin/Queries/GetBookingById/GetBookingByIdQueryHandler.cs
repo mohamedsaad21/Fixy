@@ -3,15 +3,15 @@ using Fixy.Application.Bases;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Queries.GetBookingById;
 
-public sealed class GetBookingByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetBookingByIdQuery, Result<GetBookingByIdResponse>>
+public sealed class GetBookingByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper, ILogger<GetBookingByIdQueryHandler> logger) : IRequestHandler<GetBookingByIdQuery, Result<GetBookingByIdResponse>>
 {
     public async Task<Result<GetBookingByIdResponse>> Handle(GetBookingByIdQuery request, CancellationToken cancellationToken)
     {
-        Log.Information("Fetching booking by ID. BookingId: {BookingId}", request.Id);
+        logger.LogInformation("Fetching booking by ID. BookingId: {BookingId}", request.Id);
 
         var booking = await unitOfWork.Bookings.GetTableNoTracking()
             .Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
@@ -20,12 +20,12 @@ public sealed class GetBookingByIdQueryHandler(IUnitOfWork unitOfWork, IMapper m
 
         if (booking == null)
         {
-            Log.Warning("Booking not found. BookingId: {BookingId}", request.Id);
+            logger.LogWarning("Booking not found. BookingId: {BookingId}", request.Id);
             return Errors.BookingNotFound;
         }
 
         var bookingResponse = mapper.Map<GetBookingByIdResponse>(booking);
-        Log.Information("Booking fetched successfully. BookingId: {BookingId}, Status: {Status}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}", booking.Id, booking.Status, booking.ServiceRequest.Customer.Id, booking.Technician.Id);
+        logger.LogInformation("Booking fetched successfully. BookingId: {BookingId}, Status: {Status}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}", booking.Id, booking.Status, booking.ServiceRequest.Customer.Id, booking.Technician.Id);
         return bookingResponse;
     }
 }

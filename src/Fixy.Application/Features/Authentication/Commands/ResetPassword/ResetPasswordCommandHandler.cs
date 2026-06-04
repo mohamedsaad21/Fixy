@@ -2,22 +2,22 @@
 using Fixy.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Authentication.Commands.ResetPassword;
 
-public sealed class ResetPasswordCommandHandler(UserManager<ApplicationUser> userManager) 
+public sealed class ResetPasswordCommandHandler(UserManager<ApplicationUser> userManager, ILogger<ResetPasswordCommandHandler> logger) 
     : IRequestHandler<ResetPasswordCommand, Result>
 {
     public async Task<Result> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Password reset requested. Email: {Email}", request.Email);
+        logger.LogInformation("Password reset requested. Email: {Email}", request.Email);
         
         var user = await userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
         {
-            Log.Warning("Password reset failed — user not found. Email: {Email}", request.Email);
+            logger.LogWarning("Password reset failed — user not found. Email: {Email}", request.Email);
             return Errors.UserNotFound;
         }
 
@@ -29,7 +29,7 @@ public sealed class ResetPasswordCommandHandler(UserManager<ApplicationUser> use
 
             if (isSamePassword)
             {
-                Log.Warning("Password reset rejected — new password matches current password. UserId: {UserId}", user.Id);
+                logger.LogWarning("Password reset rejected — new password matches current password. UserId: {UserId}", user.Id);
                 return Errors.PasswordPreviouslyUsed;
             }
         }
@@ -37,7 +37,7 @@ public sealed class ResetPasswordCommandHandler(UserManager<ApplicationUser> use
         await userManager.RemovePasswordAsync(user);
         await userManager.AddPasswordAsync(user, request.Password);
 
-        Log.Information("Password reset completed successfully. UserId: {UserId}", user.Id);
+        logger.LogInformation("Password reset completed successfully. UserId: {UserId}", user.Id);
 
         return Result.Success();
     }

@@ -3,27 +3,27 @@ using Fixy.Domain.Entities.Identity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Authentication.Commands.ChangePassword;
 
-public sealed class ChangePasswordCommandHandler(UserManager<ApplicationUser> userManager) : IRequestHandler<ChangePasswordCommand, Result>
+public sealed class ChangePasswordCommandHandler(UserManager<ApplicationUser> userManager, ILogger<ChangePasswordCommandHandler> logger) : IRequestHandler<ChangePasswordCommand, Result>
 {
     public async Task<Result> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Password change requested. Email: {Email}", request.Email);
+        logger.LogInformation("Password change requested. Email: {Email}", request.Email);
 
         var user = await userManager.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
 
         if (user == null)
         {
-            Log.Warning("Password change failed — user not found. Email: {Email}", request.Email);
+            logger.LogWarning("Password change failed — user not found. Email: {Email}", request.Email);
             return Errors.UserNotFound;
         }
 
         if (!await userManager.CheckPasswordAsync(user, request.CurrentPassword))
         {
-            Log.Warning("Password change failed — incorrect current password. UserId: {UserId}", user.Id);
+            logger.LogWarning("Password change failed — incorrect current password. UserId: {UserId}", user.Id);
             return Errors.PasswordInCorrect;
         }
 
@@ -31,11 +31,11 @@ public sealed class ChangePasswordCommandHandler(UserManager<ApplicationUser> us
 
         if (!result.Succeeded)
         {
-            Log.Warning("Password change failed — Identity error. UserId: {UserId}, Errors: {Errors}", user.Id, string.Join(", ", result.Errors.Select(e => e.Code)));
+            logger.LogWarning("Password change failed — Identity error. UserId: {UserId}, Errors: {Errors}", user.Id, string.Join(", ", result.Errors.Select(e => e.Code)));
             return Errors.IdentityChangePasswordFailed;
         }
 
-        Log.Information("Password changed successfully. UserId: {UserId}", user.Id);
+        logger.LogInformation("Password changed successfully. UserId: {UserId}", user.Id);
         return Result.Success();
     }
 }

@@ -9,21 +9,21 @@ using Fixy.Domain.Entities.Identity;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Authentication.Commands.RegisterCustomer;
 
 public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> userManager, IMapper mapper,
-    IStorageService fileService, IAuthenticationService authenticationService)
+    IStorageService fileService, IAuthenticationService authenticationService, ILogger<RegisterCustomerCommandHandler> logger)
     : IRequestHandler<RegisterCustomerCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(RegisterCustomerCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Customer registration initiated. Email: {Email}", request.Email);
+        logger.LogInformation("Customer registration initiated. Email: {Email}", request.Email);
 
         if (await userManager.FindByEmailAsync(request.Email) != null)
         {
-            Log.Warning("Customer registration failed — email already exists. Email: {Email}", request.Email);
+            logger.LogWarning("Customer registration failed — email already exists. Email: {Email}", request.Email);
             return Errors.EmailAlreadyExists;
         }
 
@@ -35,41 +35,41 @@ public sealed class RegisterCustomerCommandHandler(UserManager<ApplicationUser> 
         {
             if (request.ProfilePicture != null)
             {
-                Log.Information("Uploading profile picture. Email: {Email}", request.Email);
+                logger.LogInformation("Uploading profile picture. Email: {Email}", request.Email);
                 var profilePictureUrl = await fileService.UploadAsync(request.ProfilePicture);
                 customer.ProfilePictureUrl = profilePictureUrl;
-                Log.Information("Profile picture uploaded successfully. Email: {Email}", request.Email);
+                logger.LogInformation("Profile picture uploaded successfully. Email: {Email}", request.Email);
             }
 
             var createResult = await userManager.CreateAsync(customer, request.Password);
             if (!createResult.Succeeded)
             {
-                Log.Warning("Customer registration failed — Identity user creation error. Email: {Email}, Errors: {Errors}", request.Email, string.Join(", ", createResult.Errors.Select(e => e.Code)));
+                logger.LogWarning("Customer registration failed — Identity user creation error. Email: {Email}, Errors: {Errors}", request.Email, string.Join(", ", createResult.Errors.Select(e => e.Code)));
                 return Errors.IdentityCreateUserFailed;
             }
 
             var roleResult = await userManager.AddToRoleAsync(customer, Roles.Customer);
             if (!roleResult.Succeeded)
             {
-                Log.Warning("Customer registration failed — role assignment error. UserId: {UserId}, Errors: {Errors}", customer.Id, string.Join(", ", roleResult.Errors.Select(e => e.Code)));
+                logger.LogWarning("Customer registration failed — role assignment error. UserId: {UserId}, Errors: {Errors}", customer.Id, string.Join(", ", roleResult.Errors.Select(e => e.Code)));
                 return Errors.IdentityAddRoleFailed;
             }
 
             BackgroundJob.Enqueue<IAuthenticationService>(x => x.SendOtpAsync(customer, "confirm your account", "Confirm Account"));
-            Log.Information("Customer registered successfully. UserId: {UserId}, Email: {Email}", customer.Id, request.Email);
+            logger.LogInformation("Customer registered successfully. UserId: {UserId}, Email: {Email}", customer.Id, request.Email);
             return customer.Id;
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Customer registration failed — unhandled exception during registration. Email: {Email}", request.Email);
+            logger.LogError(ex, "Customer registration failed — unhandled exception during registration. Email: {Email}", request.Email);
             if (!string.IsNullOrWhiteSpace(profilePicturePublicId))
             {
-                Log.Information("Rolling back profile picture upload. Email: {Email}", request.Email);
+                logger.LogInformation("Rolling back profile picture upload. Email: {Email}", request.Email);
                 await fileService.DeleteAsync(profilePicturePublicId);
             }
 
             await userManager.DeleteAsync(customer);
-            Log.Information("Rolled back user creation after failed registration. Email: {Email}", request.Email);
+            logger.LogInformation("Rolled back user creation after failed registration. Email: {Email}", request.Email);
             return Errors.FileUploadFailed;
         }
     }

@@ -7,6 +7,7 @@ using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +28,7 @@ public sealed class GetBookingsForTechnicianQueryHandler(IUnitOfWork unitOfWork,
         }
 
         var bookings = unitOfWork.Bookings.GetTableNoTracking()
+            .Include(x => x.ServiceRequest)
             .Where(x => x.TechnicianId == technician.Id && x.Status != ServiceBookingStatus.CancelledByCustomer).AsQueryable();
 
         var result = await bookings.Select(x => x.ToGetBookingsForTechnicianResponse(localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);

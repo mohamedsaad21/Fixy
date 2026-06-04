@@ -154,7 +154,7 @@ public class RatingService : IRatingService
             FeedbackCount = feedbackCount,
             WorkerRatingVar = workerRatingVar,
             RatingDeviation = ratingDeviation,
-            predictedRating = predictedRating
+            PredictedRating = predictedRating
         };
 
         using var client = _httpClientFactory.CreateClient();
