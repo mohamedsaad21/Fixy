@@ -5,21 +5,21 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.BlockTecnhnician;
 
-public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<BlockTecnhnicianCommand, Result>
+public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<BlockTecnhnicianCommandHandler> logger) : IRequestHandler<BlockTecnhnicianCommand, Result>
 {
     public async Task<Result> Handle(BlockTecnhnicianCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Admin attempting to block technician. TechnicianId: {TechnicianId}", request.TechnicianId);
+        logger.LogInformation("Admin attempting to block technician. TechnicianId: {TechnicianId}", request.TechnicianId);
                 
         var currentUser = await currentUserService.GetCurrentUserAsync();
 
         if (currentUser == null)
         {
-            Log.Warning("Block technician failed — unauthorized, no current user resolved. TechnicianId: {TechnicianId}", request.TechnicianId);
+            logger.LogWarning("Block technician failed — unauthorized, no current user resolved. TechnicianId: {TechnicianId}", request.TechnicianId);
             return Errors.Unauthorized;
         }
 
@@ -27,13 +27,13 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
 
         if (technician == null)
         {
-            Log.Warning("Block technician failed — technician not found. TechnicianId: {TechnicianId}", request.TechnicianId);
+            logger.LogWarning("Block technician failed — technician not found. TechnicianId: {TechnicianId}", request.TechnicianId);
             return Errors.TechnicianNotFound;
         }
 
         if (technician.Status == TechnicianStatus.Blocked)
         {
-            Log.Warning("Block technician skipped — already blocked. TechnicianId: {TechnicianId}, BlockedBy: {BlockedBy}", request.TechnicianId, technician.BlockedBy);
+            logger.LogWarning("Block technician skipped — already blocked. TechnicianId: {TechnicianId}, BlockedBy: {BlockedBy}", request.TechnicianId, technician.BlockedBy);
             return Errors.TechnicianAlreadyBlocked;
         }
 
@@ -49,7 +49,7 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
             SharedResourcesKeys.NotificationTechnicianBlockedBody
         );
         await unitOfWork.SaveChangesAsync();
-        Log.Information("Technician successfully blocked. TechnicianId: {TechnicianId}, AdminId: {AdminId}, Reason: {Reason}", request.TechnicianId, currentUser.Id, request.Reason);
+        logger.LogInformation("Technician successfully blocked. TechnicianId: {TechnicianId}, AdminId: {AdminId}, Reason: {Reason}", request.TechnicianId, currentUser.Id, request.Reason);
         return Result.Success();
     }
 }

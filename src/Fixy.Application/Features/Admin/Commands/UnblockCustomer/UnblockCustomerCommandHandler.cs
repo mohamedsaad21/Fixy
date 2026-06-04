@@ -5,21 +5,21 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.UnblockCustomer;
 
-public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<UnblockCustomerCommand, Result>
+public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<UnblockCustomerCommandHandler> logger) : IRequestHandler<UnblockCustomerCommand, Result>
 {
     public async Task<Result> Handle(UnblockCustomerCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Admin attempting to unblock customer. CustomerId: {CustomerId}", request.CustomerId);
+        logger.LogInformation("Admin attempting to unblock customer. CustomerId: {CustomerId}", request.CustomerId);
 
         var currentUser = await currentUserService.GetCurrentUserAsync();
 
         if (currentUser == null)
         {
-            Log.Warning("Unblock customer failed — unauthorized, no current user resolved. CustomerId: {CustomerId}", request.CustomerId);
+            logger.LogWarning("Unblock customer failed — unauthorized, no current user resolved. CustomerId: {CustomerId}", request.CustomerId);
             return Errors.Unauthorized;
         }
 
@@ -27,13 +27,13 @@ public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurre
 
         if (customer == null)
         {
-            Log.Warning("Unblock customer failed — customer not found. CustomerId: {CustomerId}", request.CustomerId);
+            logger.LogWarning("Unblock customer failed — customer not found. CustomerId: {CustomerId}", request.CustomerId);
             return Errors.CustomerNotFound;
         }
 
         if (customer.Status == CustomerStatus.Active)
         {
-            Log.Warning("Unblock customer skipped — customer is already active. CustomerId: {CustomerId}", request.CustomerId);
+            logger.LogWarning("Unblock customer skipped — customer is already active. CustomerId: {CustomerId}", request.CustomerId);
             return Errors.CustomerAlreadyActive;
         }
 
@@ -50,7 +50,7 @@ public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurre
         );
 
         await unitOfWork.SaveChangesAsync();
-        Log.Information("Customer successfully unblocked. CustomerId: {CustomerId}, AdminId: {AdminId}", request.CustomerId, currentUser.Id);
+        logger.LogInformation("Customer successfully unblocked. CustomerId: {CustomerId}, AdminId: {AdminId}", request.CustomerId, currentUser.Id);
         return Result.Success();
     }
 }

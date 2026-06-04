@@ -2,17 +2,17 @@
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Authentication.DTOs;
 using MediatR;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Authentication.Commands.SignInWithGoogle;
 
-public sealed class SignInWithGoogleCommandHandler(IAuthenticationService authenticationService) : IRequestHandler<SignInWithGoogleCommand, Result<AuthResponse>>
+public sealed class SignInWithGoogleCommandHandler(IAuthenticationService authenticationService, ILogger<SignInWithGoogleCommandHandler> logger) : IRequestHandler<SignInWithGoogleCommand, Result<AuthResponse>>
 {
     public async Task<Result<AuthResponse>> Handle(SignInWithGoogleCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Google OAuth sign-in attempt initiated.");
+        logger.LogInformation("Google OAuth sign-in attempt initiated.");
         var authResponse = await authenticationService.AuthenticateWithGoogleAsync(request.IdToken);
-        Log.Information("Google OAuth sign-in completed successfully. UserId: {UserId}, Role: {Role}", authResponse.UserId, authResponse.Role);
+        logger.LogInformation("Google OAuth sign-in completed successfully. UserId: {UserId}, Role: {Role}", authResponse.UserId, authResponse.Role);
         return authResponse;
     }
 }

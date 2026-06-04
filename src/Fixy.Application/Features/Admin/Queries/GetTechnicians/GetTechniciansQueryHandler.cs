@@ -6,15 +6,15 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Queries.GetTechnicians;
 
-public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetTechniciansQuery, Result<PaginatedResult<GetTechniciansResponse>>>
+public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> localizer, ILogger<GetTechniciansQueryHandler> logger) : IRequestHandler<GetTechniciansQuery, Result<PaginatedResult<GetTechniciansResponse>>>
 {
     public async Task<Result<PaginatedResult<GetTechniciansResponse>>> Handle(GetTechniciansQuery request, CancellationToken cancellationToken)
     {
-        Log.Information("Admin fetching technicians list. Page: {PageNumber}, PageSize: {PageSize}, Search: {Search}, OrderBy: {OrderBy}, SortOrder: {SortOrder}",
+        logger.LogInformation("Admin fetching technicians list. Page: {PageNumber}, PageSize: {PageSize}, Search: {Search}, OrderBy: {OrderBy}, SortOrder: {SortOrder}",
             request.PageNumber, request.PageSize, request.Search, request.OrderBy, request.SortOrder);
 
         var query = unitOfWork.Technicians.GetTableNoTracking();
@@ -48,7 +48,7 @@ public sealed class GetTechniciansQueryHandler(IUnitOfWork unitOfWork, IStringLo
             AverageRating = x.AverageRating
         }).ToPaginatedListAsync(request.PageNumber, request.PageSize);
 
-        Log.Information("Technicians list fetched successfully. TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", technicians.TotalCount, technicians.CurrentPage, technicians.PageSize);
+        logger.LogInformation("Technicians list fetched successfully. TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", technicians.TotalCount, technicians.CurrentPage, technicians.PageSize);
 
         return technicians;
     }

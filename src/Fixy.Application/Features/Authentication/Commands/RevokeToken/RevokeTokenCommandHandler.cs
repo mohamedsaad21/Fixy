@@ -4,23 +4,23 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Authentication.Commands.RevokeToken;
 
-public sealed class RevokeTokenCommandHandler(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
+public sealed class RevokeTokenCommandHandler(UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor, ILogger<RevokeTokenCommandHandler> logger)
     : IRequestHandler<RevokeTokenCommand, Result>
 {
     public async Task<Result> Handle(RevokeTokenCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Token revocation initiated.");
+        logger.LogInformation("Token revocation initiated.");
 
         var token = httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
         var user = await userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
 
         if (user == null)
         {
-            Log.Warning("Token revocation failed — no user matched the provided refresh token.");
+            logger.LogWarning("Token revocation failed — no user matched the provided refresh token.");
             return Errors.InvalidToken;
         }
 
@@ -28,14 +28,14 @@ public sealed class RevokeTokenCommandHandler(UserManager<ApplicationUser> userM
 
         if (!refreshToken.IsActive)
         {
-            Log.Warning("Token revocation failed — token is already inactive. UserId: {UserId}, TokenExpiry: {TokenExpiry}", user.Id, refreshToken.ExpiresOn);
+            logger.LogWarning("Token revocation failed — token is already inactive. UserId: {UserId}, TokenExpiry: {TokenExpiry}", user.Id, refreshToken.ExpiresOn);
             return Errors.InactiveToken;
         }
 
         refreshToken.RevokedOn = DateTime.UtcNow;
         await userManager.UpdateAsync(user);
 
-        Log.Information("Refresh token revoked successfully. UserId: {UserId}", user.Id);
+        logger.LogInformation("Refresh token revoked successfully. UserId: {UserId}", user.Id);
 
         return Result.Success();
     }

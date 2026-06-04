@@ -8,15 +8,15 @@ using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Queries.GetBookings;
 
-public sealed class GetBookingsQueryHandler(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetBookingsQuery, Result<PaginatedResult<GetBookingsResponse>>>
+public sealed class GetBookingsQueryHandler(IUnitOfWork unitOfWork, IStringLocalizer<SharedResources> localizer, ILogger<GetBookingsQueryHandler> logger) : IRequestHandler<GetBookingsQuery, Result<PaginatedResult<GetBookingsResponse>>>
 {
     public async Task<Result<PaginatedResult<GetBookingsResponse>>> Handle(GetBookingsQuery request, CancellationToken cancellationToken)
     {
-        Log.Information("Admin fetching bookings list. Page: {PageNumber}, PageSize: {PageSize}, Status: {Status}, FromDate: {FromDate}, ToDate: {ToDate}, Search: {Search}, OrderBy: {OrderBy}, SortOrder: {SortOrder}",
+        logger.LogInformation("Admin fetching bookings list. Page: {PageNumber}, PageSize: {PageSize}, Status: {Status}, FromDate: {FromDate}, ToDate: {ToDate}, Search: {Search}, OrderBy: {OrderBy}, SortOrder: {SortOrder}",
             request.PageNumber, request.PageSize, request.Status, request.FromDate, request.ToDate, request.Search, request.OrderBy, request.SortOrder);
 
         var query = unitOfWork.Bookings.GetTableNoTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
@@ -64,7 +64,7 @@ public sealed class GetBookingsQueryHandler(IUnitOfWork unitOfWork, IStringLocal
             })
             .ToPaginatedListAsync(request.PageNumber, request.PageSize);
 
-        Log.Information("Bookings list fetched successfully. TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", data.TotalCount, data.CurrentPage, data.PageSize);
+        logger.LogInformation("Bookings list fetched successfully. TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", data.TotalCount, data.CurrentPage, data.PageSize);
         return data;
     }
 }

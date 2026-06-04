@@ -7,24 +7,24 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Authentication.Commands.RefreshToken;
 
 public sealed class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager,
-    IAuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor)
+    IAuthenticationService authenticationService, IHttpContextAccessor httpContextAccessor, ILogger<RefreshTokenCommandHandler> logger)
     : IRequestHandler<RefreshTokenCommand, Result<AuthResponse>>
 {
     public async Task<Result<AuthResponse>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Token refresh attempt initiated.");
+        logger.LogInformation("Token refresh attempt initiated.");
 
         var token = httpContextAccessor.HttpContext?.Request.Cookies["refreshToken"];
         var user = await userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
 
         if (user == null)
         {
-            Log.Warning("Token refresh failed — no user matched the provided refresh token.");
+            logger.LogWarning("Token refresh failed — no user matched the provided refresh token.");
             return Errors.InvalidToken;
         }
 
@@ -32,7 +32,7 @@ public sealed class RefreshTokenCommandHandler(UserManager<ApplicationUser> user
 
         if (!refreshToken.IsActive)
         {
-            Log.Warning("Token refresh failed — refresh token is inactive. UserId: {UserId}, TokenExpiry: {TokenExpiry}", user.Id, refreshToken.ExpiresOn);
+            logger.LogWarning("Token refresh failed — refresh token is inactive. UserId: {UserId}, TokenExpiry: {TokenExpiry}", user.Id, refreshToken.ExpiresOn);
             return Errors.InactiveToken;
         }
 
@@ -47,7 +47,7 @@ public sealed class RefreshTokenCommandHandler(UserManager<ApplicationUser> user
         await authenticationService.SetTokenAndRefreshTokenInCookie(accessToken, newRefreshToken.Token, newRefreshToken.ExpiresOn);
         var roles = await userManager.GetRolesAsync(user);
 
-        Log.Information("Token refreshed successfully. UserId: {UserId}, NewTokenExpiry: {NewTokenExpiry}", user.Id, newRefreshToken.ExpiresOn);
+        logger.LogInformation("Token refreshed successfully. UserId: {UserId}, NewTokenExpiry: {NewTokenExpiry}", user.Id, newRefreshToken.ExpiresOn);
 
         return new AuthResponse
         {

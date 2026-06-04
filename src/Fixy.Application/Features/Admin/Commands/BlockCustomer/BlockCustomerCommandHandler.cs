@@ -5,21 +5,21 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.BlockCustomer;
 
-public sealed class BlockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService) : IRequestHandler<BlockCustomerCommand, Result>
+public sealed class BlockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<BlockCustomerCommandHandler> logger) : IRequestHandler<BlockCustomerCommand, Result>
 {
     public async Task<Result> Handle(BlockCustomerCommand request, CancellationToken cancellationToken)
     {
-        Log.Information("Admin attempting to block customer. CustomerId: {CustomerId}", request.CustomerId);
+        logger.LogInformation("Admin attempting to block customer. CustomerId: {CustomerId}", request.CustomerId);
 
         var currentUser = await currentUserService.GetCurrentUserAsync();
 
         if (currentUser == null)
         {
-            Log.Warning("Block customer failed — unauthorized, no current user resolved. CustomerId: {CustomerId}", request.CustomerId);
+            logger.LogWarning("Block customer failed — unauthorized, no current user resolved. CustomerId: {CustomerId}", request.CustomerId);
             return Errors.Unauthorized;
         }
 
@@ -27,13 +27,13 @@ public sealed class BlockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrent
 
         if (customer == null)
         {
-            Log.Warning("Block customer failed — customer not found. CustomerId: {CustomerId}", request.CustomerId);
+            logger.LogWarning("Block customer failed — customer not found. CustomerId: {CustomerId}", request.CustomerId);
             return Errors.CustomerNotFound;
         }
 
         if (customer.Status == CustomerStatus.Blocked)
         {
-            Log.Warning("Block customer skipped — already blocked. CustomerId: {CustomerId}, BlockedBy: {BlockedBy}", request.CustomerId, customer.BlockedBy);
+            logger.LogWarning("Block customer skipped — already blocked. CustomerId: {CustomerId}, BlockedBy: {BlockedBy}", request.CustomerId, customer.BlockedBy);
             return Errors.CustomerAlreadyBlocked;
         }
 
@@ -50,7 +50,7 @@ public sealed class BlockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrent
         );
 
         await unitOfWork.SaveChangesAsync();
-        Log.Information("Customer successfully blocked. CustomerId: {CustomerId}, AdminId: {AdminId}, Reason: {Reason}", request.CustomerId, currentUser.Id, request.Reason);
+        logger.LogInformation("Customer successfully blocked. CustomerId: {CustomerId}, AdminId: {AdminId}, Reason: {Reason}", request.CustomerId, currentUser.Id, request.Reason);
         return Result.Success();
     }
 }
