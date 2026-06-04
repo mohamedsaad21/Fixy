@@ -4,13 +4,16 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Dashboards.Queries.GetCustomerDashboard;
 
-public sealed class GetCustomerDashboardQueryHandler(ICurrentUserService currentUserService, IUnitOfWork unitOfWork) : IRequestHandler<GetCustomerDashboardQuery, Result<GetCustomerDashboardResponse>>
+public sealed class GetCustomerDashboardQueryHandler(ICurrentUserService currentUserService, IUnitOfWork unitOfWork, ILogger<GetCustomerDashboardQueryHandler> logger) : IRequestHandler<GetCustomerDashboardQuery, Result<GetCustomerDashboardResponse>>
 {
     public async Task<Result<GetCustomerDashboardResponse>> Handle(GetCustomerDashboardQuery request, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Customer dashboard data requested.");
+
         var currentCustomerId = await currentUserService.GetCurrentUserId();
 
         var customer = await unitOfWork.Customers.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == currentCustomerId);
@@ -45,6 +48,12 @@ public sealed class GetCustomerDashboardQueryHandler(ICurrentUserService current
             CancelledBookingsCount = cancelledBookingsCount,
             CancellationRate = customer.CancellationRate
         };
+
+        logger.LogInformation("Customer dashboard data assembled successfully. CustomerId: {CustomerId}, PendingRequests: {PendingRequests}, CancelledRequests: {CancelledRequests}, InProgressBookings: {InProgressBookings}, CompletedBookings: {CompletedBookings}, CancelledBookings: {CancelledBookings}, CancellationRate: {CancellationRate:F2}",
+            customer.Id, pendingServiceRequestsCount, cancelledServiceRequestsCount,
+            inProgressBookingsCount, completedBookingsCount, cancelledBookingsCount,
+            customer.CancellationRate);
+
         return result;
 
     }

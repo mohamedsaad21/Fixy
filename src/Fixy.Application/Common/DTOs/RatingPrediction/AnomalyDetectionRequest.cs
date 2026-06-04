@@ -9,5 +9,5 @@ public class AnomalyDetectionRequest
     public int FeedbackCount { get; set; }
     public double WorkerRatingVar { get; set; }
     public double RatingDeviation { get; set; }
-    public double predictedRating { get; set; }
+    public double PredictedRating { get; set; }
 }

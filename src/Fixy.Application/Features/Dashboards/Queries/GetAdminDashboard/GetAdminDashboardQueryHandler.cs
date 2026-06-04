@@ -6,13 +6,15 @@ using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Dashboards.Queries.GetAdminDashboard;
 
-public sealed class GetAdminDashboardQueryHandler(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager) : IRequestHandler<GetAdminDashboardQuery, Result<GetDashboardResponse>>
+public sealed class GetAdminDashboardQueryHandler(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, ILogger<GetAdminDashboardQueryHandler> logger) : IRequestHandler<GetAdminDashboardQuery, Result<GetDashboardResponse>>
 {
     public async Task<Result<GetDashboardResponse>> Handle(GetAdminDashboardQuery request, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Admin dashboard data requested.");
         // 🔢 KPIs
         var totalUsers = await userManager.Users.CountAsync(cancellationToken);
 
@@ -85,6 +87,10 @@ public sealed class GetAdminDashboardQueryHandler(IUnitOfWork unitOfWork, UserMa
         // 💰 Revenue (V1 = 0)
         decimal revenue = 0; // implement later when payment ready
 
+        logger.LogInformation("Admin dashboard data assembled successfully. TotalUsers: {TotalUsers}, TotalCustomers: {TotalCustomers}, TotalTechnicians: {TotalTechnicians}, TotalBookings: {TotalBookings}, ActiveBookings: {ActiveBookings}, CompletedBookings: {CompletedBookings}, CancelledBookings: {CancelledBookings}, CancellationRate: {CancellationRate:F2}, TopTechniciansResolved: {TopTechniciansResolved}",
+            totalUsers, totalCustomers, totalTechnicians, totalBookings,
+            activeBookings, completedBookings, cancelledBookings,
+            cancellationRate, topTechnicians.Count);
 
         return new GetDashboardResponse
         {

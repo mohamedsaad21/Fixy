@@ -14,6 +14,7 @@ public static class BookingsDomainToGetBookingsForTechnicianResponseMapping
         return new GetBookingsForTechnicianResponse
         {
             Id = booking.Id,
+            Description = booking.ServiceRequest.Description,
             Status = EnumLocalizer.Localize(booking.Status, localizer),
             AgreedPrice = booking.AgreedPrice,
             ScheduledDateTime = booking.ScheduledDateTime,

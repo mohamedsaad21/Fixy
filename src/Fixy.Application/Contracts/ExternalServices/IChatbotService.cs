@@ -1,6 +1,8 @@
-﻿namespace Fixy.Application.Contracts.ExternalServices;
+﻿using Fixy.Domain.Entities.Chatbot;
+
+namespace Fixy.Application.Contracts.ExternalServices;
 
 public interface IChatbotService
 {
-    Task<string> SendPromptAsync(string prompt);
+    Task<string> SendPromptAsync(Prompt prompt);
 }

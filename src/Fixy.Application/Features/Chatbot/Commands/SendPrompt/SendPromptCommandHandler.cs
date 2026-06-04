@@ -21,11 +21,7 @@ public sealed class SendPromptCommandHandler(ICurrentUserService currentUserServ
         };
         await unitOfWork.Prompts.AddAsync(prompt);
 
-        var aiResponse = await chatbotService.SendPromptAsync(request.Prompt);
-
-        prompt.Response = aiResponse;
-        prompt.ResponseTime = DateTimeOffset.UtcNow;
-        await unitOfWork.SaveChangesAsync();
+        var aiResponse = await chatbotService.SendPromptAsync(prompt);
 
         return new SendPromptResponse
         {

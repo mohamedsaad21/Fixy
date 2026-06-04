@@ -1,6 +1,10 @@
 ﻿using Fixy.Application.Common.DTOs.Chatbot;
 using Fixy.Application.Contracts.ExternalServices;
+using Fixy.Application.Contracts.Services;
+using Fixy.Domain.Entities.Chatbot;
+using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
+using System.Globalization;
 using System.Text;
 using System.Text.Json;
 
@@ -10,15 +14,33 @@ public class ChatbotService : IChatbotService
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly FlaskApiSettings _flaskApiSettings;
-    public ChatbotService(IHttpClientFactory httpClientFactory, FlaskApiSettings flaskApiSettings)
+    private readonly ICurrentUserService _currentUserService;
+    private readonly IUnitOfWork _unitOfWork;
+    public ChatbotService(IHttpClientFactory httpClientFactory, FlaskApiSettings flaskApiSettings, ICurrentUserService currentUserService, IUnitOfWork unitOfWork)
     {
         _httpClientFactory = httpClientFactory;
         _flaskApiSettings = flaskApiSettings;
+        _currentUserService = currentUserService;
+        _unitOfWork = unitOfWork;
     }
 
-    public async Task<string> SendPromptAsync(string prompt)
+    public async Task<string> SendPromptAsync(Prompt prompt)
     {
-        var requestBody = new SendPromptRequest { Prompt = prompt };
+        var currentUser = await _currentUserService.GetCurrentUserAsync();
+        var currentUserRole = await _currentUserService.GetCurrentUserRoleAsync();
+        if(currentUser == null)
+        {
+            //
+        }
+        var requestBody = new SendPromptRequest
+        {
+            Query = prompt.UserPrompt,
+            Email = currentUser.Email,
+            Role = currentUserRole,
+            UserId = currentUser.Id.ToString(),
+            UserName = currentUser.UserName,
+            Language = CultureInfo.CurrentCulture.Name
+        };
 
         var request = new HttpRequestMessage
         {
@@ -38,6 +60,17 @@ public class ChatbotService : IChatbotService
 
         if (result == null)
             throw new HttpRequestException("No response from Flask API.");
+
+        prompt.Name = result.Name;
+        prompt.Description = result.Description;
+        prompt.Response = result.Response;
+        prompt.Code = result.Code;
+        prompt.ResponseTime = DateTimeOffset.UtcNow;
+        prompt.ResponseDuration = result.ResponseTime;
+        prompt.EscalateToSupport = result.EscalateToSupport;
+        prompt.source = result.Source;
+
+        await _unitOfWork.SaveChangesAsync();
 
         return result.Response;
     }
