@@ -6,27 +6,19 @@ using Fixy.Application.Wrappers;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Notifications.Queries.GetNotifications;
 
-public sealed class GetNotificationsQueryHandler : IRequestHandler<GetNotificationsQuery, Result<PaginatedResult<GetNotificationsResponse>>>
+public sealed class GetNotificationsQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStringLocalizer<SharedResources> localizer, ILogger<GetNotificationsQueryHandler> logger) : IRequestHandler<GetNotificationsQuery, Result<PaginatedResult<GetNotificationsResponse>>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IStringLocalizer<SharedResources> _localizer;
-
-    public GetNotificationsQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStringLocalizer<SharedResources> localizer)
-    {
-        _unitOfWork = unitOfWork;
-        _currentUserService = currentUserService;
-        _localizer = localizer;
-    }
-
     public async Task<Result<PaginatedResult<GetNotificationsResponse>>> Handle(GetNotificationsQuery request, CancellationToken cancellationToken)
     {
-        var userId = await _currentUserService.GetCurrentUserId();
-        var notifications = _unitOfWork.Notifications.GetTableNoTracking().Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).AsQueryable();
-        var FilterQuery = await notifications.Select(x => x.ToGetNotificationsResponse(_localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);
-        return FilterQuery;
+        var userId = await currentUserService.GetCurrentUserId();
+        logger.LogInformation("Fetching notifications. UserId: {UserId}, Page: {PageNumber}, PageSize: {PageSize}", userId, request.PageNumber, request.PageSize);
+        var notifications = unitOfWork.Notifications.GetTableNoTracking().Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).AsQueryable();
+        var result = await notifications.Select(x => x.ToGetNotificationsResponse(localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+        logger.LogInformation("Notifications fetched successfully. UserId: {UserId}, TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", userId, result.TotalCount, result.CurrentPage, result.PageSize);
+        return result;
     }
 }

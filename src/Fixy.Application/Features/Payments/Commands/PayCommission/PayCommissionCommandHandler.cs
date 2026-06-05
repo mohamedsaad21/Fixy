@@ -6,14 +6,12 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Payments.Commands.PayCommission;
 
-public class PayCommissionCommandHandler(
-    IUnitOfWork unitOfWork,
-    ICurrentUserService currentUserService,
-    IPaymentService stripeService) : IRequestHandler<PayCommissionCommand, Result<PayCommissionResponse>>
+public class PayCommissionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
+    IPaymentService stripeService, ILogger<PayCommissionCommandHandler> logger) : IRequestHandler<PayCommissionCommand, Result<PayCommissionResponse>>
 {
     public async Task<Result<PayCommissionResponse>> Handle(PayCommissionCommand request, CancellationToken cancellationToken)
     {
@@ -30,14 +28,14 @@ public class PayCommissionCommandHandler(
 
             if (!commissions.Any())
             {
-                Log.Warning("No unpaid commissions found for technician {TechnicianId}", technician.Id);
+                logger.LogWarning("No unpaid commissions found for technician {TechnicianId}", technician.Id);
                 return Errors.CommissionNoneFound;
             }
 
             // 3. Calculate total amount
             var totalAmount = commissions.Sum(c => c.AmountOwed);
 
-            Log.Information("Total commission amount: {Amount:C} for {Count} commissions",
+            logger.LogInformation("Total commission amount: {Amount:C} for {Count} commissions",
                 totalAmount, commissions.Count);
 
             // 4. Create Stripe PaymentIntent → returns ClientSecret for Angular Elements
@@ -52,8 +50,7 @@ public class PayCommissionCommandHandler(
 
             if (!paymentResult.Success)
             {
-                Log.Error("Failed to create Stripe PaymentIntent for technician {TechnicianId}: {Error}",
-                    technician.Id, paymentResult.ErrorMessage);
+                logger.LogError("Failed to create Stripe PaymentIntent for technician {TechnicianId}: {Error}", technician.Id, paymentResult.ErrorMessage);
                 return Errors.PaymentCreationFailed;
             }
 
@@ -76,13 +73,12 @@ public class PayCommissionCommandHandler(
             // 6. Log included commissions (marked as paid in callback after success)
             foreach (var commission in commissions)
             {
-                Log.Information("Commission {CommissionId} included in payment {OrderRef}",
-                    commission.Id, paymentResult.MerchantOrderId);
+                logger.LogInformation("Commission {CommissionId} included in payment {OrderRef}", commission.Id, paymentResult.MerchantOrderId);
             }
 
             await unitOfWork.SaveChangesAsync();
 
-            Log.Information("Commission payment initiated — Order: {OrderRef}, Amount: {Amount:C}",
+            logger.LogInformation("Commission payment initiated — Order: {OrderRef}, Amount: {Amount:C}",
                 paymentResult.MerchantOrderId, totalAmount);
 
             // 7. Return ClientSecret to Angular — no redirect URL needed
@@ -97,7 +93,7 @@ public class PayCommissionCommandHandler(
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Error creating commission payment for technician");
+            logger.LogError(ex, "Error creating commission payment for technician");
             return Errors.PaymentCreationFailed;
         }
     }

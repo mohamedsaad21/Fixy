@@ -6,47 +6,38 @@ using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Payments.Commands.CreatePayment;
 
-public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentCommand, Result<CreatePaymentResponse>>
+public sealed class CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService, ILogger<CreatePaymentCommandHandler> logger) : IRequestHandler<CreatePaymentCommand, Result<CreatePaymentResponse>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IPaymentService _paymentService;
-    private const decimal PLATFORM_COMMISSION_RATE = 0.15m;
-
-    public CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService)
-    {
-        _unitOfWork = unitOfWork;
-        _paymentService = paymentService;
-    }
-
+    private const decimal PLATFORM_COMMISSION_RATE = 0.10m;
     public async Task<Result<CreatePaymentResponse>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            Log.Information("Creating payment for booking {BookingId}", request.BookingId);
+            logger.LogInformation("Creating payment for booking {BookingId}", request.BookingId);
 
             // 1. Get booking details
-            var booking = await _unitOfWork.Bookings.GetTableAsTracking()
+            var booking = await unitOfWork.Bookings.GetTableAsTracking()
                 .FirstOrDefaultAsync(b => b.Id == request.BookingId, cancellationToken);
 
             if (booking == null)
             {
-                Log.Warning("Booking {BookingId} not found", request.BookingId);
+                logger.LogWarning("Booking {BookingId} not found", request.BookingId);
                 return Errors.BookingNotFound;
             }
 
             // 2. Validate booking status
             if (booking.Status != ServiceBookingStatus.AwaitingPayment)
             {
-                Log.Warning("Booking {BookingId} is not in AwaitingPayment status", request.BookingId);
+                logger.LogWarning("Booking {BookingId} is not in AwaitingPayment status", request.BookingId);
                 return Errors.BookingNotReadyForPayment;
             }
 
             // 3. Check if payment already exists
-            var existingPayment = await _unitOfWork.Payments.GetTableNoTracking()
+            var existingPayment = await unitOfWork.Payments.GetTableNoTracking()
                 .FirstOrDefaultAsync(p => p.ServiceBookingId == request.BookingId
                                        && p.Status == PaymentStatus.Success,
                                      cancellationToken);
@@ -82,7 +73,7 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
             if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Card)
             {
                 // Create Stripe PaymentIntent → returns ClientSecret for Angular Elements
-                var paymentResult = await _paymentService.CreatePaymentUrlAsync(
+                var paymentResult = await paymentService.CreatePaymentUrlAsync(
                     amount: totalAmount,
                     referenceId: request.BookingId,
                     customerName: request.CustomerName,
@@ -93,7 +84,7 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
 
                 if (!paymentResult.Success)
                 {
-                    Log.Error("Failed to create Stripe PaymentIntent for booking {BookingId}: {Error}",
+                    logger.LogError("Failed to create Stripe PaymentIntent for booking {BookingId}: {Error}",
                         request.BookingId, paymentResult.ErrorMessage);
                     return Errors.PaymentCreationFailed;
                 }
@@ -116,19 +107,19 @@ public sealed class CreatePaymentCommandHandler : IRequestHandler<CreatePaymentC
             }
 
             // 8. Save payment
-            await _unitOfWork.Payments.AddAsync(payment);
+            await unitOfWork.Payments.AddAsync(payment);
             response.PaymentId = payment.Id;
 
-            await _unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
 
-            Log.Information("Payment {PaymentId} created successfully for booking {BookingId}",
+            logger.LogInformation("Payment {PaymentId} created successfully for booking {BookingId}",
                 payment.Id, request.BookingId);
 
             return response;
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Error creating payment for booking {BookingId}", request.BookingId);
+            logger.LogError(ex, "Error creating payment for booking {BookingId}", request.BookingId);
             return Errors.PaymentCreationFailed;
         }
     }
