@@ -2,9 +2,9 @@ using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Payments.Commands.ProcessCallback;
 using MediatR;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
-public sealed class ProcessCallbackCommandHandler(IPaymentService paymentService) : IRequestHandler<ProcessCallbackCommand, Result<bool>>
+public sealed class ProcessCallbackCommandHandler(IPaymentService paymentService, ILogger<ProcessCallbackCommandHandler> logger) : IRequestHandler<ProcessCallbackCommand, Result<bool>>
 {
     public async Task<Result<bool>> Handle(ProcessCallbackCommand request, CancellationToken cancellationToken)
     {
@@ -14,7 +14,7 @@ public sealed class ProcessCallbackCommandHandler(IPaymentService paymentService
 
             if (!isValid)
             {
-                Log.Warning("Invalid webhook signature");
+                logger.LogWarning("Invalid webhook signature");
                 return Errors.InvalidHmacSignature;
             }
 
@@ -22,7 +22,7 @@ public sealed class ProcessCallbackCommandHandler(IPaymentService paymentService
         }
         catch (Exception ex)
         {
-            Log.Error(ex, "Error processing webhook");
+            logger.LogError(ex, "Error processing webhook");
             return Errors.CallbackProcessingFailed;
         }
     }

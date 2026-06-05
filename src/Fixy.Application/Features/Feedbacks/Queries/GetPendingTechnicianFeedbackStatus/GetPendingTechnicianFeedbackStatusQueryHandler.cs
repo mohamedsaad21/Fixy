@@ -3,37 +3,39 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Feedbacks.Queries.GetPendingTechnicianFeedbackStatus;
 
-public sealed class GetPendingTechnicianFeedbackStatusQueryHandler : IRequestHandler<GetPendingTechnicianFeedbackStatusQuery, Result<GetPendingTechnicianFeedbackStatusResponse>>
+public sealed class GetPendingTechnicianFeedbackStatusQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IFeedbackService feedbackService, ILogger<GetPendingTechnicianFeedbackStatusQueryHandler> logger) : IRequestHandler<GetPendingTechnicianFeedbackStatusQuery, Result<GetPendingTechnicianFeedbackStatusResponse>>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ICurrentUserService _currentUserService;
-    private readonly IFeedbackService _feedbackService;
-    public GetPendingTechnicianFeedbackStatusQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IFeedbackService feedbackService)
-    {
-        _unitOfWork = unitOfWork;
-        _currentUserService = currentUserService;
-        _feedbackService = feedbackService;
-    }
-
     public async Task<Result<GetPendingTechnicianFeedbackStatusResponse>> Handle(GetPendingTechnicianFeedbackStatusQuery request, CancellationToken cancellationToken)
     {
-        var currentTechnicianId = await _currentUserService.GetCurrentUserId();
+        var currentTechnicianId = await currentUserService.GetCurrentUserId();
 
-        var technician = await _unitOfWork.Technicians.GetTableNoTracking()
+        logger.LogInformation("Checking pending technician feedback status. TechnicianId: {TechnicianId}", currentTechnicianId);
+                
+        var technician = await unitOfWork.Technicians.GetTableNoTracking()
             .FirstOrDefaultAsync(x => x.Id == currentTechnicianId);
 
         if (technician == null)
-            return Errors.Unauthorized;
-
-        var pendingTechnicianFeedbackBookingId = await _feedbackService.GetPendingTechnicianFeedbackBookingIdAsync(technician.Id);
-        var response = new GetPendingTechnicianFeedbackStatusResponse
         {
-            HasPendingFeedback = pendingTechnicianFeedbackBookingId != null,
+            logger.LogWarning("Pending technician feedback status check failed — technician not found. TechnicianId: {TechnicianId}", currentTechnicianId);
+            return Errors.Unauthorized;
+        }
+
+        var pendingTechnicianFeedbackBookingId = await feedbackService.GetPendingTechnicianFeedbackBookingIdAsync(technician.Id);
+        var hasPendingFeedback = pendingTechnicianFeedbackBookingId != null;
+
+        if (hasPendingFeedback)
+            logger.LogInformation("Pending feedback found for technician — bid submissions are locked. TechnicianId: {TechnicianId}, PendingBookingId: {PendingBookingId}", technician.Id, pendingTechnicianFeedbackBookingId);
+        else
+            logger.LogInformation("No pending feedback for technician — bid submissions are unlocked. TechnicianId: {TechnicianId}", technician.Id);
+
+        return new GetPendingTechnicianFeedbackStatusResponse
+        {
+            HasPendingFeedback = hasPendingFeedback,
             BookingId = pendingTechnicianFeedbackBookingId
         };
-        return response;
     }
 }
