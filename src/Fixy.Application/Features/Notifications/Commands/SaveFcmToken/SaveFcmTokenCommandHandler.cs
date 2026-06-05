@@ -27,6 +27,9 @@ public sealed class SaveFcmTokenCommandHandler(ICurrentUserService currentUserSe
             return false;
         }
 
+        if (string.IsNullOrWhiteSpace(request.Token))
+            return false;
+
         currentUser.FcmToken = request.Token;
         await userManager.UpdateAsync(currentUser);
         logger.LogInformation("FCM token saved successfully. UserId: {UserId}", currentUser.Id);
