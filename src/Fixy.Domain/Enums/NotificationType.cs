@@ -1,4 +1,4 @@
-﻿namespace Fixy.Domain.Enums;
+namespace Fixy.Domain.Enums;
 
 public enum NotificationType
 {
@@ -19,5 +19,8 @@ public enum NotificationType
     TechnicianBlocked,
     TechnicianUnblocked,
     CustomerBlocked,
-    CustomerUnblocked
+    CustomerUnblocked,
+    DisputeRaised,
+    DisputeResolved,
+    DisputeUnderReview
 }

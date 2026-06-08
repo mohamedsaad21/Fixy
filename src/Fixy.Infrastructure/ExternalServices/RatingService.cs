@@ -95,7 +95,6 @@ public class RatingService : IRatingService
         var totalSum = await query.SumAsync(x => x.PredictedTechnicianRating) + booking.PredictedTechnicianRating;
         var totalCount = await query.CountAsync() + 1;
         booking.Technician.AverageRating = (double)totalSum / totalCount;
-        booking.Status = ServiceBookingStatus.FullCompleted;
         await _unitOfWork.SaveChangesAsync();
     }
 

@@ -85,6 +85,7 @@ public static class Router
         public const string ConfirmBookingCompletion = prefix + "/confirm-booking-completion/{BookingId}";
         public const string CancelBookingByCustomer = prefix + "/cancel-booking-by-customer";
         public const string CancelBookingByTechnician = prefix + "/cancel-booking-by-technician";
+        public const string DisputeBookingCompletion = prefix + "/dispute-booking-completion";
     }
     public static class PaymentRouting
     {
@@ -111,6 +112,9 @@ public static class Router
         public const string GetBookings = prefix + "/Get-Bookings";
         public const string GetBookingById = prefix + "/Get-Booking-By-Id/{Id}";
         public const string GetUserInfoById = prefix + "/Get-User-Info-By-Id/{UserId}";
+        public const string ResolveDispute = prefix + "/Resolve-Dispute";
+        public const string GetDisputes = prefix + "/Get-Disputes";
+        public const string GetDisputeById = prefix + "/Get-Dispute-By-Id/{Id}";
     }
     public static class NotificationsRouting
     {

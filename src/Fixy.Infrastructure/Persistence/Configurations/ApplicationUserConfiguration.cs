@@ -9,5 +9,6 @@ public sealed class ApplicationUserConfiguration : IEntityTypeConfiguration<Appl
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.HasOne(x => x.BlockedByUser).WithMany().HasForeignKey(x => x.BlockedBy).OnDelete(DeleteBehavior.Restrict);
+        builder.HasMany(x => x.Disputes).WithOne(x => x.Raiser).HasForeignKey(x => x.RaiserId).OnDelete(DeleteBehavior.Restrict);
     }
 }
