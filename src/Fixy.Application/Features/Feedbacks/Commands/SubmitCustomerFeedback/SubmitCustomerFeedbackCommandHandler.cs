@@ -1,8 +1,10 @@
 using Fixy.Application.Bases;
+using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Mapping.Feedbacks.Commands;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -50,13 +52,24 @@ public class SubmitCustomerFeedbackCommandHandler(IUnitOfWork unitOfWork, ICurre
         var feedback = request.ToCustomerFeedbackDomain(currentCustomer.Id, booking.TechnicianId);
 
         await unitOfWork.CustomerFeedbacks.AddAsync(feedback);
-        booking.Status = ServiceBookingStatus.CustomerCompleted;
+        var isTechnicianFeedbackExists = await unitOfWork.TechnicianFeedbacks.GetTableNoTracking().AnyAsync(x => x.ServiceBookingId == booking.Id);
+        if (isTechnicianFeedbackExists)
+        {
+            booking.Status = ServiceBookingStatus.FullCompleted;
+        }
+        else
+        {
+            booking.Status = ServiceBookingStatus.CustomerCompleted;
+        }
         booking.ServiceRequest.Customer.CompletedBookings += 1;
         await unitOfWork.SaveChangesAsync();
 
         logger.LogInformation("Customer feedback saved. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}", booking.Id, currentCustomer.Id, booking.TechnicianId);
 
-        await feedbackService.ProcessFeedbackCompletionAsync(booking);
+        if(!booking.IsEvaluated && booking.Status == ServiceBookingStatus.FullCompleted)
+        {
+            BackgroundJob.Enqueue<IRatingService>(x => x.PredictTechnicianRatingAsync(booking.Id));
+        }
 
         logger.LogInformation("Customer feedback submitted successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, NewBookingStatus: {NewBookingStatus}, CustomerCompletedBookings: {CustomerCompletedBookings}",
             booking.Id, currentCustomer.Id, booking.TechnicianId,

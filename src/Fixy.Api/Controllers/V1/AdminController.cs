@@ -1,4 +1,4 @@
-﻿using Asp.Versioning;
+using Asp.Versioning;
 using Fixy.Api.Attributes;
 using Fixy.Api.Contracts.Routing;
 using Fixy.Api.Controllers.Common;
@@ -13,6 +13,9 @@ using Fixy.Application.Features.Admin.Queries.GetBookings;
 using Fixy.Application.Features.Admin.Queries.GetCustomers;
 using Fixy.Application.Features.Admin.Queries.GetTechnicians;
 using Fixy.Application.Features.Admin.Queries.GetUserInfoById;
+using Fixy.Application.Features.Admin.Commands.ResolveDispute;
+using Fixy.Application.Features.Admin.Queries.GetDisputeById;
+using Fixy.Application.Features.Admin.Queries.GetDisputes;
 using Fixy.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -128,5 +131,32 @@ public class AdminController : AppControllerBase
     public async Task<IActionResult> GetUserInfoById([FromRoute] Guid UserId)
     {
         return ToActionResult(await Mediator.Send(new GetUserInfoByIdQuery(UserId)));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpPut(Router.AdminRouting.ResolveDispute)]
+    public async Task<IActionResult> ResolveDispute([FromBody] ResolveDisputeCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.AdminRouting.GetDisputes)]
+    public async Task<IActionResult> GetDisputes([FromQuery] GetDisputesQuery query)
+    {
+        return ToActionResult(await Mediator.Send(query));
+    }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [HttpGet(Router.AdminRouting.GetDisputeById)]
+    public async Task<IActionResult> GetDisputeById([FromRoute] Guid Id)
+    {
+        return ToActionResult(await Mediator.Send(new GetDisputeByIdQuery(Id)));
     }
 }

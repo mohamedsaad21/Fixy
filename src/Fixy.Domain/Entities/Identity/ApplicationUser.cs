@@ -34,4 +34,5 @@ public class ApplicationUser : IdentityUser<Guid>
     public ICollection<Conversation> CustomerConversations { get; set; }
     public ICollection<Conversation> TechnicianConversations { get; set; }
     public ICollection<Prompt> Prompts { get; set; }
+    public ICollection<Dispute> Disputes { get; set; }
 }
