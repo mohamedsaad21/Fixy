@@ -12,7 +12,7 @@ public class ServiceCategory : GeneralLocalizableEntity
     }
     public string NameEn { get; set; }
     public string NameAr { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public ICollection<ServiceRequestCategories> ServiceRequestCategories { get; set; }
     public ICollection<ServiceRequest> ServiceRequests { get; set; }
     public ICollection<Technician> Technicians { get; set; }

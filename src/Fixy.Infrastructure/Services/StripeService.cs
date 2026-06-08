@@ -15,10 +15,7 @@ public class StripeService : IPaymentService
     private readonly IUnitOfWork _unitOfWork;
     private readonly INotificationService _notificationService;
 
-    public StripeService(
-        StripeSettings stripeSettings,
-        IUnitOfWork unitOfWork,
-        INotificationService notificationService)
+    public StripeService(StripeSettings stripeSettings, IUnitOfWork unitOfWork, INotificationService notificationService)
     {
         _stripeSettings = stripeSettings;
         _unitOfWork = unitOfWork;
@@ -27,8 +24,7 @@ public class StripeService : IPaymentService
         StripeConfiguration.ApiKey = _stripeSettings.Secretkey;
     }
 
-    public async Task<PaymentUrlResult> CreatePaymentUrlAsync(
-        decimal amount, Guid referenceId, string customerName,
+    public async Task<PaymentUrlResult> CreatePaymentUrlAsync(decimal amount, Guid referenceId, string customerName,
         string customerEmail, string customerPhone, string orderPrefix = "BK")
     {
         try

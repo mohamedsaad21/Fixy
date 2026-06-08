@@ -10,22 +10,16 @@ using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Payments.Commands.CreatePayment;
 
-public sealed class CreatePaymentCommandHandler(
-    IUnitOfWork unitOfWork,
-    IPaymentService paymentService,
-    ILogger<CreatePaymentCommandHandler> logger) : IRequestHandler<CreatePaymentCommand, Result<CreatePaymentResponse>>
+public sealed class CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPaymentService paymentService, ILogger<CreatePaymentCommandHandler> logger) : IRequestHandler<CreatePaymentCommand, Result<CreatePaymentResponse>>
 {
     private const decimal PLATFORM_COMMISSION_RATE = 0.10m;
-
     public async Task<Result<CreatePaymentResponse>> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
     {
         try
         {
             logger.LogInformation("Creating payment for booking {BookingId}", request.BookingId);
 
-            // 1. Get booking details
-            var booking = await unitOfWork.Bookings.GetTableAsTracking()
-                .FirstOrDefaultAsync(b => b.Id == request.BookingId, cancellationToken);
+            var booking = await unitOfWork.Bookings.GetTableAsTracking().FirstOrDefaultAsync(b => b.Id == request.BookingId, cancellationToken);
 
             if (booking == null)
             {
@@ -33,14 +27,12 @@ public sealed class CreatePaymentCommandHandler(
                 return Errors.BookingNotFound;
             }
 
-            // 2. Validate booking status
             if (booking.Status != ServiceBookingStatus.AwaitingPayment)
             {
                 logger.LogWarning("Booking {BookingId} is not in AwaitingPayment status", request.BookingId);
                 return Errors.BookingNotReadyForPayment;
             }
 
-            // 3. Check existing payment
             var existingPayment = await unitOfWork.Payments.GetTableAsTracking()
                 .FirstOrDefaultAsync(p => p.ServiceBookingId == request.BookingId
                                        && p.Status != PaymentStatus.Failed,
@@ -48,18 +40,31 @@ public sealed class CreatePaymentCommandHandler(
 
             if (existingPayment != null)
             {
-                // Already paid — block
                 if (existingPayment.Status == PaymentStatus.Success)
                     return Errors.PaymentAlreadyCompleted;
 
-                else if((PaymentMethod)request.PaymentMethod == PaymentMethod.Cash)
+                if (existingPayment.Status == PaymentStatus.Pending)
                 {
-                    existingPayment.Method = PaymentMethod.Cash;
-                } 
-                else if (existingPayment.Status == PaymentStatus.Pending)
-                {
-                    // Same method + card → resume with existing ClientSecret
-                    if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Card
+                    var requestedMethod = (PaymentMethod)request.PaymentMethod;
+
+                    if (requestedMethod == PaymentMethod.Cash)
+                    {
+                        logger.LogInformation("Switching pending payment to Cash for booking {BookingId}", request.BookingId);
+                        existingPayment.Method = PaymentMethod.Cash;
+                        existingPayment.PaymentIntentId = null;
+                        existingPayment.MerchantOrderId = $"BK-{request.BookingId.ToString().ToUpper()}";
+                        await unitOfWork.SaveChangesAsync();
+                        return new CreatePaymentResponse
+                        {
+                            PaymentId = existingPayment.Id,
+                            PaymentMethod = PaymentMethod.Cash,
+                            Amount = existingPayment.TotalAmount,
+                            ClientSecret = null,
+                            OrderReference = existingPayment.MerchantOrderId,
+                        };
+                    }
+
+                    if (requestedMethod == PaymentMethod.Card
                         && existingPayment.Method == PaymentMethod.Card
                         && !string.IsNullOrEmpty(existingPayment.PaymentIntentId))
                     {
@@ -80,17 +85,18 @@ public sealed class CreatePaymentCommandHandler(
                             };
                         }
 
-                        logger.LogWarning("Could not retrieve ClientSecret for booking {BookingId}, creating new", request.BookingId);
+                        logger.LogWarning("Could not retrieve ClientSecret, creating new PaymentIntent for booking {BookingId}", request.BookingId);
                     }
+
+                    existingPayment.Status = PaymentStatus.Failed;
+                    await unitOfWork.SaveChangesAsync();
                 }
             }
 
-            // 4. Calculate amounts
             var totalAmount = booking.AgreedPrice;
             var platformCommission = totalAmount * PLATFORM_COMMISSION_RATE;
             var technicianAmount = totalAmount - platformCommission;
 
-            // 5. Create payment record
             var payment = new Payment
             {
                 ServiceBookingId = request.BookingId,
@@ -102,14 +108,12 @@ public sealed class CreatePaymentCommandHandler(
                 Status = PaymentStatus.Pending,
             };
 
-            // 6. Build response
             var response = new CreatePaymentResponse
             {
                 PaymentMethod = (PaymentMethod)request.PaymentMethod,
                 Amount = totalAmount,
             };
 
-            // 7. Handle based on payment method
             if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Card)
             {
                 var paymentResult = await paymentService.CreatePaymentUrlAsync(
@@ -142,7 +146,6 @@ public sealed class CreatePaymentCommandHandler(
                 response.OrderReference = payment.MerchantOrderId;
             }
 
-            // 8. Save payment
             await unitOfWork.Payments.AddAsync(payment);
             response.PaymentId = payment.Id;
 
