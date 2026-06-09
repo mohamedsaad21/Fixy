@@ -171,7 +171,6 @@ public class AuthenticationService : IAuthenticationService
         };
         authResponse.Role = roles.FirstOrDefault();
         authResponse.Token = accessToken;
-        authResponse.IsAuthenticated = true;
         return authResponse;
     }
 
