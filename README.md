@@ -109,5 +109,5 @@ dotnet run --project src/Fixy.Api
 
 ## 📖 API Documentation & Testing
 
-- **Swagger UI**: Accessible by navigating to `https://localhost:<port>/swagger` when running in the Development environment. Swagger includes built-in JWT authorization buttons for easy route testing.
+- **Swagger UI**: Accessible by navigating to `https://fixy-dwbmggafbkd0enbb.germanywestcentral-01.azurewebsites.net/swagger/index.html` when running in the Development environment. Swagger includes built-in JWT authorization buttons for easy route testing.
 - **Postman**: A dedicated Postman Collection file is available in the documentation folder for rapid endpoint importing and automated local environment testing.
