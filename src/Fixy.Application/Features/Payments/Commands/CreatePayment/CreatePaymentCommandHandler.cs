@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Payments.Commands.CreatePayment.Responses;
 using Fixy.Domain.Entities.Payments;
