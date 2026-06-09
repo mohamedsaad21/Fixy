@@ -163,6 +163,7 @@ public static class Router
     public static class ChatbotRouting
     {
         public const string prefix = Rule + "/Chatbot";
-        public const string SendPrompt = prefix + "/Send-Prompt";
+        public const string SendMessage = prefix + "/Send-Message";
+        public const string GetChatHistory = prefix + "/History";
     }
 }

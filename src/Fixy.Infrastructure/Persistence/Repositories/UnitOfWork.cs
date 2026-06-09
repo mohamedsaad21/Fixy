@@ -38,7 +38,8 @@ public class UnitOfWork : IUnitOfWork
     public INotificationRepository Notifications { get; private set; }
     public IServiceRequestReadRepository ServiceRequestReadRepository { get; private set; }
     public ITechnicianCommissionOwedReadRepository TechnicianCommissionOwedReadRepository { get; private set; }
-    public IGenericRepository<Prompt> Prompts { get; private set; }
+    public IGenericRepository<ChatbotConversation> ChatbotConversations { get; private set; }
+    public IGenericRepository<ChatbotMessage> ChatbotMessages { get; private set; }
 
     public UnitOfWork(FixyDbContext dbContext)
     {
@@ -65,7 +66,8 @@ public class UnitOfWork : IUnitOfWork
         Notifications = new NotificationRepository(dbContext);
         ServiceRequestReadRepository = new ServiceRequestReadRepository(dbContext);
         TechnicianCommissionOwedReadRepository = new TechnicianCommissionOwedReadRepository(dbContext);
-        Prompts = new GenericRepository<Prompt>(dbContext);
+        ChatbotConversations = new GenericRepository<ChatbotConversation>(dbContext);
+        ChatbotMessages = new GenericRepository<ChatbotMessage>(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();
     public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();

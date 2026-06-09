@@ -4,10 +4,10 @@ using Microsoft.Extensions.Localization;
 
 namespace Fixy.Application.Features.Chatbot.Commands.SendPrompt;
 
-public class SendPromptCommandValidator : AbstractValidator<SendPromptCommand>
+public class SendMessageCommandValidator : AbstractValidator<SendMessageCommand>
 {
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    public SendPromptCommandValidator(IStringLocalizer<SharedResources> stringLocalizer)
+    public SendMessageCommandValidator(IStringLocalizer<SharedResources> stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         ApplyValidationRules();
@@ -15,6 +15,6 @@ public class SendPromptCommandValidator : AbstractValidator<SendPromptCommand>
 
     public void ApplyValidationRules()
     {
-        RuleFor(x => x.Prompt).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
+        RuleFor(x => x.Message).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
     }
 }

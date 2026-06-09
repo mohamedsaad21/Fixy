@@ -1,12 +1,10 @@
 using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
-using Fixy.Application.Mapping.Bookings.Queries;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Hangfire;
 using MediatR;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

@@ -7,4 +7,5 @@ public class GetChatMessagesResponse
     public string Content { get; set; }
     public string Attachment { get; set; }
     public DateTimeOffset SentAt { get; set; }
+    public bool IsSeen { get; set; }
 }

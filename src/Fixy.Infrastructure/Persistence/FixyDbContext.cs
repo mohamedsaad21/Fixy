@@ -41,7 +41,8 @@ public class FixyDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Gui
     public virtual DbSet<Conversation> Conversations { get; set; }
     public virtual DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<ServiceRequestSpResult> ServiceRequestSpResults { get; set; }
-    public DbSet<Prompt> Prompts { get; set; }
+    public DbSet<ChatbotConversation> ChatbotConversations { get; set; }
+    public DbSet<ChatbotMessage> ChatbotMessages { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

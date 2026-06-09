@@ -33,6 +33,7 @@ public class ApplicationUser : IdentityUser<Guid>
     public ICollection<Notification> Notifications { get; set; }
     public ICollection<Conversation> CustomerConversations { get; set; }
     public ICollection<Conversation> TechnicianConversations { get; set; }
-    public ICollection<Prompt> Prompts { get; set; }
+    public ICollection<ChatbotMessage> Prompts { get; set; }
     public ICollection<Dispute> Disputes { get; set; }
+    public ChatbotConversation ChatbotConversation { get; set; }
 }

@@ -14,7 +14,8 @@ public static class ChatMessageDomainToGetChatMessageResponseMapping
             SenderId = chatMessage.SenderId,
             Content = chatMessage.Content,
             Attachment = chatMessage.Attachment,
-            SentAt = chatMessage.SentAt.ToEgyptTime()
+            SentAt = chatMessage.SentAt.ToEgyptTime(),
+            IsSeen = chatMessage.IsSeen
         };
     }
 }

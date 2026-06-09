@@ -33,6 +33,7 @@ public interface IUnitOfWork : IDisposable
     INotificationRepository Notifications { get; }
     IServiceRequestReadRepository ServiceRequestReadRepository { get; }
     ITechnicianCommissionOwedReadRepository TechnicianCommissionOwedReadRepository { get; }
-    IGenericRepository<Prompt> Prompts { get; }
+    IGenericRepository<ChatbotConversation> ChatbotConversations { get; }
+    IGenericRepository<ChatbotMessage> ChatbotMessages { get; }
     Task<int> SaveChangesAsync();
 }

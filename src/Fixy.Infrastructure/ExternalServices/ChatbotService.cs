@@ -24,7 +24,7 @@ public class ChatbotService : IChatbotService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<string> SendPromptAsync(Prompt prompt)
+    public async Task<string> SendPromptAsync(ChatbotMessage chatbotMessage)
     {
         var currentUser = await _currentUserService.GetCurrentUserAsync();
         var currentUserRole = await _currentUserService.GetCurrentUserRoleAsync();
@@ -34,7 +34,7 @@ public class ChatbotService : IChatbotService
         }
         var requestBody = new SendPromptRequest
         {
-            Query = prompt.UserPrompt,
+            Query = chatbotMessage.UserPrompt,
             Email = currentUser.Email,
             Role = currentUserRole,
             UserId = currentUser.Id.ToString(),
@@ -61,14 +61,14 @@ public class ChatbotService : IChatbotService
         if (result == null)
             throw new HttpRequestException("No response from Flask API.");
 
-        prompt.Name = result.Name;
-        prompt.Description = result.Description;
-        prompt.Response = result.Response;
-        prompt.Code = result.Code;
-        prompt.ResponseTime = DateTimeOffset.UtcNow;
-        prompt.ResponseDuration = result.ResponseTime;
-        prompt.EscalateToSupport = result.EscalateToSupport;
-        prompt.source = result.Source;
+        chatbotMessage.Name = result.Name;
+        chatbotMessage.Description = result.Description;
+        chatbotMessage.Response = result.Response;
+        chatbotMessage.Code = result.Code;
+        chatbotMessage.ResponseTime = DateTimeOffset.UtcNow;
+        chatbotMessage.ResponseDuration = result.ResponseTime;
+        chatbotMessage.EscalateToSupport = result.EscalateToSupport;
+        chatbotMessage.source = result.Source;
 
         await _unitOfWork.SaveChangesAsync();
 

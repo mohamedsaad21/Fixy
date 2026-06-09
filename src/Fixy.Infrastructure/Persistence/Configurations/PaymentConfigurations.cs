@@ -9,5 +9,6 @@ public sealed class PaymentConfigurations : IEntityTypeConfiguration<Payment>
     public void Configure(EntityTypeBuilder<Payment> builder)
     {
         builder.HasIndex(x => x.MerchantOrderId).IsUnique();
+        builder.Property(x => x.Status).HasConversion<string>();
     }
 }

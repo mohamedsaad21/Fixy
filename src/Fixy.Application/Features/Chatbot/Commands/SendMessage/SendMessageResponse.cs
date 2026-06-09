@@ -1,6 +1,6 @@
 ﻿namespace Fixy.Application.Features.Chatbot.Commands.SendPrompt;
 
-public class SendPromptResponse
+public class SendMessageResponse
 {
     public string Response { get; set; }
 }
