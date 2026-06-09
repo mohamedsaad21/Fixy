@@ -1,4 +1,4 @@
-﻿namespace Fixy.Application.Resources;
+namespace Fixy.Application.Resources;
 
 public class SharedResourcesKeys
 {
@@ -198,4 +198,14 @@ public class SharedResourcesKeys
     public const string NotificationType_TechnicianRejected = "NotificationType_TechnicianRejected";
     public const string NotificationType_TechnicianBlocked = "NotificationType_TechnicianBlocked";
     public const string NotificationType_PriceOfferReceived = "NotificationType_PriceOfferReceived";
+    public const string NotificationType_DisputeRaised = "NotificationType_DisputeRaised";
+    public const string NotificationType_DisputeResolved = "NotificationType_DisputeResolved";
+    public const string NotificationType_DisputeUnderReview = "NotificationType_DisputeUnderReview";
+
+    public const string NotificationDisputeRaisedTitle = "NotificationDisputeRaisedTitle";
+    public const string NotificationDisputeRaisedBody = "NotificationDisputeRaisedBody";
+    public const string NotificationDisputeResolvedTitle = "NotificationDisputeResolvedTitle";
+    public const string NotificationDisputeResolvedBody = "NotificationDisputeResolvedBody";
+    public const string NotificationDisputeUnderReviewTitle = "NotificationDisputeUnderReviewTitle";
+    public const string NotificationDisputeUnderReviewBody = "NotificationDisputeUnderReviewBody";
 }

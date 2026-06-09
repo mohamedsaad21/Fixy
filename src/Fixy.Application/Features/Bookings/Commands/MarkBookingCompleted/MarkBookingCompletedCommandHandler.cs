@@ -5,13 +5,14 @@ using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.MarkBookingCompleted;
 
-public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStorageService fileService, INotificationService notificationService, ILogger<MarkBookingCompletedCommandHandler>logger) : IRequestHandler<MarkBookingCompletedCommand, Result>
+public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStorageService fileService, ILogger<MarkBookingCompletedCommandHandler>logger) : IRequestHandler<MarkBookingCompletedCommand, Result>
 {
     public async Task<Result> Handle(MarkBookingCompletedCommand request, CancellationToken cancellationToken)
     {
@@ -63,16 +64,18 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
 
         var customer = booking.ServiceRequest.Customer;
 
-        await notificationService.SendFullNotificationAsync(
-            customer,
-            NotificationType.TechnicianCompleted,
-            SharedResourcesKeys.NotificationTechnicianCompletedTitle,
-            SharedResourcesKeys.NotificationTechnicianCompletedBody
-        );
         await unitOfWork.SaveChangesAsync();
         logger.LogInformation("Booking marked as completed by technician — awaiting customer confirmation. BookingId: {BookingId}, TechnicianId: {TechnicianId}, CustomerId: {CustomerId}, EvidenceImageCount: {EvidenceImageCount}, CompletedAt: {CompletedAt}",
             request.BookingId, currentTechnician.Id, booking.ServiceRequest.Customer.Id,
             uploadedUrls.Count, booking.CompletedAt);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            customer,
+            NotificationType.TechnicianCompleted,
+            SharedResourcesKeys.NotificationTechnicianCompletedTitle,
+            SharedResourcesKeys.NotificationTechnicianCompletedBody
+        ));
+
         return Result.Success();
     }
 }

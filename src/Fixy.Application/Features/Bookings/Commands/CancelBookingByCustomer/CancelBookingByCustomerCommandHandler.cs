@@ -3,15 +3,15 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.CancelBookingByCustomer;
 
 public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
-    IBookingService bookingService, INotificationService notificationService, IStringLocalizer<SharedResources> localizer, ILogger<CancelBookingByCustomerCommandHandler>logger) : IRequestHandler<CancelBookingByCustomerCommand, Result>
+    IBookingService bookingService, ILogger<CancelBookingByCustomerCommandHandler>logger) : IRequestHandler<CancelBookingByCustomerCommand, Result>
 {
     public async Task<Result> Handle(CancelBookingByCustomerCommand request, CancellationToken cancellationToken)
     {
@@ -57,16 +57,18 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
         // send notification to technician
         var technician = booking.Technician;
 
-        await notificationService.SendFullNotificationAsync(
-            technician,
-            NotificationType.BookingCancelledByCustomer,
-            SharedResourcesKeys.NotificationBookingCancelledByCustomerTitle,
-            SharedResourcesKeys.NotificationBookingCancelledByCustomerBody
-        );
         await unitOfWork.SaveChangesAsync();
         logger.LogInformation("Booking cancelled by customer successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, Reason: {Reason}, ReopenServiceRequest: {ReopenServiceRequest}, PreviousCancellationRate: {PreviousCancellationRate}, NewCancellationRate: {NewCancellationRate}",
             request.BookingId, customer.Id, booking.Technician.Id, request.Reason, request.ReopenServiceRequest,
             previousCancellationRate, customer.CancellationRate);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            technician,
+            NotificationType.BookingCancelledByCustomer,
+            SharedResourcesKeys.NotificationBookingCancelledByCustomerTitle,
+            SharedResourcesKeys.NotificationBookingCancelledByCustomerBody
+        ));
+
         return Result.Success();
     }
 }

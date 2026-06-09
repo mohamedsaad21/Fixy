@@ -4,7 +4,6 @@ namespace Fixy.Application.Features.Authentication.DTOs;
 
 public class AuthResponse
 {
-    public bool IsAuthenticated { get; set; }
     public string Message { get; set; }
     public Guid UserId { get; set; }
     public string UserName { get; set; }

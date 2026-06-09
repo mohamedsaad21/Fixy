@@ -68,6 +68,11 @@ public static class Errors
     public static Error CustomerAlreadyActive => new("CustomerAlreadyActive", ErrorType.BadRequest);
     public static Error CustomerFeedbackNotFound => new("CustomerFeedbackNotFound", ErrorType.NotFound);
     public static Error TechnicianFeedbackNotFound => new("TechnicianFeedbackNotFound", ErrorType.NotFound);
-    public static Error CommissionNoneFound => new("CommissionNoneFound", ErrorType.BadRequest);
+    public static Error CommissionNoneFound => new("CommissionNoneFound", ErrorType.BadRequest, "No unpaid commissions found");
+    public static Error DisputeNotFound => new("DisputeNotFound", ErrorType.NotFound);
+    public static Error DisputeAlreadyRaised => new("DisputeAlreadyRaised", ErrorType.BadRequest);
+    public static Error DisputeAlreadyResolved => new("DisputeAlreadyResolved", ErrorType.BadRequest);
+    public static Error BookingNotAwaitingConfirmation => new("BookingNotAwaitingConfirmation", ErrorType.BadRequest);
+    public static Error InvalidDisputeStatus => new("InvalidDisputeStatus", ErrorType.BadRequest);
     public static Error CannotEditWithActiveOffers => new("CannotEditWithActiveOffers", ErrorType.BadRequest);
 }

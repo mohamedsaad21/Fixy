@@ -3,13 +3,14 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.RequestBookingPriceChange;
 
-public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<RequestBookingPriceChangeCommandHandler>logger) : IRequestHandler<RequestBookingPriceChangeCommand, Result>
+public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<RequestBookingPriceChangeCommandHandler>logger) : IRequestHandler<RequestBookingPriceChangeCommand, Result>
 {
     public async Task<Result> Handle(RequestBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
@@ -65,16 +66,18 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         var customer = booking.ServiceRequest.Customer;
 
-        await notificationService.SendFullNotificationAsync(
-            customer,
-            NotificationType.PriceChangeRequested,
-            SharedResourcesKeys.NotificationPriceChangeRequestedTitle,
-            SharedResourcesKeys.NotificationPriceChangeRequestedBody
-        );
         await unitOfWork.SaveChangesAsync();
         logger.LogInformation("Price change requested successfully. BookingId: {BookingId}, TechnicianId: {TechnicianId}, CustomerId: {CustomerId}, OriginalPrice: {OriginalPrice}, ProposedPrice: {ProposedPrice}",
             request.BookingId, currentTechnician.Id, booking.ServiceRequest.Customer.Id,
             booking.AgreedPrice, request.NewProposedPrice);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            customer,
+            NotificationType.PriceChangeRequested,
+            SharedResourcesKeys.NotificationPriceChangeRequestedTitle,
+            SharedResourcesKeys.NotificationPriceChangeRequestedBody
+        ));
+        
         return Result.Success();
     }
 }

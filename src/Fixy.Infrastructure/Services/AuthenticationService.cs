@@ -7,16 +7,13 @@ using Fixy.Domain.Entities.Identity;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
 using Google.Apis.Auth;
-using Google.Apis.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -174,7 +171,6 @@ public class AuthenticationService : IAuthenticationService
         };
         authResponse.Role = roles.FirstOrDefault();
         authResponse.Token = accessToken;
-        authResponse.IsAuthenticated = true;
         return authResponse;
     }
 

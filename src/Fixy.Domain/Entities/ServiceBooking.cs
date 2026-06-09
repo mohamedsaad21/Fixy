@@ -37,5 +37,6 @@ public class ServiceBooking : BaseEntity
     public CustomerFeedback CustomerFeedback { get; set; }
     public TechnicianFeedback TechnicianFeedback { get; set; }
     public Payout Payout { get; set; }
+    public Dispute? Dispute { get; set; }
     public List<ServiceBookingImage> ServiceBookingImages { get; set; }
 }

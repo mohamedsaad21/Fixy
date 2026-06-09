@@ -3,30 +3,28 @@ using Fixy.Application.Contracts.ExternalServices;
 using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.ServiceRequests.Commands.DeleteServiceRequestImages;
 
-public sealed class DeleteServiceRequestImageByIdCommandHandler : IRequestHandler<DeleteServiceRequestImageByIdCommand, Result>
+public sealed class DeleteServiceRequestImageByIdCommandHandler(IUnitOfWork unitOfWork, IStorageService fileService, ILogger<DeleteServiceRequestImageByIdCommandHandler> logger) : IRequestHandler<DeleteServiceRequestImageByIdCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IStorageService _fileService;
-
-    public DeleteServiceRequestImageByIdCommandHandler(IUnitOfWork unitOfWork, IStorageService fileService)
-    {
-        _unitOfWork = unitOfWork;
-        _fileService = fileService;
-    }
-
     public async Task<Result> Handle(DeleteServiceRequestImageByIdCommand request, CancellationToken cancellationToken)
     {
-        var image = await _unitOfWork.ServiceRequestImages.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.ImageId);
+        logger.LogInformation("Attempting to delete service request image. ImageId: {ImageId}", request.ImageId);
+        
+        var image = await unitOfWork.ServiceRequestImages.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == request.ImageId);
 
         if (image == null)
+        {
+            logger.LogWarning("Service request image deletion failed — image not found. ImageId: {ImageId}", request.ImageId);
             return Errors.ImageNotFound;
+        }
 
-        await _unitOfWork.ServiceRequestImages.DeleteAsync(image);
-        await _fileService.DeleteAsync(image.ImageUrl);
-        await _unitOfWork.SaveChangesAsync();
+        await fileService.DeleteAsync(image.ImageUrl);
+        await unitOfWork.ServiceRequestImages.DeleteAsync(image);
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Service request image deleted successfully. ImageId: {ImageId}, ImageUrl: {ImageUrl}", image.Id, image.ImageUrl);
         return Result.Success();
     }
 }

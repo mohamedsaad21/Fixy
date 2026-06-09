@@ -152,4 +152,15 @@ public class BookingsController : AppControllerBase
     {
         return ToActionResult(await Mediator.Send(command));
     }
+
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [Authorize(Roles = Roles.Customer)]
+    [HttpPost(Router.BookingRouting.DisputeBookingCompletion)]
+    public async Task<IActionResult> DisputeBookingCompletion([FromBody] Fixy.Application.Features.Bookings.Commands.DisputeBookingCompletion.DisputeBookingCompletionCommand command)
+    {
+        return ToActionResult(await Mediator.Send(command));
+    }
 }

@@ -8,14 +8,18 @@ using Fixy.Domain.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.ServiceRequests.Queries.GetMyRequests;
 
-public sealed class GetMyRequestPaginatedListQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStringLocalizer<SharedResources> localizer) : IRequestHandler<GetMyRequestPaginatedListQuery, Result<PaginatedResult<GetMyRequestPaginatedListResponse>>>
+public sealed class GetMyRequestPaginatedListQueryHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, IStringLocalizer<SharedResources> localizer, ILogger<GetMyRequestPaginatedListQueryHandler> logger) : IRequestHandler<GetMyRequestPaginatedListQuery, Result<PaginatedResult<GetMyRequestPaginatedListResponse>>>
 {
     public async Task<Result<PaginatedResult<GetMyRequestPaginatedListResponse>>> Handle(GetMyRequestPaginatedListQuery request, CancellationToken cancellationToken)
     {
-        var currentCustomerId = await currentUserService.GetCurrentUserId(); 
+        var currentCustomerId = await currentUserService.GetCurrentUserId();
+
+        logger.LogInformation("Customer fetching their pending service requests. CustomerId: {CustomerId}, Page: {PageNumber}, PageSize: {PageSize}, OrderBy: {OrderBy}, Search: {Search}", currentCustomerId, request.PageNumber, request.PageSize, request.OrderBy, request.Search);
+
         var myServiceRequests = unitOfWork.ServiceRequests.GetTableNoTracking()
             .Where(x => x.CustomerId == currentCustomerId && x.Status == ServiceRequestStatus.Pending)
             .Include(x => x.Customer)
@@ -34,7 +38,10 @@ public sealed class GetMyRequestPaginatedListQueryHandler(IUnitOfWork unitOfWork
             myServiceRequests = myServiceRequests.Where(x => x.Description.Contains(request.Search));
         }
 
-        var PaginatedList = await myServiceRequests.Select(x => x.ToGetMyRequestPaginatedListResponse(localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);
-        return PaginatedList;
+        var result = await myServiceRequests.Select(x => x.ToGetMyRequestPaginatedListResponse(localizer)).ToPaginatedListAsync(request.PageNumber, request.PageSize);
+        
+        logger.LogInformation("Customer pending service requests fetched successfully. CustomerId: {CustomerId}, TotalCount: {TotalCount}, Page: {PageNumber}, PageSize: {PageSize}", currentCustomerId, result.TotalCount, result.CurrentPage, result.PageSize);
+        
+        return result;
     }
 }

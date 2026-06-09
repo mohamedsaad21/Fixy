@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Features.Payments.Commands.CreatePayment.Responses;
 using Fixy.Domain.Entities.Payments;
@@ -19,9 +19,7 @@ public sealed class CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPayment
         {
             logger.LogInformation("Creating payment for booking {BookingId}", request.BookingId);
 
-            // 1. Get booking details
-            var booking = await unitOfWork.Bookings.GetTableAsTracking()
-                .FirstOrDefaultAsync(b => b.Id == request.BookingId, cancellationToken);
+            var booking = await unitOfWork.Bookings.GetTableAsTracking().FirstOrDefaultAsync(b => b.Id == request.BookingId, cancellationToken);
 
             if (booking == null)
             {
@@ -29,28 +27,76 @@ public sealed class CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPayment
                 return Errors.BookingNotFound;
             }
 
-            // 2. Validate booking status
             if (booking.Status != ServiceBookingStatus.AwaitingPayment)
             {
                 logger.LogWarning("Booking {BookingId} is not in AwaitingPayment status", request.BookingId);
                 return Errors.BookingNotReadyForPayment;
             }
 
-            // 3. Check if payment already exists
-            var existingPayment = await unitOfWork.Payments.GetTableNoTracking()
+            var existingPayment = await unitOfWork.Payments.GetTableAsTracking()
                 .FirstOrDefaultAsync(p => p.ServiceBookingId == request.BookingId
-                                       && p.Status == PaymentStatus.Success,
+                                       && p.Status != PaymentStatus.Failed,
                                      cancellationToken);
 
             if (existingPayment != null)
-                return Errors.PaymentAlreadyCompleted;
+            {
+                if (existingPayment.Status == PaymentStatus.Success)
+                    return Errors.PaymentAlreadyCompleted;
 
-            // 4. Calculate amounts
+                if (existingPayment.Status == PaymentStatus.Pending)
+                {
+                    var requestedMethod = (PaymentMethod)request.PaymentMethod;
+
+                    if (requestedMethod == PaymentMethod.Cash)
+                    {
+                        logger.LogInformation("Switching pending payment to Cash for booking {BookingId}", request.BookingId);
+                        existingPayment.Method = PaymentMethod.Cash;
+                        existingPayment.PaymentIntentId = null;
+                        existingPayment.MerchantOrderId = $"BK-{request.BookingId.ToString().ToUpper()}";
+                        await unitOfWork.SaveChangesAsync();
+                        return new CreatePaymentResponse
+                        {
+                            PaymentId = existingPayment.Id,
+                            PaymentMethod = PaymentMethod.Cash,
+                            Amount = existingPayment.TotalAmount,
+                            ClientSecret = null,
+                            OrderReference = existingPayment.MerchantOrderId,
+                        };
+                    }
+
+                    if (requestedMethod == PaymentMethod.Card
+                        && existingPayment.Method == PaymentMethod.Card
+                        && !string.IsNullOrEmpty(existingPayment.PaymentIntentId))
+                    {
+                        logger.LogInformation("Resuming existing pending card payment for booking {BookingId}", request.BookingId);
+
+                        var clientSecret = await GetExistingClientSecretAsync(existingPayment.PaymentIntentId);
+
+                        if (clientSecret != null)
+                        {
+                            return new CreatePaymentResponse
+                            {
+                                PaymentId = existingPayment.Id,
+                                PaymentMethod = PaymentMethod.Card,
+                                Amount = existingPayment.TotalAmount,
+                                ClientSecret = clientSecret,
+                                PaymentIntentId = existingPayment.PaymentIntentId,
+                                OrderReference = existingPayment.MerchantOrderId,
+                            };
+                        }
+
+                        logger.LogWarning("Could not retrieve ClientSecret, creating new PaymentIntent for booking {BookingId}", request.BookingId);
+                    }
+
+                    existingPayment.Status = PaymentStatus.Failed;
+                    await unitOfWork.SaveChangesAsync();
+                }
+            }
+
             var totalAmount = booking.AgreedPrice;
             var platformCommission = totalAmount * PLATFORM_COMMISSION_RATE;
             var technicianAmount = totalAmount - platformCommission;
 
-            // 5. Create payment record
             var payment = new Payment
             {
                 ServiceBookingId = request.BookingId,
@@ -62,17 +108,14 @@ public sealed class CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPayment
                 Status = PaymentStatus.Pending,
             };
 
-            // 6. Build response
             var response = new CreatePaymentResponse
             {
                 PaymentMethod = (PaymentMethod)request.PaymentMethod,
                 Amount = totalAmount,
             };
 
-            // 7. Handle based on payment method
             if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Card)
             {
-                // Create Stripe PaymentIntent → returns ClientSecret for Angular Elements
                 var paymentResult = await paymentService.CreatePaymentUrlAsync(
                     amount: totalAmount,
                     referenceId: request.BookingId,
@@ -89,24 +132,20 @@ public sealed class CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPayment
                     return Errors.PaymentCreationFailed;
                 }
 
-                // Store Stripe references on the payment record
                 payment.MerchantOrderId = paymentResult.MerchantOrderId;
                 payment.PaymentIntentId = paymentResult.PaymentIntentId;
 
-                // Return ClientSecret to Angular — no redirect URL needed
                 response.ClientSecret = paymentResult.ClientSecret;
                 response.PaymentIntentId = paymentResult.PaymentIntentId;
                 response.OrderReference = paymentResult.MerchantOrderId;
             }
             else if ((PaymentMethod)request.PaymentMethod == PaymentMethod.Cash)
             {
-                // Cash payments don't need Stripe — just assign a reference
                 payment.MerchantOrderId = $"BK-{request.BookingId.ToString().ToUpper()}";
                 response.ClientSecret = null;
                 response.OrderReference = payment.MerchantOrderId;
             }
 
-            // 8. Save payment
             await unitOfWork.Payments.AddAsync(payment);
             response.PaymentId = payment.Id;
 
@@ -121,6 +160,24 @@ public sealed class CreatePaymentCommandHandler(IUnitOfWork unitOfWork, IPayment
         {
             logger.LogError(ex, "Error creating payment for booking {BookingId}", request.BookingId);
             return Errors.PaymentCreationFailed;
+        }
+    }
+
+    private async Task<string?> GetExistingClientSecretAsync(string? paymentIntentId)
+    {
+        if (string.IsNullOrEmpty(paymentIntentId))
+            return null;
+
+        try
+        {
+            var service = new Stripe.PaymentIntentService();
+            var paymentIntent = await service.GetAsync(paymentIntentId);
+            return paymentIntent.ClientSecret;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to retrieve existing PaymentIntent: {Id}", paymentIntentId);
+            return null;
         }
     }
 }

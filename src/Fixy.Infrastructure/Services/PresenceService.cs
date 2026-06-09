@@ -1,150 +1,75 @@
-﻿//using Fixy.Application.Contracts.Services;
-//using StackExchange.Redis;
-
-//namespace Fixy.Infrastructure.Services;
-
-//public class PresenceService : IPresenceService
-//{
-//    private readonly IConnectionMultiplexer _redis;
-
-//    public PresenceService(IConnectionMultiplexer redis)
-//    {
-//        _redis = redis;
-//    }
-
-//    public async Task SetOnlineAsync(Guid userId, string connectionId)
-//    {
-//        var db = _redis.GetDatabase();
-
-//        // Add connectionId to the user's connection set
-//        await db.SetAddAsync($"online:{userId}", connectionId);
-//        await db.KeyExpireAsync($"online:{userId}", TimeSpan.FromHours(24));
-
-//        // Store reverse mapping: connectionId → userId
-//        // So we can look up userId in SetOfflineAsync using only connectionId
-//        await db.StringSetAsync(
-//            $"conn:{connectionId}",
-//            userId.ToString(),
-//            TimeSpan.FromHours(24)
-//        );
-//    }
-
-//    public async Task SetOfflineAsync(string connectionId)
-//    {
-//        var db = _redis.GetDatabase();
-
-//        // Look up which user owns this connectionId
-//        var userIdStr = await db.StringGetAsync($"conn:{connectionId}");
-//        if (userIdStr.IsNullOrEmpty) return;
-
-//        var userId = Guid.Parse(userIdStr.ToString()!);
-
-//        // Remove this specific connection from the user's set
-//        await db.SetRemoveAsync($"online:{userId}", connectionId);
-
-//        // Delete the reverse mapping — no longer needed
-//        await db.KeyDeleteAsync($"conn:{connectionId}");
-//    }
-
-//    public async Task<bool> IsOnlineAsync(Guid userId)
-//    {
-//        var db = _redis.GetDatabase();
-
-//        // User is online only if they have at least one active connection
-//        // KeyExistsAsync is wrong here — an empty set key can still exist
-//        var connectionCount = await db.SetLengthAsync($"online:{userId}");
-//        return connectionCount > 0;
-//    }
-
-//    public async Task JoinConversationAsync(Guid userId, Guid conversationId)
-//    {
-//        var db = _redis.GetDatabase();
-//        await db.StringSetAsync(
-//            $"inconvo:{userId}",
-//            conversationId.ToString(),
-//            TimeSpan.FromHours(24)
-//        );
-//    }
-
-//    public async Task LeaveConversationAsync(Guid userId)
-//    {
-//        var db = _redis.GetDatabase();
-//        await db.KeyDeleteAsync($"inconvo:{userId}");
-//    }
-
-//    public async Task<bool> IsInConversationAsync(Guid userId, Guid conversationId)
-//    {
-//        var db = _redis.GetDatabase();
-//        var current = await db.StringGetAsync($"inconvo:{userId}");
-//        return current == conversationId.ToString();
-//    }
-//}
-
-using Fixy.Application.Contracts.Services;
-using System.Collections.Concurrent;
+﻿using Fixy.Application.Contracts.Services;
+using StackExchange.Redis;
 
 namespace Fixy.Infrastructure.Services;
 
 public class PresenceService : IPresenceService
 {
-    private static readonly ConcurrentDictionary<Guid, HashSet<string>> _userConnections = new();
-    private static readonly ConcurrentDictionary<string, Guid> _connectionUser = new();
-    private static readonly ConcurrentDictionary<Guid, Guid> _userConversation = new();
-    private static readonly object _lock = new();
+    private readonly IConnectionMultiplexer _redis;
 
-    public Task SetOnlineAsync(Guid userId, string connectionId)
+    public PresenceService(IConnectionMultiplexer redis)
     {
-        lock (_lock)
-        {
-            if (!_userConnections.ContainsKey(userId))
-                _userConnections[userId] = new HashSet<string>();
-
-            _userConnections[userId].Add(connectionId);
-            _connectionUser[connectionId] = userId;
-        }
-        return Task.CompletedTask;
+        _redis = redis;
     }
 
-    public Task SetOfflineAsync(string connectionId)
+    public async Task SetOnlineAsync(Guid userId, string connectionId)
     {
-        lock (_lock)
-        {
-            if (_connectionUser.TryRemove(connectionId, out var userId))
-            {
-                if (_userConnections.TryGetValue(userId, out var connections))
-                {
-                    connections.Remove(connectionId);
-                    if (connections.Count == 0)
-                        _userConnections.TryRemove(userId, out _);
-                }
-            }
-        }
-        return Task.CompletedTask;
+        var db = _redis.GetDatabase();
+
+        // Add connectionId to the user's connection set
+        await db.SetAddAsync($"online:{userId}", connectionId);
+        await db.KeyExpireAsync($"online:{userId}", TimeSpan.FromHours(24));
+
+        // Store reverse mapping: connectionId → userId
+        // So we can look up userId in SetOfflineAsync using only connectionId
+        await db.StringSetAsync($"conn:{connectionId}", userId.ToString(), TimeSpan.FromHours(24)
+        );
     }
 
-    public Task<bool> IsOnlineAsync(Guid userId)
+    public async Task SetOfflineAsync(string connectionId)
     {
-        var isOnline = _userConnections.TryGetValue(userId, out var connections)
-                       && connections.Count > 0;
-        return Task.FromResult(isOnline);
+        var db = _redis.GetDatabase();
+
+        // Look up which user owns this connectionId
+        var userIdStr = await db.StringGetAsync($"conn:{connectionId}");
+        if (userIdStr.IsNullOrEmpty) return;
+
+        var userId = Guid.Parse(userIdStr.ToString()!);
+
+        // Remove this specific connection from the user's set
+        await db.SetRemoveAsync($"online:{userId}", connectionId);
+
+        // Delete the reverse mapping — no longer needed
+        await db.KeyDeleteAsync($"conn:{connectionId}");
     }
 
-    public Task JoinConversationAsync(Guid userId, Guid conversationId)
+    public async Task<bool> IsOnlineAsync(Guid userId)
     {
-        _userConversation[userId] = conversationId;
-        return Task.CompletedTask;
+        var db = _redis.GetDatabase();
+
+        // User is online only if they have at least one active connection
+        // KeyExistsAsync is wrong here — an empty set key can still exist
+        var connectionCount = await db.SetLengthAsync($"online:{userId}");
+        return connectionCount > 0;
     }
 
-    public Task LeaveConversationAsync(Guid userId)
+    public async Task JoinConversationAsync(Guid userId, Guid conversationId)
     {
-        _userConversation.TryRemove(userId, out _);
-        return Task.CompletedTask;
+        var db = _redis.GetDatabase();
+        await db.StringSetAsync($"inconvo:{userId}", conversationId.ToString(), TimeSpan.FromHours(24)
+        );
     }
 
-    public Task<bool> IsInConversationAsync(Guid userId, Guid conversationId)
+    public async Task LeaveConversationAsync(Guid userId)
     {
-        var result = _userConversation.TryGetValue(userId, out var current)
-                     && current == conversationId;
-        return Task.FromResult(result);
+        var db = _redis.GetDatabase();
+        await db.KeyDeleteAsync($"inconvo:{userId}");
+    }
+
+    public async Task<bool> IsInConversationAsync(Guid userId, Guid conversationId)
+    {
+        var db = _redis.GetDatabase();
+        var current = await db.StringGetAsync($"inconvo:{userId}");
+        return current == conversationId.ToString();
     }
 }
