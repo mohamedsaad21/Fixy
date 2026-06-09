@@ -27,13 +27,23 @@ public class NotificationHub : Hub
             await Groups.AddToGroupAsync(Context.ConnectionId, $"user_{userId}");
             await _presenceService.SetOnlineAsync(userGuid, Context.ConnectionId);
 
-            // Notify the other party in any open conversations
             var relatedUserIds = await GetRelatedUserIdsAsync(userGuid);
 
             foreach (var relatedId in relatedUserIds)
             {
+                // Notify related users that THIS user is now online
                 await Clients.Group($"user_{relatedId}")
                     .SendAsync("UserOnline", new { UserId = userGuid });
+
+                var isRelatedOnline = await _presenceService.IsOnlineAsync(relatedId);
+                if (isRelatedOnline)
+                {
+                    await Clients.Caller.SendAsync("UserOnline", new { UserId = relatedId });
+                }
+                else
+                {
+                    await Clients.Caller.SendAsync("UserOffline", new { UserId = relatedId });
+                }
             }
         }
         await base.OnConnectedAsync();
@@ -68,10 +78,10 @@ public class NotificationHub : Hub
             .GetTableNoTracking()
             .Include(x => x.ServiceRequest)
             .Where(x => (x.TechnicianId == userId || x.ServiceRequest.CustomerId == userId)
-            && x.Status != ServiceBookingStatus.CancelledByCustomer
-            && x.Status != ServiceBookingStatus.CancelledByTechnician
-            && x.Status != ServiceBookingStatus.CustomerCompleted
-            && x.Status != ServiceBookingStatus.TechnicianCompleted)
+            && (x.Status == ServiceBookingStatus.InProgress
+            || x.Status == ServiceBookingStatus.AwaitingPriceChangeApproval
+            || x.Status == ServiceBookingStatus.AwaitingCustomerConfirmationForCompletion
+            || x.Status == ServiceBookingStatus.AwaitingPayment))
             .Select(x => x.TechnicianId == userId
                 ? x.ServiceRequest.CustomerId
                 : x.TechnicianId)

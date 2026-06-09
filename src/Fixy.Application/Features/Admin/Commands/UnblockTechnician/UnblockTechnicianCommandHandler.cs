@@ -3,13 +3,14 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.UnblockTechnician;
 
-public sealed class UnblockTechnicianCommandHandler(ICurrentUserService currentUserService, IUnitOfWork unitOfWork, INotificationService notificationService, ILogger<UnblockTechnicianCommandHandler> logger) : IRequestHandler<UnblockTechnicianCommand, Result>
+public sealed class UnblockTechnicianCommandHandler(ICurrentUserService currentUserService, IUnitOfWork unitOfWork, ILogger<UnblockTechnicianCommandHandler> logger) : IRequestHandler<UnblockTechnicianCommand, Result>
 {
     public async Task<Result> Handle(UnblockTechnicianCommand request, CancellationToken cancellationToken)
     {
@@ -42,15 +43,16 @@ public sealed class UnblockTechnicianCommandHandler(ICurrentUserService currentU
         technician.BlockedAt = null;
         technician.BlockedBy = null;
 
-        await notificationService.SendFullNotificationAsync(
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Technician successfully unblocked. TechnicianId: {TechnicianId}, AdminId: {AdminId}", request.TechnicianId, currentUser.Id);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             technician,
             NotificationType.TechnicianUnblocked,
             SharedResourcesKeys.NotificationTechnicianUnblockedTitle,
             SharedResourcesKeys.NotificationTechnicianUnblockedBody
-        );
+        ));
 
-        await unitOfWork.SaveChangesAsync();
-        logger.LogInformation("Technician successfully unblocked. TechnicianId: {TechnicianId}, AdminId: {AdminId}", request.TechnicianId, currentUser.Id);
         return Result.Success();
     }
 }

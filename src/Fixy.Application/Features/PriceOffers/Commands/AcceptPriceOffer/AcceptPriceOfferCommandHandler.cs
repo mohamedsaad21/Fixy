@@ -4,15 +4,14 @@ using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.PriceOffers.Commands.AcceptPriceOffer;
 
-public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService,
-    INotificationService notificationService, IStringLocalizer<SharedResources> localizer, ILogger<AcceptPriceOfferCommandHandler> logger) : IRequestHandler<AcceptPriceOfferCommand, Result<Guid>>
+public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<AcceptPriceOfferCommandHandler> logger) : IRequestHandler<AcceptPriceOfferCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(AcceptPriceOfferCommand request, CancellationToken cancellationToken)
     {
@@ -53,16 +52,18 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
         
         var technician = priceOffer.Technician;
 
-        await notificationService.SendFullNotificationAsync(
-            technician,
-            NotificationType.PriceOfferAccepted,
-            SharedResourcesKeys.NotificationPriceOfferAcceptedTitle,
-            SharedResourcesKeys.NotificationPriceOfferAcceptedBody
-        );
         await unitOfWork.SaveChangesAsync();
         logger.LogInformation("Price offer accepted — booking created successfully. PriceOfferId: {PriceOfferId}, BookingId: {BookingId}, ServiceRequestId: {ServiceRequestId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, AgreedPrice: {AgreedPrice}, ScheduledDateTime: {ScheduledDateTime}",
             priceOffer.Id, booking.Id, serviceRequest.Id, currentCustomer.Id,
             priceOffer.TechnicianId, booking.AgreedPrice, booking.ScheduledDateTime);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            technician,
+            NotificationType.PriceOfferAccepted,
+            SharedResourcesKeys.NotificationPriceOfferAcceptedTitle,
+            SharedResourcesKeys.NotificationPriceOfferAcceptedBody
+        ));
+
         return booking.Id;
     }
 }

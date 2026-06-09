@@ -4,14 +4,14 @@ using Fixy.Application.Mapping.PriceOffers.Commands;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.PriceOffers.Commands.CreatePriceOffer;
 
-public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, 
-    INotificationService notificationService, ILogger<CreatePriceOfferCommandHandler> logger) : IRequestHandler<CreatePriceOfferCommand, Result<Guid>>
+public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<CreatePriceOfferCommandHandler> logger) : IRequestHandler<CreatePriceOfferCommand, Result<Guid>>
 {
     public async Task<Result<Guid>> Handle(CreatePriceOfferCommand request, CancellationToken cancellationToken)
     {
@@ -62,16 +62,17 @@ public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
 
         var customer = serviceRequest.Customer;
 
-        await notificationService.SendFullNotificationAsync(
-            customer,
-            NotificationType.PriceOfferReceived,
-            SharedResourcesKeys.NotificationPriceOfferReceivedTitle,
-            SharedResourcesKeys.NotificationPriceOfferReceivedBody
-        );
         await unitOfWork.SaveChangesAsync();
 
         logger.LogInformation("Price offer created successfully. PriceOfferId: {PriceOfferId}, TechnicianId: {TechnicianId}, ServiceRequestId: {ServiceRequestId}, CustomerId: {CustomerId}, OfferedPrice: {OfferedPrice}",
             priceOffer.Id, technician.Id, serviceRequest.Id, serviceRequest.Customer.Id, priceOffer.Price);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            customer,
+            NotificationType.PriceOfferReceived,
+            SharedResourcesKeys.NotificationPriceOfferReceivedTitle,
+            SharedResourcesKeys.NotificationPriceOfferReceivedBody
+        ));
 
         return priceOffer.Id;
     }

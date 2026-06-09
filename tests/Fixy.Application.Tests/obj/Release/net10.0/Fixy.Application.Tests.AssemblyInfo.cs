@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Fixy.Application.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+324c433e0410a33ab939744c008ea71a1fe40bb3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9768ac908cd2ec03131f603a8157e907726a819c")]
 [assembly: System.Reflection.AssemblyProductAttribute("Fixy.Application.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Fixy.Application.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

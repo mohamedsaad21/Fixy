@@ -38,3 +38,6 @@ appsettings.Local.json
 # Other
 *.vsidx
 *.cache
+.vscode/
+.gitignore
+Fixy.slnx

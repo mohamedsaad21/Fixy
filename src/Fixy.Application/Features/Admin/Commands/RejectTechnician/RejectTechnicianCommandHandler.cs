@@ -3,13 +3,14 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.RejectTechnician;
 
-public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<RejectTechnicianCommandHandler> logger) : IRequestHandler<RejectTechnicianCommand, Result>
+public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<RejectTechnicianCommandHandler> logger) : IRequestHandler<RejectTechnicianCommand, Result>
 {
     public async Task<Result> Handle(RejectTechnicianCommand request, CancellationToken cancellationToken)
     {
@@ -41,14 +42,16 @@ public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
         technician.RejectionReason = request.Reason;
         technician.RejectedAt = DateTime.UtcNow;
 
-        await notificationService.SendFullNotificationAsync(
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Technician successfully rejected. TechnicianId: {TechnicianId}, AdminId: {AdminId}, Reason: {Reason}", request.TechnicianId, currentUser.Id, request.Reason);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             technician,
             NotificationType.TechnicianRejected,
             SharedResourcesKeys.NotificationTechnicianRejectedTitle,
             SharedResourcesKeys.NotificationTechnicianRejectedBody
-        );
-        await unitOfWork.SaveChangesAsync();
-        logger.LogInformation("Technician successfully rejected. TechnicianId: {TechnicianId}, AdminId: {AdminId}, Reason: {Reason}", request.TechnicianId, currentUser.Id, request.Reason);
+        ));
+
         return Result.Success();
     }
 }

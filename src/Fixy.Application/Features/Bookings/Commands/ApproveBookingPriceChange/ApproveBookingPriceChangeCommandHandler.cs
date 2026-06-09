@@ -3,13 +3,14 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.ApproveBookingPriceChange;
 
-public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<ApproveBookingPriceChangeCommandHandler>logger) : IRequestHandler<ApproveBookingPriceChangeCommand, Result>
+public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<ApproveBookingPriceChangeCommandHandler>logger) : IRequestHandler<ApproveBookingPriceChangeCommand, Result>
 {
     public async Task<Result> Handle(ApproveBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
@@ -52,14 +53,16 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
 
         var technician = booking.Technician;
 
-        await notificationService.SendFullNotificationAsync(
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Price change approved successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, PreviousPrice: {PreviousPrice}, ApprovedPrice: {ApprovedPrice}", request.BookingId, currentCustomer.Id, booking.Technician.Id, previousPrice, booking.AgreedPrice);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             technician,
             NotificationType.PriceChangeApproved,
             SharedResourcesKeys.NotificationPriceChangeApprovedTitle,
             SharedResourcesKeys.NotificationPriceChangeApprovedBody
-        );
-        await unitOfWork.SaveChangesAsync();
-        logger.LogInformation("Price change approved successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, PreviousPrice: {PreviousPrice}, ApprovedPrice: {ApprovedPrice}", request.BookingId, currentCustomer.Id, booking.Technician.Id, previousPrice, booking.AgreedPrice);
+        ));
+
         return Result.Success();
     }
 }

@@ -54,7 +54,7 @@ public static class ServiceRegisteration
         });
         // Redis
         services.AddMemoryCache();
-        //services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]!));
+        services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Azure:Redis:ConnectionString"]!));
         // Google External Login
         var google = configuration.GetSection("Authentication:Google");
 

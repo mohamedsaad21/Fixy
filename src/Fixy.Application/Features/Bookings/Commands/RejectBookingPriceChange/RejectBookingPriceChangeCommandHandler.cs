@@ -1,17 +1,16 @@
 using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
-using Fixy.Application.Mapping.Bookings.Queries;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
-using Microsoft.AspNetCore.DataProtection.XmlEncryption;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.RejectBookingPriceChange;
 
-public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<RejectBookingPriceChangeCommandHandler>logger) : IRequestHandler<RejectBookingPriceChangeCommand, Result>
+public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<RejectBookingPriceChangeCommandHandler>logger) : IRequestHandler<RejectBookingPriceChangeCommand, Result>
 {
     public async Task<Result> Handle(RejectBookingPriceChangeCommand request, CancellationToken cancellationToken)
     {
@@ -45,17 +44,18 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
 
         var technician = booking.Technician;
 
-        await notificationService.SendFullNotificationAsync(
-            technician,
-            NotificationType.PriceChangeRejected,
-            SharedResourcesKeys.NotificationPriceChangeRejectedTitle,
-            SharedResourcesKeys.NotificationPriceChangeRejectedBody
-        );
         await unitOfWork.SaveChangesAsync();
 
         logger.LogInformation("Price change rejected by customer — booking resumed at original price. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, RejectedProposedPrice: {RejectedProposedPrice}, ResumedAtPrice: {ResumedAtPrice}",
             request.BookingId, currentCustomer.Id, booking.Technician.Id,
             rejectedProposedPrice, booking.AgreedPrice);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            technician,
+            NotificationType.PriceChangeRejected,
+            SharedResourcesKeys.NotificationPriceChangeRejectedTitle,
+            SharedResourcesKeys.NotificationPriceChangeRejectedBody
+        ));
 
         return Result.Success();
     }

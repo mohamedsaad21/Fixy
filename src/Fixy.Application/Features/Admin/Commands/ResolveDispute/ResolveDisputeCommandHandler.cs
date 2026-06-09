@@ -3,13 +3,14 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.ResolveDispute;
 
-public class ResolveDisputeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<ResolveDisputeCommandHandler> logger) : IRequestHandler<ResolveDisputeCommand, Result>
+public class ResolveDisputeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<ResolveDisputeCommandHandler> logger) : IRequestHandler<ResolveDisputeCommand, Result>
 {
     public async Task<Result> Handle(ResolveDisputeCommand request, CancellationToken cancellationToken)
     {
@@ -64,23 +65,22 @@ public class ResolveDisputeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSe
             dispute.ServiceBooking.Status = ServiceBookingStatus.AwaitingPayment;
         }
 
-        await notificationService.SendFullNotificationAsync(
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Dispute resolved by admin. DisputeId: {DisputeId}, AdminId: {AdminId}, Outcome: {Outcome}", request.DisputeId, currentAdmin.Id, request.Outcome);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             dispute.ServiceBooking.ServiceRequest.Customer,
             NotificationType.DisputeResolved,
             SharedResourcesKeys.NotificationDisputeResolvedTitle,
             SharedResourcesKeys.NotificationDisputeResolvedBody
-        );
+        ));
 
-        await notificationService.SendFullNotificationAsync(
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             dispute.ServiceBooking.Technician,
             NotificationType.DisputeResolved,
             SharedResourcesKeys.NotificationDisputeResolvedTitle,
             SharedResourcesKeys.NotificationDisputeResolvedBody
-        );
-
-        await unitOfWork.SaveChangesAsync();
-
-        logger.LogInformation("Dispute resolved by admin. DisputeId: {DisputeId}, AdminId: {AdminId}, Outcome: {Outcome}", request.DisputeId, currentAdmin.Id, request.Outcome);
+        ));
 
         return Result.Success();
     }

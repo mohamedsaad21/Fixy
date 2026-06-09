@@ -3,13 +3,14 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.UnblockCustomer;
 
-public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<UnblockCustomerCommandHandler> logger) : IRequestHandler<UnblockCustomerCommand, Result>
+public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<UnblockCustomerCommandHandler> logger) : IRequestHandler<UnblockCustomerCommand, Result>
 {
     public async Task<Result> Handle(UnblockCustomerCommand request, CancellationToken cancellationToken)
     {
@@ -42,15 +43,16 @@ public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurre
         customer.BlockedAt = null;
         customer.BlockedBy = null;
 
-        await notificationService.SendFullNotificationAsync(
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Customer successfully unblocked. CustomerId: {CustomerId}, AdminId: {AdminId}", request.CustomerId, currentUser.Id);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             customer,
             NotificationType.CustomerUnblocked,
             SharedResourcesKeys.NotificationCustomerUnblockedTitle,
             SharedResourcesKeys.NotificationCustomerUnblockedBody
-        );
+        ));
 
-        await unitOfWork.SaveChangesAsync();
-        logger.LogInformation("Customer successfully unblocked. CustomerId: {CustomerId}, AdminId: {AdminId}", request.CustomerId, currentUser.Id);
         return Result.Success();
     }
 }

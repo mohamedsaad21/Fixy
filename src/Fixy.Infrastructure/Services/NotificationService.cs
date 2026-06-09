@@ -1,4 +1,5 @@
 ﻿using FirebaseAdmin.Messaging;
+using Fixy.Application.Common.DTOs.Notifications;
 using Fixy.Application.Common.Helpers;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
@@ -9,44 +10,47 @@ using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Fixy.Infrastructure.Services;
 
 public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitOfWork unitOfWork, 
-    IStringLocalizer<SharedResources> localizer) : INotificationService
+    IStringLocalizer<SharedResources> localizer, ILogger<NotificationService> logger) : INotificationService
 {
     public async Task SendFullNotificationAsync(ApplicationUser user, NotificationType type, string titleKey, string bodyKey)
     {
         await SaveNotificationAsync(user.Id, type, titleKey, bodyKey);
+        await unitOfWork.SaveChangesAsync();
 
         CultureHelper.SetCulture(user.PreferredLanguage);
 
         var title = localizer[titleKey];
         var message = localizer[bodyKey];
 
-        var payload = new
+        var payload = new NotificationPayload(title, message, EnumLocalizer.Localize(type, localizer), DateTimeOffset.UtcNow.ToEgyptTime());
+
+        try
         {
-            title,
-            message,
-            type = EnumLocalizer.Localize(type, localizer),
-            createdAt = DateTimeOffset.UtcNow.ToEgyptTime()
-        };
+            await SendNotificationToUserAsync(user, payload);
+            //if (!string.IsNullOrEmpty(user.FcmToken))
+            //{
+            //    await SendPushNotificationAsync(
+            //        fcmToken: user.FcmToken,
+            //        title: title,
+            //        body: message,
+            //        data: new Dictionary<string, string>
+            //        {
+            //            { "type", EnumLocalizer.Localize(type, localizer) },
+            //            { "createdAt", DateTimeOffset.UtcNow.ToString("O") }
+            //        }
+            //    );
+            //}
 
-        await SendNotificationToUserAsync(user, payload);
-
-        //if (!string.IsNullOrEmpty(user.FcmToken))
-        //{
-        //    await SendPushNotificationAsync(
-        //        fcmToken: user.FcmToken,
-        //        title: title,
-        //        body: message,
-        //        data: new Dictionary<string, string>
-        //        {
-        //            { "type", EnumLocalizer.Localize(type, localizer) },
-        //            { "createdAt", DateTimeOffset.UtcNow.ToString("O") }
-        //        }
-        //    );
-        //}
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Failed to deliver real-time notification to UserId: {UserId}", user.Id);
+        }
     }
 
     private async Task SaveNotificationAsync(Guid userId, NotificationType type, string titleKey, string bodyKey)

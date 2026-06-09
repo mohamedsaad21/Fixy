@@ -4,13 +4,14 @@ using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Bookings.Commands.DisputeBookingCompletion;
 
-public class DisputeBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, INotificationService notificationService, ILogger<DisputeBookingCompletionCommandHandler> logger) : IRequestHandler<DisputeBookingCompletionCommand, Result>
+public class DisputeBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICurrentUserService currentUserService, ILogger<DisputeBookingCompletionCommandHandler> logger) : IRequestHandler<DisputeBookingCompletionCommand, Result>
 {
     public async Task<Result> Handle(DisputeBookingCompletionCommand request, CancellationToken cancellationToken)
     {
@@ -64,16 +65,15 @@ public class DisputeBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
 
         await unitOfWork.Disputes.AddAsync(dispute);
         
-        await notificationService.SendFullNotificationAsync(
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Booking completion disputed by customer. BookingId: {BookingId}, CustomerId: {CustomerId}", request.BookingId, currentCustomer.Id);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             booking.Technician,
             NotificationType.DisputeRaised,
             SharedResourcesKeys.NotificationDisputeRaisedTitle,
             SharedResourcesKeys.NotificationDisputeRaisedBody
-        );
-
-        await unitOfWork.SaveChangesAsync();
-
-        logger.LogInformation("Booking completion disputed by customer. BookingId: {BookingId}, CustomerId: {CustomerId}", request.BookingId, currentCustomer.Id);
+        ));
 
         return Result.Success();
     }

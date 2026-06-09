@@ -3,14 +3,14 @@ using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 namespace Fixy.Application.Features.Admin.Commands.ApproveTechnician;
 
-public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork, INotificationService notificationService, IStringLocalizer<SharedResources> localizer, ILogger<ApproveTechnicianCommandHandler> logger) : IRequestHandler<ApproveTechnicianCommand, Result>
+public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork, ILogger<ApproveTechnicianCommandHandler> logger) : IRequestHandler<ApproveTechnicianCommand, Result>
 {
     public async Task<Result> Handle(ApproveTechnicianCommand request, CancellationToken cancellationToken)
     {
@@ -31,15 +31,16 @@ public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork, INotificati
         }
 
         technician.Status = TechnicianStatus.Approved;
+        await unitOfWork.SaveChangesAsync();
+        logger.LogInformation("Technician successfully approved. TechnicianId: {TechnicianId}", request.TechnicianId);
 
-        await notificationService.SendFullNotificationAsync(
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             technician,
             NotificationType.TechnicianApproved,
             SharedResourcesKeys.NotificationTechnicianApprovedTitle,
             SharedResourcesKeys.NotificationTechnicianApprovedBody
-        );
-        await unitOfWork.SaveChangesAsync();
-        logger.LogInformation("Technician successfully approved. TechnicianId: {TechnicianId}", request.TechnicianId);
+        ));
+
         return Result.Success();
     }
 }
