@@ -72,14 +72,16 @@ public class ResolveDisputeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSe
             dispute.ServiceBooking.ServiceRequest.Customer,
             NotificationType.DisputeResolved,
             SharedResourcesKeys.NotificationDisputeResolvedTitle,
-            SharedResourcesKeys.NotificationDisputeResolvedBody
+            SharedResourcesKeys.NotificationDisputeResolvedBody,
+            new Dictionary<string, string> { { "bookingId", dispute.ServiceBookingId.ToString() } }
         ));
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             dispute.ServiceBooking.Technician,
             NotificationType.DisputeResolved,
             SharedResourcesKeys.NotificationDisputeResolvedTitle,
-            SharedResourcesKeys.NotificationDisputeResolvedBody
+            SharedResourcesKeys.NotificationDisputeResolvedBody,
+            new Dictionary<string, string> { { "bookingId", dispute.ServiceBookingId.ToString() } }
         ));
 
         return Result.Success();

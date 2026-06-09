@@ -73,7 +73,8 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
             customer,
             NotificationType.TechnicianCompleted,
             SharedResourcesKeys.NotificationTechnicianCompletedTitle,
-            SharedResourcesKeys.NotificationTechnicianCompletedBody
+            SharedResourcesKeys.NotificationTechnicianCompletedBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
         ));
 
         return Result.Success();

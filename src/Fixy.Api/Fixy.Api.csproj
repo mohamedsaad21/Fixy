@@ -48,4 +48,10 @@
     <Folder Include="Requests\" />
   </ItemGroup>
 
+	<ItemGroup>
+		<None Update="firebase-service-account.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>

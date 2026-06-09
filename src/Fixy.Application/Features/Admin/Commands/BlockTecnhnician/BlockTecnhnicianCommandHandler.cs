@@ -50,7 +50,8 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
             technician,
             NotificationType.TechnicianBlocked,
             SharedResourcesKeys.NotificationTechnicianBlockedTitle,
-            SharedResourcesKeys.NotificationTechnicianBlockedBody
+            SharedResourcesKeys.NotificationTechnicianBlockedBody,
+            new Dictionary<string, string> { { "technicianId", technician.Id.ToString() } }
         ));
 
         return Result.Success();

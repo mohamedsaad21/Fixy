@@ -54,7 +54,8 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
             technician,
             NotificationType.PriceChangeRejected,
             SharedResourcesKeys.NotificationPriceChangeRejectedTitle,
-            SharedResourcesKeys.NotificationPriceChangeRejectedBody
+            SharedResourcesKeys.NotificationPriceChangeRejectedBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
         ));
 
         return Result.Success();

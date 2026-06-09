@@ -72,7 +72,8 @@ public class DisputeBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
             booking.Technician,
             NotificationType.DisputeRaised,
             SharedResourcesKeys.NotificationDisputeRaisedTitle,
-            SharedResourcesKeys.NotificationDisputeRaisedBody
+            SharedResourcesKeys.NotificationDisputeRaisedBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
         ));
 
         return Result.Success();

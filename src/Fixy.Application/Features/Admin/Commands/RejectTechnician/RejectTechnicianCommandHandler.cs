@@ -49,7 +49,8 @@ public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
             technician,
             NotificationType.TechnicianRejected,
             SharedResourcesKeys.NotificationTechnicianRejectedTitle,
-            SharedResourcesKeys.NotificationTechnicianRejectedBody
+            SharedResourcesKeys.NotificationTechnicianRejectedBody,
+            new Dictionary<string, string> { { "technicianId", technician.Id.ToString() } }
         ));
 
         return Result.Success();

@@ -1,9 +1,10 @@
-﻿namespace Fixy.Application.Common.DTOs.Notifications;
+namespace Fixy.Application.Common.DTOs.Notifications;
 
 public record NotificationPayload
     (
         string Title,
         string Message,
         string Type,
-        DateTimeOffset CreatedAt
+        DateTimeOffset CreatedAt,
+        Dictionary<string, string>? AdditionalData = null
     );

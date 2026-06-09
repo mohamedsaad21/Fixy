@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Enums;
@@ -38,8 +38,9 @@ public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork, ILogger<App
             technician,
             NotificationType.TechnicianApproved,
             SharedResourcesKeys.NotificationTechnicianApprovedTitle,
-            SharedResourcesKeys.NotificationTechnicianApprovedBody)
-        );
+            SharedResourcesKeys.NotificationTechnicianApprovedBody,
+            new Dictionary<string, string> { { "technicianId", technician.Id.ToString() } }
+        ));
 
         return Result.Success();
     }

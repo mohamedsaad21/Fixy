@@ -60,7 +60,8 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
             technician,
             NotificationType.PriceChangeApproved,
             SharedResourcesKeys.NotificationPriceChangeApprovedTitle,
-            SharedResourcesKeys.NotificationPriceChangeApprovedBody
+            SharedResourcesKeys.NotificationPriceChangeApprovedBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
         ));
 
         return Result.Success();

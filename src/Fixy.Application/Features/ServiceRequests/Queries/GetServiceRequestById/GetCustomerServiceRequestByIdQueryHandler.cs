@@ -28,6 +28,7 @@ public sealed class GetCustomerServiceRequestByIdQueryHandler(
             {
                 Id = x.Id,
                 CustomerUserName = x.Customer.UserName,
+                CustomerName = x.Customer.FirstName + " " + x.Customer.LastName,
                 Description = x.Description,
                 ScheduledDateTime = x.ScheduledDateTime,
                 Status = EnumLocalizer.Localize(x.Status, localizer),

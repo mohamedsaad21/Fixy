@@ -1,4 +1,4 @@
-﻿using Fixy.Application.Bases;
+using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
@@ -61,7 +61,8 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
             technician,
             NotificationType.PriceOfferAccepted,
             SharedResourcesKeys.NotificationPriceOfferAcceptedTitle,
-            SharedResourcesKeys.NotificationPriceOfferAcceptedBody
+            SharedResourcesKeys.NotificationPriceOfferAcceptedBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
         ));
 
         return booking.Id;

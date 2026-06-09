@@ -2,9 +2,11 @@ using Fixy.Application.Bases;
 using Fixy.Application.Contracts.Services;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Fixy.Application.Resources;
 
 namespace Fixy.Application.Features.Bookings.Commands.ConfirmBookingCompletion;
 
@@ -14,7 +16,9 @@ public class ConfirmBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
     {
         logger.LogInformation("Customer attempting to confirm booking completion. BookingId: {BookingId}", request.BookingId);
         
-        var booking = await unitOfWork.Bookings.GetTableAsTracking().Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
+        var booking = await unitOfWork.Bookings.GetTableAsTracking()
+            .Include(x => x.ServiceRequest).ThenInclude(x => x.Customer)
+            .Include(x => x.Technician)
             .FirstOrDefaultAsync(x => x.Id == request.BookingId);
 
         if (booking == null)
@@ -45,6 +49,14 @@ public class ConfirmBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
 
         logger.LogInformation("Booking completion confirmed by customer — awaiting payment. BookingId: {BookingId}, CustomerId: {CustomerId}, AgreedPrice: {AgreedPrice}, ConfirmedAt: {ConfirmedAt}",
             request.BookingId, currentCustomer.Id, booking.AgreedPrice, booking.CustomerConfirmedAt);
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            booking.Technician,
+            NotificationType.BookingCompleted,
+            SharedResourcesKeys.NotificationBookingCompletedTitle,
+            SharedResourcesKeys.NotificationBookingCompletedBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
+        ));
 
         return Result.Success();
     }

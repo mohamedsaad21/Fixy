@@ -6,6 +6,7 @@ namespace Fixy.Application.Features.ServiceRequests.Queries.GetServiceRequestByI
 public class GetCustomerServiceRequestByIdResponse
 {
     public Guid Id { get; set; }
+    public string CustomerName { get; set; }
     public string CustomerUserName { get; set; }
     public string Description { get; set; }
     public DateTimeOffset ScheduledDateTime { get; set; }

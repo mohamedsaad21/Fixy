@@ -1,4 +1,4 @@
-﻿using FirebaseAdmin.Messaging;
+using FirebaseAdmin.Messaging;
 using Fixy.Application.Common.DTOs.Notifications;
 using Fixy.Application.Common.Helpers;
 using Fixy.Application.Contracts.Services;
@@ -11,15 +11,16 @@ using Fixy.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace Fixy.Infrastructure.Services;
 
 public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitOfWork unitOfWork, 
     IStringLocalizer<SharedResources> localizer, ILogger<NotificationService> logger) : INotificationService
 {
-    public async Task SendFullNotificationAsync(ApplicationUser user, NotificationType type, string titleKey, string bodyKey)
+    public async Task SendFullNotificationAsync(ApplicationUser user, NotificationType type, string titleKey, string bodyKey, Dictionary<string, string>? additionalData = null)
     {
-        await SaveNotificationAsync(user.Id, type, titleKey, bodyKey);
+        await SaveNotificationAsync(user.Id, type, titleKey, bodyKey, additionalData);
         await unitOfWork.SaveChangesAsync();
 
         CultureHelper.SetCulture(user.PreferredLanguage);
@@ -27,24 +28,34 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
         var title = localizer[titleKey];
         var message = localizer[bodyKey];
 
-        var payload = new NotificationPayload(title, message, EnumLocalizer.Localize(type, localizer), DateTimeOffset.UtcNow.ToEgyptTime());
+        var payload = new NotificationPayload(title, message, EnumLocalizer.Localize(type, localizer), DateTimeOffset.UtcNow.ToEgyptTime(), additionalData);
 
         try
         {
             await SendNotificationToUserAsync(user, payload);
-            //if (!string.IsNullOrEmpty(user.FcmToken))
-            //{
-            //    await SendPushNotificationAsync(
-            //        fcmToken: user.FcmToken,
-            //        title: title,
-            //        body: message,
-            //        data: new Dictionary<string, string>
-            //        {
-            //            { "type", EnumLocalizer.Localize(type, localizer) },
-            //            { "createdAt", DateTimeOffset.UtcNow.ToString("O") }
-            //        }
-            //    );
-            //}
+            if (!string.IsNullOrEmpty(user.FcmToken))
+            {
+                var fcmData = new Dictionary<string, string>
+                {
+                    { "type", EnumLocalizer.Localize(type, localizer) },
+                    { "createdAt", DateTimeOffset.UtcNow.ToString("O") }
+                };
+
+                if (additionalData != null)
+                {
+                    foreach (var kvp in additionalData)
+                    {
+                        fcmData[kvp.Key] = kvp.Value;
+                    }
+                }
+
+                await SendPushNotificationAsync(
+                    fcmToken: user.FcmToken,
+                    title: title,
+                    body: message,
+                    data: fcmData
+                );
+            }
 
         }
         catch (Exception ex)
@@ -53,7 +64,7 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
         }
     }
 
-    private async Task SaveNotificationAsync(Guid userId, NotificationType type, string titleKey, string bodyKey)
+    private async Task SaveNotificationAsync(Guid userId, NotificationType type, string titleKey, string bodyKey, Dictionary<string, string>? additionalData = null)
     {
         var notification = new Domain.Entities.Notification
         {
@@ -61,6 +72,8 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
             Type = type,
             TitleKey = titleKey,
             BodyKey = bodyKey,
+            AdditionalDataJson = additionalData is not null? JsonSerializer.Serialize(additionalData)
+            : null,
             IsRead = false,
             CreatedAt = DateTime.UtcNow
         };

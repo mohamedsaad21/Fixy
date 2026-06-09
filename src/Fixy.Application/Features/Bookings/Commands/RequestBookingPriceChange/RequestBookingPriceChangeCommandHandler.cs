@@ -75,7 +75,8 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
             customer,
             NotificationType.PriceChangeRequested,
             SharedResourcesKeys.NotificationPriceChangeRequestedTitle,
-            SharedResourcesKeys.NotificationPriceChangeRequestedBody
+            SharedResourcesKeys.NotificationPriceChangeRequestedBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
         ));
         
         return Result.Success();

@@ -4,6 +4,7 @@ using Fixy.Application.Resources;
 using Fixy.Domain.Entities;
 using Fixy.Domain.Helpers;
 using Microsoft.Extensions.Localization;
+using System.Text.Json;
 
 namespace Fixy.Application.Mapping.Notifications.Queries;
 
@@ -17,6 +18,7 @@ public static class NotificationDomainToNotificationDtoMapping
             Type = EnumLocalizer.Localize(notification.Type, localizer),
             Title = localizer[notification.TitleKey],
             Body = localizer[notification.BodyKey],
+            AdditionalData = JsonSerializer.Deserialize<Dictionary<string, string>>(notification.AdditionalDataJson),
             IsRead = notification.IsRead,
             CreatedAt = notification.CreatedAt.ToEgyptTime()
         };

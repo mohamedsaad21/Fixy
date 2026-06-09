@@ -66,7 +66,8 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
             technician,
             NotificationType.BookingCancelledByCustomer,
             SharedResourcesKeys.NotificationBookingCancelledByCustomerTitle,
-            SharedResourcesKeys.NotificationBookingCancelledByCustomerBody
+            SharedResourcesKeys.NotificationBookingCancelledByCustomerBody,
+            new Dictionary<string, string> { { "bookingId", booking.Id.ToString() } }
         ));
 
         return Result.Success();
