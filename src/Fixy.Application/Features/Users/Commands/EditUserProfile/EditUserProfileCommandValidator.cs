@@ -19,7 +19,6 @@ public class EditUserProfileCommandValidator : AbstractValidator<EditUserProfile
         RuleFor(x => x.UserId).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
         RuleFor(x => x.FirstName).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
         RuleFor(x => x.LastName).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
-        RuleFor(x => x.Bio).NotEmpty().WithMessage(_stringLocalizer[SharedResourcesKeys.NotEmpty]);
         RuleFor(x => x.ProfilePicture)
             .Must(file => file.Length <= 10 * 1024 * 1024)
             .WithMessage("File size must not exceed 10MB")

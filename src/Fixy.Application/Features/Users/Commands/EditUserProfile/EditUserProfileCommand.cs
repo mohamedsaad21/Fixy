@@ -9,7 +9,7 @@ public sealed record EditUserProfileCommand
         Guid UserId,
         string FirstName,
         string LastName,
-        string Bio,
+        string? Bio,
         IFormFile? ProfilePicture,
         string PreferredLanguage
     ) : IRequest<Result>;
