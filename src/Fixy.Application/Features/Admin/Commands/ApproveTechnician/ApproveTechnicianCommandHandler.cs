@@ -35,7 +35,7 @@ public class ApproveTechnicianCommandHandler(IUnitOfWork unitOfWork, ILogger<App
         logger.LogInformation("Technician successfully approved. TechnicianId: {TechnicianId}", request.TechnicianId);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.TechnicianApproved,
             SharedResourcesKeys.NotificationTechnicianApprovedTitle,
             SharedResourcesKeys.NotificationTechnicianApprovedBody,

@@ -51,7 +51,7 @@ public class ConfirmBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
             request.BookingId, currentCustomer.Id, booking.AgreedPrice, booking.CustomerConfirmedAt);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            booking.Technician,
+            booking.TechnicianId,
             NotificationType.BookingCompleted,
             SharedResourcesKeys.NotificationBookingCompletedTitle,
             SharedResourcesKeys.NotificationBookingCompletedBody,

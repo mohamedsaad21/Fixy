@@ -18,7 +18,7 @@ public static class NotificationDomainToNotificationDtoMapping
             Type = EnumLocalizer.Localize(notification.Type, localizer),
             Title = localizer[notification.TitleKey],
             Body = localizer[notification.BodyKey],
-            AdditionalData = JsonSerializer.Deserialize<Dictionary<string, string>>(notification.AdditionalDataJson),
+            AdditionalData = notification.AdditionalDataJson == null? new Dictionary<string, string>() : JsonSerializer.Deserialize<Dictionary<string, string>>(notification.AdditionalDataJson),
             IsRead = notification.IsRead,
             CreatedAt = notification.CreatedAt.ToEgyptTime()
         };

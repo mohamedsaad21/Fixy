@@ -5,6 +5,7 @@ using Fixy.Application.Resources;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
+using Hangfire;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -90,12 +91,6 @@ INotificationService notificationService, ILogger<ConfirmCashReceiptCommandHandl
 
         // 8. Send notifications
         var customer = booking.ServiceRequest.Customer;
-        await notificationService.SendFullNotificationAsync(
-            customer,
-            NotificationType.BookingCompleted,
-            SharedResourcesKeys.NotificationBookingCompletedTitle,
-            SharedResourcesKeys.NotificationBookingCompletedBody
-        );
         await unitOfWork.SaveChangesAsync();
 
         // 9. Build response
@@ -109,6 +104,13 @@ INotificationService notificationService, ILogger<ConfirmCashReceiptCommandHandl
             Status = "Success",
             Message = $"Cash receipt confirmed. You earned {payment.TechnicianAmount:C}. You owe platform: {payment.PlatformCommission:C}"
         };
+
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            customer.Id,
+            NotificationType.BookingCompleted,
+            SharedResourcesKeys.NotificationBookingCompletedTitle,
+            SharedResourcesKeys.NotificationBookingCompletedBody
+        ));
 
         return response;
     }

@@ -58,7 +58,7 @@ public sealed class AcceptPriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
             priceOffer.TechnicianId, booking.AgreedPrice, booking.ScheduledDateTime);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.PriceOfferAccepted,
             SharedResourcesKeys.NotificationPriceOfferAcceptedTitle,
             SharedResourcesKeys.NotificationPriceOfferAcceptedBody,

@@ -51,7 +51,7 @@ public class RejectBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICur
             rejectedProposedPrice, booking.AgreedPrice);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.PriceChangeRejected,
             SharedResourcesKeys.NotificationPriceChangeRejectedTitle,
             SharedResourcesKeys.NotificationPriceChangeRejectedBody,

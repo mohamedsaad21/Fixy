@@ -47,7 +47,7 @@ public sealed class UnblockTechnicianCommandHandler(ICurrentUserService currentU
         logger.LogInformation("Technician successfully unblocked. TechnicianId: {TechnicianId}, AdminId: {AdminId}", request.TechnicianId, currentUser.Id);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.TechnicianUnblocked,
             SharedResourcesKeys.NotificationTechnicianUnblockedTitle,
             SharedResourcesKeys.NotificationTechnicianUnblockedBody

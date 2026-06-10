@@ -9,17 +9,25 @@ using Fixy.Domain.Helpers;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
 namespace Fixy.Infrastructure.Services;
 
-public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitOfWork unitOfWork, 
+public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitOfWork unitOfWork,
     IStringLocalizer<SharedResources> localizer, ILogger<NotificationService> logger) : INotificationService
 {
-    public async Task SendFullNotificationAsync(ApplicationUser user, NotificationType type, string titleKey, string bodyKey, Dictionary<string, string>? additionalData = null)
+    public async Task SendFullNotificationAsync(Guid userId, NotificationType type, string titleKey, string bodyKey, Dictionary<string, string>? additionalData = null)
     {
+        var user = await unitOfWork.Users.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == userId);
+        if (user is null)
+        {
+            logger.LogWarning("User {UserId} not found for notification", userId);
+            return;
+        }
+
         await SaveNotificationAsync(user.Id, type, titleKey, bodyKey, additionalData);
         await unitOfWork.SaveChangesAsync();
 

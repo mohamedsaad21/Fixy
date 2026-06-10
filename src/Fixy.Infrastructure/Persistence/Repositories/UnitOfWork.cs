@@ -40,6 +40,7 @@ public class UnitOfWork : IUnitOfWork
     public ITechnicianCommissionOwedReadRepository TechnicianCommissionOwedReadRepository { get; private set; }
     public IGenericRepository<ChatbotConversation> ChatbotConversations { get; private set; }
     public IGenericRepository<ChatbotMessage> ChatbotMessages { get; private set; }
+    public IGenericRepository<ApplicationUser> Users { get; private set; }
 
     public UnitOfWork(FixyDbContext dbContext)
     {
@@ -68,6 +69,7 @@ public class UnitOfWork : IUnitOfWork
         TechnicianCommissionOwedReadRepository = new TechnicianCommissionOwedReadRepository(dbContext);
         ChatbotConversations = new GenericRepository<ChatbotConversation>(dbContext);
         ChatbotMessages = new GenericRepository<ChatbotMessage>(dbContext);
+        Users = new GenericRepository<ApplicationUser>(dbContext);
     }
     public void Dispose() => _dbContext.Dispose();
     public async Task<int> SaveChangesAsync() => await _dbContext.SaveChangesAsync();

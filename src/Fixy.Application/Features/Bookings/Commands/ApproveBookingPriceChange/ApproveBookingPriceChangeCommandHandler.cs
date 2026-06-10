@@ -57,7 +57,7 @@ public class ApproveBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
         logger.LogInformation("Price change approved successfully. BookingId: {BookingId}, CustomerId: {CustomerId}, TechnicianId: {TechnicianId}, PreviousPrice: {PreviousPrice}, ApprovedPrice: {ApprovedPrice}", request.BookingId, currentCustomer.Id, booking.Technician.Id, previousPrice, booking.AgreedPrice);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.PriceChangeApproved,
             SharedResourcesKeys.NotificationPriceChangeApprovedTitle,
             SharedResourcesKeys.NotificationPriceChangeApprovedBody,

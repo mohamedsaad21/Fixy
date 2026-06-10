@@ -47,7 +47,7 @@ public sealed class BlockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurrent
         logger.LogInformation("Customer successfully blocked. CustomerId: {CustomerId}, AdminId: {AdminId}, Reason: {Reason}", request.CustomerId, currentUser.Id, request.Reason);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            customer,
+            customer.Id,
             NotificationType.CustomerBlocked,
             SharedResourcesKeys.NotificationCustomerBlockedTitle,
             SharedResourcesKeys.NotificationCustomerBlockedBody

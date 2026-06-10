@@ -70,7 +70,7 @@ public class MarkBookingCompletedCommandHandler(IUnitOfWork unitOfWork, ICurrent
             uploadedUrls.Count, booking.CompletedAt);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            customer,
+            customer.Id,
             NotificationType.TechnicianCompleted,
             SharedResourcesKeys.NotificationTechnicianCompletedTitle,
             SharedResourcesKeys.NotificationTechnicianCompletedBody,

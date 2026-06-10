@@ -47,7 +47,7 @@ public sealed class UnblockCustomerCommandHandler(IUnitOfWork unitOfWork, ICurre
         logger.LogInformation("Customer successfully unblocked. CustomerId: {CustomerId}, AdminId: {AdminId}", request.CustomerId, currentUser.Id);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            customer,
+            customer.Id,
             NotificationType.CustomerUnblocked,
             SharedResourcesKeys.NotificationCustomerUnblockedTitle,
             SharedResourcesKeys.NotificationCustomerUnblockedBody

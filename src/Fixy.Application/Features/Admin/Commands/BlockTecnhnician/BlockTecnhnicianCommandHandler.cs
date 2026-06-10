@@ -47,7 +47,7 @@ public sealed class BlockTecnhnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
         logger.LogInformation("Technician successfully blocked. TechnicianId: {TechnicianId}, AdminId: {AdminId}, Reason: {Reason}", request.TechnicianId, currentUser.Id, request.Reason);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.TechnicianBlocked,
             SharedResourcesKeys.NotificationTechnicianBlockedTitle,
             SharedResourcesKeys.NotificationTechnicianBlockedBody,

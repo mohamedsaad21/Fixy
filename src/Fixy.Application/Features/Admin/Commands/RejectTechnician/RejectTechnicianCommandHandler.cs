@@ -46,7 +46,7 @@ public sealed class RejectTechnicianCommandHandler(IUnitOfWork unitOfWork, ICurr
         logger.LogInformation("Technician successfully rejected. TechnicianId: {TechnicianId}, AdminId: {AdminId}, Reason: {Reason}", request.TechnicianId, currentUser.Id, request.Reason);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.TechnicianRejected,
             SharedResourcesKeys.NotificationTechnicianRejectedTitle,
             SharedResourcesKeys.NotificationTechnicianRejectedBody,

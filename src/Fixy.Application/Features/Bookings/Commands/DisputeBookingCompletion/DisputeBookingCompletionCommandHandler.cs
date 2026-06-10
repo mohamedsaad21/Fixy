@@ -69,7 +69,7 @@ public class DisputeBookingCompletionCommandHandler(IUnitOfWork unitOfWork, ICur
         logger.LogInformation("Booking completion disputed by customer. BookingId: {BookingId}, CustomerId: {CustomerId}", request.BookingId, currentCustomer.Id);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            booking.Technician,
+            booking.TechnicianId,
             NotificationType.DisputeRaised,
             SharedResourcesKeys.NotificationDisputeRaisedTitle,
             SharedResourcesKeys.NotificationDisputeRaisedBody,

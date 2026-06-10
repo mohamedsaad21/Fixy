@@ -72,7 +72,7 @@ public class RequestBookingPriceChangeCommandHandler(IUnitOfWork unitOfWork, ICu
             booking.AgreedPrice, request.NewProposedPrice);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            customer,
+            customer.Id,
             NotificationType.PriceChangeRequested,
             SharedResourcesKeys.NotificationPriceChangeRequestedTitle,
             SharedResourcesKeys.NotificationPriceChangeRequestedBody,

@@ -69,7 +69,7 @@ public class ResolveDisputeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSe
         logger.LogInformation("Dispute resolved by admin. DisputeId: {DisputeId}, AdminId: {AdminId}, Outcome: {Outcome}", request.DisputeId, currentAdmin.Id, request.Outcome);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            dispute.ServiceBooking.ServiceRequest.Customer,
+            dispute.ServiceBooking.ServiceRequest.CustomerId,
             NotificationType.DisputeResolved,
             SharedResourcesKeys.NotificationDisputeResolvedTitle,
             SharedResourcesKeys.NotificationDisputeResolvedBody,
@@ -77,7 +77,7 @@ public class ResolveDisputeCommandHandler(IUnitOfWork unitOfWork, ICurrentUserSe
         ));
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            dispute.ServiceBooking.Technician,
+            dispute.ServiceBooking.TechnicianId,
             NotificationType.DisputeResolved,
             SharedResourcesKeys.NotificationDisputeResolvedTitle,
             SharedResourcesKeys.NotificationDisputeResolvedBody,

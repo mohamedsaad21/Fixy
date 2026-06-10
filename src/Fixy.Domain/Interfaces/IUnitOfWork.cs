@@ -35,5 +35,6 @@ public interface IUnitOfWork : IDisposable
     ITechnicianCommissionOwedReadRepository TechnicianCommissionOwedReadRepository { get; }
     IGenericRepository<ChatbotConversation> ChatbotConversations { get; }
     IGenericRepository<ChatbotMessage> ChatbotMessages { get; }
+    IGenericRepository<ApplicationUser> Users { get; }
     Task<int> SaveChangesAsync();
 }

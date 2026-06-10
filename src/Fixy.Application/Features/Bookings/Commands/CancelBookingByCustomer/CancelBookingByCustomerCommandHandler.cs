@@ -63,7 +63,7 @@ public sealed class CancelBookingByCustomerCommandHandler(IUnitOfWork unitOfWork
             previousCancellationRate, customer.CancellationRate);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            technician,
+            technician.Id,
             NotificationType.BookingCancelledByCustomer,
             SharedResourcesKeys.NotificationBookingCancelledByCustomerTitle,
             SharedResourcesKeys.NotificationBookingCancelledByCustomerBody,

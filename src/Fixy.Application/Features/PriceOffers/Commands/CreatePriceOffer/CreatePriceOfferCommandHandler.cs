@@ -60,7 +60,7 @@ public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
 
         serviceRequest.PriceOffers.Add(priceOffer);
 
-        var customer = serviceRequest.Customer;
+        var customerId = serviceRequest.CustomerId;
 
         await unitOfWork.SaveChangesAsync();
 
@@ -68,7 +68,7 @@ public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
             priceOffer.Id, technician.Id, serviceRequest.Id, serviceRequest.Customer.Id, priceOffer.Price);
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
-            customer,
+            customerId,
             NotificationType.PriceOfferReceived,
             SharedResourcesKeys.NotificationPriceOfferReceivedTitle,
             SharedResourcesKeys.NotificationPriceOfferReceivedBody

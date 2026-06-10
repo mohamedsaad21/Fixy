@@ -5,6 +5,7 @@ using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
 using Fixy.Infrastructure.Configurations;
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Stripe;
@@ -230,19 +231,19 @@ public class StripeService : IPaymentService
             CreatedAt = DateTime.UtcNow
         });
 
-        await _notificationService.SendFullNotificationAsync(
-            booking.ServiceRequest.Customer,
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            booking.ServiceRequest.CustomerId,
             NotificationType.BookingPaymentSucceeded,
             SharedResourcesKeys.NotificationBookingPaymentSucceededTitle,
             SharedResourcesKeys.NotificationBookingPaymentSucceededBody
-        );
+        ));
 
-        await _notificationService.SendFullNotificationAsync(
-            booking.Technician,
+        BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
+            booking.TechnicianId,
             NotificationType.BookingPaymentReceived,
             SharedResourcesKeys.NotificationBookingPaymentReceivedTitle,
             SharedResourcesKeys.NotificationBookingPaymentReceivedBody
-        );
+        ));
 
         Log.Information("Payout created: {Amount:C} for technician {TechnicianId}", payment.TechnicianAmount, booking.TechnicianId);
     }

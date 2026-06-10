@@ -67,7 +67,7 @@ public static class WebApplicationExtensions
         app.MapHangfireDashboard("/hangfire", new DashboardOptions()
         {
             DashboardTitle = "Fixy Service Dashboard",
-            Authorization = [new HangfireAuthorizationFilter()]
+            //Authorization = [new HangfireAuthorizationFilter()]
         });
     }
 }
