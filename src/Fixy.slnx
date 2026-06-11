@@ -1,7 +1,0 @@
-<Solution>
-  <Project Path="../tests/Fixy.Application.Tests/Fixy.Application.Tests.csproj" />
-  <Project Path="Fixy.Api/Fixy.Api.csproj" />
-  <Project Path="Fixy.Application/Fixy.Application.csproj" />
-  <Project Path="Fixy.Domain/Fixy.Domain.csproj" />
-  <Project Path="Fixy.Infrastructure/Fixy.Infrastructure.csproj" />
-</Solution>

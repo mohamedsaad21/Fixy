@@ -28,13 +28,13 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
             return;
         }
 
+        CultureHelper.SetCulture(user.PreferredLanguage);
+
         await SaveNotificationAsync(user.Id, type, titleKey, bodyKey, additionalData);
         await unitOfWork.SaveChangesAsync();
 
-        CultureHelper.SetCulture(user.PreferredLanguage);
-
-        var title = localizer[titleKey];
-        var message = localizer[bodyKey];
+        var title = localizer[titleKey].Value;
+        var message = localizer[bodyKey].Value;
 
         var payload = new NotificationPayload(title, message, EnumLocalizer.Localize(type, localizer), DateTimeOffset.UtcNow.ToEgyptTime(), additionalData);
 
@@ -69,6 +69,10 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
         catch (Exception ex)
         {
             logger.LogError(ex, "Failed to deliver real-time notification to UserId: {UserId}", user.Id);
+        }
+        finally
+        {
+            CultureHelper.SetCulture("en");
         }
     }
 
