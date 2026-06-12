@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Fixy.Infrastructure.Hubs;
 
@@ -18,13 +19,15 @@ public class ChatHub : Hub
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IPresenceService _presenceService;
     private readonly IHubContext<NotificationHub> _notificationHub;
+    private readonly INotificationService _notificationService;
     public ChatHub(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager, 
-        IPresenceService presenceService, IHubContext<NotificationHub> notificationHub)
+        IPresenceService presenceService, IHubContext<NotificationHub> notificationHub, INotificationService notificationService)
     {
         _unitOfWork = unitOfWork;
         _userManager = userManager;
         _presenceService = presenceService;
         _notificationHub = notificationHub;
+        _notificationService = notificationService;
     }
 
     public async Task SendMessage(Guid bookingId, MessageContent messageContent)
@@ -101,31 +104,39 @@ public class ChatHub : Hub
                     msg.IsSeen
                 });
         }
-        else if (isReceiverOnline)
+        else
         {
             // User is in the app but on a different page — send notification only
             await _notificationHub.Clients.Group($"user_{receiverId}")
-            .SendAsync("ReceiveNotification", new {
+            .SendAsync("ReceiveNotification", new
+            {
                 msg.ConversationId,
                 msg.SenderId,
                 SenderName = sender.FirstName + " " + sender.LastName,
                 SenderProfilePicture = sender.ProfilePictureUrl,
                 Preview = msg.Content?[..Math.Min(60, msg.Content.Length)],
-                msg.SentAt
+                msg.SentAt,
+                BookingId = booking.Id
             });
-        }
-        else
-        {
-            // User is fully offline — send push notification (FCM / APNs)
-            //await _pushNotificationService.SendAsync(receiverId, new PushPayload
-            //{
-            //    Title = sender.FirstName + " " + sender.LastName,
-            //    Body = msg.Content?[..Math.Min(60, msg.Content.Length)],
-            //    Data = new { conversationId = msg.ConversationId }
-            //});
-        }
 
-
+            //User is fully offline — send push notification(FCM / APNs)
+            var senderName = sender.FirstName + " " + sender.LastName;
+            var preview = msg.Content?[..Math.Min(60, msg.Content.Length)];
+            var receiver = await _unitOfWork.Users.GetTableNoTracking().FirstOrDefaultAsync(x => x.Id == receiverId);
+            await _notificationService.SendPushNotificationAsync(
+                fcmToken: receiver.FcmToken,
+                title: senderName,
+                body: preview ?? "New message",
+                data: new Dictionary<string, string>
+                {
+                    { "conversationId", msg.ConversationId.ToString() },
+                    { "senderId", msg.SenderId.ToString() },
+                    { "senderName", senderName },
+                    { "Preview", msg.Content == null? msg.Content?[..Math.Min(60, msg.Content.Length)]: "📌 Attachment"},
+                    { "BookingId", booking.Id.ToString() }
+                }
+            );
+        }
 
         // Echo back to sender
         await Clients.Caller.SendAsync("MessageSent", new

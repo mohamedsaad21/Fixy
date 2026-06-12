@@ -72,7 +72,7 @@ public sealed class CreatePriceOfferCommandHandler(IUnitOfWork unitOfWork, ICurr
             NotificationType.PriceOfferReceived,
             SharedResourcesKeys.NotificationPriceOfferReceivedTitle,
             SharedResourcesKeys.NotificationPriceOfferReceivedBody,
-            new Dictionary<string, string> { { "bookingId", serviceRequest.Id.ToString() } }
+            new Dictionary<string, string> { { "ServiceRequestId", serviceRequest.Id.ToString() } }
         ));
 
         return priceOffer.Id;

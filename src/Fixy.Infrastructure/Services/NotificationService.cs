@@ -97,7 +97,7 @@ public class NotificationService(IHubContext<NotificationHub> hubContext, IUnitO
         await hubContext.Clients.Group($"user_{user.Id}").SendAsync("ReceiveNotification", payload, cancellationToken);
     }
 
-    private async Task SendPushNotificationAsync(string fcmToken, string title, string body, Dictionary<string, string>? data = null, CancellationToken cancellationToken = default)
+    public async Task SendPushNotificationAsync(string fcmToken, string title, string body, Dictionary<string, string>? data = null, CancellationToken cancellationToken = default)
     {
         var message = new Message
         {

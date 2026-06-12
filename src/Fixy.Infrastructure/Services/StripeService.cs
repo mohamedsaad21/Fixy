@@ -1,6 +1,7 @@
 using Fixy.Application.Common.DTOs.Payment;
 using Fixy.Application.Contracts.Services;
 using Fixy.Application.Resources;
+using Fixy.Domain.Entities;
 using Fixy.Domain.Entities.Payments;
 using Fixy.Domain.Enums;
 using Fixy.Domain.Interfaces;
@@ -235,14 +236,16 @@ public class StripeService : IPaymentService
             booking.ServiceRequest.CustomerId,
             NotificationType.BookingPaymentSucceeded,
             SharedResourcesKeys.NotificationBookingPaymentSucceededTitle,
-            SharedResourcesKeys.NotificationBookingPaymentSucceededBody
+            SharedResourcesKeys.NotificationBookingPaymentSucceededBody,
+            new Dictionary<string, string> { { "BookingId", booking.Id.ToString() } }
         ));
 
         BackgroundJob.Enqueue<INotificationService>(x => x.SendFullNotificationAsync(
             booking.TechnicianId,
             NotificationType.BookingPaymentReceived,
             SharedResourcesKeys.NotificationBookingPaymentReceivedTitle,
-            SharedResourcesKeys.NotificationBookingPaymentReceivedBody
+            SharedResourcesKeys.NotificationBookingPaymentReceivedBody,
+            new Dictionary<string, string> { { "BookingId", booking.Id.ToString() } }
         ));
 
         Log.Information("Payout created: {Amount:C} for technician {TechnicianId}", payment.TechnicianAmount, booking.TechnicianId);
